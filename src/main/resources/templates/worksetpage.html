@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>考勤设置</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+    <script src="/lib/defaults-zh_CN.js" type="text/javascript"></script>
+</head>
+<script>
+
+    $(function () {
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        var flag = $("#flag").val();
+        var aflag = eval(flag)
+        if (aflag == 1) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;添加成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 2) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;删除成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 3) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;更改成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 4) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+            errormessagediv.style.color = "green";
+        }
+    });
+
+    function goPageone() {
+        $("#n_currentPage").val(1);
+        queryWorkSetByCondition();
+    }
+
+    function goPrePage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 - 1 * 1);
+        queryWorkSetByCondition();
+    }
+
+    function goAftPage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 + 1 * 1);
+        queryWorkSetByCondition();
+    }
+
+    function goMaxPage() {
+        $("#n_currentPage").val($("#maxPage").val());
+        queryWorkSetByCondition();
+    }
+
+    function isNull(arg1) {
+        if (arg1 == "null" || arg1 == null || arg1 == 0 || arg1 == "0") {
+            return "";
+        }
+        return arg1;
+        //return !arg1 && arg1!==0 && typeof arg1!=="boolean"?true:false;
+    }
+
+    function goPage2() {
+        var tp = document.getElementById("_tp").value;//currentPage
+        var max = $("#maxPage").val(); //maxPage
+        tp = tp.trim();
+        var r = /^\+?[0-9][0-9]*$/;
+        if (!(r.test(tp))) {
+            alert("页数输入有误，请重新输入!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) == 0) {
+            alert("页数必须大于0!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) > parseInt(max)) {
+            alert("不能大于总页数!");
+            $("#_tp").val(max);
+            return false;
+        } else {
+            $("#n_currentPage").val(tp);
+            // document.forms["form0"].submit();
+            queryWorkSetByCondition();
+        }
+    }
+
+    function goPriAftPage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 + 1 * 1);
+        queryWorkSetByCondition();
+    }
+
+    function goPriMaxPage() {
+        $("#n_currentPage").val($("#maxPage").val());
+        queryWorkSetByCondition();
+    }
+
+    function goPriPrePage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 - 1 * 1);
+        queryWorkSetByCondition();
+    }
+
+    function showDateByWorkLevelAndMonth() {
+        var positionLevel = $("#positionLevel").val();
+        var monthId = $("#monthId").val();
+        if (positionLevel != 0) {
+            var formData = new FormData();
+            formData.append('positionLevel', $("#positionLevel").val());
+            formData.append('month', monthId);
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: "/person/getWorkDatesAndPositionsByData2",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    var data = eval(msg);//将msg化为数;
+                    if (data.includes("$")) {
+                        flag = true;
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "";
+                        var arr = data.split("$")
+                        $("#workDateStr").val(arr[0]);
+                        $("#positionLevelId").val(arr[1]);
+                    } else {
+                        flag = false;
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;" + data;
+                        errormessagediv.style.color = "red";
+                        $("#workDateStr").val("");
+                        $("#positionLevelId").val("");
+                    }
+                },
+                error: function (msg) {
+                    flag = false;
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                    $("#workDateStr").val("");
+                    $("#positionLevelId").val("");
+                }
+            });
+        }
+
+    }
+
+    var currentPage; //当前页
+    var totalPage; //总多少页
+    var totaldata; //总共多少记录
+    var pageSize;//当前每页多少条
+    function queryWorkSetByCondition() {
+        var currentpage = $("#n_currentPage").val();
+        var positionLevel = $("#positionLevel").val();
+        var monthId = $("#monthId").val();
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var formData = new FormData();
+        formData.append('workLevels', positionLevel);
+        formData.append('months', monthId);
+        formData.append('currentPage', currentpage);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/person/queryWorkSetByCondition",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+                errormessagediv.style.color = "green";
+                var data = eval(msg);//将msg化为数;
+                var tr = "";
+                var image01 = $("#image01");
+                var image02 = $("#image02");
+                var image03 = $("#image03");
+                var image04 = $("#image04");
+                var maxpageid = $("#maxPage");
+                var n_currentPage = $("#n_currentPage");
+                var inputpage = $("#_tp");
+                image01.html("");
+                image02.html("");
+                image03.html("");
+                image04.html("");
+                var td = "";
+                var tbody = $("#tabletblody");
+                tbody.html("");
+                if (data != null && data != "") {
+                    $("#nodatadiv").hide();
+                    $("#showdiv").show();
+                    currentPage = data[0].currentPage; //当前页
+                    totalPage = data[0].maxPage; //总多少页
+                    totaldata = data[0].recordCount; //总共多少记录
+                    pageSize = data[0].pageSize;
+                    maxpageid.val(totalPage);
+                    n_currentPage.val(currentPage);
+                    inputpage.val(currentPage);
+                    $.each(data, function (num) {
+                        tr = $("<tr id='" + data[num].id + "'></tr>");
+                        tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
+                        tr.append("<td>" + isNull(data[num].workLevel) + "</td>");
+                        tr.append("<td>" + isNull(data[num].month) + "</td>");
+                        tr.append("<td>" + isNull(data[num].morningOn) + "</td>");
+                        tr.append("<td>" + isNull(data[num].morningOnFrom) + "</td>");
+                        tr.append("<td>" + isNull(data[num].morningOnEnd) + "</td>");
+                        tr.append("<td>" + isNull(data[num].morningOffFrom) + "</td>");
+                        tr.append("<td>" + isNull(data[num].morningOffEnd) + "</td>");
+                        tr.append("<td>" + isNull(data[num].noonOn) + "</td>");
+                        tr.append("<td>" + isNull(data[num].noonOnFrom) + "</td>");
+                        tr.append("<td>" + isNull(data[num].noonOnEnd) + "</td>");
+                        tr.append("<td>" + isNull(data[num].noonOff) + "</td>");
+                        tr.append("<td>" + isNull(data[num].noonOffFrom) + "</td>");
+                        tr.append("<td>" + isNull(data[num].noonOffEnd) + "</td>");
+                        tr.append("<td>" + isNull(data[num].extworkon) + "</td>");
+                        tr.append("<td>" + isNull(data[num].extworkoff) + "</td>");
+                        tr.append("<td>" + isNull(data[num].remark) + "</td>");
+                        td = "<td>";
+                        td += " <a href=\"javascript:void(0);\"\n" +
+                            "onclick=\"updateWorkSet(" + data[num].id + ");\">编辑</a>\n" +
+                            "  <a href=\"javascript:void(0);\"\n" +
+                            " onclick=\"deleteWorkSet(" + data[num].id + ");\">删除</a>\n" +
+                            "  </td>";
+                        tr.append(td);
+                        tr.appendTo(tbody);
+                    });
+                    $("#currentpagespan").html(currentPage);
+                    $("#maxpagespan").html(totalPage);
+                    $("#recordcountspan").html(totaldata);
+                    if (currentPage > 1) {
+                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPriPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPriPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image01.html(imange01str);
+                    } else {
+                        image01.html("");
+                    }
+                    if (currentPage <= 1) {
+                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image02.html(image02str);
+                    } else {
+                        image02.html("");
+                    }
+                    if (currentPage < totalPage) {
+                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goPriAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goPriMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image03.html(imange03str);
+                    } else {
+                        image03.html("");
+                    }
+                    if (currentPage >= totalPage) {
+                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image04.html(image04str);
+                    } else {
+                        image04.html("");
+                    }
+                } else {
+                    $("#nodatadiv").show();
+                    $("#showdiv").hide();
+                }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+            }
+
+        });
+    }
+
+    function updateWorkSet(workSetId) {
+        window.location.href = "/person/toupdateWorkSetById?Id=" + workSetId;
+
+    }
+
+    function deleteWorkSet(workSetId) {
+        window.location.href = "/person/deleteWorkSetById?id=" + workSetId;
+    }
+
+</script>
+<style type="text/css">
+    a {
+        white-space: nowrap;
+    }
+
+    table tr td {
+        white-space: nowrap;
+    }
+</style>
+<body>
+
+<div id='app'>
+    <form>
+        <input type="hidden" id="flag" th:value="${flag}">
+        <input type="hidden" id="maxPage" th:value="${workSet.maxPage}">
+        <input type="hidden" id="n_currentPage" th:value="${workSet.currentPage}"/>
+
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#compreAttendRecord" data-toggle="tab">考勤设置</a>
+            </li>
+            <li>
+                <a th:href="@{/person/toworkdatepage}">排班设置</a>
+            </li>
+            <li>
+                <a th:href="@{/person/tooutsetpage}">外出考勤设置</a>
+            </li>
+            <li>
+                <a th:href="@{/person/toZhongKong}">考勤机绑定</a>
+            </li>
+            <li>
+                <a th:href="@{/person/toBanGongShiPinShiJiaBanRenYuan}">办公室加班</a>
+            </li>
+            <li>
+                <a th:href="@{/person/toDaKaPianCha}">打卡偏差</a>
+            </li>
+        </ul>
+        <br>
+        <p>
+        <div id="compreAttendRecord">
+            <div class="panel panel-primary">
+                <div class="panel-body form-inline">
+                    <table style="border-collapse:separate; border-spacing:2px;">
+                        <tr>
+                            <td style="text-align: right">
+                                <label>职位类别：</label>
+                            </td>
+                            <td>
+                                <!---->
+                                <select id="positionLevel" class="selectpicker show-tick form-control"
+                                        data-live-search="true" onchange="showDateByWorkLevelAndMonth()"
+                                        data-selected-text-format="count > 5">
+                                    <option th:value="A">A</option>
+                                    <option th:value="B">B</option>
+                                    <option th:value="C">C</option>
+                                    <option th:value="D">D</option>
+                                    <option th:value="E">E</option>
+                                </select>
+                            </td>
+                            <td><label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年月选择:</label></td>
+                            <td>
+                                <input type="text" id="monthId" onchange="showDateByWorkLevelAndMonth()"
+                                       style="width:130px;height: 34px;text-align: center"
+                                       class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM'})"
+                                />
+                            </td>
+                            <!--onchange="showDateByMonth()"-->
+                            <td style="text-align: right">
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a class="btn btn-primary"
+                                                                     href="javascript:void(0);"
+                                                                     onclick="queryWorkSetByCondition()">查找</a>
+                                <!--<input type="button" value="查找" class="btn btn-primary">-->
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a class="btn btn-primary"
+                                   href="/person/toaddworksetpage">新增</a>
+                                <!--<input type="button" value="新增" class="btn btn-primary" onclick="showAddPersonDiv()">-->
+                            </td>
+                            <td>
+                                <div style="display: none" id="errormessage">
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>职位：</label>
+                            </td>
+                            <td colspan="5">
+                                <input type="text" id="workDateStr" class="form-control" disabled style="width:900px"/>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>工作日：</label>
+                            </td>
+                            <td colspan="5">
+                                <input type="text" id="positionLevelId" class="form-control" disabled
+                                       style="width:900px"/>
+
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+    </form>
+    <table class="table table-bordered table-hover table-striped text-center" style="word-break: keep-all"
+           id="showlistbody">
+        <thead style="background-color:lightsteelblue;font-size: 13px">
+        <tr>
+            <th style="text-align: center">序号</th>
+            <th style="text-align: center">属性</th>
+            <th style="text-align: center">月份</th>
+            <th style="text-align: center">a.on</th>
+            <th style="text-align: center">a.on.fro</th>
+            <th style="text-align: center">a.on.end</th>
+            <th style="text-align: center">a.off</th>
+            <th style="text-align: center">a.off.fro</th>
+            <th style="text-align: center">a.off.end</th>
+            <th style="text-align: center">p.on</th>
+            <th style="text-align: center">p.on.fro</th>
+            <th style="text-align: center">p.on.end</th>
+            <th style="text-align: center">p.off</th>
+            <th style="text-align: center">p.off.fro</th>
+            <th style="text-align: center">p.off.end</th>
+            <th style="text-align: center">n.on</th>
+            <th style="text-align: center">n.off</th>
+            <th style="text-align: center">备注</th>
+            <th style="text-align: center">操作</th>
+        </tr>
+        </thead>
+        <tbody id="tabletblody">
+        <!--v-for中的数据不再是直接从data中获取，而是通过search方法对data中的数据进行过滤再显示-->
+        <div th:unless="${#lists.isEmpty(workSetList)}">
+            <div th:each="work ,iterStat: ${workSetList}" align="center">
+                <tr>
+                    <td align="center"
+                        th:text="${(iterStat.index+1)}+${workSet.currentPage-1}*${workSet.pageSize}"></td>
+                    <td align="center" th:text="${work.workLevel}"></td>
+                    <td align="center" th:text="${work.month}"></td>
+                    <td align="center" th:text="${work.morningOn}"></td>
+                    <td align="center" th:text="${work.morningOnFrom}"></td>
+                    <td align="center" th:text="${work.morningOnEnd}"></td>
+                    <td align="center" th:text="${work.morningOff}"></td>
+                    <td align="center" th:text="${work.morningOffFrom}"></td>
+                    <td align="center" th:text="${work.morningOffEnd}"></td>
+                    <td align="center" th:text="${work.noonOn}"></td>
+                    <td align="center" th:text="${work.noonOnFrom}"></td>
+                    <td align="center" th:text="${work.noonOnEnd}"></td>
+                    <td align="center" th:text="${work.noonOff}"></td>
+                    <td align="center" th:text="${work.noonOffFrom}"></td>
+                    <td align="center" th:text="${work.noonOffEnd}"></td>
+                    <td align="center" th:text="${work.extworkon}"></td>
+                    <td align="center" th:text="${work.extworkoff}"></td>
+                    <td align="center" th:text="${work.remark}"></td>
+                    <td align="center" style="word-break: keep-all">
+                        <a href="javascript:void(0);"
+                           th:onclick="updateWorkSet([[${work.id}]]);">编辑</a>
+                        <a href="javascript:void(0);"
+                           th:onclick="deleteWorkSet([[${work.id}]]);">删除</a>
+                    </td>
+                </tr>
+            </div>
+        </div>
+        <div th:if="${#lists.isEmpty(workSetList)}">
+            <tr>
+                <td align="center" colspan="19">查无数据</td>
+            </tr>
+        </div>
+        </tbody>
+
+        <tfoot id="s_tfoot">
+        <tr id="showdiv">
+
+            <td colspan="19" align="center">
+                <span>第</span>
+                <span th:text="${workSet.currentPage}" id="currentpagespan"> </span>
+                <span>页|共</span>
+                <span th:text="${workSet.maxPage}" id="maxpagespan"> </span>
+                <span>页|共</span>
+                <span th:text="${workSet.recordCount}" id="recordcountspan"> </span>
+                <span>条记录 </span>
+                <span id="image01">
+                            <span th:if="${workSet.currentPage gt 1}">
+                                    <img src="/images/page/sy-2.jpg" align="middle" border="0"
+                                         style="width: 20px; height: 20px; vertical-align: middle"
+                                         onClick="goPageone()"/>
+                                    <img src="/images/page/syy-2.jpg" align="middle" border="0" onClick="goPrePage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+
+                                </span>
+                                </span>
+                <span id="image02">
+                            <span th:if="${workSet.currentPage le 1}">
+                                <img src='/images/page/l-sy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='images/images/page/l-syy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+                            </span>
+                            </span>
+                <span id="image03">
+                            <span th:if="${workSet.currentPage lt workSet.maxPage}">
+                                    <img src="/images/page/xyy-2.jpg" align="middle" border="0" onClick="goAftPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                                    <img src="/images/page/my-2.jpg" align="middle" border="0" onClick="goMaxPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                                </span>
+                <span id="image04">
+                            <span th:if="${workSet.currentPage ge workSet.maxPage}">
+                                <img src='/images/page/l-xyy-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='/images/page/l-my-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                            </span>
+
+                |&nbsp;到第
+                <input onkeypress="if(event.keyCode==13) {gopage.click();return false;}"
+                       style="width: 50px"
+                       id="_tp" th:name="currentPage" type="text" th:value="${workSet.currentPage}"/>
+                页&nbsp;
+                <img src="/images/page/cx-2.jpg" id="gopage" onClick="goPage2()"
+                     style="width:20px;height:20px;vertical-align:middle">
+            </td>
+
+        </tr>
+
+
+        <tr style="display:none;" id="nodatadiv">
+            <td colspan="18" align="center">
+                查无数据
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+</div>
+
+</body>
+</html>

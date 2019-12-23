@@ -1,0 +1,386 @@
+<!doctype html>
+<!--suppress ALL-->
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>用户注册</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/premium.css">
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+
+
+</head>
+<body class=" theme-blue">
+
+<!-- Demo page code -->
+
+<script type="text/javascript">
+    $(function () {
+        $('.selectpicker').selectpicker();
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        var match = document.cookie.match(new RegExp('color=([^;]+)'));
+        if (match) var color = match[1];
+        if (color) {
+            $('body').removeClass(function (index, css) {
+                return (css.match(/\btheme-\S+/g) || []).join(' ')
+            })
+            $('body').addClass('theme-' + color);
+        }
+
+        $('[data-popover="true"]').popover({html: true});
+
+    });
+
+
+</script>
+<style type="text/css">
+    #line-chart {
+        height: 300px;
+        width: 800px;
+        margin: 0px auto;
+        margin-top: 1em;
+    }
+
+    .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+        color: #fff;
+    }
+
+    .panel-body {
+        height: 500px;
+        width: 400px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        var uls = $('.sidebar-nav > ul > *').clone();
+        uls.addClass('visible-xs');
+        $('#main-menu').append(uls.clone());
+    });
+</script>
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- Le fav and touch icons -->
+<link rel="shortcut icon" href="../assets/ico/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+
+
+<!--[if lt IE 7 ]>
+<body class="ie ie6"> <![endif]-->
+<!--[if IE 7 ]>
+<body class="ie ie7 "> <![endif]-->
+<!--[if IE 8 ]>
+<body class="ie ie8 "> <![endif]-->
+<!--[if IE 9 ]>
+<body class="ie ie9 "> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+
+<!--<![endif]-->
+
+<div class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <a class="" href="mainindex.html"><span class="navbar-brand"><span class="fa fa-paper-plane"></span> 深圳柯赛标识工程有限公司</span></a>
+    </div>
+
+    <div class="navbar-collapse collapse" style="height: 1px;">
+
+    </div>
+</div>
+</div>
+
+
+<div class="dialog">
+    <div class="panel panel-default">
+        <p class="panel-heading no-collapse">用户注册</p>
+        <div class="panel-body">
+            <form id="registform" th:action="@{/account/register}" method="post" th:object="${userInfo}">
+                <input type="hidden" th:field="*{empNo}" id="empNoPost">
+
+                <div class="form-group">
+                    <label>姓名</label>
+                    <select id="empNo" class="selectpicker show-tick form-control"
+                            data-live-search="true" onchange="checkUserExsitAndReturnPinyinName()">
+                        　
+                        <option th:value="0">请选择</option>
+                        　
+                        <option th:each="c:${employeeList}" th:value="${c.empNo}"
+                                th:text="${c.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>部门</label>
+                    <input type="text" class="form-controlspan12 form-control" id="deptName" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" class="form-controlspan12 form-control" id="username"
+                           onchange="checkUserNameExsit()" th:field="*{userName}">
+                </div>
+
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="text" class="form-control span12" id="password1" th:field="*{userPwd}"
+                           onchange="checkpassword()">
+                </div>
+                <div class="form-group">
+                    <label>确认密码</label>
+                    <input type="text" class="form-controlspan12 form-control" id="password2"
+                           onchange="checkpassword2()">
+                </div>
+
+                <div id="errormessage" style="display: block">
+                </div>
+                <div>
+                    <input type="submit" onclick="return checkregistsubmitdata()" ; class="btn btn-primary pull-right"
+                           value="注册"></input>
+                </div>
+            </form>
+        </div>
+    </div>
+    <p><a th:href="@{/account/tologin}">返回登录界面</a></p>
+</div>
+
+
+<script src="/lib/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript">
+    $("[rel=tooltip]").tooltip();
+    $(function () {
+        $('.demo-cancel-click').click(function () {
+            return false;
+        });
+    });
+
+    var usernameflag = false;
+    var passwordflag = false;
+    String.prototype.trim = function () {
+        return this.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+    function checkregistsubmitdata() {
+        var isRight = true;
+        var empNo = $("#empNoPost").val();
+        if (empNo.length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请选择姓名再提交注册！";
+            errormessagediv.style.color = "red";
+            isRight = false;
+            return isRight;
+        }
+        var username = $("#username").val();
+        if (username.trim().length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写用户名再提交注册！";
+            errormessagediv.style.color = "red";
+            isRight = false;
+            return isRight;
+        }
+        var password1 = $("#password1").val();
+        var password2 = $("#password2").val();
+        if (password1.trim().length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写密码再提交注册！";
+            errormessagediv.style.color = "red";
+            isRight = false;
+            return isRight;
+        }
+        if (password2.trim().length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请确认密码再提交注册！";
+            errormessagediv.style.color = "red";
+            isRight = false;
+            return isRight;
+        }
+        return isRight;
+    }
+
+
+    function checkpassword() {
+        $("#errormessage").hide();
+        var password = $("#password1").val();
+        var passwordregul = /^[a-zA-Z]\w{4,11}$/;
+        if (password == "") {
+            $("#password2").val("");
+            passwordflag = false;
+        }
+        if (passwordregul.test(password)) {
+            passwordflag = true;
+        } else {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;以字母开头，长度在5~12之间，只能包含字母、数字和下划线!";
+            errormessagediv.style.color = "red";
+            $("#password1").val("");
+            passwordflag = false;
+        }
+    }
+
+    function checkpassword2() {
+        $("#errormessage").hide();
+        var password = $("#password1").val();
+        var password2 = $("#password2").val();
+        var passwordregul = /^[a-zA-Z]\w{4,11}$/;
+        if (password != "") {
+            if (passwordflag) {
+                if (passwordregul.test(password)) {
+                    if (password != password2) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;密码确认错误!";
+                        errormessagediv.style.color = "red";
+                        $("#password2").val("");
+                        passwordflag1 = false;
+                    } else {
+                        passwordflag1 = true;
+                    }
+                } else {
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;以字母开头，长度在5~12之间，只能包含字母、数字和下划线!";
+                    errormessagediv.style.color = "red";
+                    $("#password1").val("");
+                    passwordflag1 = false;
+                }
+            }
+        } else {
+            $("#password2").val("");
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请先输入密码再确认!";
+            errormessagediv.style.color = "red";
+            passwordflag1 = false;
+        }
+    }
+
+    function checkUserExsitAndReturnPinyinName() {
+        $("#errormessage").hide();
+        var empNo = $("#empNo").val();
+        $.ajax({
+            data: empNo,
+            type: "POST",
+            contentType: "application/json",//上传内容格式为json结构
+            url: "/account/checkUserExsitAndReturnPinyinName",
+            success: function (msg) {
+                var nameStr = msg.substring(1, msg.length - 1);
+                if (nameStr != 1) {
+                    var arr = nameStr.split(",");
+                    $("#username").val(arr[0]);
+                    $("#deptName").val(arr[1]);
+                    $("#empNoPost").val($("#empNo").val());
+                } else {
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;您已注册过,不能重复注册!";
+                    errormessagediv.style.color = "red";
+                }
+            },
+            error: function (msg) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+        });
+    }
+
+    function checkUserNameExsit() {
+        // 当鼠标不聚焦验证用户名input
+        var username = $("#username").val();
+        var str2 = check_user_name(username);
+        if ("该用户名合法" == str2) {
+            usernameflag = true;
+            $("#errormessage").hide();
+        } else {
+            usernameflag = false;
+            $("#username").val("")
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;"+str2;
+            errormessagediv.style.color = "red";
+        }
+
+        if(usernameflag) {
+            $.ajax({
+                data: username,
+                type: "POST",
+                contentType: "application/json",//上传内容格式为json结构
+                url: "/account/checkUserNameExsit",
+                success: function (msg) {
+                    var nameStr = msg.substring(1, msg.length - 1);
+                    if (nameStr == 0) {
+                        $("#errormessage").hide();
+                    } else {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;用户名已存在!";
+                        errormessagediv.style.color = "red";
+                    }
+                },
+                error: function (msg) {
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+            });
+        }
+    }
+
+    function check_user_name(str) {
+        var str2 = "该用户名合法";
+        if ("" == str) {
+            str2 = "用户名为空";
+            return str2;
+        } else if ((str.length < 4) || (str.length > 20)) {
+            str2 = "用户名必须为4 ~ 20位";
+            return str2;
+        } else if (check_other_char(str)) {
+            str2 = "不能含有特殊字符";
+            return str2;
+        }
+        return str2;
+    }
+
+    // 验证用户名是否含有特殊字符
+    function check_other_char(str) {
+        var arr = ["&", "\\", "/", "*", ">", "<", "@", "!"];
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = 0; j < str.length; j++) {
+                if (arr[i] == str.charAt(j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+</script>
+
+
+</body>
+</html>

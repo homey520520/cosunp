@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>工资单</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+    <script src="/lib/defaults-zh_CN.js" type="text/javascript"></script>
+</head>
+<style type="text/css">
+    th,td{
+        white-space: nowrap;
+    }
+    th{
+        font-size: 11px;
+    }
+</style>
+<script>
+
+    $(function () {
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        var flag = $("#flag").val();
+        var aflag = eval(flag)
+        if (aflag == 1) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;添加成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 2) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;删除成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 3) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;更改成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 4) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+            errormessagediv.style.color = "green";
+        }
+    });
+
+    function goPageone() {
+        $("#n_currentPage").val(1);
+        querySalaryDataOutPutByCondition2();
+    }
+
+    function goPrePage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 - 1 * 1);
+        querySalaryDataOutPutByCondition2();
+    }
+
+    function goAftPage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 + 1 * 1);
+        querySalaryDataOutPutByCondition2();
+    }
+
+    function goMaxPage() {
+        $("#n_currentPage").val($("#maxPage").val());
+        querySalaryDataOutPutByCondition2();
+    }
+
+    function goPriPageone() {
+        $("#n_currentPage").val(1);
+        querySalaryDataOutPutByCondition2();
+    }
+
+    function isNull(arg1) {
+        if (arg1 == "null" || arg1 == null || arg1 == 0 || arg1 == "0") {
+            return "";
+        }
+        return arg1;
+    }
+
+    function goPage2() {
+        var tp = document.getElementById("_tp").value;
+        var max = $("#maxPage").val();
+        tp = tp.trim();
+        var r = /^\+?[0-9][0-9]*$/;
+        if (!(r.test(tp))) {
+            alert("页数输入有误，请重新输入!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) == 0) {
+            alert("页数必须大于0!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) > parseInt(max)) {
+            alert("不能大于总页数!");
+            $("#_tp").val(max);
+            return false;
+        } else {
+            $("#n_currentPage").val(tp);
+            querySalaryDataOutPutByCondition2();
+        }
+    }
+
+    function goPriAftPage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 + 1 * 1);
+        querySalaryDataOutPutByCondition2();
+    }
+
+    function goPriMaxPage() {
+        $("#n_currentPage").val($("#maxPage").val());
+        querySalaryDataOutPutByCondition2();
+    }
+
+    function goPriPrePage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 - 1 * 1);
+        querySalaryDataOutPutByCondition2();
+    }
+
+    var currentPage;
+    var totalPage;
+    var totaldata;
+    var pageSize;
+    function querySalaryDataOutPutByCondition2() {
+        var currentpage = $("#n_currentPage").val();
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var formData = new FormData();
+        formData.append('nameIds', $("#name").val());
+        formData.append('empNo', $("#empNo").val());
+        formData.append('deptIds', $("#deptId").val());
+        formData.append('positionIds', $("#positionId").val());
+        formData.append('startIncomDateStr', $("#startIncomDateStr").val());
+        formData.append('endIncomDateStr', $("#endIncomDateStr").val());
+        formData.append('sortMethod', sortMethod);
+        formData.append('sortByName', sortByName);
+        formData.append('workTypes', $("#workType").val());
+        formData.append('currentPage', currentpage);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/finance/querySalaryDataOutPutByCondition",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+                errormessagediv.style.color = "green";
+                var data = eval(msg);
+                var tr = "";
+                var image01 = $("#image01");
+                var image02 = $("#image02");
+                var image03 = $("#image03");
+                var image04 = $("#image04");
+                var maxpageid = $("#maxPage");
+                var n_currentPage = $("#n_currentPage");
+                var inputpage = $("#_tp");
+                image01.html("");
+                image02.html("");
+                image03.html("");
+                image04.html("");
+                var td = "";
+                var td2 = "";
+                var tbody = $("#tabletblody");
+                tbody.html("");
+                var userType;
+                if (data != null && data != "") {
+                    $("#nodatadiv").hide();
+                    $("#showdiv").show();
+                    currentPage = data[0].currentPage;
+                    totalPage = data[0].maxPage;
+                    totaldata = data[0].recordCount;
+                    pageSize = data[0].pageSize;
+                    userType = data[0].type;
+                    maxpageid.val(totalPage);
+                    n_currentPage.val(currentPage);
+                    inputpage.val(currentPage);
+                    var eduLe;
+                    var safeLe;
+                    var otherLe;
+                    $.each(data, function (num) {
+                        tr = $("<tr id='" + data[num].id + "'></tr>");
+                        tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
+                        tr.append("<td>" + isNull(data[num].yearMonth) + "</td>");
+                        tr.append("<td>" + isNull(data[num].deptName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].positionName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].positionAttrName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].empNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].name) + "</td>");
+                        tr.append("<td>" + isNull(data[num].inCompDate) + "</td>");
+                        tr.append("<td>" + data[num].basickWorkHours + "</td>");
+                        tr.append("<td>" + data[num].norAttenHours + "</td>");
+                        tr.append("<td>" + data[num].norAttendSalary + "</td>");
+                        tr.append("<td>" + data[num].chinaPailLeavHours + "</td>");
+                        tr.append("<td>" + data[num].chinaPaidLeavSalary + "</td>");
+                        tr.append("<td>" + data[num].otherPaidLeavHours + "</td>");
+                        tr.append("<td>" + data[num].otherPaidLeavSalary + "</td>");
+                        tr.append("<td>" + data[num].basicSalarySubTotal + "</td>");
+                        tr.append("<td>" + data[num].usualExtraHours + "</td>");
+                        tr.append("<td>" + data[num].usralExtraSalary + "</td>");
+                        tr.append("<td>" + data[num].weekendWorkHours + "</td>");
+                        tr.append("<td>" + data[num].weekendWorkSalary + "</td>");
+                        tr.append("<td>" + data[num].chinaHoliWorkHours + "</td>");
+                        tr.append("<td>" + data[num].chinaHoliWorkSalary + "</td>");
+                        tr.append("<td>" + data[num].compressSalary + "</td>");
+                        tr.append("<td>" + data[num].jobSalary + "</td>");
+                        tr.append("<td>" + data[num].positionSalary + "</td>");
+                        tr.append("<td>" + data[num].meritSalary + "</td>");
+                        tr.append("<td>" + data[num].meritScore + "</td>");
+                        tr.append("<td>" + data[num].subbonusTotal + "</td>");
+                        tr.append("<td>" + data[num].salorLevelSalary + "</td>");
+                        tr.append("<td>" + data[num].salrActuGetSalary + "</td>");
+                        tr.append("<td>" + data[num].houseOrTELSubsidy + "</td>");
+                        tr.append("<td>" + data[num].hotTempOrOtherAllow + "</td>");
+                        tr.append("<td>" + data[num].fullWorkReword + "</td>");
+                        tr.append("<td>" + data[num].workYearsSalary + "</td>");
+                        tr.append("<td>" + data[num].sellCommi + "</td>");
+                        tr.append("<td>" + data[num].compreSalary + "</td>");
+                        tr.append("<td>" + data[num].buckFoodCost + "</td>");
+                        tr.append("<td>" + data[num].buckWaterEleCost + "</td>");
+                        tr.append("<td>" + data[num].buckOldAgeInsurCost + "</td>");
+                        tr.append("<td>" + data[num].buckMedicInsurCost + "</td>");
+                        tr.append("<td>" + data[num].buckUnEmployCost + "</td>");
+                        tr.append("<td>" + data[num].buckAccumCost + "</td>");
+                        tr.append("<td>" + data[num].otherBuckCost + "</td>");
+                        tr.append("<td>" + data[num].sixDeducCost + "</td>");
+                        tr.append("<td>" + data[num].personIncomTaxCost + "</td>");
+                        tr.append("<td>" + data[num].netPaySalary + "</td>");
+                        tr.appendTo(tbody);
+                    });
+                    $("#currentpagespan").html(currentPage);
+                    $("#maxpagespan").html(totalPage);
+                    $("#recordcountspan").html(totaldata);
+                    if (currentPage > 1) {
+                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPriPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPriPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image01.html(imange01str);
+                    } else {
+                        image01.html("");
+                    }
+                    if (currentPage <= 1) {
+                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image02.html(image02str);
+                    } else {
+                        image02.html("");
+                    }
+                    if (currentPage < totalPage) {
+                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goPriAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goPriMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image03.html(imange03str);
+                    } else {
+                        image03.html("");
+                    }
+                    if (currentPage >= totalPage) {
+                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image04.html(image04str);
+                    } else {
+                        image04.html("");
+                    }
+                } else {
+                    $("#nodatadiv").show();
+                    $("#showdiv").hide();
+                }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+
+        });
+    }
+
+
+    var sortMethod;
+    var sortByName;
+
+    function querySalaryDataOutPutByCondition() {
+        var currentpage = $("#n_currentPage").val();
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var formData = new FormData();
+        formData.append('nameIds', $("#name").val());
+        formData.append('empNo', $("#empNo").val());
+        formData.append('deptIds', $("#deptId").val());
+        formData.append('positionIds', $("#positionId").val());
+        formData.append('startIncomDateStr', $("#startIncomDateStr").val());
+        formData.append('endIncomDateStr', $("#endIncomDateStr").val());
+        formData.append('sortMethod', sortMethod);
+        formData.append('sortByName', sortByName);
+        formData.append('workTypes', $("#workType").val());
+        formData.append('currentPage', 1);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/finance/querySalaryDataOutPutByCondition",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+                errormessagediv.style.color = "green";
+                var data = eval(msg);
+                var tr = "";
+                var image01 = $("#image01");
+                var image02 = $("#image02");
+                var image03 = $("#image03");
+                var image04 = $("#image04");
+                var maxpageid = $("#maxPage");
+                var n_currentPage = $("#n_currentPage");
+                var inputpage = $("#_tp");
+                image01.html("");
+                image02.html("");
+                image03.html("");
+                image04.html("");
+                var td = "";
+                var td2 = "";
+                var tbody = $("#tabletblody");
+                tbody.html("");
+                var userType;
+                if (data != null && data != "") {
+                    $("#nodatadiv").hide();
+                    $("#showdiv").show();
+                    currentPage = data[0].currentPage;
+                    totalPage = data[0].maxPage;
+                    totaldata = data[0].recordCount;
+                    pageSize = data[0].pageSize;
+                    userType = data[0].type;
+                    maxpageid.val(totalPage);
+                    n_currentPage.val(currentPage);
+                    inputpage.val(currentPage);
+                    var eduLe;
+                    var safeLe;
+                    var otherLe;
+                    $.each(data, function (num) {
+                        tr = $("<tr id='" + data[num].id + "'></tr>");
+                        tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
+                        tr.append("<td>" + isNull(data[num].yearMonth) + "</td>");
+                        tr.append("<td>" + isNull(data[num].deptName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].positionName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].positionAttrName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].empNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].name) + "</td>");
+                        tr.append("<td>" + isNull(data[num].inCompDate) + "</td>");
+                        tr.append("<td>" + data[num].basickWorkHours + "</td>");
+                        tr.append("<td>" + data[num].norAttenHours + "</td>");
+                        tr.append("<td>" + data[num].norAttendSalary + "</td>");
+                        tr.append("<td>" + data[num].chinaPailLeavHours + "</td>");
+                        tr.append("<td>" + data[num].chinaPaidLeavSalary + "</td>");
+                        tr.append("<td>" + data[num].otherPaidLeavHours + "</td>");
+                        tr.append("<td>" + data[num].otherPaidLeavSalary + "</td>");
+                        tr.append("<td>" + data[num].basicSalarySubTotal + "</td>");
+                        tr.append("<td>" + data[num].usualExtraHours + "</td>");
+                        tr.append("<td>" + data[num].usralExtraSalary + "</td>");
+                        tr.append("<td>" + data[num].weekendWorkHours + "</td>");
+                        tr.append("<td>" + data[num].weekendWorkSalary + "</td>");
+                        tr.append("<td>" + data[num].chinaHoliWorkHours + "</td>");
+                        tr.append("<td>" + data[num].chinaHoliWorkSalary + "</td>");
+                        tr.append("<td>" + data[num].compressSalary + "</td>");
+                        tr.append("<td>" + data[num].jobSalary + "</td>");
+                        tr.append("<td>" + data[num].positionSalary + "</td>");
+                        tr.append("<td>" + data[num].meritSalary + "</td>");
+                        tr.append("<td>" + data[num].meritScore + "</td>");
+                        tr.append("<td>" + data[num].subbonusTotal + "</td>");
+                        tr.append("<td>" + data[num].salorLevelSalary + "</td>");
+                        tr.append("<td>" + data[num].salrActuGetSalary + "</td>");
+                        tr.append("<td>" + data[num].houseOrTELSubsidy + "</td>");
+                        tr.append("<td>" + data[num].hotTempOrOtherAllow + "</td>");
+                        tr.append("<td>" + data[num].fullWorkReword + "</td>");
+                        tr.append("<td>" + data[num].workYearsSalary + "</td>");
+                        tr.append("<td>" + data[num].sellCommi + "</td>");
+                        tr.append("<td>" + data[num].compreSalary + "</td>");
+                        tr.append("<td>" + data[num].buckFoodCost + "</td>");
+                        tr.append("<td>" + data[num].buckWaterEleCost + "</td>");
+                        tr.append("<td>" + data[num].buckOldAgeInsurCost + "</td>");
+                        tr.append("<td>" + data[num].buckMedicInsurCost + "</td>");
+                        tr.append("<td>" + data[num].buckUnEmployCost + "</td>");
+                        tr.append("<td>" + data[num].buckAccumCost + "</td>");
+                        tr.append("<td>" + data[num].otherBuckCost + "</td>");
+                        tr.append("<td>" + data[num].sixDeducCost + "</td>");
+                        tr.append("<td>" + data[num].personIncomTaxCost + "</td>");
+                        tr.append("<td>" + data[num].netPaySalary + "</td>");
+                        tr.appendTo(tbody);
+                    });
+                    $("#currentpagespan").html(currentPage);
+                    $("#maxpagespan").html(totalPage);
+                    $("#recordcountspan").html(totaldata);
+                    if (currentPage > 1) {
+                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPriPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPriPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image01.html(imange01str);
+                    } else {
+                        image01.html("");
+                    }
+                    if (currentPage <= 1) {
+                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image02.html(image02str);
+                    } else {
+                        image02.html("");
+                    }
+                    if (currentPage < totalPage) {
+                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goPriAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goPriMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image03.html(imange03str);
+                    } else {
+                        image03.html("");
+                    }
+                    if (currentPage >= totalPage) {
+                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image04.html(image04str);
+                    } else {
+                        image04.html("");
+                    }
+                } else {
+                    $("#nodatadiv").show();
+                    $("#showdiv").hide();
+                }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+
+        });
+    }
+
+    function updateFinanceImportData(id) {
+        window.location.href = "/finance/toupdateFinanceImportDataById?id=" + id;
+
+    }
+
+    function deleteFinanceImportData(id) {
+        window.location.href = "/finance/deleteFinanceImportData?id=" + id;
+    }
+
+    function deleteFinanceImportDataByBatch() {
+        var deleteBatch = document.getElementsByName("deleteBatch");
+        var check_val = [];
+        var k;
+        for (k in deleteBatch) {
+            if (deleteBatch[k].checked) {
+                if (deleteBatch[k].value != "null") {
+                    check_val.push(deleteBatch[k].value);
+                }
+            }
+        }
+        if (check_val.length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请先勾选再批量删除!";
+            errormessagediv.style.color = "red";
+        } else {
+            $("#errormessage").hide();
+            window.location.href = "/finance/deleteFinanceImportDataByBatch?ids=" + check_val;
+        }
+    }
+
+    function showPNG(id, type) {
+        window.open("/person/showImage?id=" + id + "&type=" + type);
+    }
+
+    function sortByAsc(titlename) {
+        sortMethod = 'asc';
+        sortByName = titlename;
+        querySalaryDataOutPutByCondition2();
+    }
+
+    function sortByDesc(titlename) {
+        sortMethod = 'desc';
+        sortByName = titlename;
+        querySalaryDataOutPutByCondition2();
+    }
+
+</script>
+<body>
+
+<div id='app'>
+    <form>
+        <input type="hidden" id="flag" th:value="${flag}">
+        <input type="hidden" id="maxPage" th:value="${employee.maxPage}">
+        <input type="hidden" id="userType" th:value="${userInfo.type}">
+        <input type="hidden" id="n_currentPage" name="view.currentPage" th:value="${employee.currentPage}"/>
+        <div class="panel panel-primary">
+            <div class="panel-body form-inline">
+                <table>
+                    <tr>
+                        <td style="text-align: right">
+                            <label>姓名：</label>
+                        </td>
+                        <td>
+                            <label>
+                                <select id="name" multiple class="selectpicker show-tick form-control"
+                                        data-live-search="true" data-actions-box="true"
+                                        data-selected-text-format="count > 2">
+                                    　　
+                                    <option th:each="c:${empList}" th:value="${c.id}"
+                                            th:text="${c.name}"></option>
+                                </select>
+                            </label>
+                        </td>
+
+                        <td style="text-align: right">
+                            <label>工号：</label>
+                        </td>
+                        <td>
+                            <label><input type="text" id="empNo" class="form-control" style="width:150px"></label>
+                        </td>
+                        <td style="text-align: right">
+                            <label>部门：</label>
+                        </td>
+                        <td>
+                            <select id="deptId" multiple class="selectpicker show-tick form-control"
+                                    data-live-search="true" data-actions-box="true"
+                                    data-selected-text-format="count > 2">
+                                　　
+                                <option th:each="c:${deptList}" th:value="${c.id}"
+                                        th:text="${c.deptname}"></option>
+                            </select>
+                        </td>
+
+                        <td style="text-align: right">
+                            <label>职位：</label>
+                        </td>
+                        <td>
+                            <select id="positionId" multiple class="selectpicker show-tick form-control"
+                                    data-live-search="true" data-actions-box="true"
+                                    data-selected-text-format="count > 1">
+                                　　
+                                <option th:each="c:${positionList}" th:value="${c.id}"
+                                        th:text="${c.positionName}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>入职时间起：</label>
+                        </td>
+                        <td>
+                            <input type="text" id="startIncomDateStr"
+                                   style="width:130px;height: 34px;text-align: center"
+                                   class="Wdate"
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endIncomDateStr\')}'})"/>
+
+                        </td>
+                        <td>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入职时间止：</label>
+                        </td>
+                        <td>
+                            <input type="text" id="endIncomDateStr"
+                                   style="width:140px;height: 34px;text-align: center" class="Wdate"
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startIncomDateStr\')}'})"/>
+
+                        </td>
+
+
+                        <td>
+                            <label>&nbsp;&nbsp;工作方式：</label>
+                        </td>
+                        <td>
+                            <select id="workType" multiple class="selectpicker show-tick form-control"
+                                    data-live-search="true" data-actions-box="true"
+                                    data-selected-text-format="count > 2">
+                                　　
+                                <option th:value="0">车间</option>
+                                <option th:value="1">办公区</option>
+                            </select>
+                        </td>
+
+                        <td colspan="2" style="text-align: right">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-primary"
+                               href="javascript:void(0);" onclick="querySalaryDataOutPutByCondition()">查找</a>
+                            <!--<input type="button" value="查找" class="btn btn-primary">-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            <!--<a class="btn btn-primary"-->
+                            <!--th:disabled="${userInfo.type ne 1}"-->
+                            <!--href="/finance/toaddfinanceimportdata">新增</a>-->
+                            <!--&nbsp;&nbsp;&nbsp;-->
+                            <!--<a class="btn btn-primary"-->
+                            <!--th:disabled="${userInfo.type ne 1}"-->
+                            <!--href="javascript:void(0);" onclick="deleteFinanceImportDataByBatch()">批量删除</a>-->
+                            <!--<input type="button" value="新增" class="btn btn-primary" onclick="showAddPersonDiv()">-->
+                        </td>
+                        <td>
+                            <div style="display: none" id="errormessage">
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+    <table class="table table-bordered table-hover table-striped text-center hongmei" id="showlistbody">
+        <thead style="background-color:lightsteelblue">
+        <tr>
+            <th style="text-align: center"> 序号</th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('yearMonth')" aria-hidden="true"></i>
+                年月
+                <i class="fa fa-sort-desc" onclick="sortByDesc('yearMonth')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('deptName')" aria-hidden="true"></i>
+                部门
+                <i class="fa fa-sort-desc" onclick="sortByDesc('deptName')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('positionName')" aria-hidden="true"></i>
+                职务
+                <i class="fa fa-sort-desc" onclick="sortByDesc('positionName')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('positionAttrName')" aria-hidden="true"></i>
+                职位
+                <i class="fa fa-sort-desc" onclick="sortByDesc('positionAttrName')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('empNo')" aria-hidden="true"></i>
+                工号
+                <i class="fa fa-sort-desc" onclick="sortByDesc('empNo')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('name')" aria-hidden="true"></i>
+                姓名
+                <i class="fa fa-sort-desc" onclick="sortByDesc('name')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('inCompDate')" aria-hidden="true"></i>
+                入职时间
+                <i class="fa fa-sort-desc" onclick="sortByDesc('inCompDate')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('basickWorkHours')" aria-hidden="true"></i>
+                基本工时
+                <i class="fa fa-sort-desc" onclick="sortByDesc('basickWorkHours')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('norAttenHours')" aria-hidden="true"></i>
+                正常出勤<br>工时
+                <i class="fa fa-sort-desc" onclick="sortByDesc('norAttenHours')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('norAttendSalary')" aria-hidden="true"></i>
+                正常出勤<br>工资
+                <i class="fa fa-sort-desc" onclick="sortByDesc('norAttendSalary')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('chinaPailLeavHours')" aria-hidden="true"></i>
+                法定有薪<br>假工时
+                <i class="fa fa-sort-desc" onclick="sortByDesc('chinaPailLeavHours')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('chinaPaidLeavSalary')" aria-hidden="true"></i>
+                法定有薪<br>假工资
+                <i class="fa fa-sort-desc" onclick="sortByDesc('chinaPaidLeavSalary')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('otherPaidLeavHours')" aria-hidden="true"></i>
+                其它有薪<br>假工时
+                <i class="fa fa-sort-desc" onclick="sortByDesc('otherPaidLeavHours')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('otherPaidLeavSalary')" aria-hidden="true"></i>
+                其它有薪<br>假工资
+                <i class="fa fa-sort-desc" onclick="sortByDesc('otherPaidLeavSalary')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('basicSalarySubTotal')" aria-hidden="true"></i>
+                基本工资<br>小计
+                <i class="fa fa-sort-desc" onclick="sortByDesc('basicSalarySubTotal')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('usualExtraHours')" aria-hidden="true"></i>
+                平时加班<br>工时
+                <i class="fa fa-sort-desc" onclick="sortByDesc('usualExtraHours')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('usralExtraSalary')" aria-hidden="true"></i>
+                平时加班<br>费
+                <i class="fa fa-sort-desc" onclick="sortByDesc('usralExtraSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('weekendWorkHours')" aria-hidden="true"></i>
+                周末加班<br>工时
+                <i class="fa fa-sort-desc" onclick="sortByDesc('weekendWorkHours')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('weekendWorkSalary')" aria-hidden="true"></i>
+                周末加班<br>费
+                <i class="fa fa-sort-desc" onclick="sortByDesc('weekendWorkSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('chinaHoliWorkHours')" aria-hidden="true"></i>
+                法定假日<br>加班工时
+                <i class="fa fa-sort-desc" onclick="sortByDesc('chinaHoliWorkHours')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('chinaHoliWorkSalary')" aria-hidden="true"></i>
+                法定假日<br>加班费
+                <i class="fa fa-sort-desc" onclick="sortByDesc('chinaHoliWorkSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('compressSalary')" aria-hidden="true"></i>
+                综合技能
+                <i class="fa fa-sort-desc" onclick="sortByDesc('compressSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('jobSalary')" aria-hidden="true"></i>
+                岗位工资
+                <i class="fa fa-sort-desc" onclick="sortByDesc('jobSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('positionSalary')" aria-hidden="true"></i>
+                职务工资
+                <i class="fa fa-sort-desc" onclick="sortByDesc('positionSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('meritSalary')" aria-hidden="true"></i>
+                绩效奖金
+                <i class="fa fa-sort-desc" onclick="sortByDesc('meritSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('meritScore')" aria-hidden="true"></i>
+                绩效分数
+                <i class="fa fa-sort-desc" onclick="sortByDesc('meritScore')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('subbonusTotal')" aria-hidden="true"></i>
+                奖金/技能<br>小计
+                <i class="fa fa-sort-desc" onclick="sortByDesc('subbonusTotal')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('salorLevelSalary')" aria-hidden="true"></i>
+                业务等级<br>工资
+                <i class="fa fa-sort-desc" onclick="sortByDesc('salorLevelSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('salrActuGetSalary')" aria-hidden="true"></i>
+                业务等级<br>实得
+                <i class="fa fa-sort-desc" onclick="sortByDesc('salrActuGetSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('houseOrTELSubsidy')" aria-hidden="true"></i>
+                房补/话补
+                <i class="fa fa-sort-desc" onclick="sortByDesc('houseOrTELSubsidy')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('hotTempOrOtherAllow')" aria-hidden="true"></i>
+                高温补贴<br>及其它
+                <i class="fa fa-sort-desc" onclick="sortByDesc('hotTempOrOtherAllow')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('fullWorkReword')" aria-hidden="true"></i>
+                全勤奖
+                <i class="fa fa-sort-desc" onclick="sortByDesc('fullWorkReword')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('workYearsSalary')" aria-hidden="true"></i>
+                工龄工资
+                <i class="fa fa-sort-desc" onclick="sortByDesc('workYearsSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('sellCommi')" aria-hidden="true"></i>
+                业务提成
+                <i class="fa fa-sort-desc" onclick="sortByDesc('sellCommi')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('compreSalary')" aria-hidden="true"></i>
+                综合工资
+                <i class="fa fa-sort-desc" onclick="sortByDesc('compreSalary')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('buckFoodCost')" aria-hidden="true"></i>
+                扣代付餐<br>费
+                <i class="fa fa-sort-desc" onclick="sortByDesc('buckFoodCost')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('buckWaterEleCost')" aria-hidden="true"></i>
+                扣代付水<br>电
+                <i class="fa fa-sort-desc" onclick="sortByDesc('buckWaterEleCost')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('buckOldAgeInsurCost')" aria-hidden="true"></i>
+                扣代付养<br>老险
+                <i class="fa fa-sort-desc" onclick="sortByDesc('buckOldAgeInsurCost')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('buckMedicInsurCost')" aria-hidden="true"></i>
+                扣代付医<br>疗险
+                <i class="fa fa-sort-desc" onclick="sortByDesc('buckMedicInsurCost')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('buckUnEmployCost')" aria-hidden="true"></i>
+                扣代付失<br>业险
+                <i class="fa fa-sort-desc" onclick="sortByDesc('buckUnEmployCost')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('buckAccumCost')" aria-hidden="true"></i>
+                扣代付公<br>积金
+                <i class="fa fa-sort-desc" onclick="sortByDesc('buckAccumCost')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('otherBuckCost')" aria-hidden="true"></i>
+                其他扣款
+                <i class="fa fa-sort-desc" onclick="sortByDesc('otherBuckCost')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('sixDeducCost')" aria-hidden="true"></i>
+                专项附加<br>扣除
+                <i class="fa fa-sort-desc" onclick="sortByDesc('sixDeducCost')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('personIncomTaxCost')" aria-hidden="true"></i>
+                个税
+                <i class="fa fa-sort-desc" onclick="sortByDesc('personIncomTaxCost')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('netPaySalary')" aria-hidden="true"></i>
+                实发工资
+                <i class="fa fa-sort-desc" onclick="sortByDesc('netPaySalary')" aria-hidden="true"></i>
+            </th>
+        </tr>
+        </thead>
+        <tbody id="tabletblody">
+        <!--v-for中的数据不再是直接从data中获取，而是通过search方法对data中的数据进行过滤再显示-->
+        <div th:unless="${#lists.isEmpty(salaryDataOutPutList)}">
+            <div th:each="empH,iterStat: ${salaryDataOutPutList}" align="center">
+                <tr>
+                    <td align="center"
+                        th:text="${(iterStat.index+1)}+${employee.currentPage-1}*${employee.pageSize}"></td>
+                    <td align="center" th:text="${empH.yearMonth}"></td>
+                    <td align="center" th:text="${empH.deptName}"></td>
+                    <td align="center" th:text="${empH.positionName}"></td>
+                    <td align="center" th:text="${empH.positionAttrName}"></td>
+                    <td align="center" th:text="${empH.empNo}"></td>
+                    <td align="center" th:text="${empH.name}"></td>
+                    <td align="center" th:text="${empH.inCompDate}"></td>
+                    <td align="center" th:text="${empH.basickWorkHours}"></td>
+                    <td align="center" th:text="${empH.norAttenHours}"></td>
+                    <td align="center" th:text="${empH.norAttendSalary}"></td>
+                    <td align="center" th:text="${empH.chinaPailLeavHours}"></td>
+                    <td align="center" th:text="${empH.chinaPaidLeavSalary}"></td>
+                    <td align="center" th:text="${empH.otherPaidLeavHours}"></td>
+                    <td align="center" th:text="${empH.otherPaidLeavSalary}"></td>
+                    <td align="center" th:text="${empH.basicSalarySubTotal}"></td>
+                    <td align="center" th:text="${empH.usualExtraHours}"></td>
+                    <td align="center" th:text="${empH.usralExtraSalary}"></td>
+                    <td align="center" th:text="${empH.weekendWorkHours}"></td>
+                    <td align="center" th:text="${empH.weekendWorkSalary}"></td>
+                    <td align="center" th:text="${empH.chinaHoliWorkHours}"></td>
+                    <td align="center" th:text="${empH.chinaHoliWorkSalary}"></td>
+                    <td align="center" th:text="${empH.compressSalary}"></td>
+                    <td align="center" th:text="${empH.jobSalary}"></td>
+                    <td align="center" th:text="${empH.positionSalary}"></td>
+                    <td align="center" th:text="${empH.meritSalary}"></td>
+                    <td align="center" th:text="${empH.meritScore}"></td>
+                    <td align="center" th:text="${empH.subbonusTotal}"></td>
+                    <td align="center" th:text="${empH.salorLevelSalary}"></td>
+                    <td align="center" th:text="${empH.salrActuGetSalary}"></td>
+                    <td align="center" th:text="${empH.houseOrTELSubsidy}"></td>
+                    <td align="center" th:text="${empH.hotTempOrOtherAllow}"></td>
+                    <td align="center" th:text="${empH.fullWorkReword}"></td>
+                    <td align="center" th:text="${empH.workYearsSalary}"></td>
+                    <td align="center" th:text="${empH.sellCommi}"></td>
+                    <td align="center" th:text="${empH.compreSalary}"></td>
+                    <td align="center" th:text="${empH.buckFoodCost}"></td>
+                    <td align="center" th:text="${empH.buckWaterEleCost}"></td>
+                    <td align="center" th:text="${empH.buckOldAgeInsurCost}"></td>
+                    <td align="center" th:text="${empH.buckMedicInsurCost}"></td>
+                    <td align="center" th:text="${empH.buckUnEmployCost}"></td>
+                    <td align="center" th:text="${empH.buckAccumCost}"></td>
+                    <td align="center" th:text="${empH.otherBuckCost}"></td>
+                    <td align="center" th:text="${empH.sixDeducCost}"></td>
+                    <td align="center" th:text="${empH.personIncomTaxCost}"></td>
+                    <td align="center" th:text="${empH.netPaySalary}"></td>
+                </tr>
+            </div>
+        </div>
+        <div th:if="${#lists.isEmpty(salaryDataOutPutList)}">
+            <tr>
+                <td colspan="46">
+                    查无数据
+                </td>
+            </tr>
+        </div>
+        </tbody>
+
+        <tfoot id="s_tfoot">
+        <tr id="showdiv">
+
+            <td colspan="46" align="center">
+                <span>第</span>
+                <span th:text="${employee.currentPage}" id="currentpagespan"> </span>
+                <span>页|共</span>
+                <span th:text="${employee.maxPage}" id="maxpagespan"> </span>
+                <span>页|共</span>
+                <span th:text="${employee.recordCount}" id="recordcountspan"> </span>
+                <span>条记录 </span>
+                <span id="image01">
+                            <span th:if="${employee.currentPage gt 1}">
+                                    <img src="/images/page/sy-2.jpg" align="middle" border="0"
+                                         style="width: 20px; height: 20px; vertical-align: middle"
+                                         onClick="goPageone()"/>
+                                    <img src="/images/page/syy-2.jpg" align="middle" border="0" onClick="goPrePage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+
+                                </span>
+                                </span>
+                <span id="image02">
+                            <span th:if="${employee.currentPage le 1}">
+                                <img src='/images/page/l-sy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='images/images/page/l-syy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+                            </span>
+                            </span>
+                <span id="image03">
+                            <span th:if="${employee.currentPage lt employee.maxPage}">
+                                    <img src="/images/page/xyy-2.jpg" align="middle" border="0" onClick="goAftPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                                    <img src="/images/page/my-2.jpg" align="middle" border="0" onClick="goMaxPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                                </span>
+                <span id="image04">
+                            <span th:if="${employee.currentPage ge employee.maxPage}">
+                                <img src='/images/page/l-xyy-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='/images/page/l-my-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                            </span>
+
+                |&nbsp;到第
+                <input onkeypress="if(event.keyCode==13) {gopage.click();return false;}"
+                       style="width: 50px"
+                       id="_tp" th:name="currentPage" type="text" th:value="${employee.currentPage}"/>
+                页&nbsp;
+                <img src="/images/page/cx-2.jpg" id="gopage" onClick="goPage2()"
+                     style="width:20px;height:20px;vertical-align:middle">
+            </td>
+
+        </tr>
+
+
+        <tr style="display:none;" id="nodatadiv">
+            <td colspan="46" align="center">
+                查无数据
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+</body>
+</html>

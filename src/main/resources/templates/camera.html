@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>拍照</title>
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+<script>
+    var l_timestamp;
+    var l_noncestr;
+    var l_signature;
+    var appid;
+    var wx;
+    var openId;
+    $(function () {
+        var url = location.href.split('#').toString();
+        var bean = $("#bean").val();
+        var path = "http://homey.nat100.top/weixin/getMobileLocateReal";
+        $.post(path, {wxurl: url, bean: bean}, function (data) {
+            var data = JSON.parse(data);
+            l_timestamp = data[0];
+            l_noncestr = data[1];
+            l_signature = data[2];
+            appid = data[4];
+            openId = data[5];
+            wx.config({
+                debug: false,
+                appId: appid,
+                timestamp: l_timestamp,
+                nonceStr: l_noncestr,
+                signature: l_signature,
+                jsApiList: ['chooseImage', 'uploadImage']
+            });
+        });
+    });
+
+
+    wx.ready(function () {
+        wx.checkJsApi({
+            jsApiList: [
+                'chooseImage', 'uploadImage'
+            ],
+            success: function (res) {
+                // alert(JSON.stringify(res));
+                // alert(JSON.stringify(res.checkResult.getLocation));
+                if (res.checkResult.chooseImage == false) {
+                    alert('你的微信版本太低！');
+                    return;
+                }
+            }
+        });
+        wx.error(function (res) {
+            alert("接口调取失败")
+        });
+        wx.chooseImage({
+            count: 1,
+            sizeType: ['original', 'compressed'],
+            sourceType: ['camera'],
+            success: function (res) {
+                let localIds = res.localIds; // 返回选定照片的本地ID列表（手机上操作就是手机端的ID列表，是一个数组），localId可以作为img标签的src属性显示图片
+                wx.uploadImage({
+                    localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (result) {
+                        let serverId = result.serverId; // 返回图片的服务器端ID
+                        window.location.href = "http://homey.nat100.top/weixin/saveOutPhoto?serverId="+serverId + "&openId=" + openId;
+                    }
+                });
+            },
+            fail: function () {
+            },
+            complete: function () {
+            }
+        });
+
+    });
+
+</script>
+<body>
+<input type="hidden" id="appId" th:value="${appId}">
+<input type="hidden" id="l_timestamp" th:value="${l_timestamp}">
+<input type="hidden" id="l_noncestr" th:value="${l_noncestr}">
+<input type="hidden" id="l_signature" th:value="${l_signature}">
+<input type="hidden" id="requestOri" th:value="${requestOri}">
+<input type="hidden" id="bean" th:value="${bean}">
+
+</body>
+</html>

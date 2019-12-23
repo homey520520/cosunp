@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>设计文件</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/bootstrap/css/bootstrap.css}">
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.css">
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/premium.css">
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+
+</head>
+<body class=" theme-blue">
+<script type="text/javascript">
+    var extensionarrays;
+    var extensionarray;
+    var extensionSupport = [];
+    $(function () {
+        extensionSupport.push('tif');
+        extensionSupport.push('jpeg');
+        extensionSupport.push('jpg');
+        extensionSupport.push('png');
+        extensionSupport.push('dwg');
+        extensionSupport.push('dxf');
+        extensionSupport.push('doc');
+        extensionSupport.push('docx');
+        extensionSupport.push('xls');
+        extensionSupport.push('xlsx');
+        extensionSupport.push('ppt');
+        extensionSupport.push('pptx');
+        extensionSupport.push('pdf');
+        extensionSupport.push('pdfx');
+        extensionarrays = $("#extension").val();
+        extensionarray = eval("(" + extensionarrays + ")");
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        var match = document.cookie.match(new RegExp('color=([^;]+)'));
+        if (match) var color = match[1];
+        if (color) {
+            $('body').removeClass(function (index, css) {
+                return (css.match(/\btheme-\S+/g) || []).join(' ')
+            })
+            $('body').addClass('theme-' + color);
+        }
+    });
+</script>
+<style type="text/css">
+    .clear {
+        zoom: 1;
+    }
+
+    .clear:after {
+        content: "";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+
+    #listdiv {
+        border: 1px solid #9AC0CD;
+        width: 99%;
+        height: 450px;
+        overflow-x: scroll;
+    }
+
+    .page_btn {
+        padding-top: 20px;
+    }
+
+    .page_btn a {
+        cursor: pointer;
+        padding: 1px;
+        border: solid 1px #ccc;
+        font-size: 12px;
+    }
+
+    .page_box {
+        float: right;
+    }
+
+    .num {
+        padding: 0 10px;
+    }
+
+    #folderdiv {
+        border: 1px solid #9AC0CD;
+        width: 1148px;
+        height: 530px;
+        Margin: 2px;
+        padding: 3px;
+    }
+
+    #innerfolderdiv {
+        border: 1px solid #9AC0CD;
+        width: 1120px;
+        height: 450px;
+        Margin: 10px;
+        padding: 3px;
+    }
+
+    #pagetfoottr {
+        width: 1120px;
+        height: 20px;
+        padding: 3px;
+    }
+
+    table.grid {
+        font-family: verdana, arial, sans-serif;
+        font-size: 12px;
+        border-width: 1px;
+        border-collapse: collapse;
+    }
+
+    table.grid th {
+        border-width: 1px;
+        padding: 3px;
+        border-style: solid;
+        white-space: nowrap;
+    }
+
+    table.grid td {
+        border-width: 1px;
+        padding: 3px;
+        border-style: solid;
+        white-space: nowrap;
+    }
+
+    #selecradio {
+        padding: 8px;
+    }
+
+    .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+        color: #fff;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        var uls = $('.sidebar-nav > ul > *').clone();
+        uls.addClass('visible-xs');
+        $('#main-menu').append(uls.clone());
+
+
+        $(".next").click(function () {
+            if (current_num >= total_page) {
+                return false;
+            } else {
+                $(".current_page").text(++current_num);
+                $.each($('#innerfolderdiv li'), function (index, item) {
+                    var start = current_page * (current_num - 1);
+                    var end = current_page * current_num;
+                    if (index >= start && index < end) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+
+        $(".prev").click(function () {
+            if (current_num == 1) {
+                return false;
+            } else {
+                $(".current_page").text(--current_num);
+                $.each($('#innerfolderdiv li'), function (index, item) {
+                    var start = current_page * (current_num - 1);
+                    var end = current_page * current_num;
+                    if (index >= start && index < end) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        })
+
+
+    });
+
+    function showlistdiv3() {
+        $("#listdiv").show();
+        $("#folderdiv").hide();
+        $("#pagetfoottr").hide();
+        $("#showdiv").show();
+    }
+
+    var topfolder;
+    var current_page = 15;
+    var current_num = 1;
+    var total_page;
+    function backFolder3() {
+        current_num = 1;
+        var foldername = $("#foldername").val();
+        var reg = new RegExp(/^[A-Z]{5}[0-9]{8}[A-Z]{2}[0-9]{2}$/g);
+        var salor = $("#salor").val();
+        var engineer = $("#engineer").val();
+        var orderNo = $("#orderno").val().trim();
+        var projectname = $("#projectname").val();
+        var filename = $("#filename").val();
+        var startnewestsavedate = $("#startnewestsavedate").val();
+        var endnewestsavedate = $("#endnewestsavedate").val();
+        var fileInput = $('#file').val();
+        var folderhtml = "";
+        var fileshtml = "";
+        var cominone2 = 0;
+        if (orderNo == "" || orderNo == null) {
+            alert("点击返回的时候，订单编号不能为空！请不要删空它。")
+            return;
+        }
+
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+
+        var jsonarray = {
+            "salor": salor,
+            "engineer": engineer,
+            "orderNo": orderNo,
+            "folderName": foldername,
+            "projectName": projectname,
+            "fileName": filename,
+            "startNewestSaveDateStr": startnewestsavedate,
+            "endNewestSaveDateStr": endnewestsavedate
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",
+            url: "/fileupdown/findBackFoldersByQueryParam",
+            success: function (msg) {
+                var data = eval(msg);
+                var totalnum = data.length;
+                $.each(data, function (num) {
+                    var ind = data[num].lastIndexOf('.');
+                    var extenName = data[num].substr(ind + 1, data[num].length);
+                    if (reg.test(data[totalnum])) {
+                        $("#orderno").val(data[totalnum]);
+                    }
+                    if (num < 15) {
+                        if (data[num].indexOf(".") <= 0 || !extensionarray.includes(extenName.toLowerCase())) {
+                            $("#foldername").val(data[num]);
+                            if (reg.test(data[num])) {
+                                $("#backfolder").attr("disabled", "disabled");
+                            }
+                            folderhtml += "<li>" +
+                                " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" " +
+                                "/> " +
+                                "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                "/>" +
+                                "<img src=\"/images/icon/Folder.png\" " +
+                                " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                            cominone2 = 1;
+                        } else {
+                            if (extensionarray.includes(extenName.toLowerCase())) {
+                                if (extensionSupport.includes(extenName.toLowerCase())) {
+                                    fileshtml += "<li>" +
+                                        " <img src=\"/images/icon/big.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"big('" + data[num] + "','" + orderNo + "')\"\n " +
+                                        "/> " +
+                                        "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                        "/>" +
+                                        "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                                } else {
+                                    fileshtml += "<li>" +
+                                        " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\"  " +
+                                        "/> " +
+                                        "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                        "/>" +
+                                        "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+
+                                }
+                                if (cominone2 == 0) {
+                                    $("#foldername").val(data[num]);
+                                }
+                            }
+                        }
+
+                    } else {
+                        if (data[num].indexOf(".") <= 0 || !extensionarray.includes(extenName.toLowerCase())) {
+                            $("#foldername").val(data[num]);
+                            if (reg.test(data[num])) {
+                                $("#backfolder").attr("disabled", "disabled");
+                            }
+                            folderhtml += "<li style='display: none'>" +
+                                " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" " +
+                                "/> " +
+                                "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                "/>" +
+                                "<img src=\"/images/icon/Folder.png\" " +
+                                " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                            cominone2 = 1;
+                        } else {
+                            if (extensionarray.includes(extenName.toLowerCase())) {
+                                if (extensionSupport.includes(extenName.toLowerCase())) {
+                                    fileshtml += "<li style='display: none'>" +
+                                        " <img src=\"/images/icon/big.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"big('" + data[num] + "','" + orderNo + "')\"\n " +
+                                        "/> " +
+                                        "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                        "/>" +
+                                        "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                                } else {
+                                    fileshtml += "<li style='display: none'>" +
+                                        " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\"  " +
+                                        "/> " +
+                                        "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                        "/>" +
+                                        "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+
+                                }
+                                if (cominone2 == 0) {
+                                    $("#foldername").val(data[num]);
+                                }
+                            }
+                        }
+                    }
+
+                });
+                var maxPages = Math.round((totalnum + 15 - 1) / 15);
+                var next = $(".next");
+                var prev = $(".prev");
+                $(".total").text(maxPages);
+                $(".current_page").text(1);
+                $("#n_currentPage").val(1)
+                total_page = maxPages;
+                $("#_tp").val(1);
+                $("#currentpagespan").val(1)
+                $("#innerfolderdiv").html(folderhtml + fileshtml)
+                $("#nodatadiv").hide();
+                $("#pagetfoottr").show();
+                $("#showdiv").hide();
+
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+                alert("查询失败");
+            }
+        });
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+    }
+
+    function showupdaterecode(foldOrFileName) {
+        var jsonarray = {
+            "orderNo": $("#orderno").val(),
+            "folderOrFileName": foldOrFileName
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+                data: data,
+                type: "POST",
+                contentType: "application/json",
+                url: "/fileupdown/showUpdateDownItemByIcon",
+                success: function (msg) {
+                    $("#tablecontent").html("");
+                    $("#tablecontent2").html("");
+                    var tbody = $("#tablecontent");
+                    var tbody2 = $("#tablecontent2");
+                    var tr = "";
+                    var tr2 = "";
+                    var trnum = 0;
+                    var trnum2 = 0;
+                    var data = eval(msg);
+                    $.each(data, function (num) {
+                        if (data[num].typeK == 0) {
+                            trnum = trnum + 1;
+                            tr += "<tr>";
+                            tr += ("<td align='center' width=\"32px\">" + (trnum) + "</td>");
+                            tr += ("<td align='center' width=\"180px\">" + isNull(data[num].fileName) + "</td>");
+                            tr += ("<td align='center' width=\"50px\">" + isNull(data[num].updateFullName) + "</td>");
+                            tr += ("<td align='center' width=\"150px\">" + isNull(data[num].updateDateStr) + "</td>");
+                            tr += ("<td align='left'>" + isNull(data[num].updateReason) + "</td>");
+                            tr += "</tr>";
+                        } else {
+                            trnum2 = trnum2 + 1;
+                            tr2 += "<tr>";
+                            tr2 += ("<td align='center' width=\"32px\">" + (trnum2) + "</td>");
+                            tr2 += ("<td align='center' width=\"170px\">" + isNull(data[num].fileName) + "</td>");
+                            tr2 += ("<td align='center' width=\"70px\">" + isNull(data[num].downFullName) + "</td>");
+                            tr2 += ("<td align='center' width=\"152px\">" + isNull(data[num].downDateStr) + "</td>");
+                            tr2 += ("<td width=\"180px\" align='center'>" + isNull(data[num].ipAddr) + "</td>");
+                            tr2 += ("<td align='center'  width=\"135px\">" + isNull(data[num].ipName) + "</td>");
+                            tr2 += "</tr>";
+                        }
+                    });
+
+                    if (trnum == 0) {
+                        tr += "<tr>";
+                        tr += ("<td align='center' colspan='5'>无更新记录</td>");
+                        tr += ("</tr>");
+                    }
+                    if (trnum2 == 0) {
+                        tr2 += "<tr>";
+                        tr2 += ("<td align='center' colspan='5' width=\"760px\">无下载记录</td>");
+                        tr2 += ("</tr>");
+                    }
+                    window.parent.document.getElementById('tablecontent').innerHTML = tr;
+                    window.parent.document.getElementById('tablecontent2').innerHTML = tr2;
+                    window.parent.document.getElementById('coverbehidepage').style.display = "block";
+                    window.parent.document.getElementById('updateDiv').style.display = "block";
+                },
+                error: function (msg) {
+
+                }
+            }
+        );
+    }
+
+
+    function big(fileName, ordernum) {
+        var reg = /&/g;
+        var afterEnds = [];
+        afterEnds.push('tif');
+        afterEnds.push('jpeg');
+        afterEnds.push('jpg');
+        afterEnds.push('png');
+        var splitA = fileName.split(".");
+        if (afterEnds.includes(splitA[splitA.length - 1].toLowerCase())) {
+            window.open("/fileupdown/showImage?fileName=" + fileName.replace(reg, '*') + "&orderNo=" + ordernum);
+        } else {
+            localStorage.setItem("fileName", fileName);
+            fileName = fileName + ":" + ordernum;
+            fileName = fileName.replace(reg, '*');
+            window.open("/pdfjs/web/viewer.html?file=/fileupdown/preview?fileNameandOrderNum%3D" + fileName);
+        }
+    }
+
+
+    function showfolderdiv3() {
+        current_num = 1;
+        var salor = $("#salor").val();
+        var engineer = $("#engineer").val();
+        var orderNo = $("#orderno").val().trim();
+        var fileInput = $('#file').val();
+        var filefolder = $('#filefolder').val();
+        var projectname = $("#projectname").val();
+        var filename = $("#filename").val();
+        var startnewestsavedate = $("#startnewestsavedate").val();
+        var endnewestsavedate = $("#endnewestsavedate").val();
+        var folderhtml = "";
+        var fileshtml = "";
+        $("#folderdiv").attr("style", "display:block;")
+        $("#listdiv").attr("style", "display:none;")
+        //$("#some-element").busyLoad("show");
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+
+        var jsonarray = {
+            "salor": salor,
+            "engineer": engineer,
+            "orderNo": orderNo,
+            "projectName": projectname,
+            "fileName": filename,
+            "startNewestSaveDateStr": startnewestsavedate,
+            "endNewestSaveDateStr": endnewestsavedate
+
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",
+            url: "/fileupdown/findFoldersByQueryParam",
+            success: function (msg) {
+                var data = eval(msg);
+                var totalnum = data.length;
+                $.each(data, function (num) {
+                    if (num < 15) {
+                        if (data[num].indexOf(".") <= 0) {
+                            topfolder = data[num];
+                            $("#foldername").val(data[num]);
+                            folderhtml += "<li>" +
+                                " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" " +
+                                "/> " +
+                                "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "','" + orderNo + "')\"\n " +
+                                "/>" +
+                                "<img src=\"/images/icon/Folder.png\" " +
+                                " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                        } else {
+                            fileshtml += "<li>" +
+                                "<img src=\"/images/icon/big.png\" align=\"middle\" border=\"0\" " +
+                                "                                 style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"big('" + data[num] + "','" + orderNo + "')\"\n " +
+                                "                                />" +
+                                "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                "/>" +
+                                "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                        }
+                    } else {
+                        if (data[num].indexOf(".") <= 0) {
+                            topfolder = data[num];
+                            $("#foldername").val(data[num]);
+                            folderhtml += "<li style='display: none'>" +
+                                " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" " +
+                                "/> " +
+                                "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                "/>" +
+                                "<img src=\"/images/icon/Folder.png\" " +
+                                " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                        } else {
+                            fileshtml += "<li style='display: none'>" +
+                                "<img src=\"/images/icon/big.png\" align=\"middle\" border=\"0\" " +
+                                "                                 style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"big('" + data[num] + "','" + orderNo + "')\"\n " +
+                                "                                />" +
+                                "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                "/>" +
+                                "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                        }
+                    }
+                });
+                $("#innerfolderdiv").html(folderhtml + fileshtml)
+                var maxPages = Math.round((totalnum + 15 - 1) / 15);
+                var next = $(".next");
+                var prev = $(".prev");
+                $(".total").text(maxPages);
+                $(".current_page").text(1);
+                $("#n_currentPage").val(1);
+                total_page = maxPages;
+                $("#_tp").val(1);
+                $("#currentpagespan").val(1)
+
+                $("#nodatadiv").hide();
+                $("#pagetfoottr").show();
+                $("#showdiv").hide();
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                alert("查询失败");
+            }
+        });
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+    }
+
+    function shownextfolderorfiles(foldernam) {
+        current_num = 1;
+        var foldername = foldernam;
+        $("#backfolder").removeAttr("disabled");
+        var reg = new RegExp(/^[A-Z]{5}[0-9]{8}[A-Z]{2}[0-9]{2}$/g);
+        var salor = $("#salor").val();
+        var engineer = $("#engineer").val();
+        var orderNo = $("#orderno").val().trim();
+        var fileInput = $('#file').val();
+        var filefolder = $('#filefolder').val();
+        var projectname = $("#projectname").val();
+        var filename = $("#filename").val();
+        var startnewestsavedate = $("#startnewestsavedate").val();
+        var endnewestsavedate = $("#endnewestsavedate").val();
+        var folderhtml = "";
+        var fileshtml = "";
+        var cominone = 0;
+        if (orderNo == "") {
+            if (reg.test(foldername)) {
+                orderNo = foldername;
+                $("#orderno").val(orderNo);
+            }
+        }
+
+        if (orderNo == "") {
+            alert("进行点击文件夹操作,请不要删除输入框的订单编号!");
+            return;
+        }
+
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var jsonarray = {
+            "salor": salor,
+            "engineer": engineer,
+            "orderNo": orderNo,
+            "folderName": foldername,
+            "projectName": projectname,
+            "fileName": filename,
+            "startNewestSaveDateStr": startnewestsavedate,
+            "endNewestSaveDateStr": endnewestsavedate
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",
+            url: "/fileupdown/findNextFoldersByQueryParam",
+            success: function (msg) {
+                var data = eval(msg);
+                var totalnum = data.length;
+                $.each(data, function (num) {
+                    var ind = data[num].lastIndexOf('.');
+                    var extenName = data[num].substr(ind + 1, data[num].length);
+                    if (reg.test(data[totalnum])) {
+                        $("#orderno").val(data[totalnum]);
+                    }
+                    if (num < 15) {
+                        if (data[num].indexOf(".") <= 0 || !extensionarray.includes(extenName.toLowerCase())) {
+                            $("#foldername").val(data[num]);
+                            folderhtml += "<li>" +
+                                " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" " +
+                                "/> " +
+                                "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                "/>" +
+                                "<img src=\"/images/icon/Folder.png\" " +
+                                " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                            cominone = 1;
+                        } else {
+                            if (extensionarray.includes(extenName.toLowerCase())) {
+
+                                if (extensionSupport.includes(extenName.toLowerCase())) {
+                                    fileshtml += "<li>" +
+                                        " <img src=\"/images/icon/big.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"big('" + data[num] + "','" + orderNo + "')\"\n " +
+                                        "/> " +
+                                        "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                        "/>" +
+                                        "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+
+                                } else {
+                                    fileshtml += "<li>" +
+                                        " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\"  " +
+                                        "/> " +
+                                        "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                        "/>" +
+                                        "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+
+                                }
+                                if (cominone == 0) {
+                                    $("#foldername").val(data[num]);
+                                }
+                            }
+
+                        }
+                    } else {
+                        if (data[num].indexOf(".") <= 0 || !extensionarray.includes(extenName.toLowerCase())) {
+                            $("#foldername").val(data[num]);
+                            folderhtml += "<li style='display: none'>" +
+                                " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" " +
+                                "/> " +
+                                "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                "/>" +
+                                "<img src=\"/images/icon/Folder.png\" " +
+                                " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                                " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                            cominone = 1;
+                        } else {
+                            if (extensionarray.includes(extenName.toLowerCase())) {
+
+                                if (extensionSupport.includes(extenName.toLowerCase())) {
+                                    fileshtml += "<li style='display: none'>" +
+                                        " <img src=\"/images/icon/big.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"big('" + data[num] + "','" + orderNo + "')\"\n " +
+                                        "/> " +
+                                        "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                        "/>" +
+                                        "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                                } else {
+                                    fileshtml += "<li style='display: none'>" +
+                                        " <img src=\"/images/icon/blank.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" " +
+                                        "/> " +
+                                        "<img src=\"/images/icon/modicon.png\" align=\"middle\" border=\"0\" " +
+                                        " style=\"width: 30px; height: 30px; vertical-align: middle\" onclick=\"showupdaterecode('" + data[num] + "')\"\n " +
+                                        "/>" +
+                                        "<img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                                }
+
+                                if (cominone == 0) {
+                                    $("#foldername").val(data[num]);
+                                }
+
+
+                            }
+                        }
+                    }
+                });
+                var maxPages = Math.floor((totalnum + 15 - 1) / 15);
+                var next = $(".next");
+                var prev = $(".prev");
+                $(".total").text(maxPages);
+                $(".current_page").text(1);
+                $("#n_currentPage").val(1)
+                total_page = maxPages;
+                $("#_tp").val(1);
+                $("#currentpagespan").val(1)
+                $("#innerfolderdiv").html(folderhtml + fileshtml)
+                $("#nodatadiv").hide();
+                $("#pagetfoottr").show();
+                $("#showdiv").hide();
+
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+                alert("查询失败");
+            }
+        });
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+    }
+</script>
+
+<link rel="shortcut icon" href="../assets/ico/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+
+
+<div>
+    <div id="tabs">
+        <a class="btn btn-default"
+           th:href="@{/fileupdown/tomainpage(currentPage=${view.currentPage})}">上传</a>
+        <a class="btn  btn-default"
+           th:href="@{/fileupdown/tomodifypage(currentPage=${view.currentPage})}">更新</a>
+
+        <a class="btn btn-default"
+           th:href="@{/fileupdown/download(currentPage=${view.currentPage})}">
+            下载</a>
+        <a class="btn btn-default"
+           th:href="@{/fileupdown/todeletepage(currentPage=${view.currentPage})}">删除</a>
+        <a class="btn btn-primary"
+           th:href="@{/fileupdown/tobroserfilepage(currentPage=${view.currentPage})}">查找</a>
+
+        <a class="btn btn-default"
+           th:href="@{/fileupdown/toprivilmanagepage(pageSize=12,currentPage=${view.currentPage})}">管理</a>
+        <p>
+
+            <div id="">
+                <form id="queryform" th:action="@{/fileupdown/downloadbyquerycondition}" method="post"
+                      style="margin-left: 0px;margin-top: 15px;margin-right: 35px;margin-bottom: 15px;">
+
+
+                    <div>
+                        <fieldset>
+                            <!--<legend>查询条件</legend>-->
+                            <table width="100%">
+                                <tr>
+                                    <td align="right">
+                                        业务员:
+                                    </td>
+                                    <td>
+                                        <select id="salor" style="width: 120px" name="view.salor" form="form0">
+                                            <option value="" selected="selected">请选择业务员</option>
+                                            <option th:each="c:${employees}" th:value="${c.name}"
+                                                    th:text="${c.name}"></option>
+                                        </select>
+                                    </td>
+                                    <td align="right">订单编码:</td>
+                                    <td><input type="text" id="orderno" name="view.orderNo" style="width:180px"
+                                               form="form0"
+                                               onkeypress="if(event.keyCode==13) {submitQueryByConditionbutton.click();return false;}"/>
+                                    </td>
+                                    <td align="right"> 顶目名称:</td>
+                                    <td><input type="text" id="projectname" name="view.projectName"
+                                               style="width:150px"
+                                               form="form0"
+                                               onkeypress="if(event.keyCode==13) {submitQueryByConditionbutton.click();return false;}"/>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    <td align="right">设计师:</td>
+                                    <td>
+                                        <select id="engineer" style="width: 120px" name="view.engineer">
+                                            <option value="0" selected="selected">请选择设计师</option>
+                                            <option th:each="c:${userInfos}" th:value="${c.uId}"
+                                                    th:text="${c.fullName}"></option>
+                                        </select>
+
+                                    </td>
+                                    <td align="right">文件名称:</td>
+                                    <td><input type="text" id="filename" name="view.fileName" style="width:180px"
+                                               form="form0"
+                                               onkeypress="if(event.keyCode==13) {submitQueryByConditionbutton.click();return false;}"/>
+                                    </td>
+                                    <td align="right">最新上传时间:</td>
+                                    <td colspan="2" th:align="left">
+                                        <input type="text" style="width:120px" id="startnewestsavedate"
+                                               readOnly="true"
+                                               name="view.startNewestSaveDate" class="Wdate" form="form0"
+                                               onkeypress="if(event.keyCode==13) {submitQueryByConditionbutton.click();return false;}"
+                                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endnewestsavedate\')}'})"/>
+                                        至：
+                                        <input type="text" id="endnewestsavedate" style="width:120px"
+                                               name="view.endnewestsavedate" class="Wdate" form="form0"
+                                               onkeypress="if(event.keyCode==13) {submitQueryByConditionbutton.click();return false;}"
+                                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startnewestsavedate\')}'})"/>
+                                    </td>
+
+                                    <td th:align="right">
+                                        <input type="button" id="submitQueryByConditionbutton"
+                                               onclick="submitQueryByCondition()" value="查询"/>
+                                        <!--<input type="button" onclick="exportDataByCondition()" value="导出"/></td>-->
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+                </form>
+
+        <p>
+        <div id="selecradio">
+
+            <input type="radio" name="showmethod" checked value="0" id="listshow" onclick="showlistdiv3()">列表展示
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="showmethod" value="1" id="foldershow" onclick="showfolderdiv3()">文件夹展示
+        </div>
+
+        <div id="listdiv">
+            <div id="downloadpage">
+                <form th:action="@{/fileupdown/downloadbyquerycondition}" method="post" id="form0">
+                    <input type="hidden" id="maxPage" th:value="${view.maxPage}">
+                    <input type="hidden" id="n_currentPage" name="view.currentPage" th:value="${view.currentPage}"/>
+                    <input type="hidden" id="userName" name="view.userName" th:value="${view.userName}">
+                    <input type="hidden" id="passWord" name="view.password" th:value="${view.password}">
+                    <input type="hidden" th:value="${extensionList}" id="extension">
+                    <input type="hidden" id="foldername">
+                    <table class="grid" style="width: 100%">
+                        <thead style="background-color: #E0EEEE" align="center" id="urlthead">
+                        <tr>
+                            <td>编号</td>
+                            <td>最近设计者</td>
+                            <td>最近上传/更新时间</td>
+                            <td>订单编码</td>
+                            <td>顶目名称</td>
+                            <td>文件名称</td>
+                            <td>业务员</td>
+                            <td>更新次数</td>
+                            <td>更新原因</td>
+                            <td>文件说明</td>
+                            <td>备注</td>
+                            <td>路径</td>
+                        </tr>
+                        </thead>
+                        <tbody id="showdatatable">
+                        <div th:unless="${#lists.isEmpty(downloadViewList)}">
+                            <div th:each="downloadView ,iterStat: ${downloadViewList}" align="center">
+                                <tr th:ondblclick="'javascript:showUpdateDownRecordItem(\''+${downloadView.fileUrlId}+'\');'">
+                                    <td align="center"
+                                        th:text="${(iterStat.index+1)+(view.currentPage-1)*(view.pageSize)}"></td>
+                                    <td align="center" th:text="${downloadView.lastUpdator}"></td>
+                                    <td align="center" th:text="${downloadView.lastUpdateTime}"></td>
+                                    <td align="center" th:text="${downloadView.orderNo}"></td>
+                                    <td align="center" th:text="${downloadView.projectName}"></td>
+                                    <td align="left" th:text="${downloadView.fileName}"></td>
+                                    <td align="center" th:text="${downloadView.salor}"></td>
+                                    <td align="center" th:text="${downloadView.singleFileUpdateNum}"></td>
+                                    <td th:text="${downloadView.modifyReason}"></td>
+                                    <td th:text="${downloadView.filedescribtion}"></td>
+                                    <td th:text="${downloadView.remark}"></td>
+                                    <td align="left" th:text="${downloadView.urlAddr}"></td>
+                                </tr>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.isEmpty(downloadViewList)}">
+                            <tr>
+                                <td colspan="12" align="center">暂无文件清单信息</td>
+                            </tr>
+                        </div>
+                        </tbody>
+
+                        <tfoot id="s_tfoot">  <!-- 分页-->
+
+                        <tr id="showdiv">
+
+                            <td colspan="12" align="center">
+                                <span>第</span>
+                                <span th:text="${view.currentPage}" id="currentpagespan"> </span>
+                                <span>页|共</span>
+                                <span th:text="${view.maxPage}" id="maxpagespan"> </span>
+                                <span>页|共</span>
+                                <span th:text="${view.recordCount}" id="recordcountspan"> </span>
+                                <span>条记录 </span>
+                                <span id="image01">
+                            <span th:if="${view.currentPage gt 1}">
+                                    <img src="/images/page/sy-2.jpg" align="middle" border="0"
+                                         style="width: 20px; height: 20px; vertical-align: middle"
+                                         onClick="goPageone()"/>
+                                    <img src="/images/page/syy-2.jpg" align="middle" border="0" onClick="goPrePage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+
+                                </span>
+                                </span>
+                                <span id="image02">
+                            <span th:if="${view.currentPage le 1}">
+                                <img src='/images/page/l-sy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='images/images/page/l-syy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+                            </span>
+                            </span>
+                                <span id="image03">
+                            <span th:if="${view.currentPage lt view.maxPage}">
+                                    <img src="/images/page/xyy-2.jpg" align="middle" border="0" onClick="goAftPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                                    <img src="/images/page/my-2.jpg" align="middle" border="0" onClick="goMaxPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                                </span>
+                                <span id="image04">
+                            <span th:if="${view.currentPage ge view.maxPage}">
+                                <img src='/images/page/l-xyy-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='/images/page/l-my-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                            </span>
+
+                                |&nbsp;到第
+                                <input onkeypress="if(event.keyCode==13) {gopage.click();return false;}"
+                                       style="width: 50px"
+                                       id="_tp" th:name="currentPage" type="text" th:value="${view.currentPage}"/>
+                                页&nbsp;
+                                <img src="/images/page/cx-2.jpg" id="gopage" onClick="goPage2()"
+                                     style="width:20px;height:20px;vertical-align:middle">
+                            </td>
+
+                        </tr>
+
+
+                        <tr style="display:none;" id="nodatadiv">
+                            <td colspan="12" align="center">
+                                查无数据
+                            </td>
+                        </tr>
+
+                        </tfoot>
+                    </table>
+                </form>
+
+            </div>
+        </div>
+
+        <div id="folderdiv" style="display: none">
+
+            &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="backfolder" disabled value="返回上一级"
+                                           onclick="backFolder3();">
+
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div id="innerfolderdiv">
+            </div>
+            <div class="page_btn clear" id="pagetfoottr" align="center">
+                <i align="center">
+                                       <span class="page_box">
+                                           <a class="prev">上一页</a>
+                                       <span class="num"><span class="current_page">1</span>
+                                       <span style="padding:0 3px;">/</span>
+                                           <span class="total"></span></span>
+                                           <a class="next">下一页</a></span>
+                </i>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<script src="/lib/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript">
+    var currentPage; //当前页
+    var totalPage; //总多少页
+    var totaldata; //总共多少记录
+    var pageSize;//当前每页多少条
+    var username;
+    var password;
+
+
+    function showUpdateDownRecordItem(fileurlid) {
+        var jsonarray = {
+            "fileUrlId": fileurlid
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",//上传内容格式为json结构
+            url: "/fileupdown/showUpdateDownItem",
+            success: function (msg) {
+                $("#tablecontent").html("");
+                $("#tablecontent2").html("");
+                var tbody = $("#tablecontent");
+                var tbody2 = $("#tablecontent2");
+                var tr = "";
+                var tr2 = "";
+                var trnum = 0;
+                var trnum2 = 0;
+                var data = eval(msg);//将msg化为数;
+                $.each(data, function (num) {
+                    if (data[num].typeK == 0) {
+                        trnum = trnum + 1;
+                        tr += "<tr>";
+                        tr += ("<td align='center' width=\"32px\">" + (trnum) + "</td>");
+                        tr += ("<td align='center' width=\"180px\">" + isNull(data[num].fileName) + "</td>");
+                        tr += ("<td align='center' width=\"50px\">" + isNull(data[num].updateFullName) + "</td>");
+                        tr += ("<td align='center' width=\"150px\">" + isNull(data[num].updateDateStr) + "</td>");
+                        tr += ("<td align='left'>" + isNull(data[num].updateReason) + "</td>");
+                        tr += "</tr>";
+                    } else {
+                        trnum2 = trnum2 + 1;
+                        tr2 += "<tr>";
+                        tr2 += ("<td align='center' width=\"32px\">" + (trnum2) + "</td>");
+                        tr2 += ("<td align='center' width=\"170px\">" + isNull(data[num].fileName) + "</td>");
+                        tr2 += ("<td align='center' width=\"70px\">" + isNull(data[num].downFullName) + "</td>");
+                        tr2 += ("<td align='center' width=\"152px\">" + isNull(data[num].downDateStr) + "</td>");
+                        tr2 += ("<td width=\"180px\" align='center'>" + isNull(data[num].ipAddr) + "</td>");
+                        tr2 += ("<td align='center'  width=\"135px\">" + isNull(data[num].ipName) + "</td>");
+                        tr2 += "</tr>";
+                    }
+                });
+
+                if (trnum == 0) {
+                    tr += "<tr>";
+                    tr += ("<td align='center' colspan='5'>无更新记录</td>");
+                    tr += ("</tr>");
+                }
+                if (trnum2 == 0) {
+                    tr2 += "<tr>";
+                    tr2 += ("<td align='center' colspan='5' width=\"760px\">无下载记录</td>");
+                    tr2 += ("</tr>");
+                }
+                window.parent.document.getElementById('tablecontent').innerHTML = tr;
+                window.parent.document.getElementById('tablecontent2').innerHTML = tr2;
+                window.parent.document.getElementById('coverbehidepage').style.display = "block";
+                window.parent.document.getElementById('updateDiv').style.display = "block";
+            },
+            error: function (msg) {
+
+            }
+        });
+    }
+
+    function submitQueryByCondition() {
+        // $("#some-element").busyLoad("show");//遮罩层开启
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+
+        var jsonarray = {
+            "salor": $("#salor").val(), //业务员
+            "engineer": $("#engineer").val(),//设计师
+            "orderNo": $("#orderno").val(), //订单编号
+            "projectName": $("#projectname").val(), //项目编号
+            "fileName": $("#filename").val(), //文件名
+            "startNewestSaveDateStr": $("#startnewestsavedate").val(), //查询开始时间
+            "endNewestSaveDateStr": $("#endnewestsavedate").val(), //查询结束时间
+            "currentPage": $("#n_currentPage").val()
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",//上传内容格式为json结构
+            url: "/fileupdown/browserbyquerycondition",
+            success: function (msg) {
+                var data = eval(msg);//将msg化为数;
+                var num = 0;
+                var tr = "";
+                var image01 = $("#image01");
+                var image02 = $("#image02");
+                var image03 = $("#image03");
+                var image04 = $("#image04");
+                var maxpageid = $("#maxPage");
+                var n_currentPage = $("#n_currentPage");
+                var inputpage = $("#_tp");
+                image01.html("");
+                image02.html("");
+                image03.html("");
+                image04.html("");
+                var td = "";
+                var tbody = $("#showdatatable");
+                var tfoot = $("#s_tfoot");
+                tbody.html("");
+                if (data != null && data != "") {
+                    $("#nodatadiv").hide();
+                    $("#showdiv").show();
+                    currentPage = data[0].currentPage; //当前页
+                    totalPage = data[0].maxPage; //总多少页
+                    totaldata = data[0].recordCount; //总共多少记录
+                    username = data[0].userName;
+                    password = data[0].userPwd;
+                    pageSize = data[0].pageSize;
+                    maxpageid.val(totalPage);
+                    n_currentPage.val(currentPage);
+                    inputpage.val(currentPage);
+                    $.each(data, function (num) {
+                        tr = $("<tr id='" + data[num].id + "' ondblclick=\"showUpdateDownRecordItem('" + data[num].fileUrlId + "')\"></tr>");
+                        tr.append("<td align='center'>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
+                        tr.append("<td align='center'>" + isNull(data[num].lastUpdator) + "</td>");
+                        tr.append("<td>" + isNull(data[num].lastUpdateTime) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].projectName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].fileName) + "</td>");
+                        tr.append("<td align='center'>" + isNull(data[num].salor) + "</td>");
+                        tr.append("<td align='center'>" + isNull(data[num].singleFileUpdateNum) + "</td>");
+                        tr.append("<td>" + isNull(data[num].modifyReason) + "</td>");
+                        tr.append("<td align='center'>" + isNull(data[num].filedescribtion) + "</td>");
+                        tr.append("<td>" + isNull(data[num].remark) + "</td>");
+                        tr.append("<td>" + isNull(data[num].urlAddr) + "</td>");
+                        tr.appendTo(tbody);
+                    });
+                    $("#currentpagespan").html(currentPage);
+                    $("#maxpagespan").html(totalPage);
+                    $("#recordcountspan").html(totaldata);
+                    if (currentPage > 1) {
+                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image01.html(imange01str);
+                    } else {
+                        image01.html("");
+                    }
+                    if (currentPage <= 1) {
+                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image02.html(image02str);
+                    } else {
+                        image02.html("");
+                    }
+                    if (currentPage < totalPage) {
+                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image03.html(imange03str);
+                    } else {
+                        image03.html("");
+                    }
+                    if (currentPage >= totalPage) {
+                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image04.html(image04str);
+                    } else {
+                        image04.html("");
+                    }
+                } else {
+                    $("#nodatadiv").show();
+                    $("#showdiv").hide();
+                }
+                // 隐藏loading
+                $("#foldershow").removeAttr("checked");
+                $("#listshow").prop("checked", 'checked');
+                $("#folderdiv").attr("style", "display:none;")
+                $("#listdiv").attr("style", "display:block;")
+                //$("#some-element").busyLoad("hide");
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+            },
+            error: function (msg) {
+                // 隐藏loading
+                //$("#some-element").busyLoad("hide");
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+                alert("失败");
+            }
+        });
+    }
+
+    function exportDataByCondition() {
+        alert("此功能暂未做")
+    }
+
+    function goPageone() {
+        $("#n_currentPage").val(1);
+        submitQueryByCondition();
+    }
+
+    function goPrePage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 - 1 * 1);
+        submitQueryByCondition();
+    }
+
+    function goAftPage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 + 1 * 1);
+        submitQueryByCondition();
+    }
+
+    function goMaxPage() {
+        $("#n_currentPage").val($("#maxPage").val());
+        submitQueryByCondition();
+    }
+
+    function goPage2() {
+        var tp = document.getElementById("_tp").value;//currentPage
+        var max = $("#maxPage").val(); //maxPage
+        tp = tp.trim();
+        var r = /^\+?[0-9][0-9]*$/;
+        if (!(r.test(tp))) {
+            alert("页数输入有误，请重新输入!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) == 0) {
+            alert("页数必须大于0!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) > parseInt(max)) {
+            alert("不能大于总页数!");
+            $("#_tp").val(max);
+            return false;
+        } else {
+            $("#n_currentPage").val(tp);
+            // document.forms["form0"].submit();
+            submitQueryByCondition();
+        }
+    }
+
+    function goAjaxPage(strCount) {
+        switch (strCount) {
+            case "0":
+                if (currentPage == 1)
+                    return;
+                else
+                    currentPage = 1;
+                break;
+            case "-1":
+                if (currentPage == 1)
+                    return;
+                if (currentPage != 1)
+                    currentPage = parseInt(currentPage) - 1;
+                break;
+            case "1":
+                if (currentPage == totalPage)
+                    return;
+                if (currentPage != totalPage)
+                    currentPage = parseInt(currentPage) + 1;
+                break;
+            case "end":
+                if (currentPage == totalPage)
+                    return;
+                if (currentPage != totalPage)
+                    currentPage = totalPage;
+                break;
+            case "_go":
+                var _page = $("#_tp2").val();
+                if (!isInt(_page)) {
+                    alert("请输入正整数!");
+                    return;
+                }
+                if (_page <= 0) {
+                    alert("页数必须大于0!");
+                    return;
+                }
+                if (parseInt(_page) > parseInt(totalPage)) {
+                    alert("不能大于总页数!");
+                    return;
+                }
+                currentPage = $("#_tp2").val();
+                break;
+            default:
+                break;
+        }
+        if (totalPage) {
+            $("#n_currentPage").val(currentPage);
+            querySupplierPage();
+        }
+    }
+
+    function clickButton(event) {
+        if (event.keyCode == 13) {
+            goAjaxPage("_go");
+            return false;
+        }
+    }
+
+    function isNull(arg1) {
+        if (arg1 == "null" || arg1 == null) {
+            return "";
+        }
+        return arg1;
+    }
+
+    function isInt(str) {
+        var re = /^[0-9]*[1-9][0-9]*$/;
+        return re.test(str);
+    }
+
+    $("[rel=tooltip]").tooltip();
+    $(function () {
+        $('[data-popover="true"]').popover({html: true});
+        $('.demo-cancel-click').click(function () {
+            return false;
+        });
+    });
+</script>
+
+
+</body>
+</html>

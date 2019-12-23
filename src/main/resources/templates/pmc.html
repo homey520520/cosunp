@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>PMC信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+    <script src="/lib/defaults-zh_CN.js" type="text/javascript"></script>
+</head>
+<style type="text/css">
+    td, th {
+        white-space: nowrap;
+    }
+
+    th {
+        font-size: 11px;
+    }
+
+
+    #orderItemDivTop {
+        border: 1px solid #9AC0CD;
+        width: 560px;
+        height: 510px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-top: 5px;
+        background-color: #E0EEEE;
+    }
+
+    #innershowMessageDiv252 {
+        border: 1px solid #9AC0CD;
+        width: 560px;
+        height: 50px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        border: 1px solid #9AC0CD;
+        background-color: #E0EEEE;
+        position: absolute;
+    }
+
+    #alertupdatediv {
+        top: 5%;
+        left: 12%;
+        width: 600px;
+        height: 600px;
+        padding: 8px;
+        border: 8px solid #E8E9F7;
+        background-color: #E0EEEE;
+        z-index: 1010;
+        position: absolute;
+    }
+
+    #coverbehidepage {
+        display: none;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        z-index: 1006;
+        -moz-opacity: 0.3;
+        opacity: .30;
+        filter: alpha(opacity=30);
+
+    }
+</style>
+<script>
+
+    $(function () {
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        document.getElementById("coverbehidepage").style.display = "none";
+        var flag = $("#flag").val();
+        var aflag = eval(flag)
+        if (aflag == 1) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;添加成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 2) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;删除成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 3) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;更改成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 4) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 5) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;订单状态更改成功!";
+            errormessagediv.style.color = "green";
+        }
+    });
+
+    function goPageone() {
+        $("#n_currentPage").val(1);
+        queryOrderHeadByCondition2();
+    }
+
+    function goPrePage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 - 1 * 1);
+        queryOrderHeadByCondition2();
+    }
+
+    function goAftPage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 + 1 * 1);
+        queryOrderHeadByCondition2();
+    }
+
+    function goMaxPage() {
+        $("#n_currentPage").val($("#maxPage").val());
+        queryOrderHeadByCondition2();
+    }
+
+    function goPriPageone() {
+        $("#n_currentPage").val(1);
+        queryOrderHeadByCondition2();
+    }
+
+    function isNull(arg1) {
+        if (arg1 == "null" || arg1 == null || arg1 == 0 || arg1 == "0") {
+            return "";
+        }
+        return arg1;
+        //return !arg1 && arg1!==0 && typeof arg1!=="boolean"?true:false;
+    }
+
+    function goPage2() {
+        var tp = document.getElementById("_tp").value;//currentPage
+        var max = $("#maxPage").val(); //maxPage
+        tp = tp.trim();
+        var r = /^\+?[0-9][0-9]*$/;
+        if (!(r.test(tp))) {
+            alert("页数输入有误，请重新输入!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) == 0) {
+            alert("页数必须大于0!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) > parseInt(max)) {
+            alert("不能大于总页数!");
+            $("#_tp").val(max);
+            return false;
+        } else {
+            $("#n_currentPage").val(tp);
+            // document.forms["form0"].submit();
+            queryOrderHeadByCondition2();
+        }
+    }
+
+    function goPriAftPage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 + 1 * 1);
+        queryOrderHeadByCondition2();
+    }
+
+    function goPriMaxPage() {
+        $("#n_currentPage").val($("#maxPage").val());
+        queryOrderHeadByCondition2();
+    }
+
+    function goPriPrePage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 - 1 * 1);
+        queryOrderHeadByCondition2();
+    }
+
+    var currentPage; //当前页
+    var totalPage; //总多少页
+    var totaldata; //总共多少记录
+    var pageSize;//当前每页多少条
+    function queryOrderHeadByCondition2() {
+        var currentpage = $("#n_currentPage").val();
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var formData = new FormData();
+        formData.append('nameIds', $("#name").val());
+        formData.append('orderNos', $("#orderNo").val());
+        formData.append('productTotalName', $("#prodName").val());
+        formData.append('singleOrProjects', $("#orderType").val());
+        formData.append('states', $("#state").val());
+        formData.append('orderTimeStr', $("#orderDate").val());
+        formData.append('itemDeliverTimeStr', $("#deleverDate").val());
+        formData.append('sortMethod', sortMethod);
+        formData.append('sortByName', sortByName);
+        formData.append('currentPage', currentpage);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/order/queryOrderHeadByCondition",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+                errormessagediv.style.color = "green";
+                var data = eval(msg);//将msg化为数;
+                var tr = "";
+                var image01 = $("#image01");
+                var image02 = $("#image02");
+                var image03 = $("#image03");
+                var image04 = $("#image04");
+                var maxpageid = $("#maxPage");
+                var n_currentPage = $("#n_currentPage");
+                var inputpage = $("#_tp");
+                image01.html("");
+                image02.html("");
+                image03.html("");
+                image04.html("");
+                var td = "";
+                var td2 = "";
+                var tbody = $("#tabletblody");
+                tbody.html("");
+                var userType;
+                if (data != null && data != "") {
+                    $("#nodatadiv").hide();
+                    $("#showdiv").show();
+                    currentPage = data[0].currentPage; //当前页
+                    totalPage = data[0].maxPage; //总多少页
+                    totaldata = data[0].recordCount; //总共多少记录
+                    pageSize = data[0].pageSize;
+                    userType = data[0].type;
+                    maxpageid.val(totalPage);
+                    n_currentPage.val(currentPage);
+                    inputpage.val(currentPage);
+                    var eduLe;
+                    var safeLe;
+                    var otherLe;
+                    $.each(data, function (num) {
+                        tr = $("<tr id='" + data[num].id + "'></tr>");
+                        tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].salor) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderTimeStr) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderSetNum) + "</td>");
+                        tr.append("<td>" + isNull(data[num].singleOrProjectStr) + "</td>");
+                        tr.append("<td>" + isNull(data[num].stateStr) + "</td>");
+                        td = "<td>";
+                        td += " <a class=\"btn btn-xs btn-primary\" \n" +
+                            "onclick=\"updateOrderItemPMCByheadId('" + data[num].id + "');\">PMC编辑</a>\n" +
+                            "<a class=\"btn btn-xs btn-primary\"\n" +
+                            " onclick=\"confirmOrderPMCByheadId('" + data[num].id + "');\">PMC审核/下发</a>" +
+                            "</td>";
+                        tr.append(td);
+                        tr.appendTo(tbody);
+                        $('#stateStr' + data[num].orderNo).selectpicker('refresh');
+                    });
+                    $("#currentpagespan").html(currentPage);
+                    $("#maxpagespan").html(totalPage);
+                    $("#recordcountspan").html(totaldata);
+                    if (currentPage > 1) {
+                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPriPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPriPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image01.html(imange01str);
+                    } else {
+                        image01.html("");
+                    }
+                    if (currentPage <= 1) {
+                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image02.html(image02str);
+                    } else {
+                        image02.html("");
+                    }
+                    if (currentPage < totalPage) {
+                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goPriAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goPriMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image03.html(imange03str);
+                    } else {
+                        image03.html("");
+                    }
+                    if (currentPage >= totalPage) {
+                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image04.html(image04str);
+                    } else {
+                        image04.html("");
+                    }
+                } else {
+                    $("#nodatadiv").show();
+                    $("#showdiv").hide();
+                }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+
+        });
+    }
+
+
+    var sortMethod;
+    var sortByName;
+
+    function queryOrderHeadByCondition() {
+        var currentpage = $("#n_currentPage").val();
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var formData = new FormData();
+        formData.append('nameIds', $("#name").val());
+        formData.append('orderNos', $("#orderNo").val());
+        formData.append('productTotalName', $("#prodName").val());
+        formData.append('singleOrProjects', $("#orderType").val());
+        formData.append('states', $("#state").val());
+        formData.append('orderTimeStr', $("#orderDate").val());
+        formData.append('itemDeliverTimeStr', $("#deleverDate").val());
+        formData.append('sortMethod', sortMethod);
+        formData.append('sortByName', sortByName);
+        formData.append('currentPage', 1);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/order/queryOrderHeadByCondition",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+                errormessagediv.style.color = "green";
+                var data = eval(msg);//将msg化为数;
+                var tr = "";
+                var image01 = $("#image01");
+                var image02 = $("#image02");
+                var image03 = $("#image03");
+                var image04 = $("#image04");
+                var maxpageid = $("#maxPage");
+                var n_currentPage = $("#n_currentPage");
+                var inputpage = $("#_tp");
+                image01.html("");
+                image02.html("");
+                image03.html("");
+                image04.html("");
+                var td = "";
+                var td2 = "";
+                var tbody = $("#tabletblody");
+                tbody.html("");
+                var userType;
+                if (data != null && data != "") {
+                    $("#nodatadiv").hide();
+                    $("#showdiv").show();
+                    currentPage = data[0].currentPage; //当前页
+                    totalPage = data[0].maxPage; //总多少页
+                    totaldata = data[0].recordCount; //总共多少记录
+                    pageSize = data[0].pageSize;
+                    userType = data[0].type;
+                    maxpageid.val(totalPage);
+                    n_currentPage.val(currentPage);
+                    inputpage.val(currentPage);
+                    var eduLe;
+                    var safeLe;
+                    var otherLe;
+                    $.each(data, function (num) {
+                        tr = $("<tr id='" + data[num].id + "'></tr>");
+                        tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].salor) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderTimeStr) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderSetNum) + "</td>");
+                        tr.append("<td>" + isNull(data[num].singleOrProjectStr) + "</td>");
+                        tr.append("<td>" + isNull(data[num].stateStr) + "</td>");
+                        td = "<td>";
+                        td += " <a class=\"btn btn-xs btn-primary\" \n" +
+                            "onclick=\"updateOrderItemPMCByheadId('" + data[num].id + "');\">PMC编辑</a>\n" +
+                            "</td>";
+                        tr.append(td);
+                        tr.appendTo(tbody);
+                        $('#stateStr' + data[num].orderNo).selectpicker('refresh');
+                    });
+                    $("#currentpagespan").html(currentPage);
+                    $("#maxpagespan").html(totalPage);
+                    $("#recordcountspan").html(totaldata);
+                    if (currentPage > 1) {
+                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPriPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPriPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image01.html(imange01str);
+                    } else {
+                        image01.html("");
+                    }
+                    if (currentPage <= 1) {
+                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image02.html(image02str);
+                    } else {
+                        image02.html("");
+                    }
+                    if (currentPage < totalPage) {
+                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goPriAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goPriMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image03.html(imange03str);
+                    } else {
+                        image03.html("");
+                    }
+                    if (currentPage >= totalPage) {
+                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image04.html(image04str);
+                    } else {
+                        image04.html("");
+                    }
+                } else {
+                    $("#nodatadiv").show();
+                    $("#showdiv").hide();
+                }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+
+        });
+    }
+
+    function updateOrderItemPMCByheadId(headId) {
+        document.getElementById("coverbehidepage").style.display = "block";
+        window.parent.document.getElementById('coverbehidepageLeft').style.display = "block";
+        window.parent.document.getElementById('coverbehidepageTop').style.display = "block";
+        $("#alertupdatediv").show();
+    }
+
+    function deleteEmployeeSalary(empNo) {
+        window.location.href = "/finance/deleteEmployeeSalaryByEmpNo?empNo=" + empNo;
+    }
+
+    function deleteEmpSalaryByBatch() {
+        var deleteBatch = document.getElementsByName("deleteBatch");
+        var check_val = [];
+        var k;
+        for (k in deleteBatch) {
+            if (deleteBatch[k].checked) {
+                if (deleteBatch[k].value != "null") {
+                    check_val.push(deleteBatch[k].value);
+                }
+            }
+        }
+        if (check_val.length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请先勾选再批量删除!";
+            errormessagediv.style.color = "red";
+        } else {
+            $("#errormessage").hide();
+            window.location.href = "/finance/deleteEmpByBatch?ids=" + check_val;
+        }
+    }
+
+    function showPNG(id, type) {
+        window.open("/person/showImage?id=" + id + "&type=" + type);
+    }
+
+    function sortByAsc(titlename) {
+        sortMethod = 'asc';
+        sortByName = titlename;
+        queryEmployeeSalaryByCondition();
+    }
+
+    function sortByDesc(titlename) {
+        sortMethod = 'desc';
+        sortByName = titlename;
+        queryEmployeeSalaryByCondition();
+    }
+
+    function showOrderItemByOrderNo(orderId) {
+        var jsonarray = {
+            "id": orderId
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+                data: data,
+                type: "POST",
+                contentType: "application/json",//上传内容格式为json结构
+                url: "/order/showOrderItemByOrderHeadId",
+                success: function (msg) {
+                    $("#tablecontent").html("");
+                    $("#tablecontent2").html("");
+                    var tbody = $("#tablecontent");
+                    var tbody2 = $("#tablecontent2");
+                    var tr = "";
+                    var tr2 = "";
+                    var trnum = 0;
+                    var trnum2 = 0;
+                    var data = eval(msg);//将msg化为数;
+                    $.each(data, function (num) {
+                        trnum = trnum + 1;
+                        tr += "<tr>";
+                        tr += ("<td align='center' >" + (trnum) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].orderNo) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].productName) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].newFinishProudNo) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].productBigType) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].productMainShape) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].needNum) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].productSize) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].edgeHightSize) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].itemDeliverTime) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].backInstallSelect) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].mainMateriAndArt) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].electMateriNeeds) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].installTransfBacking) + "</td>");
+                        tr += ("<td align='center' >" + isNull(data[num].otherRemark) + "</td>");
+                        tr += "</tr>";
+                    });
+
+                    if (trnum == 0) {
+                        tr += "<tr>";
+                        tr += ("<td align='center' colspan='16'>无订单明细</td>");
+                        tr += ("</tr>");
+                    }
+                    window.parent.document.getElementById('tablecontent22').innerHTML = tr;
+                    window.parent.document.getElementById('coverbehidepage').style.display = "block";
+                    window.parent.document.getElementById('orderItemDiv').style.display = "block";
+                },
+                error: function (msg) {
+
+                }
+            }
+        );
+    }
+
+    function closeOrderItemPMCMessage() {
+        $("#alertupdatediv").hide();
+        document.getElementById("coverbehidepage").style.display = "none";
+        window.parent.document.getElementById('coverbehidepageLeft').style.display = "none";
+        window.parent.document.getElementById('coverbehidepageTop').style.display = "none";
+
+    }
+
+</script>
+<body>
+<div id="coverbehidepage"></div>
+<div id="coverbehidepagetwo"></div>
+<div id="coverbehidepagethree"></div>
+<div id='app'>
+    <form>
+        <input type="hidden" id="flag" th:value="${flag}">
+        <input type="hidden" id="maxPage" th:value="${orderHead.maxPage}">
+        <input type="hidden" id="n_currentPage" name="view.currentPage" th:value="${orderHead.currentPage}"/>
+        <div class="panel panel-primary">
+            <div class="panel-body form-inline">
+                <table width="100%">
+                    <tr>
+                        <td style="text-align: right">
+                            <label>业务员：</label>
+                        </td>
+                        <td>
+                            <label>
+                                <select id="name" multiple class="selectpicker show-tick form-control"
+                                        data-live-search="true" data-actions-box="true"
+                                        data-selected-text-format="count > 2">
+                                    <option th:each="c:${salorList}" th:value="${c.id}"
+                                            th:text="${c.name}"></option>
+                                </select>
+                            </label>
+                        </td>
+
+                        <td style="text-align: right">
+                            <label>订单编号：</label>
+                        </td>
+                        <td>
+                            <label>
+                                <select id="orderNo" multiple class="selectpicker show-tick form-control"
+                                        data-live-search="true" data-actions-box="true"
+                                        data-selected-text-format="count > 1">
+                                    　　
+                                    <option th:each="c:${orderNoList}" th:value="${c.id}"
+                                            th:text="${c.orderNo}"></option>
+                                </select>
+                            </label>
+                        </td>
+                        <td style="text-align: right">
+                            <label>品名：</label>
+                        </td>
+                        <td>
+                            <select id="prodName" class="selectpicker show-tick form-control"
+                                    data-live-search="true" data-actions-box="true">
+
+                                <option value="">请选择品名</option>
+                                <option th:each="c:${prodNameList}" th:value="${c}"
+                                        th:text="${c}"></option>
+                            </select>
+                        </td>
+
+                        <td style="text-align: right">
+                            <label>订单类别：</label>
+                        </td>
+                        <td>
+                            <select id="orderType" multiple class="selectpicker show-tick form-control"
+                                    data-live-search="true" data-actions-box="true"
+                                    data-selected-text-format="count > 1">
+                                <option value="0">单项订单</option>
+                                <option value="1">项目订单</option>
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>订单日期：</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orderDate"
+                                   style="width:130px;height: 34px;text-align: center"
+                                   class="Wdate"
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+
+                        </td>
+                        <td>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交货时间：</label>
+                        </td>
+                        <td>
+                            <input type="text" id="deleverDate"
+                                   style="width:140px;height: 34px;text-align: center" class="Wdate"
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+
+                        </td>
+
+
+                        <td colspan="2" style="text-align: right">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-primary"
+                               href="javascript:void(0);" onclick="queryOrderHeadByCondition()">查找</a>
+
+                        </td>
+                        <td colspan="3">
+                            <div style="display: none" id="errormessage">
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+    <table class="table table-bordered table-hover table-striped text-center hongmei" id="showlistbody">
+        <thead style="background-color:lightsteelblue">
+        <tr>
+            <th style="text-align: center"> 序号</th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('orderNo')" aria-hidden="true"></i>
+                订单编号
+                <i class="fa fa-sort-desc" onclick="sortByDesc('orderNo')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('salor')" aria-hidden="true"></i>
+                业务员
+                <i class="fa fa-sort-desc" onclick="sortByDesc('salor')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('orderTime')" aria-hidden="true"></i>
+                下单时间
+                <i class="fa fa-sort-desc" onclick="sortByDesc('orderTime')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('orderNum')" aria-hidden="true"></i>
+                商品类别数量
+                <i class="fa fa-sort-desc" onclick="sortByDesc('orderNum')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('orderType')" aria-hidden="true"></i>
+                订单类别
+                <i class="fa fa-sort-desc" onclick="sortByDesc('orderType')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('state')" aria-hidden="true"></i>
+                订单状态
+                <i class="fa fa-sort-desc" onclick="sortByDesc('state')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">操作</th>
+        </tr>
+        </thead>
+        <tbody id="tabletblody">
+        <!--v-for中的数据不再是直接从data中获取，而是通过search方法对data中的数据进行过滤再显示-->
+        <div th:unless="${#lists.isEmpty(orderList)}">
+            <div th:each="order,iterStat: ${orderList}" align="center">
+                <tr th:ondblclick="showOrderItemByOrderNo([[${order.id}]])">
+                    <td align="center"
+                        th:text="${(iterStat.index+1)}+${orderHead.currentPage-1}*${orderHead.pageSize}"></td>
+                    <td align="center" th:text="${order.orderNo}"></td>
+                    <td align="center" th:text="${order.salor}"></td>
+                    <td align="center" th:text="${order.orderTimeStr}"></td>
+                    <td align="center" th:text="${order.orderSetNum}"></td>
+                    <td align="center" th:text="${order.singleOrProjectStr}"></td>
+                    <td align="center" th:text="${order.stateStr}"></td>
+                    <td align="center">
+                        <a class="btn btn-xs btn-primary"
+                           th:onclick="updateOrderItemPMCByheadId([[${order.id}]]);">PMC编辑</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-xs btn-primary"
+                           th:onclick="confirmOrderPMCByheadId([[${order.id}]]);">PMC审核/下发</a>
+                    </td>
+                </tr>
+            </div>
+        </div>
+        <div th:if="${#lists.isEmpty(orderList)}">
+            <tr>
+                <td colspan="8">
+                    查无数据
+                </td>
+            </tr>
+        </div>
+        </tbody>
+
+        <tfoot id="s_tfoot">
+        <tr id="showdiv">
+
+            <td colspan="9" align="center">
+                <span>第</span>
+                <span th:text="${orderHead.currentPage}" id="currentpagespan"> </span>
+                <span>页|共</span>
+                <span th:text="${orderHead.maxPage}" id="maxpagespan"> </span>
+                <span>页|共</span>
+                <span th:text="${orderHead.recordCount}" id="recordcountspan"> </span>
+                <span>条记录 </span>
+                <span id="image01">
+                            <span th:if="${orderHead.currentPage gt 1}">
+                                    <img src="/images/page/sy-2.jpg" align="middle" border="0"
+                                         style="width: 20px; height: 20px; vertical-align: middle"
+                                         onClick="goPageone()"/>
+                                    <img src="/images/page/syy-2.jpg" align="middle" border="0" onClick="goPrePage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+
+                                </span>
+                                </span>
+                <span id="image02">
+                            <span th:if="${orderHead.currentPage le 1}">
+                                <img src='/images/page/l-sy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='images/images/page/l-syy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+                            </span>
+                            </span>
+                <span id="image03">
+                            <span th:if="${orderHead.currentPage lt orderHead.maxPage}">
+                                    <img src="/images/page/xyy-2.jpg" align="middle" border="0" onClick="goAftPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                                    <img src="/images/page/my-2.jpg" align="middle" border="0" onClick="goMaxPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                                </span>
+                <span id="image04">
+                            <span th:if="${orderHead.currentPage ge orderHead.maxPage}">
+                                <img src='/images/page/l-xyy-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='/images/page/l-my-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                            </span>
+
+                |&nbsp;到第
+                <input onkeypress="if(event.keyCode==13) {gopage.click();return false;}"
+                       style="width: 50px"
+                       id="_tp" th:name="currentPage" type="text" th:value="${orderHead.currentPage}"/>
+                页&nbsp;
+                <img src="/images/page/cx-2.jpg" id="gopage" onClick="goPage2()"
+                     style="width:20px;height:20px;vertical-align:middle">
+            </td>
+
+        </tr>
+
+
+        <tr style="display:none;" id="nodatadiv">
+            <td colspan="9" align="center">
+                查无数据
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div id="alertupdatediv" style="display: none">
+    <div id="orderItemDivIn" style="display: block">
+        <div id="orderItemDivTop" style="text-align: center">
+            <table style="align: center" class="grid" width="100%">
+                <tr style="height: 50px">
+                    <td style="text-align: right">订单编号:</td>
+                    <td style="text-align: left">
+                        <input type="text" class="form-control" value="12121212" style="width: 180px">
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td style="text-align: right">品名:</td>
+                    <td style="text-align: left">
+                        <input type="text" class="form-control" value="55" style="width: 180px">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr style="height: 50px">
+                    <td style="text-align: right">PMC交期:</td>
+                    <td style="text-align: left">
+                        <input type="text" id="PMCdeleverDate"
+                               style="width:180px;height: 34px;text-align: center" class="Wdate"
+                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr style="height: 50px">
+                    <td style="text-align: right">是否需要提前购买材料:</td>
+                    <td style="text-align: left">
+                        <input type="radio" name="needbuybefor" value="0">否
+                        &nbsp;
+                        <input type="radio" name="needbuybefor" value="1">是
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="text" style="width: 200px">
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td style="text-align: right">是否需外发:</td>
+                    <td style="text-align: left"><input type="radio" name="needoutwork" value="1">是 &nbsp;
+                        <input type="radio" name="needoutwork" value="0">否 &nbsp;
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="2" style="text-align: left">
+                        <input type="checkbox" name="outworkfile" value="0">制作图纸
+                        <input type="checkbox" name="outworkfile" value="1">BOM表
+                        <input type="checkbox" name="outworkfile" value="2">激光文件
+                        <input type="checkbox" name="outworkfile" value="3">雕刻文件
+                        <input type="checkbox" name="outworkfile" value="4">外发文件
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td style="text-align: right">PMC备注:</td>
+                    <td style="text-align: left">
+                        <input type="text" name="pmcremark" style="width: 180px" class="form-control" id="pmcremark">
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="innershowMessageDiv252" th:align="right">
+        <p>
+            <br>
+
+            <input type="button" value="保存" onclick="saveOrderItemPMCMessage()">
+            &nbsp; &nbsp; &nbsp;
+            <input type="button" value="关闭" onclick="closeOrderItemPMCMessage()">
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>深圳柯赛标识工程有限公司</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/static/lib/font-awesome/css/font-awesome.css"/>
+
+    <script src="/static/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <!--<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.min.js "></script>-->
+
+    <link rel="stylesheet" type="text/css" href="/static/stylesheets/theme.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/stylesheets/premium.css"/>
+
+</head>
+<body class=" theme-blue">
+
+<!-- Demo page code -->
+
+<script type="text/javascript">
+    $(function () {
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        var match = document.cookie.match(new RegExp('color=([^;]+)'));
+        if (match) var color = match[1];
+        if (color) {
+            $('body').removeClass(function (index, css) {
+                return (css.match(/\btheme-\S+/g) || []).join(' ')
+            })
+            $('body').addClass('theme-' + color);
+        }
+        $('[data-popover="true"]').popover({html: true});
+        // var flag = $("#flag").val();
+        // if (flag == "false") {
+        //     $("#showwrongmessage").html(" <h1><font color=\"#FF0000\">用户名与密码借误</font></h1>");
+        //     $("#username").val("");
+        //     $("#password").val("")
+        //     $("#uid").val("");
+        // } else {
+        //     $("#showwrongmessage").html("");
+        // }
+    });
+</script>
+<style type="text/css">
+    .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+        color: #fff;
+    }
+
+
+</style>
+
+<script type="text/javascript">
+    var usernameflag = false;
+    var passwordflag = false;
+    var uidflag = false;
+    $(function () {
+        if (window.top != window.self) {
+            window.top.location.href = window.self.location.href;
+        }
+        var flag=$("#flagstatus").val();
+        var showerrmessage = document.getElementById("showerrmessage");
+        if(flag=="false"){
+            showerrmessage.innerHTML = "用户名与密码错误，请重新输入！";
+            showerrmessage.style.color = "red";
+            $("#username").val("");
+            $("#password").val("")
+            $("#uid").val("");
+        }else if(flag=="3"){
+            showerrmessage.innerHTML = "用户注册成功,请让上级审核后再登录！";
+            showerrmessage.style.color = "red";
+        }else if(flag=="0"){
+            showerrmessage.innerHTML = "您注册的用户未经过上级审核！";
+            showerrmessage.style.color = "red";
+        } else if(flag=="2"){
+            showerrmessage.innerHTML = "您注册的用户上级审核未通过！";
+            showerrmessage.style.color = "red";
+        } else{
+            showerrmessage.innerHTML = "";
+        }
+        var uls = $('.sidebar-nav > ul > *').clone();
+        uls.addClass('visible-xs');
+        $('#main-menu').append(uls.clone());
+    });
+    function checksubmitdata() {
+        var showerrmessage = document.getElementById("showerrmessage");
+        checkpassword();
+        checkusername();
+        showerrmessage.innerHTML = "";
+        if(usernameflag&passwordflag){
+            return true;
+        }
+        showerrmessage.innerHTML = "请先填写用户名和密码！";
+        showerrmessage.style.color = "red";
+        return false;
+    }
+    function checkpassword() {
+        var showerrmessage = document.getElementById("showerrmessage");
+        showerrmessage.innerHTML = "";
+        var password = $("#password").val();
+        var passworderr = document.getElementById("passworderr");
+        var passwordregul = /^[a-zA-Z]\w{4,11}$/;
+        if (passwordregul.test(password)) {
+            passworderr.innerHTML="";
+            passwordflag = true;
+        } else {
+            passworderr.innerHTML="以字母开头，长度在5~12之间，只能包含字母、数字和下划线";
+            passworderr.style.color="red";
+            passwordflag = false;
+        }
+        checkusername;
+    }
+    // 当鼠标不聚焦验证用户名input
+    function checkusername() { // 找到id=result_name的div
+        var showerrmessage = document.getElementById("showerrmessage");
+        showerrmessage.innerHTML = "";
+        var nameObj = document.getElementById("usererro"); // 判断用户名是否合法
+        var username = $("#username").val();
+        var str2 = check_user_name(username);
+        nameObj.style.color = "red";
+        if ("该用户名合法" == str2) {
+            usernameflag = true;
+            nameObj.innerHTML = "";
+        } else {
+            usernameflag = false;
+            nameObj.innerHTML = str2;
+        }
+        checkpassword();
+    }
+    // 检查用户名是否合法    合法就返回"该用户名合法"
+    function check_user_name(str) {
+        var str2 = "该用户名合法";
+        if ("" == str) {
+            str2 = "用户名为空";
+            return str2;
+        } else if ((str.length < 4) || (str.length > 20)) {
+            str2 = "用户名必须为4 ~ 20位";
+            return str2;
+        } else if (check_other_char(str)) {
+            str2 = "不能含有特殊字符";
+            return str2;
+        }
+        return str2;
+    }
+    // 验证用户名是否含有特殊字符
+    function check_other_char(str) {
+        var arr = ["&", "\\", "/", "*", ">", "<", "@", "!"];
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = 0; j < str.length; j++) {
+                if (arr[i] == str.charAt(j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+</script>
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- Le fav and touch icons -->
+<link rel="shortcut icon" href="../assets/ico/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+
+
+<!--[if lt IE 7 ]>
+<body class="ie ie6"> <![endif]-->
+<!--[if IE 7 ]>
+<body class="ie ie7 "> <![endif]-->
+<!--[if IE 8 ]>
+<body class="ie ie8 "> <![endif]-->
+<!--[if IE 9 ]>
+<body class="ie ie9 "> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+
+<!--<![endif]-->
+
+<div class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <a class="" href="index.html"><span class="navbar-brand"><span class="fa fa-paper-plane"></span>深圳柯赛标识工程有限公司 </span></a>
+    </div>
+
+    <div class="navbar-collapse collapse" style="height: 1px;">
+
+    </div>
+</div>
+</div>
+
+
+<div class="dialog" style="width: 100%">
+    <div class="panel panel-default">
+        <p class="panel-heading no-collapse">登录</p>
+        <div class="panel-body">
+            <form id="loginform"   th:action="@{/account/login}"  th:object="${view}" method="post">
+                <input type="hidden" id="flagstatus" th:field="*{flag}" >
+                <div class="form-group">
+                    <label> <font color="#FF0000" size="2">*</font>用户名</label>
+                    <input type="text" class="form-control span12" id="username"  th:field="*{userName}"  onblur="checkusername()" >
+                    <div id="usererro"></div>
+                </div>
+                <div class="form-group">
+                    <label> <font color="#FF0000" size="2">*</font>密码</label>
+                    <input type="password" class="form-controlspan12 form-control" id="password"  th:field="*{password}"
+                           onblur="checkpassword()"><div id="passworderr"></div>
+
+                </div>
+                <div class="form-group">
+                    <label>编号</label>
+                    <input type="text" class="form-controlspan12 form-control" id="uid" onblur="checkuid(this)"
+                    ><div id=""></div>
+                </div>
+                <div id="showerrmessage"></div>
+                <input type="submit" onclick="return checksubmitdata()"; class="btn btn-primary pull-right" value="登录"></input>
+                <!--<label class="remember-me"><input type="checkbox" onclick='alert("doing")'> 记住密码</label>-->
+                <div class="clearfix"></div>
+            </form>
+        </div>
+    </div>
+    <!--<p class="pull-right" style=""><a href="http://www.portnine.com" target="blank" style="font-size: .75em; margin-top: .25em;">Design by Portnine</a></p>-->
+    <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+        <a th:href="@{/account/toregister}">注册</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a th:href="@{/account/toforgetpasswordpage}">忘记密码?</a></p>
+</div>
+
+
+<script src="/static/lib/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript">
+    $("[rel=tooltip]").tooltip();
+    $(function () {
+        $('.demo-cancel-click').click(function () {
+            return false;
+        });
+    });
+</script>
+
+
+</body>
+</html>

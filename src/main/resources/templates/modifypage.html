@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>设计文件</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/theme.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/premium.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/webuploader.css">
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+
+
+</head>
+<div id="coverbehidepage1" style="display: none"></div>
+<input type="hidden" th:value="${view.flag}" id="uploadflag">
+<input type="hidden" th:value="${view.noExsitFileMessage}" id="existFileMessage">
+<input type="hidden" th:value="${view.isExistNum}" id="isExistNum">
+<input type="hidden" th:value="${extensionList}" id="extension">
+
+<input type="hidden" id="foldername">
+<div id="">
+    <input type="hidden" name="*{salor}" id="salorvalue">
+    <input type="hidden" name="*{saveFolderName}" id="folderselect">
+    <input type="hidden" name="filePathName" id="filePathName">
+    <div id="tabs">
+
+        <a class="btn btn-default"
+           th:href="@{/fileupdown/tomainpage}">上传</a>
+
+        <a class="btn  btn-primary"
+           th:href="@{/fileupdown/tomodifypage}">更新</a>
+
+        <a class="btn btn-default"
+           th:href="@{/fileupdown/download(currentPage=${view.currentPage})}">
+            下载</a>
+        <a class="btn btn-default"
+           th:href="@{/fileupdown/todeletepage(currentPage=${view.currentPage})}">删除</a>
+        <a class="btn btn-default"
+           th:href="@{/fileupdown/tobroserfilepage(currentPage=${view.currentPage})}">查找</a>
+
+        <a class="btn btn-default"
+           th:href="@{/fileupdown/toprivilmanagepage(pageSize=12,currentPage=${view.currentPage})}">管理</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a onclick="alertMessageDiv()" href="#"><font color="#FF0000"
+                                                      size="2"><u><strong>使用说明</strong></u></font></a>
+
+
+        <p>
+        <p>
+
+
+            <!--<input type="hidden" value="1" th:field="*{currentPage}">-->
+        <div>
+            &nbsp;&nbsp;&nbsp;&nbsp; <font color="#FF0000" size="2">*</font>
+            <select id="salorid" style="width: 153px" name="salor" onchange="showFileUrl()">
+                <option value="" selected="selected" disabled="disabled" hidden="hidden">请选择业务员</option>
+                <option th:each="c:${employees}" th:value="${c.name}"
+                        th:text="${c.name}"></option>
+
+            </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <font color="#FF0000" size="2">*</font>
+            订单编号
+            <input type="text" id="orderno" name="orderNo" onblur="checkOrderNo(this)">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <!--<font color="#FF0000" size="2">*</font>-->
+            项目名称
+            <input type="text" id="projectno" name="projectName" onchange="clearFileDataM1()" disabled>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+            更新时间
+            <input type="text" readonly="readonly" class="Wdate" id="uploaddatetime" name="createTime">
+        </div>
+        <p>
+        <div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            文件设计师 <input type="text" id="fileuploader" style="width: 80px;" readonly="readonly"
+                         th:field="${view.fullName}">
+
+
+        </div>
+        <p>
+        <div>
+
+            <table id="uploadtable" width="100%">
+                <thead style="background-color: #E0EEEE">
+                <tr id="colrcss">
+                    <td width="50">序号</td>
+                    <td width="200">选择文件夹</td>
+                    <td width="200">选择更新的单或多个文件</td>
+                    <td width="200"><font color="#FF0000" size="2">*</font>更新原因</td>
+
+                </tr>
+                </thead>
+
+                <tbody id="bodycss">
+                <tr id="tr01">
+                    <td>1</td>
+
+
+
+                    <td style="text-align: left">
+                        <div id="uploader" class="wu-example">
+                            <div class="btns">
+                                <span id="picker"></span><span id="showtotalnumspan"
+                                                               style="display: none">您已选择<span
+                                    id="showfiletotalnum"></span>个文件</span>
+                                <br>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="text-align: left">
+                        <div id="uploader1" class="wu-example">
+                            <div class="btns">
+                                <span id="picker1"></span><span id="showtotalnumspan1"
+                                                                style="display: none">您已选择<span
+                                    id="showfiletotalnum1"></span>个文件</span>
+                                <br>
+                            </div>
+                        </div>
+
+                    </td>
+
+                    <td>
+                        <input type="text" style="width: 300px" id="modifyreason" value="" name="modifyReason">
+
+                    </td>
+
+
+                </tr>
+                </tbody>
+
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+        <p>
+        <div id="selecradio">
+
+            <input type="radio" name="showmethod" checked value="0" id="listshow" onclick="showlistdiv2()">列表展示
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="showmethod" value="1" id="foldershow" onclick="showfolderdiv2()">文件夹展示
+        </div>
+
+        <div id="listdiv">
+            <div id="showtabledivhead">
+                <table class="grid" style="width: 100%" id="tablecss">
+                    <thead style="background-color: #E0EEEE" align="center" id="urlthead">
+                    <td width="30">序号</td>
+                    <td width="50">设计师</td>
+                    <td width="150">订单编号</td>
+                    <td width="50">业务员</td>
+                    <td width="200">文件名称</td>
+                    <td width="153">上传时间</td>
+                    <td width="50">更新次数</td>
+                    </thead>
+                </table>
+            </div>
+
+            <div id="showurldiv">
+                <table class="grid" style="width: 100%;height: 360px" id="tablecss">
+                    <tbody align="center" id="urltbody" style="height: 250px;">
+                    <tr>
+                        <td colspan="7">暂无数据</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p>
+        <div id="folderdiv" style="display: none">
+
+            &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="backfolder" disabled value="返回上一级"
+                                           onclick="backFolder2();">
+
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div id="innerfolderdiv" style="overflow-y:scroll">
+            </div>
+        </div>
+        <div id="buttondiv">
+            <div id="innerbuttondiv" style="text-align: right">
+
+                <button id="ctlBtn" class="btn btn-default">开始更新</button>
+                <button id="" class="btn btn-default" onclick="clearFileData()">全部清空</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="thelist" class="uploader-list" style="display:none;"></div>
+
+
+    <div id="showMessageDiv" style="display: none">
+        <div id="innershowMessageDiv">
+            <div id="innershowMessageDiv1">
+                <div id="innershowMessageDiv11" th:align="center">
+                    <font color="#FF0000" size="3" th:align="center"><strong>温馨小贴士</strong></font>
+                </div>
+                <div id="innershowMessageDiv12" th:align="left">
+
+                </div>
+            </div>
+            <div id="innershowMessageDiv2" th:align="right">
+                <p>
+                    <br>
+                    <input type="button" value="关闭" onclick="closeShowMessage()">
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</html>
+</html>
+
+
+<script src="/lib/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript">
+    $("[rel=tooltip]").tooltip();
+    var extensionarrays;
+    var extensionarray;
+    $(function () {
+        extensionarrays = $("#extension").val();
+        extensionarray = eval("(" + extensionarrays + ")");
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        $('[data-popover="true"]').popover({html: true});
+        $('.demo-cancel-click').click(function () {
+            return false;
+        });
+    });
+
+</script>
+<script type="text/javascript" src="/lib/webuploader.min.js"></script>
+<script type="text/javascript">
+    var isFilePathRight = 1;
+    var filePathName1 = ""
+    var filePathName = "";
+    $(function () {
+        var flag = $("#uploadflag").val();
+        if (flag == "-18") {
+            alert("文件全部更新成功！");
+        }
+
+        $("#salorid").val("");
+        $("#orderno").val("");
+        $("#projectno").val("");
+        $('#file').val("");
+        $('#filefolder').val("");
+        $("#modifyreason").val("");
+        $('#filedescribtion').val("");
+        $('#remark').val("");
+        $("#uploaddatetime").val(today());
+
+
+        var match = document.cookie.match(new RegExp('color=([^;]+)'));
+        if (match) var color = match[1];
+        if (color) {
+            $('body').removeClass(function (index, css) {
+                return (css.match(/\btheme-\S+/g) || []).join(' ')
+            })
+            $('body').addClass('theme-' + color);
+        }
+    });
+    var $btn = $('#ctlBtn');
+    var $thelist = $('#thelist');
+    var chunkSize = 5 * 1024 * 1024;
+
+    WebUploader.Uploader.register({
+        'before-send-file': 'beforeSendFile',
+        'before-send': 'beforeSend'
+    }, {
+        beforeSendFile: function (file) {
+            var task = new $.Deferred();
+            uploader.md5File(file).progress(function (percentage) {
+                findWhat(file, percentage, "MD5", "MD5");
+            }).then(function (val) {
+                file.md5 = val;
+                file.uid = WebUploader.Base.guid();
+                $.post("/fileupdown/checkFileMd5", {uid: file.uid, md5: file.md5},
+                    function (data) {
+                        var status = data.status.value;
+                        task.resolve();
+                        if (status == 101) {
+                        } else if (status == 100) {
+                        } else if (status == 102) {
+                            file.missChunks = data.data;
+                        }
+                    });
+            });
+            return $.when(task);
+        },
+        beforeSend: function (block) {
+            var task = new $.Deferred();
+            var file = block.file;
+            var missChunks = file.missChunks;
+            var blockChunk = block.chunk;
+            if (missChunks !== null && missChunks !== undefined && missChunks !== '') {
+                var flag = true;
+                for (var i = 0; i < missChunks.length; i++) {
+                    if (blockChunk == missChunks[i]) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    task.reject();
+                } else {
+                    task.resolve();
+                }
+            } else {
+                task.resolve();
+            }
+            return $.when(task);
+        }
+    });
+
+    var uploader = WebUploader.create({
+        pick:
+            {
+                id: '#picker',
+                label: '选择文件夹',
+                multiple: false,
+                webkitdirectory: true
+            },
+        formData: {
+            uid: 0,
+            md5: '',
+            chunkSize: chunkSize
+        },
+
+        swf: 'js/Uploader.swf',
+        chunked: true,
+        chunkSize: chunkSize,
+        threads: 3,
+        server: '/fileupdown/modifyfolder1',
+        auto: false,
+        compress: false,
+
+
+        disableGlobalDnd: true,
+        fileNumLimit: 1024,
+        fileSizeLimit: 1024 * 1024 * 1024,
+        fileSingleSizeLimit: 1024 * 1024 * 1024
+    });
+
+
+    var uploader1 = WebUploader.create({
+        pick:
+            {
+                id: '#picker1',
+                label: '选择文件',
+                multiple: true,
+                webkitdirectory: false
+            },
+        formData: {
+            uid: 0,
+            md5: '',
+            chunkSize: chunkSize
+        },
+
+        swf: 'js/Uploader.swf',
+        chunked: true,
+        chunkSize: chunkSize,
+        threads: 3,
+        server: '/fileupdown/modifyfile1',
+        auto: false,
+        compress: false,
+
+
+        disableGlobalDnd: true,
+        fileNumLimit: 1024,
+        fileSizeLimit: 1024 * 1024 * 1024 * 1024,
+        fileSingleSizeLimit: 1024 * 1024 * 1024 * 1024
+    });
+
+    var arr = "";
+    var totalFileNum1 = 0;
+    var allurls1 = new Array();
+    var goOne = true;
+    uploader1.on('fileQueued', function (file) {
+        if (goOne) {
+            $("#uploader").hide();
+            goOne = false;
+        }
+        allurls1[totalFileNum1] = file.name;
+        totalFileNum1++;
+        $thelist.append('<div id="' + file.id + '" class="item">' +
+            '<h6 class="info">' + file.name + '</h6>' +
+            '<p class="state">等待更新...</p>' +
+            '</div>');
+        $("#showfiletotalnum1").html(totalFileNum1);
+        $("#showtotalnumspan1").show();
+    });
+
+
+    uploader1.onUploadBeforeSend = function (obj, data) {
+        var file = obj.file;
+        data.md5 = file.md5 || '';
+        data.uid = file.uid;
+        data.webkitRelativePath = obj.file.source.source.webkitRelativePath ? obj.file.source.source.webkitRelativePath : '';
+        data.orderNo = $("#orderno").val().trim();
+        data.salor = $("#salorid").val();
+        data.projectName = $("#projectno").val().trim();
+        data.fileNames = allurls1;
+        data.name = file.name;
+    };
+    uploader1.on('uploadProgress', function (file, percentage) {
+        findWhat(file, percentage, "FILE", "更新进度");
+    });
+    uploader1.on('uploadSuccess', function (file) {
+        var text = '已更新';
+        if (file.pass) {
+            text = "文件妙传功能，文件已更新。"
+        }
+        $('#' + file.id).find('p.state').text(text);
+    });
+    uploader1.on('uploadError', function (file) {
+        $('#' + file.id).find('p.state').text('更新出错');
+    });
+    uploader1.on('uploadComplete', function (file) {
+        $("#" + file.id).hide();
+        getEmpNoByFileId(file, 'FILE');
+    });
+
+
+    var totalFileNum = 0;
+    var allurls = new Array();
+    var goOne1 = true;
+    uploader.on('fileQueued', function (file) {
+        if (goOne1) {
+            $("#uploader1").hide();
+            goOne1 = false;
+        }
+        allurls[totalFileNum] = file.source.source.webkitRelativePath;
+        totalFileNum++;
+        $thelist.append('<div id="' + file.id + '" class="item">' +
+            '<h6 class="info">' + file.name + '</h6>' +
+            '<p class="state">等待更新...</p>' +
+            '</div>');
+        file.source.source.webkitRelativePath
+        $("#showfiletotalnum").html(totalFileNum);
+        $("#showtotalnumspan").show();
+    });
+
+    uploader.onUploadBeforeSend = function (obj, data) {
+        var file = obj.file;
+        data.md5 = file.md5 || '';
+        data.uid = file.uid;
+        data.webkitRelativePath = obj.file.source.source.webkitRelativePath ? obj.file.source.source.webkitRelativePath : '';
+        data.orderNo = $("#orderno").val().trim();
+        data.salor = $("#salorid").val();
+        data.projectName = $("#projectno").val().trim();
+        data.webkitRelativePaths = allurls;
+    };
+
+    uploader.on('uploadProgress', function (file, percentage) {
+        findWhat(file, percentage, "FILE", "更新进度");
+    });
+    uploader.on('uploadSuccess', function (file) {
+        var text = '已更新';
+        if (file.pass) {
+            text = "文件妙传功能，文件已更新。"
+        }
+        $('#' + file.id).find('p.state').text(text);
+    });
+    uploader.on('uploadError', function (file) {
+        $('#' + file.id).find('p.state').text('更新出错');
+    });
+    uploader.on('uploadComplete', function (file) {
+        $("#" + file.id).hide();
+        getEmpNoByFileId(file, 'FILE');
+    });
+    var flagg = true;
+    var flaggg = false;
+
+
+    function checkMessageBeforeUpload() {
+        var salorid = $("#salorid").val();
+        var orderno = $("#orderno").val().trim();
+        var projecto = $("#projectno").val().trim();
+        var filePathName = "";
+        var fileName = "";
+        var reg = new RegExp(/^[A-Z]{5}[0-9]{8}[A-Z]{2}[0-9]{2}$/g);
+        var filesaveselect = $('input[name="filesaveselect"]:checked').val();
+        var url = "";
+        var formData = new FormData();
+        formData.append('orderNo', $("#orderno").val());
+        formData.append('salor', $("#salorid").val());
+
+        if (salorid == "" || salorid == null) {
+            alert("请选择业务人员！");
+            flagg = false;
+            clearUploder()
+            return false;
+        }
+        if (orderno == "") {
+            flagg = false;
+            clearUploder()
+            alert("请填写订单编号！");
+            return false;
+        }
+
+        var folderArray;
+        if (totalFileNum != 0) {
+            for (var i = 0; i < allurls.length; i++) {
+                folderArray = allurls[i].split("/");
+
+                if (allurls[i].indexOf(":") == -1) {
+                    filePathName += allurls[i] + ":";
+                } else {
+                    alert("您选择的文件名或者文件夹名含有:符号,如:" + allurls[i]);
+                    flagg = false;
+                    clearUploder()
+                    return false;
+                }
+
+                for (var a = 0; a < folderArray.length - 1; a++) {
+                    if (folderArray[a].indexOf(".") != -1) {
+                        var indexc = folderArray[a].lastIndexOf('.');
+                        var centerurlc = folderArray[a].substr(indexc + 1, folderArray[a].length);
+                        if (extensionarray.includes(centerurlc.toLowerCase())) {
+                            alert("您选择的文件夹名不能以有效扩展名结尾,如:" + allurls[i]);
+                            window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                            flagg = false;
+                            clearUploder()
+                            return false;
+                        }
+                    }
+                }
+            }
+            url = "/fileupdown/checkupdatemessagefolder";
+            formData.append('filePathName', filePathName);
+        } else if (totalFileNum1 != 0) {
+            for (var i = 0; i < allurls1.length; i++) {
+                if (allurls1[i].indexOf(".") != -1) {
+                    var index = allurls1[i].lastIndexOf('.');
+                    var centerurla = allurls1[i].substr(index + 1, allurls1[i].length);
+                    if (extensionarray.includes(centerurla.toLowerCase())) {
+                        fileName += allurls1[i] + ":";
+                    } else {
+                        alert("您选择的文件名没有有效扩展名,如:" + allurls1[i]);
+                        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                        flagg = false;
+                        clearUploder()
+                        return false;
+                    }
+                } else {
+                    alert("文件名必须要有扩展名,如:" + allurls1[i] + "就没有扩展名!");
+                    flagg = false;
+                    clearUploder()
+                    return false;
+                }
+                if (allurls1[i].indexOf(":") != -1) {
+                    alert("文件名不能有:符号,如:" + allurls1[i]);
+                    flagg = false;
+                    clearUploder()
+                    return false;
+                }
+            }
+            url = "/fileupdown/checkupdatemessage";
+            formData.append('filePathName', fileName);
+        } else {
+            alert("更新前请选择文件!")
+            flagg = false;
+            clearUploder()
+            return false;
+        }
+        if (flagg) {
+            window.parent.document.getElementById('coverbehidepage').style.display = "block";
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: url,
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    if (msg != '"OK"') {
+                        alert(msg);
+                        flaggg = false;
+                        clearUploder()
+                        return flaggg;
+                    } else {
+                        flaggg = true;
+                        return flaggg;
+                    }
+                },
+                error: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    alert("查询失败");
+                    flaggg = false;
+                    clearUploder()
+                    return flaggg;
+
+                }
+            });
+        }
+    }
+
+    function saveData() {
+        var formData = new FormData();
+        formData.append('filePathName', $("#filePathName").val());
+        formData.append('orderNo', $("#orderno").val());
+        formData.append('salor', $("#salorid").val());
+        formData.append('projectName', $("#projectno").val().trim());
+        formData.append('modifyReason', $("#modifyreason").val());
+        if (totalFileNum != 0) {
+            formData.append('filePathNames', allurls.join(":"));
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: "/fileupdown/saveFolderMessageUpdate",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+
+                },
+                error: function (msg) {
+                }
+            });
+        } else if (totalFileNum1 != 0) {
+            formData.append('filePathNames', allurls1.join(":"));
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: "/fileupdown/saveFileMessageUpdate",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+
+                },
+                error: function (msg) {
+                }
+            });
+        }
+
+    }
+
+    uploader1.on('filesQueued', function (file) {
+        checkMessageBeforeUpload();
+    });
+
+    uploader.on('filesQueued', function (file) {
+        checkMessageBeforeUpload();
+    });
+
+
+    uploader.on('uploadFinished', function (file) {
+        saveData();
+        $("#coverbehidepage1").hide();
+        window.parent.document.getElementById('coverbehidepageLeft').style.display = "none";
+        window.parent.document.getElementById('coverbehidepageTop').style.display = "none";
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+        $("#thelist").hide();
+        clearFileData();
+        alert("更新成功")
+    });
+
+    uploader1.on('uploadFinished', function (file) {
+        saveData();
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+        $("#coverbehidepage1").hide();
+        window.parent.document.getElementById('coverbehidepageLeft').style.display = "none";
+        window.parent.document.getElementById('coverbehidepageTop').style.display = "none";
+        $("#thelist").hide();
+        clearFileData();
+        alert("更新成功")
+    });
+
+    $btn.on('click', function () {
+        var salorid = $("#salorid").val();
+        var orderno = $("#orderno").val().trim();
+        var reg = new RegExp(/^[A-Z]{5}[0-9]{8}[A-Z]{2}[0-9]{2}$/g);
+
+        if (salorid == "" || salorid == null) {
+            alert("请选择业务人员！");
+            flagg = false;
+            clearFileData()
+            return false;
+        }
+        if (orderno == "") {
+            flagg = false;
+            clearFileData()
+            alert("请填写订单编号！");
+            return false;
+        }
+
+        if (totalFileNum1 == 0 && totalFileNum == 0) {
+            alert("更新前请选择需要更新的文件或文件夹!");
+            return false;
+        }
+
+        var modifyreason = $("#modifyreason").val().trim();
+
+        if (modifyreason == "") {
+            alert("为方便后继管理，请填写更新原因!")
+            flagg = false;
+            return false;
+        }
+
+        if (flaggg) {
+            $("#thelist").show();
+            $("#coverbehidepage1").show();
+            window.parent.document.getElementById('coverbehidepageLeft').style.display = "block";
+            window.parent.document.getElementById('coverbehidepageTop').style.display = "block";
+
+            if (totalFileNum1 != 0) {
+                uploader1.upload();
+            } else if (totalFileNum != 0) {
+                uploader.upload();
+            } else if (totalFileNum1 == 0 && totalFileNum == 0) {
+                alert("更新前请选择需要更新的文件或文件夹!");
+                return false;
+            }
+        } else {
+            return false;
+        }
+    })
+
+
+
+
+    function findWhat(file, percentage, id_Prefix, titleName) {
+        var $li = $('#' + file.id), $percent = $li.find('#' + id_Prefix + '-progress-bar');
+        if (!$percent.length) {
+            $percent = $('<div id="' + id_Prefix + '-progress" class="progress progress-striped active">' +
+                '<div id="' + id_Prefix + '-progress-bar" class="progress-bar" role="progressbar" style="width: 0%">' +
+                '</div>' +
+                '</div>'
+            ).appendTo($li).find('#' + id_Prefix + '-progress-bar');
+        }
+        var progressPercentage = (percentage * 100).toFixed(2) + '%';
+        $percent.css('width', progressPercentage);
+        $percent.html(titleName + ':' + progressPercentage);
+    }
+
+    function getEmpNoByFileId(file, id_Prefix) {
+        $('#' + file.id).find('#' + id_Prefix + '-progress').fadeOut();
+    }
+
+    function clearUploder() {
+        $("#innerfolderdiv").html("");
+        $("#foldershow").removeAttr("checked");
+        $("#listshow").prop("checked", 'checked');
+        $("#listdiv").attr("style", "display:block;")
+        $("#folderdiv").attr("style", "display:none;")
+        allurls = new Array();
+        allurls1 = new Array();
+        arr = "";
+        // $('#filename').val("");
+        $("#uploaddatetime").val(today());
+        flagg = true;
+        flaggg = false;
+        goOne1 = true;
+        goOne = true;
+        $("#uploader1").show();
+        $("#uploader").show();
+        totalFileNum = 0;
+        totalFileNum1 = 0;
+        $("#thelist").html("");
+        $("#showfiletotalnum").html("");
+        $("#showtotalnumspan").hide();
+        $("#thelist1").html("");
+        $("#showfiletotalnum1").html("");
+        $("#showtotalnumspan1").hide();
+        uploader.reset();
+        uploader1.reset();
+    }
+
+
+    function clearFileData() {
+        $("#innerfolderdiv").html("");
+        $("#urltbody").html("<tr><td colspan='7'>暂无数据</td></tr>");
+        $("#foldershow").removeAttr("checked");
+        $("#listshow").prop("checked", 'checked');
+        $("#listdiv").attr("style", "display:block;")
+        $("#folderdiv").attr("style", "display:none;")
+        $("#salorid").val("");
+        $("#orderno").val("");
+        $("#projectno").val("");
+        $('#filedescribtion').val("");
+        $('#modifyreason').val("");
+        allurls = new Array();
+        allurls1 = new Array();
+        arr = "";
+        $('#remark').val("");
+        // $('#filename').val("");
+        $("#uploaddatetime").val(today());
+        flagg = true;
+        flaggg = false;
+        goOne1 = true;
+        goOne = true;
+        $("#uploader1").show();
+        $("#uploader").show();
+        totalFileNum = 0;
+        totalFileNum1 = 0;
+        $("#thelist").html("");
+        $("#showfiletotalnum").html("");
+        $("#showtotalnumspan").hide();
+        $("#thelist1").html("");
+        $("#showfiletotalnum1").html("");
+        $("#showtotalnumspan1").hide();
+        uploader.reset();
+        uploader1.reset();
+
+    }
+
+
+    function clearFileDataM1() {
+        $('#modifyreason').val("");
+        allurls = new Array();
+        allurls1 = new Array();
+        arr = "";
+        flagg = true;
+        flaggg = false;
+        goOne1 = true;
+        goOne = true;
+        totalFileNum = 0;
+        totalFileNum1 = 0;
+        $("#thelist").html("");
+        $("#showfiletotalnum").html("");
+        $("#showtotalnumspan").hide();
+        $("#thelist1").html("");
+        $("#showfiletotalnum1").html("");
+        $("#showtotalnumspan1").hide();
+        uploader.reset();
+        uploader1.reset();
+
+    }
+
+</script>
+<style type="text/css">
+
+    #listdiv {
+        border: 1px solid #9AC0CD;
+        width: 100%;
+        height: 280px;
+    }
+
+    #thelist {
+        border: 1px solid #9AC0CD;
+        width: 800px;
+        height: 500px;
+        Margin: 2px;
+        padding: 3px;
+        z-index: 1007;
+        background-color: #E0EEEE;
+        position: absolute;
+        top: 15%;
+        left: 12%;
+        overflow-y: scroll;
+    }
+
+
+    #folderdiv {
+        border: 1px solid #9AC0CD;
+        width: 1148px;
+        height: 320px;
+        Margin: 2px;
+        padding: 3px;
+    }
+
+    #innerfolderdiv {
+        border: 1px solid #9AC0CD;
+        width: 1120px;
+        height: 250px;
+        Margin: 10px;
+        padding: 3px;
+    }
+
+    #buttondiv {
+        width: 1148px;
+        Margin: 2px;
+        padding: 3px;
+    }
+
+    #innerbuttondiv {
+        width: 1120px;
+        Margin: 10px;
+        padding: 3px;
+    }
+
+
+    table.grid {
+        font-family: verdana, arial, sans-serif;
+        font-size: 13px;
+        border-width: 1px;
+        border-collapse: collapse;
+    }
+
+    table.grid th {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+    }
+
+    #coverbehidepage1 {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        width: 100%;
+        height: 100%;
+        filter: alpha(opacity=60);
+        background-color: black;
+        z-index: 1002;
+        left: 0px;
+        display: none;
+        opacity: 0.3;
+        -moz-opacity: 0.3;
+        padding-top: 250px;
+        display: none;
+        filter: alpha(opacity=30);
+        text-align: center;
+        color: #000000
+    }
+
+    table.grid td {
+        border-width: 1px;
+        padding: 1px;
+        border-style: solid;
+    }
+
+    progress {
+        width: 168px;
+        height: 5px;
+        color: #f00;
+        background: #EFEFF4;
+    }
+
+
+    progress::-moz-progress-bar {
+        background-color: #f00;
+    }
+
+    #colrcss td {
+        border-width: 1px;
+        padding: 1px;
+        border-style: solid;
+        text-align: center;
+    }
+
+    #bodycss tr td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        text-align: center;
+    }
+
+    .trrcss tr td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        text-align: center;
+    }
+
+    #showurldiv {
+        margin-left: 1px;
+        margin-right: 1px;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 280px;
+        right: 0;
+
+    }
+
+    #showtabledivhead {
+        margin-top: 1px;
+        margin-left: 1px;
+        margin-right: 1px;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        right: 0;
+    }
+
+    #selecradio {
+        padding: 8px;
+    }
+
+    #alertdiv {
+        position: absolute;
+        left: 400px;
+        top: 180px;
+        width: 300px;
+        height: 150px;
+        background-color: #9AC0CD;
+        border-left-color: #c3dde0;
+        border-right-color: #c3dde0;
+        border-top-color: #c3dde0;
+        border-bottom-color: #c3dde0;
+        z-index: 1009;
+        border-style: solid;
+
+    }
+
+    #div1 {
+        margin-top: 1px;
+        margin-left: 1px;
+        margin-right: 1px;
+        top: 0;
+        bottom: 0;
+        width: 291px;
+        height: 90px;
+        right: 0;
+        z-index: 1008;
+        background-color: #E0EEEE;
+        line-height: 90px
+    }
+
+    #urltbody {
+        display: block;
+        height: 195px;
+        overflow-y: scroll;
+    }
+
+    #urltbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    #urltbody tr td {
+        text-align: center;
+    }
+
+    #urlthead {
+        width: calc(100% - 1em);
+        text-align: center;
+    }
+
+    #urlthead tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+        color: #fff;
+    }
+
+    #showMessageDiv {
+        border: 1px solid #9AC0CD;
+        width: 800px;
+        height: 500px;
+        Margin: 2px;
+        padding: 3px;
+        z-index: 1007;
+        background-color: #E0EEEE;
+        position: absolute;
+        top: 19%;
+        left: 28%;;
+    }
+
+    #innershowMessageDiv {
+        border: 1px solid #9AC0CD;
+        width: 787px;
+        height: 487px;
+        Margin: 3px;
+        padding: 3px;
+        z-index: 1008;
+        background-color: #E0EEEE;
+        position: absolute;
+    }
+
+    #innershowMessageDiv1 {
+        border: 1px solid #9AC0CD;
+        width: 750px;
+        height: 390px;
+        margin-left: 15px;
+        margin-right: 15px;
+        margin-top: 15px;
+        padding: 3px;
+        background-color: #E0EEEE;
+    }
+
+    #innershowMessageDiv11 {
+        width: 745px;
+        height: 30px;
+        background-color: #E0EEEE;
+    }
+
+    #innershowMessageDiv12 {
+        width: 745px;
+        height: 360px;
+        background-color: #E0EEEE;
+        position: absolute;
+    }
+
+
+    #innershowMessageDiv2 {
+        border: 1px solid #9AC0CD;
+        width: 750px;
+        height: 50px;
+        margin-left: 15px;
+        margin-right: 15px;
+        margin-bottom: 15px;
+        padding-left: 3px;
+        padding-right: 3px;
+        padding-bottom: 3px;
+        background-color: #E0EEEE;
+        position: absolute;
+
+    }
+
+
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        var uls = $('.sidebar-nav > ul > *').clone();
+        uls.addClass('visible-xs');
+        $('#main-menu').append(uls.clone());
+    });
+
+
+    function showlistdiv2() {
+        $("#listdiv").show();
+        $("#folderdiv").hide();
+    }
+
+    var topfolder;
+
+    function backFolder2() {
+        var foldername = $("#foldername").val();
+        var reg = new RegExp(/^[A-Z]{5}[0-9]{8}[A-Z]{2}[0-9]{2}$/g);
+        var salor = $("#salorid").val();
+        var engineer = $("#selectuser").val();
+        var orderNo = $("#orderno").val().trim();
+        var fileInput = $('#file').val();
+        var folderhtml = "";
+        var fileshtml = "";
+        var cominone2 = 0;
+        if (salor == "") {
+            alert("请选择业务人员!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        if (engineer == "") {
+            alert("请选择设计师!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        if (orderNo == "") {
+            alert("请填写订单编号!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+
+        // $("#some-element").busyLoad("show");//遮罩层开启
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var jsonarray = {
+            "salor": salor, //业务员
+            "engineer": engineer, //设计师
+            "orderNo": orderNo, //订单编号
+            "folderName": foldername//当前文件夹名
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",
+            url: "/fileupdown/findBackFoldersByQueryParam",
+            success: function (msg) {
+                var data = eval(msg);
+                $.each(data, function (num) {
+                    var ind = data[num].lastIndexOf('.');
+                    var extenName = data[num].substr(ind + 1, data[num].length);
+                    if (data[num].indexOf(".") <= 0 || !extensionarray.includes(extenName.toLowerCase())) {
+                        $("#foldername").val(data[num]);
+                        if (reg.test(data[num])) {
+                            $("#backfolder").attr("disabled", "disabled");
+                        }
+                        folderhtml += "<li><img src=\"/images/icon/Folder.png\" " +
+                            " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                            " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                        cominone2 = 1;
+                    } else {
+                        if (extensionarray.includes(extenName.toLowerCase())) {
+                            fileshtml += "<li><img src=\"/images/icon/File.png\" " +
+                                " align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                            if (cominone2 == 0) {
+                                $("#foldername").val(data[num]);
+                            }
+                        }
+                    }
+                });
+                $("#innerfolderdiv").html(folderhtml + fileshtml)
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                alert("查询失败");
+            }
+        });
+
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+    }
+
+    function shownextfolderorfiles(foldername) {
+        $("#backfolder").removeAttr("disabled");
+        var salor = $("#salorid").val();
+        var engineer = $("#selectuser").val();
+        var orderNo = $("#orderno").val().trim();
+        var fileInput = $('#file').val();
+        var filefolder = $('#filefolder').val();
+        var folderhtml = "";
+        var fileshtml = "";
+        var cominone = 0;
+        if (salor == "") {
+            alert("请选择业务人员!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        if (engineer == "") {
+            alert("请选择设计师!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        if (orderNo == "") {
+            alert("请填写订单编号!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+
+        var jsonarray = {
+            "salor": salor, //业务员
+            "engineer": engineer, //设计师
+            "orderNo": orderNo, //订单编号
+            "folderName": foldername//当前文件夹名
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",
+            url: "/fileupdown/findNextFoldersByQueryParam",
+            success: function (msg) {
+                var data = eval(msg);
+                $.each(data, function (num) {
+                    var ind = data[num].lastIndexOf('.');
+                    var extenName = data[num].substr(ind + 1, data[num].length);
+                    if (data[num].indexOf(".") <= 0 || !extensionarray.includes(extenName.toLowerCase())) {
+                        $("#foldername").val(data[num]);
+                        folderhtml += "<li><img src=\"/images/icon/Folder.png\" " +
+                            " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                            " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                        cominone = 1;
+                    } else {
+                        if (extensionarray.includes(extenName.toLowerCase())) {
+                            fileshtml += "<li><img src=\"/images/icon/File.png\" " +
+                                " align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                            if (cominone == 0) {
+                                $("#foldername").val(data[num]);
+                            }
+                        }
+                    }
+                });
+                $("#innerfolderdiv").html(folderhtml + fileshtml)
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+                alert("查询失败");
+            }
+        });
+
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+
+    }
+
+    function showfolderdiv2() {
+        $("#listdiv").hide();
+        $("#folderdiv").show();
+        var salor = $("#salorid").val();
+        var engineer = $("#selectuser").val();
+        var orderNo = $("#orderno").val().trim();
+        var fileInput = $('#file').val();
+        var filefolder = $('#filefolder').val();
+        var folderhtml = "";
+        var fileshtml = "";
+
+        if (salor == "") {
+            alert("请选择业务人员!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        if (engineer == "") {
+            alert("请选择设计师!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        if (orderNo == "") {
+            alert("请填写订单编号!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+
+        var jsonarray = {
+            "salor": salor, //业务员
+            "engineer": engineer, //设计师
+            "orderNo": orderNo //订单编号
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",
+            url: "/fileupdown/findFoldersByQueryParam",
+            success: function (msg) {
+                var data = eval(msg);
+                $.each(data, function (num) {
+                    if (data[num].indexOf(".") <= 0) {
+                        topfolder = data[num];
+                        $("#foldername").val(data[num]);
+                        folderhtml += "<li><img src=\"/images/icon/Folder.png\" " +
+                            " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                            " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                    } else {
+                        fileshtml += "<li><img src=\"/images/icon/File.png\" " +
+                            " align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+
+                    }
+                });
+                $("#innerfolderdiv").html(folderhtml + fileshtml)
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+                alert("查询失败");
+            }
+        });
+
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+    }
+
+
+    function showFileUrl() {
+        $("#salorvalue").val($("#salorid").val());
+        var salorid = $("#salorid").val();
+        var orderno = $("#orderno").val().trim();
+        if (salorid == "" || salorid == null) {
+            return false;
+        }
+        if (orderno == "" || orderno == null) {
+            return false;
+        }
+        $("#foldershow").removeAttr("checked");
+        $("#listshow").prop("checked", 'checked');
+        $("#listdiv").attr("style", "display:block;")
+        $("#folderdiv").attr("style", "display:none;")
+        showfileurldivbysaloridorderno(salorid, orderno);
+
+    }
+
+
+    function isNull(arg1) {
+        if (arg1 == "null" || arg1 == null) {
+            return "";
+        }
+        return arg1;
+    }
+
+    function Trim(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+    function checkOrderNo(str) {
+        var newstr = str.value;
+        if (Trim(newstr) != "") {
+            //var reg = new RegExp(/^[0-9a-zA-Z]*$/g);
+            var reg = new RegExp(/^[A-Z]{5}[0-9]{8}[A-Z]{2}[0-9]{2}$/g);
+            if (!reg.test(str.value)) {
+
+                alert("订单编号不符合规定格式，示范如：COSUN20190112WW01");
+                $("#orderno").val("");
+                // document.getElementById("coverbehidepage").style.display = "block";
+                // document.getElementById("alertdiv").style.display = "block";
+                return false;
+            }
+            // $("#foldershow").removeAttr("checked");
+            // $("#listdiv").prop("checked",'checked');
+            // $("#listshow").attr("style", "display:block;")
+            // $("#folderdiv").hide();
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#listdiv").attr("style", "display:block;")
+            $("#folderdiv").attr("style", "display:none;")
+            showFileUrl();
+            clearUploder();
+        }
+
+    }
+
+
+    function today() {
+        var today = new Date();
+        var h = today.getFullYear();
+        var m = today.getMonth() + 1;
+        var d = today.getDate();
+        var hh = today.getHours();
+        var mm = today.getMinutes();
+        var ss = today.getSeconds();
+        m = m < 10 ? "0" + m : m;
+        d = d < 10 ? "0" + d : d;
+        hh = hh < 10 ? "0" + hh : hh;
+        mm = mm < 10 ? "0" + mm : mm;
+        ss = ss < 10 ? "0" + ss : ss;
+        return h + "-" + m + "-" + d + " " + hh + ":" + mm + ":" + ss;
+    }
+
+    function alertMessageDiv() {
+        // $("#coverbehidepage").show();
+        var ojb = window.parent.document.getElementById('innershowMessageDiv12');
+        ojb.innerHTML = " <p>\n" +
+            "                        <font color=\"#000000\" size=\"2\" th:align=\"center\">一,更新方式:文件夹和文件二选一.</font>\n" +
+            "                    <p>\n" +
+            "                        <font color=\"#000000\" size=\"2\" th:align=\"center\">二,接收种类:文件更新功能只接收您要更新的文件全部已上传过.</font>\n" +
+            "                    <p>\n" +
+            "                        <font color=\"#000000\" size=\"2\" th:align=\"center\">三,更新条件:同一订单下您要更新的文件里业务员，设计师必须与上传时的的业务员，设计师相同。</font>\n" +
+            "                <p>\n" +
+            "                    <font color=\"#000000\" size=\"2\" th:align=\"center\">四,文件(夹)更新不按收任何类型的空文件(0字节文件).</font>\n" +
+
+            "                    <p>\n" +
+            "                        <font color=\"#000000\" size=\"2\" th:align=\"center\">五,您得需要有您准备更新的文件的更新权限.</font>\n" +
+            "                    <p>\n" +
+            "                        <font color=\"#000000\" size=\"2\" th:align=\"center\">六,文件(夹).一旦更新,老文件将无法撤回,请谨慎操作.</font>\n" +
+
+            "                    <p>\n" +
+            "                        <font color=\"#000000\" size=\"2\" th:align=\"center\">七,文件夹更新需与上传过的文件夹目录完全一致.</font>\n" +
+
+
+            "\n" +
+            "                    <p>\n" +
+            "                        <font color=\"#000000\" size=\"2\" th:align=\"center\">八,为方便后续管理,请尽量将信息填写完整.</font>";
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        window.parent.document.getElementById('showMessageDiv').style.display = "block";
+
+        //$("#showMessageDiv").show();
+    }
+
+    function closeShowMessage() {
+        //$("#coverbehidepage").hide();
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+        window.parent.document.getElementById('showMessageDiv').style.display = "none";
+
+        // $("#showMessageDiv").hide();
+    }
+
+    function setsalorvalue() {
+        $("#salorvalue").val($("#salorid").val());
+    }
+
+    function showfileurldivbysaloridorderno(salorid, orderno) {
+        //$("#some-element").busyLoad("show");//遮罩层开启
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+
+        var urltbody = $("#urltbody");
+        urltbody.html("");
+        var jsonarray = {
+            "salor": salorid, //业务员
+            "orderNo": orderno //订单编号
+        }
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",//上传内容格式为json结构
+            url: "/fileupdown/showfileurldiv",
+            success: function (msg) {
+                var data = eval(msg);
+                var td = "";
+                var tr = "";
+                if (data != null && data != "") {
+                    $.each(data, function (num) {
+                        $("#projectno").val(data[num].projectName);
+                        tr = $("<tr></tr>");
+                        tr.append("<td width='30'>" + (num + 1) + "</td>");
+                        tr.append("<td width='50'>" + isNull(data[num].userName) + "</td>");
+                        tr.append("<td width='150'>" + isNull(data[num].orderNo) + "</td>");
+                        tr.append("<td width='50'>" + isNull(data[num].salor) + "</td>");
+                        tr.append("<td width='200'>" + isNull(data[num].fileName) + "</td>");
+                        tr.append("<td width='153'>" + isNull(data[num].lastUpdateTime) + "</td>");
+                        tr.append("<td width='50'>" + isNull(data[num].singleFileUpdateNum) + "</td>");
+                        tr.append(td);
+                        tr.appendTo(urltbody);
+                    });
+                } else {
+                    tr = $("<tr></tr>");
+                    tr.append("<td colspan='7'>查询为空</td>");
+                    tr.append(td);
+                    $("#projectno").val("")
+                    tr.appendTo(urltbody);
+                }
+
+            },
+            error: function (msg) {
+                // 隐藏loading
+                //$("#some-element").busyLoad("hide");
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+                alert("失败");
+            }
+
+        });
+        //$("#some-element").busyLoad("hide");//遮罩层开启
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+    }
+
+
+    function submitalldata2() {
+        var filefolder = $("#filefolder").val();
+        var modifyreason = $("#modifyreason").val().trim();
+        var salorid = $("#salorid").val();
+        var orderno = $("#orderno").val().trim();
+        var projecto = $("#projectno").val().trim();
+        var fileInput = $('#file').val();
+
+        if (modifyreason == "") {
+            alert("为方便后继管理，请填写更新原因!")
+            return false;
+        }
+
+        // if (filefolder != "" && fileInput == "") {
+        //     document.getElementById("form1").submit();
+        //     $("#some-element").busyLoad("show");//遮罩层开启
+        //     return false;
+        // }
+        if (salorid == "" || salorid == null) {
+            alert("请选择业务人员！");
+            return false;
+        }
+        if (orderno == "") {
+            alert("请填写业务订单号！");
+            return false;
+        }
+        // if (projecto == "") {
+        //     alert("请填写项目名称！");
+        //     return false;
+        // }
+
+        if (fileInput == "" && filefolder == "") {
+            alert("请选择更新文件！")
+            return false;
+        }
+        if (fileInput != "" && filefolder != "") {
+            alert("不能同时选择两种文件方式更新！")
+            $('#file').val("");
+            $("#filefolder").val("");
+            return false;
+        }
+        //$("#some-element").busyLoad("show");//遮罩层开启
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        if (isFilePathRight == 0) {
+            alert("您要更新的的文件夹或文件名不能包含,符号.");
+            //$("#some-element").busyLoad("hide");//遮罩层开启
+            window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+            return;
+        }
+        var formData = new FormData();
+        formData.append('filePathName', $("#filePathName").val());
+        formData.append('orderNo', $("#orderno").val());
+        formData.append('salor', $("#salorid").val());
+        var url = "";
+        if (fileInput != "") {
+            url = "/fileupdown/checkupdatemessage";
+        } else if (filefolder != "") {
+            url = "/fileupdown/checkupdatemessagefolder";
+        }
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: url,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                // $("#some-element").busyLoad("hide");//遮罩层开启
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                var flag = msg;
+                if (flag != '"OK"') {
+                    alert(flag);
+                    return;
+                } else {
+                    //$("#some-element").busyLoad("show");//遮罩层开启
+                    window.parent.document.getElementById('coverbehidepage').style.display = "block";
+                    document.getElementById("form1").submit();
+                    var pro = null;
+                    pro = setInterval(function () {
+                        if (fileInput != "") {
+                            $.get("/fileupdown/modifypage", "", function (data) {
+                                if (data.substring(0, data.lastIndexOf('%')) >= '96') {
+                                    clearInterval(pro);
+                                    $("#proInfo").text("更新进度：99%");
+                                    $("#progressBar").width("99%");
+                                } else {
+                                    $("#proInfo").text("更新进度：" + data);
+                                    $("#progressBar").width(data);
+                                }
+                            });
+                        } else {
+                            $.get("/fileupdown/modifypagefolder", "", function (data) {
+                                if (data.substring(0, data.lastIndexOf('%')) >= '96') {
+                                    clearInterval(pro);
+                                    $("#proInfo").text("更新进度：99%");
+                                    $("#progressBar").width("99%");
+                                } else {
+                                    $("#proInfo").text("更新进度：" + data);
+                                    $("#progressBar").width(data);
+                                }
+                            });
+                        }
+                    }, 200);
+                }
+
+
+            },
+            error: function (msg) {
+                // $("#some-element").busyLoad("hide");
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+                alert("查询失败");
+            }
+        });
+
+
+    }
+
+
+    function removeallbutonetr2() {
+        $("#urltbody").html("");
+        $("#innerfolderdiv").html("");
+        $("#foldershow").removeAttr("checked");
+        $("#listshow").prop("checked", 'checked');
+        $("#listdiv").attr("style", "display:block;")
+        $("#folderdiv").attr("style", "display:none;")
+        $("#salorid").val("");
+        $("#orderno").val("");
+        $("#projectno").val("");
+        $('#file').val("");
+        $("#filefolder").val("");
+        $('#filedescribtion').val("");
+        $('#remark').val("");
+        $("#modifyreason").val("");
+        $("#uploaddatetime").val(today());
+
+    }
+
+    function changeformactionfolder() {
+        var newUrl = "/fileupdown/modifypagefolder";
+        $("#foldershow").removeAttr("checked");
+        $("#listshow").prop("checked", 'checked');
+        $("#listdiv").attr("style", "display:block;")
+        $("#folderdiv").attr("style", "display:none;")
+        $('#file').val("");
+        $("#form1").attr('action', newUrl);
+    }
+
+    function changeformactionupload() {
+        var newUrl = "/fileupdown/modifypage";
+        $("#form1").attr('action', newUrl);
+        $('#filefolder').val("");
+        $("#listshow").removeAttr("checked");
+        $("#foldershow").prop("checked", "checked");
+        $("#form1").attr('action', newUrl);
+        showfolderdivforfilesaveselect();
+    }
+
+    function showfolderdivforfilesaveselect() {
+        $("#listdiv").attr("style", "display:none;")
+        $("#folderdiv").attr("style", "display:block;")
+        var salor = $("#salorid").val();
+        var engineer = $("#selectuser").val();
+        var orderNo = $("#orderno").val().trim();
+        var folderhtml = "";
+        var fileshtml = "";
+
+        if (salor == "") {
+            alert("请选择业务人员!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        if (engineer == "") {
+            alert("请选择设计师!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        if (orderNo == "") {
+            alert("请填写订单编号!");
+            $("#foldershow").removeAttr("checked");
+            $("#listshow").prop("checked", 'checked');
+            $("#folderdiv").attr("style", "display:none;")
+            $("#listdiv").attr("style", "display:block;")
+            return false;
+        }
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var jsonarray = {
+            "salor": salor, //业务员
+            "engineer": engineer, //设计师
+            "orderNo": orderNo //订单编号
+        };
+        var data = JSON.stringify(jsonarray);
+        $.ajax({
+            data: data,
+            type: "POST",
+            contentType: "application/json",
+            url: "/fileupdown/findFoldersByQueryParam",
+            success: function (msg) {
+                var data = eval(msg);
+                $.each(data, function (num) {
+                    if (data[num].indexOf(".") <= 0) {
+                        topfolder = data[num];
+                        $("#foldername").val(data[num]);
+                        folderhtml += "<li><img src=\"/images/icon/Folder.png\" " +
+                            " align=\"middle\" border=\"0\" ondblclick=\"shownextfolderorfiles('" + data[num] + "')\"\n" +
+                            " style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+                    } else {
+                        fileshtml += "<li><img src=\"/images/icon/File.png\" align=\"middle\" border=\"0\"  style=\"width: 30px; height: 30px; vertical-align: middle\"/>" + data[num] + "</li>";
+
+                    }
+                });
+                $("#innerfolderdiv").html(folderhtml + fileshtml)
+            },
+            error: function (msg) {
+                //$("#some-element").busyLoad("hide");
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                alert("查询失败");
+            }
+        });
+
+        //$("#some-element").busyLoad("hide");//遮罩层开启
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+    }
+
+</script>
+

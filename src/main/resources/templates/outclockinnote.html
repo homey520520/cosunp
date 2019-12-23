@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>打卡条件须知</title>
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <meta name="viewport"
+          content="
+    height = [pixel_value | device-height] ,
+    width = [pixel_value | device-width ] ,
+    initial-scale = 0.5 ,
+    minimum-scale = float_value ,
+    maximum-scale = float_value ,
+    user-scalable = [yes | no] ,
+  "
+
+    />
+</head>
+<script>
+
+    $(function () {
+    });
+
+</script>
+<style type="text/css">
+    a {
+        white-space: nowrap;
+    }
+
+    table tr td {
+        white-space: nowrap;
+    }
+
+
+</style>
+<body>
+
+<div id='app'>
+    <form>
+        <div class="panel-heading" style="background-color:lightsteelblue;text-align: center">
+            <h3 class="panel-title"><font color="#00008b" size="6">打卡条件</font></h3>
+        </div>
+        <table class="table table-bordered table-hover table-striped text-center hongmei"
+               id="showlistbody"
+               style="width: 100%">
+            <thead style="background-color:lightsteelblue">
+            <tr>
+                <th style="text-align: center">
+                    <font color="black" size="5">序号</font>
+                </th>
+
+                <th style="text-align: center">
+                    <font color="black" size="5">外出天数</font>
+                </th>
+
+                <th style="text-align: center">
+                    <font color="black" size="5">日打卡次数</font>
+                </th>
+
+                <th style="text-align: center">
+                    <font color="black" size="5">备注</font>
+                </th>
+
+            </tr>
+            </thead>
+            <tbody id="tabletblody">
+            <!--v-for中的数据不再是直接从data中获取，而是通过search方法对data中的数据进行过滤再显示-->
+            <div th:unless="${#lists.isEmpty(clockInSetUpList)}">
+                <div th:each="order,iterStat: ${clockInSetUpList}" align="center">
+                    <tr>
+                       <td align="center" style="font-size: 23px;color: #2a6496" th:text="${(iterStat.index+1)}"></td>
+                        <td align="center" style="font-size: 23px;color: #2a6496"  th:text="'<='+${order.outDays}"></td>
+                        <td align="center" style="font-size: 23px;color: #2a6496"  th:text="${order.dayClockInTimes}+'次'"></td>
+                        <td align="center" style="font-size: 23px;color: #2a6496"  th:text="${order.remark}"></td>
+                    </tr>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(clockInSetUpList)}">
+                <tr>
+                    <td colspan="4" style="font-size: 23px;color: #2a6496" >
+                        暂无打卡条件
+                    </td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+    </form>
+    <br>
+    <p>
+
+    <form>
+        <div class="panel-heading" style="background-color:lightsteelblue;text-align: center">
+            <h3 class="panel-title"><font color="#00008b" size="6">打卡时间段</font></h3>
+        </div>
+        <table class="table table-bordered table-hover table-striped text-center hongmei"
+               style="width: 100%">
+            <thead style="background-color:lightsteelblue">
+            <tr>
+
+                <th style="text-align: center">
+                    <font color="black" size="5">上午打卡</font>
+                </th>
+
+                <th style="text-align: center">
+                    <font color="black" size="5">下午打卡</font>
+                </th>
+
+                <th style="text-align: center">
+                    <font color="black" size="5">晚上打卡</font>
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <!--v-for中的数据不再是直接从data中获取，而是通过search方法对data中的数据进行过滤再显示-->
+            <tr>
+                <td align="center" style="font-size: 23px;color: #2a6496">06:00~11:59</td>
+                <td align="center" style="font-size: 23px;color: #2a6496">12:00~17:59</td>
+                <td align="center" style="font-size: 23px;color: #2a6496">18:00~23:59</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <font style="font-size: 23px;color: red">
+                        *日打卡一次,即在三个打卡时间段选一个时间段打卡一次就行,以此类推.
+                    </font>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+</body>
+</html>

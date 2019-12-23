@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>员工-更新</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../static/lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+    <script src="../static/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+</head>
+<script>
+    $(window).on('load', function () {
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        $('.selectpicker').selectpicker();
+        // var educationLe = $("#educationLe").val();
+        // var sateListAndLeaCerti = $("#sateListAndLeaCerti").val();
+        // var otherCerti = $("#otherCerti").val();
+        // if (educationLe > 7) {
+        //     $("#educationLeFileId").show();
+        // } else {
+        //     $("#educationLeFileId").hide();
+        // }
+        //
+        // if (sateListAndLeaCerti == 0) {
+        //     $("#sateListAndLeaCertiFileId").hide();
+        // } else {
+        //     $("#sateListAndLeaCertiFileId").show();
+        //
+        // }
+        //
+        // if (otherCerti == 0) {
+        //     $("#otherCertiFileId").hide();
+        // } else {
+        //     $("#otherCertiFileId").show();
+        // }
+    });
+
+    function updatePersonToMysql() {
+        // document.forms[0].submit();
+        // return
+        //
+        var isflag = true;
+        var employeeNo = $("#employeeNo").val();
+        var employeeName = $("#employeeName").val();
+        var ID_NO = $("#ID_NO").val();
+        var sexV = $('input[name="sex"]:checked').val();
+        var isQuit = $('input[name="isQuit"]:checked').val();
+        var birthDay = $("#birthDay").val();
+        var marriaged = $('input[name="marriaged"]:checked').val();
+        var screAgreement = $('input[name="screAgreement"]:checked').val();
+        var incompDate = $("#incompDate").val();
+        var valiPeriodOfID = $("#valiPeriodOfID").val();
+        var contactPhone = $("#contactPhone").val();
+        var homeAddr = $("#homeAddr").val();
+        if (employeeName.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将姓名填写完整再保存!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+
+        if (birthDay.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写生日再保存!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+
+        if (ID_NO.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写身份证号码再保存!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+        if (incompDate.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写入厂时间再保存!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+
+        if (employeeNo.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将工号填写完整再保存!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+
+        if (valiPeriodOfID.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将身份证到期时间填写完整再保存!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+
+        if (contactPhone.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将手机号码填写完整再保存!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+        if (homeAddr.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将家庭住址填写完整再保存!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+        var educationLe = $("#educationLe").val();
+        var educationLeDis = document.getElementById("educationLeFileId").style.display;
+        if (educationLe > 7 && educationLeDis == "block") {
+            var educationLeFile = $("#educationLeFileIDID").val();
+            if (educationLeFile.trim().length == 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将学历附件上传!";
+                errormessagediv.style.color = "red";
+                return;
+            }
+        }
+        var sateListAndLeaCerti = $("#sateListAndLeaCerti").val();
+        var sateListAndLeaCertidis = document.getElementById("sateListAndLeaCertiFileId").style.display;
+        if (sateListAndLeaCerti > 0 && sateListAndLeaCertidis == "block") {
+            var sateListAndLeaCertiFileIDID = $("#sateListAndLeaCertiFileIDID").val();
+            if (sateListAndLeaCertiFileIDID.trim().length == 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将离职或社保清单附件上传!";
+                errormessagediv.style.color = "red";
+                return;
+            }
+        }
+
+        var otherCerti = $("#otherCerti").val();
+        var otherCertidis = document.getElementById("otherCertiFileId").style.display;
+        if (otherCerti > 0 && otherCertidis == "block") {
+            var otherCertiFileIDID = $("#otherCertiFileIDID").val();
+            if (otherCertiFileIDID.trim().length == 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将其它证件附件上传!";
+                errormessagediv.style.color = "red";
+                return;
+            }
+        }
+
+        var compreSalary = $("#compreSalary").val();
+        var posSalary = $("#posSalary").val();
+        var jobSalary = $("#jobSalary").val();
+        var meritSalary = $("#meritSalary").val();
+        var allSalary;
+        if (compreSalary.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写综合工资!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+        if (posSalary.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写岗位工资!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+        if (jobSalary.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写职务工资!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+        if (meritSalary.trim().length == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写绩效工资!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+
+        var username = $("#username").val();
+        var password1 = $("#password1").val();
+        var password2 = $("#password2").val();
+        if (username.trim().length > 0) {
+            if (password1.trim().length == 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;用户注册密码不能为空!";
+                errormessagediv.style.color = "red";
+                return;
+            }
+            if (password2.trim().length == 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;用户注册确认密码不能为空!";
+                errormessagediv.style.color = "red";
+                return;
+            }
+        }
+
+        if (isflag) {
+            $("#errormessage").hide();
+            $("#positionIdId").val($("#positionId").val());
+            $("#deptIdId").val($("#deptId").val());
+            $("#sexId").val(sexV);
+            $("#marriagedId").val(marriaged);
+            $("#screAgreementId").val(screAgreement);
+            $("#isQuitId").val(isQuit);
+            document.forms[0].submit();
+        } else {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将信息填写完整再保存!";
+            errormessagediv.style.color = "red";
+        }
+
+    }
+
+    function checkemployno(valuestr) {
+        $("#errormessageempNo").hide();
+        $("#rightmessageempNo").hide();
+        var empoyeeNo = valuestr.trim();
+        var reg = new RegExp(/^CS20[1-2]{1}[0-9]{1}[0-1]{1}[0-9]{1}[0-3]{1}[0-9]{1}[0-9]{2}$/g);
+        if (empoyeeNo.length > 0) {
+            if (reg.test(empoyeeNo)) {
+                $.ajax({
+                    data: empoyeeNo,
+                    type: "POST",
+                    contentType: "application/json",//上传内容格式为json结构
+                    url: "/person/checkEmployNoIsExsit",
+                    success: function (msg) {
+                        var amsg = eval(msg)
+                        if (amsg > 0) {
+                            $("#employeeNo").val("");
+                            $("#errormessageempNo").show();
+                            $("#errormessageempNo").html("<img src=\"../static/images/icon/error.jpg\"\n" +
+                                "                                         style=\"width: 20px; height: 20px; vertical-align: middle\" border=\"0\"\n" +
+                                "                                         align=\"center\"><strong><font size=\"2\" color=\"red\">工号已存在</font></strong>\n" +
+                                "                                ");
+                            $("#rightmessageempNo").hide();
+                        } else {
+                            $("#errormessageempNo").hide();
+                            $("#rightmessageempNo").show();
+                        }
+                    },
+                    error: function (msg) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                        errormessagediv.style.color = "red";
+                    }
+
+                });
+            } else {
+                $("#employeeNo").val("");
+                $("#errormessageempNo").html("<img src=\"../static/images/icon/error.jpg\"\n" +
+                    "                                         style=\"width: 20px; height: 20px; vertical-align: middle\" border=\"0\"\n" +
+                    "                                         align=\"center\"><strong><font size=\"2\" color=\"red\">工号不合法</font></strong>\n" +
+                    "                                ");
+                $("#errormessageempNo").show();
+                $("#rightmessageempNo").hide();
+            }
+        }
+
+    }
+
+    function checkNameisChineseOrRepeat(namestr) {
+        $("#rightmessagename").hide();
+        $("#errormessagename").hide();
+        //中文匹配后续补充
+        var name = namestr.trim();
+        if (name.length > 0) {
+            $.ajax({
+                data: name,
+                type: "POST",
+                contentType: "application/json",//上传内容格式为json结构
+                url: "/person/checkEmployIsExsit",
+                success: function (msg) {
+                    var amsg = eval(msg)
+                    if (amsg > 0) {
+                        $("#employeeName").val("");
+                        $("#errormessagename").show();
+                        $("#rightmessagename").hide();
+                    } else {
+                        $("#errormessagename").hide();
+                        $("#rightmessagename").show();
+                        $("#usernamere").val(name);
+                    }
+                },
+                error: function (msg) {
+                    $("#errormessage").show();
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+
+            });
+        }
+    }
+
+    String.prototype.trim = function () {
+        return this.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+
+    function checkPersonIDNo(ID_NO) {
+        var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if (ID_NO.value.trim().length > 0) {
+            if (!reg.test(ID_NO.value)) {
+                $("#ID_NO").val("");
+                $("#errormessageID").show();
+                $("#rightmessageID").hide();
+                return;
+            } else {
+                $("#errormessageID").hide();
+                $("#rightmessageID").show();
+            }
+        }
+    }
+
+    function checkMobileNo(mobile) {
+        var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+        if (mobile.trim().length > 0) {
+            if (!reg.test(mobile)) {
+                $("#contactPhone").val("");
+                $("#errormessageempMobile").show();
+                $("#rightmessageempMobile").hide();
+            } else {
+                $("#errormessageempMobile").hide();
+                $("#rightmessageempMobile").show();
+            }
+        }
+    }
+
+    function today() {
+        var today = new Date();
+        var h = today.getFullYear();
+        var m = today.getMonth() + 1;
+        var d = today.getDate();
+        var hh = today.getHours();
+        var mm = today.getMinutes();
+        var ss = today.getSeconds();
+        m = m < 10 ? "0" + m : m;
+        d = d < 10 ? "0" + d : d;
+        return h + "-" + m + "-" + d;
+    }
+
+    function showUploadeduAtta() {
+        var educationLe = $("#educationLe").val();
+        if (educationLe > 7) {
+            document.getElementById("educationLeFileId").style.display = "block";
+        } else {
+            document.getElementById("educationLeFileId").style.display = "none";
+        }
+    }
+
+    function showuploadsaftleav() {
+        var sateListAndLeaCerti = $("#sateListAndLeaCerti").val();
+        if (sateListAndLeaCerti > 0) {
+            document.getElementById("sateListAndLeaCertiFileId").style.display = "block";
+        } else {
+            document.getElementById("sateListAndLeaCertiFileId").style.display = "none";
+        }
+    }
+
+    function showOtherCerUpload() {
+        var otherCerti = $("#otherCerti").val();
+        if (otherCerti > 0) {
+            document.getElementById("otherCertiFileId").style.display = "block";
+        } else {
+            document.getElementById("otherCertiFileId").style.display = "none";
+        }
+    }
+
+    function fillRe() {
+        $("#deptNamere").val($("#deptId").val());
+    }
+
+
+    function checkpasswordA() {
+        $("#errormessageRe").hide();
+        var password = $("#password1").val();
+        var passwordregul = /^[a-zA-Z]\w{4,11}$/;
+        if (password == "") {
+            $("#password2").val("");
+            passwordflag = false;
+        }
+        if (passwordregul.test(password)) {
+            passwordflag = true;
+        } else {
+            $("#errormessageRe").show();
+            var errormessagediv = document.getElementById("errormessageRe");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;以字母开头，长度在5~12之间，只能包含字母、数字和下划线!";
+            errormessagediv.style.color = "red";
+            $("#password1").val("");
+            passwordflag = false;
+        }
+    }
+
+    function checkpassword2A() {
+        $("#errormessageRe").hide();
+        var password = $("#password1").val();
+        var password2 = $("#password2").val();
+        var passwordregul = /^[a-zA-Z]\w{4,11}$/;
+        if (password != "") {
+            if (passwordflag) {
+                if (passwordregul.test(password)) {
+                    if (password != password2) {
+                        $("#errormessageRe").show();
+                        var errormessagediv = document.getElementById("errormessageRe");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;密码确认错误!";
+                        errormessagediv.style.color = "red";
+                        $("#password2").val("");
+                        passwordflag1 = false;
+                    } else {
+                        passwordflag1 = true;
+                    }
+                } else {
+                    $("#errormessageRe").show();
+                    var errormessagediv = document.getElementById("errormessageRe");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;以字母开头，长度在5~12之间，只能包含字母、数字和下划线!";
+                    errormessagediv.style.color = "red";
+                    $("#password1").val("");
+                    passwordflag1 = false;
+                }
+            }
+        } else {
+            $("#password2").val("");
+            $("#errormessageRe").show();
+            var errormessagediv = document.getElementById("errormessageRe");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请先输入密码再确认!";
+            errormessagediv.style.color = "red";
+            passwordflag1 = false;
+        }
+    }
+
+    function checkUserExsitAndReturnPinyinNameA() {
+        $("#errormessageRe").hide();
+        var empNo = $("#empNo").val();
+        $.ajax({
+            data: empNo,
+            type: "POST",
+            contentType: "application/json",//上传内容格式为json结构
+            url: "/account/checkUserExsitAndReturnPinyinName",
+            success: function (msg) {
+                var nameStr = msg.substring(1, msg.length - 1);
+                if (nameStr != 1) {
+                    var arr = nameStr.split(",");
+                    $("#username").val(arr[0]);
+                    $("#deptName").val(arr[1]);
+                    $("#empNoPost").val($("#empNo").val());
+                } else {
+                    $("#errormessageRe").show();
+                    var errormessagediv = document.getElementById("errormessageRe");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;您已注册过,不能重复注册!";
+                    errormessagediv.style.color = "red";
+                }
+            },
+            error: function (msg) {
+                $("#errormessageRe").show();
+                var errormessagediv = document.getElementById("errormessageRe");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+        });
+    }
+
+    function checkUserNameExsitA() {
+        // 当鼠标不聚焦验证用户名input
+        var username = $("#username").val();
+        var str2 = check_user_name(username);
+        if ("该用户名合法" == str2) {
+            usernameflag = true;
+            $("#errormessageRe").hide();
+        } else {
+            usernameflag = false;
+            $("#username").val("")
+            $("#errormessageRe").show();
+            var errormessagediv = document.getElementById("errormessageRe");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;" + str2;
+            errormessagediv.style.color = "red";
+        }
+
+        if (usernameflag) {
+            $.ajax({
+                data: username,
+                type: "POST",
+                contentType: "application/json",//上传内容格式为json结构
+                url: "/account/checkUserNameExsit",
+                success: function (msg) {
+                    var nameStr = msg.substring(1, msg.length - 1);
+                    if (nameStr == 0) {
+                        $("#errormessageRe").hide();
+                    } else {
+                        $("#errormessageRe").show();
+                        var errormessagediv = document.getElementById("errormessageRe");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;用户名已存在!";
+                        errormessagediv.style.color = "red";
+                    }
+                },
+                error: function (msg) {
+                    $("#errormessageRe").show();
+                    var errormessagediv = document.getElementById("errormessageRe");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+            });
+        }
+    }
+
+    function check_user_name(str) {
+        var str2 = "该用户名合法";
+        if ("" == str) {
+            str2 = "用户名为空";
+            return str2;
+        } else if ((str.length < 4) || (str.length > 20)) {
+            str2 = "用户名必须为4 ~ 20位";
+            return str2;
+        } else if (check_other_char(str)) {
+            str2 = "不能含有特殊字符";
+            return str2;
+        }
+        return str2;
+    }
+
+    // 验证用户名是否含有特殊字符
+    function check_other_char(str) {
+        var arr = ["&", "\\", "/", "*", ">", "<", "@", "!"];
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = 0; j < str.length; j++) {
+                if (arr[i] == str.charAt(j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    function computeAllSalary() {
+        var compreSalary = Number($("#compreSalary").val());
+        var posSalary = Number($("#posSalary").val());
+        var jobSalary = Number($("#jobSalary").val());
+        var meritSalary = Number($("#meritSalary").val());
+        var all;
+        all = compreSalary + posSalary + jobSalary + meritSalary + 0;
+        $("#allSalary").val(all);
+    }
+</script>
+<style type="text/css">
+    #line-chart {
+        height: 300px;
+        width: 800px;
+        margin: 0px auto;
+        margin-top: 1em;
+    }
+
+    .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+        color: #fff;
+    }
+
+    .panel-body {
+        height: 300px;
+        width: 400px;
+    }
+
+    #panel2 {
+        height: 350px;
+        width: 400px;
+    }
+
+    /*.panel {*/
+        /*height: 300px;*/
+        /*width: 400px;*/
+    /*}*/
+
+    #innerdiv {
+        height: 560px;
+        padding-left: 20px;
+        padding-top: 10px;
+    }
+
+    #salarymessage {
+        height: 300px;
+        width: 100%;
+        padding-left: 38%;
+        padding-top: 5%;
+    }
+
+    #registerDiv {
+        height: 500px;
+        width: 100%;
+        padding-left: 38%;
+        padding-top: 5%;
+    }
+
+    #bottomdiv {
+        padding-left: 575px;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+</style>
+<body>
+<div>
+    <form id="addEmployee" th:action="@{/person/updatePersonToMysql}" th:method="post" th:object="${employee}"
+          enctype="multipart/form-data">
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#employeemessage" role="tab" data-toggle="tab">员工信息</a></li>
+            <li role="presentation"><a href="#registermessage" role="tab" data-toggle="tab">注册信息</a></li>
+            <li role="presentation"><a href="#salarymessage" role="tab" data-toggle="tab">工资信息</a></li>
+        </ul>
+
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="employeemessage">
+                <div id='app'>
+                    <div id="innerdiv">
+                        <input type="hidden" id="positionIdId" th:field="*{positionId}">
+                        <input type="hidden" id="deptIdId" th:field="*{deptId}">
+                        <input type="hidden" id="sexId" th:field="*{sex}">
+                        <input type="hidden" id="screAgreementId" th:field="*{screAgreement}">
+                        <input type="hidden" id="isQuitId" th:field="*{isQuit}">
+                        <input type="hidden" id="marriagedId" th:field="*{marriaged}">
+                        <table class="table table-hover table-striped text-center"
+                               style="text-align: right;width: 100%">
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;姓名：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="employeeName" th:field="*{name}"
+                                           onblur="checkNameisChineseOrRepeat(this.value)" readonly>
+                                </td>
+                                <td style="text-align: left">
+                                    <div style="display: none;" id="errormessagename">
+                                        <img src="../static/images/icon/error.jpg"
+                                             style="width: 20px; height: 20px; vertical-align: middle" border="0"
+                                             align="center"><strong><font size="2" color="red">已存在</font></strong>
+                                    </div>
+                                    <div style="display: none;" id="rightmessagename">
+                                        <img src="../static/images/icon/right.jpg"
+                                             style="width: 20px; height: 20px; vertical-align: middle" border="0"
+                                             align="center">
+                                    </div>
+                                </td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;籍贯：</label></td>
+                                <td>
+                                    <select id="nativePla" class="selectpicker show-tick form-control"
+                                            data-live-search="true" th:field="*{nativePla}">
+                                        　　
+                                        <option value="1" th:selected="${1 eq employee.nativePla}">北京</option>
+                                        <option value="2" th:selected="${2 eq employee.nativePla}">上海</option>
+                                        <option value="3" th:selected="${3 eq employee.nativePla}">广东</option>
+                                        <option value="4" th:selected="${4 eq employee.nativePla}">河北</option>
+                                        <option value="5" th:selected="${5 eq employee.nativePla}">山西</option>
+                                        <option value="6" th:selected="${6 eq employee.nativePla}">辽宁</option>
+                                        <option value="7" th:selected="${7 eq employee.nativePla}">吉林</option>
+                                        <option value="8" th:selected="${8 eq employee.nativePla}">黑龙江</option>
+                                        <option value="9" th:selected="${9 eq employee.nativePla}">江苏</option>
+                                        <option value="10" th:selected="${10 eq employee.nativePla}">浙江</option>
+                                        <option value="11" th:selected="${11 eq employee.nativePla}">安徽</option>
+                                        <option value="12" th:selected="${12 eq employee.nativePla}">福建</option>
+                                        <option value="13" th:selected="${13 eq employee.nativePla}">江西</option>
+                                        <option value="14" th:selected="${14 eq employee.nativePla}">山东</option>
+                                        <option value="15" th:selected="${15 eq employee.nativePla}">河南</option>
+                                        <option value="16" th:selected="${16 eq employee.nativePla}">湖北</option>
+                                        <option value="17" th:selected="${17 eq employee.nativePla}">湖南</option>
+                                        <option value="18" th:selected="${18 eq employee.nativePla}">天津</option>
+                                        <option value="19" th:selected="${19 eq employee.nativePla}">陕西</option>
+                                        <option value="20" th:selected="${20 eq employee.nativePla}">四川</option>
+                                        <option value="21" th:selected="${21 eq employee.nativePla}">台湾</option>
+                                        <option value="22" th:selected="${22 eq employee.nativePla}">云南</option>
+                                        <option value="23" th:selected="${23 eq employee.nativePla}">青海</option>
+                                        <option value="24" th:selected="${24 eq employee.nativePla}">甘肃</option>
+                                        <option value="25" th:selected="${25 eq employee.nativePla}">海南</option>
+                                        <option value="26" th:selected="${26 eq employee.nativePla}">贵州</option>
+                                        <option value="27" th:selected="${27 eq employee.nativePla}">重庆</option>
+                                        <option value="28" th:selected="${28 eq employee.nativePla}">新疆</option>
+                                        <option value="29" th:selected="${29 eq employee.nativePla}">广西</option>
+                                        <option value="30" th:selected="${30 eq employee.nativePla}">宁夏</option>
+                                        <option value="31" th:selected="${31 eq employee.nativePla}">内蒙古</option>
+                                        <option value="32" th:selected="${32 eq employee.nativePla}">西藏</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;性别：</label></td>
+                                <td align="center">
+                                    <label><input type="radio" th:value="1" name="sex" th:attr="checked=*{sex == 1}"
+                                                  disabled="">男</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label><input type="radio" th:value="0" name="sex" disabled
+                                                  th:attr="checked=*{sex == 0}">女</label>
+                                </td>
+                                <td></td>
+
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;身份证到期时间：</label></td>
+                                <td>
+                                    <input type="text" style="width:170px;height: 34px;text-align: center"
+                                           id="valiPeriodOfID"
+                                           readOnly="true" class="Wdate" th:field="*{valiPeriodOfIDStr}"
+                                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;出生日期：</label></td>
+                                <td>
+                                    <input type="text" style="width:170px;height: 34px;text-align: center" id="birthDay"
+                                           readOnly="true" class="Wdate" th:field="*{birthDayStr}"
+                                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                </td>
+                                <td></td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;民族：</label></td>
+                                <td>
+                                    <select id="nation" class="selectpicker show-tick form-control"
+                                            data-live-search="true" th:field="*{nation}">
+                                        <option value="1" th:selected="${1 eq employee.nation}">壮族</option>
+                                        <option value="2" th:selected="${2 eq employee.nation}">>藏族</option>
+                                        <option value="3" th:selected="${3 eq employee.nation}">裕固族</option>
+                                        <option value="4" th:selected="${4 eq employee.nation}">彝族</option>
+                                        <option value="5" th:selected="${5 eq employee.nation}">瑶族</option>
+                                        <option value="6" th:selected="${6 eq employee.nation}">锡伯族</option>
+                                        <option value="7" th:selected="${7 eq employee.nation}">乌孜别克族</option>
+                                        <option value="8" th:selected="${8 eq employee.nation}">维吾尔族</option>
+                                        <option value="9" th:selected="${9 eq employee.nation}">佤族</option>
+                                        <option value="10" th:selected="${10 eq employee.nation}">土家族</option>
+                                        <option value="11" th:selected="${11 eq employee.nation}">土族</option>
+                                        <option value="12" th:selected="${12 eq employee.nation}">塔塔尔族</option>
+                                        <option value="13" th:selected="${13 eq employee.nation}">塔吉克族</option>
+                                        <option value="14" th:selected="${14 eq employee.nation}">水族</option>
+                                        <option value="15" th:selected="${15 eq employee.nation}">畲族</option>
+                                        <option value="16" th:selected="${16 eq employee.nation}">撒拉族</option>
+                                        <option value="17" th:selected="${17 eq employee.nation}">羌族</option>
+                                        <option value="18" th:selected="${18 eq employee.nation}">普米族</option>
+                                        <option value="19" th:selected="${19 eq employee.nation}">怒族</option>
+                                        <option value="20" th:selected="${20 eq employee.nation}">纳西族</option>
+                                        <option value="21" th:selected="${21 eq employee.nation}">仫佬族</option>
+                                        <option value="22" th:selected="${22 eq employee.nation}">苗族</option>
+                                        <option value="23" th:selected="${23 eq employee.nation}">蒙古族</option>
+                                        <option value="24" th:selected="${24 eq employee.nation}">门巴族</option>
+                                        <option value="25" th:selected="${25 eq employee.nation}">毛南族</option>
+                                        <option value="26" th:selected="${26 eq employee.nation}">满族</option>
+                                        <option value="27" th:selected="${27 eq employee.nation}">珞巴族</option>
+                                        <option value="28" th:selected="${28 eq employee.nation}">僳僳族</option>
+                                        <option value="29" th:selected="${29 eq employee.nation}">黎族</option>
+                                        <option value="30" th:selected="${30 eq employee.nation}">拉祜族</option>
+                                        <option value="31" th:selected="${31 eq employee.nation}">柯尔克孜族</option>
+                                        <option value="32" th:selected="${32 eq employee.nation}">景颇族</option>
+                                        <option value="33" th:selected="${33 eq employee.nation}">京族</option>
+                                        <option value="34" th:selected="${34 eq employee.nation}">基诺族</option>
+                                        <option value="35" th:selected="${35 eq employee.nation}">回族</option>
+                                        <option value="36" th:selected="${36 eq employee.nation}">赫哲族</option>
+                                        <option value="37" th:selected="${37 eq employee.nation}">哈萨克族</option>
+                                        <option value="38" th:selected="${38 eq employee.nation}">哈尼族</option>
+                                        <option value="39" th:selected="${39 eq employee.nation}">仡佬族</option>
+                                        <option value="40" th:selected="${40 eq employee.nation}">高山族</option>
+                                        <option value="41" th:selected="${41 eq employee.nation}">鄂温克族</option>
+                                        <option value="42" th:selected="${42 eq employee.nation}">俄罗斯族</option>
+                                        <option value="43" th:selected="${43 eq employee.nation}">鄂伦春族</option>
+                                        <option value="44" th:selected="${44 eq employee.nation}">独龙族</option>
+                                        <option value="45" th:selected="${45 eq employee.nation}">东乡族</option>
+                                        <option value="46" th:selected="${46 eq employee.nation}">侗族</option>
+                                        <option value="47" th:selected="${47 eq employee.nation}">德昂族</option>
+                                        <option value="48" th:selected="${48 eq employee.nation}">傣族</option>
+                                        <option value="49" th:selected="${49 eq employee.nation}">达斡尔族</option>
+                                        <option value="50" th:selected="${50 eq employee.nation}">朝鲜族</option>
+                                        <option value="51" th:selected="${51 eq employee.nation}">布依族</option>
+                                        <option value="52" th:selected="${52 eq employee.nation}">布朗族</option>
+                                        <option value="53" th:selected="${53 eq employee.nation}">保安族</option>
+                                        <option value="54" th:selected="${54 eq employee.nation}">白族</option>
+                                        <option value="55" th:selected="${55 eq employee.nation}">阿昌族</option>
+                                        <option value="56" th:selected="${56 eq employee.nation}">汉族</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;身份证号码：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="ID_NO" th:field="*{ID_NO}"
+                                           onblur="checkPersonIDNo(this)">
+                                </td>
+                                <td style="text-align: left">
+                                    <div style="display: none;" id="errormessageID">
+                                        <img src="../static/images/icon/error.jpg"
+                                             style="width: 20px; height: 20px; vertical-align: middle" border="0"
+                                             align="center"><strong><font size="2" color="red">不符合规则</font></strong>
+                                    </div>
+                                    <div style="display: none;" id="rightmessageID">
+                                        <img src="../static/images/icon/right.jpg"
+                                             style="width: 20px; height: 20px; vertical-align: middle" border="0"
+                                             align="center">
+                                    </div>
+                                </td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;婚否：</label></td>
+                                <td align="center">
+                                    <label><input type="radio" th:value="0" th:attr="checked=*{marriaged == 0}"
+                                                  name="marriaged" checked>未</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label><input type="radio" th:value="1" th:attr="checked=*{marriaged == 1}"
+                                                  name="marriaged">已</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label><input type="radio" th:value="2" th:attr="checked=*{marriaged == 2}"
+                                                  name="marriaged">离</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;入职时间：</label></td>
+                                <td>
+                                    <input type="text" style="width:170px;height: 34px;text-align: center"
+                                           id="incompDate" th:field="*{incomdateStr}"
+                                           readOnly="true" class="Wdate"
+                                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                </td>
+                                <td></td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;手机号码：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="contactPhone" th:field="*{contactPhone}"
+                                           onblur="checkMobileNo(this.value)">
+                                </td>
+                                <td style="text-align: left">
+                                    <div style="display: none;" id="errormessageempMobile">
+                                        <img src="../static/images/icon/error.jpg"
+                                             style="width: 20px; height: 20px; vertical-align: middle" border="0"
+                                             align="center"><strong><font size="2"
+                                                                          color="red">手机不合法</font></strong>
+                                    </div>
+                                    <div style="display: none;" id="rightmessageempMobile">
+                                        <img src="../static/images/icon/right.jpg"
+                                             style="width: 20px; height: 20px; vertical-align: middle" border="0"
+                                             align="center">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;工号：</label></td>
+                                <td><input type="text" class="form-control" th:field="*{empNo}" id="employeeNo"
+                                           onblur="checkemployno(this.value)" readonly></td>
+                                <td style="text-align: left">
+                                    <div style="display: none;" id="errormessageempNo">
+                                        <img src="../static/images/icon/error.jpg"
+                                             style="width: 20px; height: 20px; vertical-align: middle" border="0"
+                                             align="center"><strong><font size="2"
+                                                                          color="red">工号不合法</font></strong>
+                                    </div>
+                                    <div style="display: none;" id="rightmessageempNo">
+                                        <img src="../static/images/icon/right.jpg"
+                                             style="width: 20px; height: 20px; vertical-align: middle" border="0"
+                                             align="center">
+                                    </div>
+                                </td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;健康证：</label></td>
+                                <td>
+                                    <select id="healthCerti" class="selectpicker show-tick form-control"
+                                            data-live-search="true" th:field="*{healthCerti}">
+                                        　　
+                                        <option value="0">无</option>
+                                        <option value="1">健康证</option>
+                                        <option value="3">体检单</option>
+                                        <option value="4">职业病体检</option>
+                                    </select>
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;职位：</label></td>
+                                <td>
+                                    <select id="positionAttrId" class="selectpicker show-tick form-control"
+                                            data-live-search="true" th:field="*{positionAttrId}">
+                                        　　
+                                        <option value="4" th:selected="${4 eq employee.positionAttrId}">职员</option>
+                                        <option value="3" th:selected="${3 eq employee.positionAttrId}">组长</option>
+                                        <option value="2" th:selected="${2 eq employee.positionAttrId}">主管</option>
+                                        <option value="1" th:selected="${1 eq employee.positionAttrId}">经理</option>
+
+
+                                    </select>
+                                </td>
+                                <td></td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;保密协议：</label></td>
+                                <td align="center">
+                                    <label><input type="radio" th:value="0" th:attr="checked=*{screAgreement == 0}"
+                                                  name="screAgreement">无</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label><input type="radio" th:value="1" th:attr="checked=*{screAgreement == 1}"
+                                                  name="screAgreement" checked>有</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;职务：</label></td>
+                                <td>
+                                    <select id="positionId" class="selectpicker show-tick form-control"
+                                            data-live-search="true">
+                                        　　
+                                        <option th:each="c:${positionList}" th:value="${c.id}"
+                                                th:selected="${c.id eq employee.positionId}"
+                                                th:text="${c.positionName}"></option>
+
+
+                                    </select>
+
+                                </td>
+                                <td style="text-align: left">&nbsp;&nbsp;&nbsp; <a href="/person/topositanddeptpage?">没有？新增职务</a>
+                                </td>
+
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;学历：</label></td>
+                                <td>
+                                    <select id="educationLe" class="selectpicker show-tick form-control"
+                                            data-live-search="true" onchange="showUploadeduAtta()"
+                                            th:field="*{educationLe}">
+                                        <option value="1">小学</option>
+                                        <option value="2">初中</option>
+                                        <option value="3">高中</option>
+                                        <option value="4">技校</option>
+                                        <option value="5">中技</option>
+                                        <option value="6">中专</option>
+                                        <option value="7">大专</option>
+                                        <option value="8">本科</option>
+                                        <option value="9">研究生</option>
+                                        <option value="10">硕士</option>
+                                        <option value="11">博士</option>
+                                        <option value="12">MBA</option>
+                                    </select>
+                                </td>
+
+                                <div style="display:none" id="testDiv"></div>
+                                <td style="display:none" id="educationLeFileId">
+                                    <input type="file" name="educationLeFile" id="educationLeFileIDID">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;合同到期时间：</label></td>
+                                <td>
+                                    <input type="text" style="width:170px;height: 34px;text-align: center"
+                                           id="conExpDateId"
+                                           readOnly="true" class="Wdate" th:field="*{conExpDateStr}"
+                                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                </td>
+                                <td></td>
+                                <td><label>社保清单或离职证明：</label></td>
+                                <td align="center">
+                                    <select id="sateListAndLeaCerti" class="selectpicker show-tick form-control"
+                                            data-live-search="true" onchange="showuploadsaftleav()"
+                                            th:field="*{sateListAndLeaCerti}">
+                                        　　
+                                        <option value="0">无</option>
+                                        <option value="1">离职和社保</option>
+                                        <option value="2">社保</option>
+                                        <option value="3">离职</option>
+                                    </select>
+                                </td>
+                                <td style="display: none" id="sateListAndLeaCertiFileId">
+                                    <input type="file" name="sateListAndLeaCertiFile" id="sateListAndLeaCertiFileIDID">
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;部门：</label></td>
+                                <td>
+                                    <select id="deptId" class="selectpicker show-tick form-control"
+                                            data-live-search="true">
+
+                                        <option th:each="c:${deptList}" th:value="${c.id}"
+                                                th:selected="${c.id eq employee.deptId}"
+                                                th:text="${c.deptname}"></option>
+                                    </select>
+
+                                </td>
+                                <td style="text-align: left"> &nbsp;&nbsp;&nbsp;<a
+                                        href="/person/topositanddeptpage2?flaga=66">没有？新增部门</a></td>
+                                <td><label>其它证件：</label></td>
+                                <td>
+                                    <select id="otherCerti" class="selectpicker show-tick form-control"
+                                            data-live-search="true" onchange="showOtherCerUpload()"
+                                            th:field="*{otherCerti}">
+                                        　　
+                                        <option value="0">无</option>
+                                        <option value="1">毕业证</option>
+                                        <option value="2">电工证</option>
+                                        <option value="3">焊工证</option>
+                                        <option value="4">结婚证</option>
+                                    </select>
+                                </td>
+
+                                <td style="display: none;" id="otherCertiFileId">
+                                    <input type="file" name="otherCertiFile" id="otherCertiFileIDID">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;是否在职：</label></td>
+                                <td colspan="1" align="center">
+                                    <label><input type="radio" th:value="0" th:attr="checked=*{isQuit == 0}" name="isQuit">在职</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label><input type="radio" th:value="1" th:attr="checked=*{isQuit == 1}" name="isQuit" >离职</label>
+                                </td>
+                                <td></td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;家庭住址：</label></td>
+                                <td colspan="1">
+                                    <input type="text" class="form-control" id="homeAddr" th:field="*{homeAddr}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="text-align: left;">
+                                    <div id="errormessage" style="display: none">
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p>
+                    <div id="bottomdiv">
+                        <input type="button" value="返回" class="btn btn-primary" onclick="javascript:history.back(-1);">
+                        <input type="button" value="更新" class="btn btn-primary" onclick="updatePersonToMysql()">
+                    </div>
+                </div>
+
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="registermessage">
+                <div class="dialog" style="align: center" id="registerDiv">
+                    <div class="panel panel-default" id="panel2">
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <label>姓名</label>
+                                <input type="text" class="form-controlspan12 form-control" id="usernamere"
+                                       th:field="*{namea}" disabled>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>用户名</label>
+                                <input type="text" class="form-controlspan12 form-control" id="username"
+                                       onchange="checkUserNameExsitA()" th:field="*{username}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>密码</label>
+                                <input type="text" class="form-control span12" id="password1" th:field="*{passowrd}"
+                                       onchange="checkpasswordA()">
+                            </div>
+                            <div class="form-group">
+                                <label>确认密码</label>
+                                <input type="text" class="form-controlspan12 form-control" id="password2"
+                                       onchange="checkpassword2A()" th:field="*{passowrd22}">
+                            </div>
+                            <div id="errormessageRe" style="display: block">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="salarymessage">
+                <div class="panel">
+                    <div class="panel-body form-inline">
+                        <div id="innerdiv2">
+                            <input type="hidden">
+                            <table class="table table-hover table-striped text-center"
+                                   style="text-align: right;width: 100%">
+                                <tr>
+                                    <td><label>综合工资：</label></td>
+                                    <td style="width:200px">
+                                        <input type="text" class="form-controlspan12 form-control"
+                                               onblur="computeAllSalary()"
+                                               id="compreSalary" th:field="*{compreSalary}"
+                                        >元
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label>岗位工资：</label></td>
+                                    <td style="width:200px">
+                                        <input type="text" class="form-controlspan12 form-control"
+                                               onblur="computeAllSalary()"
+                                               id="posSalary" th:field="*{posSalary}">元
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label>职务工资：</label></td>
+                                    <td style="width:200px">
+                                        <input type="text" class="form-controlspan12 form-control"
+                                               onblur="computeAllSalary()"
+                                               id="jobSalary" th:field="*{jobSalary}">元
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label>绩效工资：</label></td>
+                                    <td style="width:200px">
+                                        <input type="text" class="form-controlspan12 form-control"
+                                               onblur="computeAllSalary()"
+                                               id="meritSalary" th:field="*{meritSalary}">元
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label>工资合计：</label></td>
+                                    <td style="width:200px">
+                                        <input type="text" class="form-controlspan12 form-control"
+                                               id="allSalary" th:field="*{allMoney}">元
+                                    </td>
+                                </tr>
+                            </table>
+                            <div id="errormessageSa" style="display: block">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+</body>
+</html>

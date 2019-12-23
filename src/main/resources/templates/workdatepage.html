@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>排班设置</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+    <script src="/lib/defaults-zh_CN.js" type="text/javascript"></script>
+</head>
+<style type="text/css">
+</style>
+<script>
+
+    $(function () {
+        $('#name').selectpicker({
+            'selectedText': 'cat'
+        });
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        var flag = $("#flag").val();
+        var aflag = eval(flag)
+        if (aflag == 3) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;更改成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 4) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+            errormessagediv.style.color = "green";
+        }
+    });
+
+    function showDateByMonth() {
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var month = $("#monthId").val();
+        var positionLevel = $("#positionLevel").val();
+        var formData = new FormData();
+        var largeMonth = new Array('3', '5', '7', '8', '10', '12');
+        var smallMonth = new Array('4', '6', '9', '11');
+        formData.append('month', month);
+        formData.append('positionLevel', positionLevel);
+        formData.append('type', 0);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/person/getWorkDateByMonth",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                // if (largeMonth.includes(month)) {
+                $("#date31Title").show();
+                $("#date31").show();
+                // } else {
+                //     $("#date31Title").hide();
+                //     $("#date31").hide();
+                // }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+                errormessagediv.style.color = "green";
+                var data = eval(msg);//将msg化为数;
+                var tr = "";
+                var td = "";
+                var workDates = data[0].workDate.split(',');
+                var remark = data[0].remark;
+                $("#remark").val(remark)
+                var tbody = $("#workdateall");
+                tbody.html("");
+                tr = $("<tr></tr>");
+                if (workDates.includes('1')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"1\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"1\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('2')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"2\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"2\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('3')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"3\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"3\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('4')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"4\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"4\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('5')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"5\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"5\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('6')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"6\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"6\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('7')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"7\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"7\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('8')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"8\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"8\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('9')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"9\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"9\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('10')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"10\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"10\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('11')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"11\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"11\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('12')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"12\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"12\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('13')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"13\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"13\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('14')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"14\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"14\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('15')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"15\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"15\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('16')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"16\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"16\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('17')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"17\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"17\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('18')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"18\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"18\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('19')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"19\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"19\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('20')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"20\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"20\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('21')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"21\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"21\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('22')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"22\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"22\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('23')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"23\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"23\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('24')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"24\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"24\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('25')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"25\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"25\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('26')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"26\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"26\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('27')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"27\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"27\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('28')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"28\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"28\"  name=\"workDates\"></td>");
+                }
+                if (workDates.includes('29')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"29\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"29\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('30')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"30\"  checked name=\"workDates\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"30\"  name=\"workDates\"></td>");
+                }
+
+                if (workDates.includes('31')) {
+                    tr.append("<td id='date31' style='display: block;'><input type=\"checkbox\" value=\"31\"  checked name=\"workDates\"></td>");
+                } else {
+                    // if (largeMonth.includes(month)) {
+
+                    tr.append("<td id='date31' style='display: block;'><input type=\"checkbox\" value=\"31\"  name=\"workDates\"></td>");
+                    // }
+                }
+                tr.appendTo(tbody);
+            },
+            error: function (msg) {
+                $("#errormessage").show();
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询失败!";
+                errormessagediv.style.color = "red";
+            }
+        });
+
+    }
+
+
+    function showDateByMonth2() {
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var month = $("#monthId2").val();
+        var positionLevel = $("#positionLevel2").val();
+        var formData = new FormData();
+        var largeMonth = new Array('3', '5', '7', '8', '10', '12');
+        var smallMonth = new Array('4', '6', '9', '11');
+        formData.append('month', month);
+        formData.append('positionLevel', positionLevel);
+        formData.append('type', 1);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/person/getWorkDateByMonth",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                // if (largeMonth.includes(month)) {
+                $("#date31Title2").show();
+                $("#date312").show();
+                // } else {
+                //     $("#date31Title2").hide();
+                //     $("#date312").hide();
+                // }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage2").show();
+                var errormessagediv = document.getElementById("errormessage2");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+                errormessagediv.style.color = "green";
+                var data = eval(msg);//将msg化为数;
+                var empList = data[0].empList;
+                document.getElementById("name").options.length = 0;
+                var tr = "";
+                var td = "";
+
+                var optArr = [];
+                for (var i = 0; i < empList.length; i++) {
+                    $('.selectpicker').append("<option value=" + empList[i].empNo + ">" + empList[i].name + "</option>");
+                }
+                // 缺一不可
+                $('#name').selectpicker('refresh');
+                $('#name').selectpicker('render');
+
+                var selectArr = []
+                var empNostr = data[0].empNostr;
+                empNostr = empNostr.substring(1, empNostr.length - 1);
+                var arr = empNostr.split(',');
+                for (var i = 0; i < arr.length; i++) {
+                    selectArr.push(arr[i].trim());
+                }
+
+                // var rtype=document.getElementById("name");
+                // for(var i=0;i<rtype.options.length;i++){
+                //     for(var j=0;j<selectArr.length;j++){
+                //         if(rtype.options[i].value.trim()==arr[j].trim()){
+                //             rtype.options[i].selected=true;
+                //             // $('#name').selectpicker('val', arr[j].trim());
+                //
+                //         }
+                //     }
+                // }
+                // $('#name').selectpicker('val', "CS2019031102,CS2013082701");
+                $('#name').selectpicker('val', selectArr);
+                var workDates = data[0].workDate.split(',');
+                var remark = data[0].remark;
+                $("#remark2").val(remark)
+                var tbody = $("#workdateall2");
+                tbody.html("");
+                tr = $("<tr></tr>");
+                if (workDates.includes('1')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"1\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"1\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('2')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"2\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"2\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('3')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"3\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"3\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('4')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"4\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"4\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('5')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"5\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"5\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('6')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"6\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"6\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('7')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"7\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"7\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('8')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"8\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"8\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('9')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"9\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"9\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('10')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"10\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"10\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('11')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"11\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"11\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('12')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"12\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"12\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('13')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"13\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"13\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('14')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"14\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"14\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('15')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"15\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"15\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('16')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"16\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"16\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('17')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"17\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"17\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('18')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"18\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"18\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('19')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"19\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"19\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('20')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"20\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"20\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('21')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"21\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"21\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('22')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"22\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"22\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('23')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"23\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"23\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('24')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"24\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"24\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('25')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"25\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"25\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('26')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"26\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"26\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('27')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"27\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"27\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('28')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"28\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"28\"  name=\"workDates2\"></td>");
+                }
+                if (workDates.includes('29')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"29\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"29\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('30')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"30\"  checked name=\"workDates2\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"30\"  name=\"workDates2\"></td>");
+                }
+
+                if (workDates.includes('31')) {
+                    tr.append("<td id='date312' style='display: block;'><input type=\"checkbox\" value=\"31\"  checked name=\"workDates2\"></td>");
+                } else {
+                    // if (largeMonth.includes(month)) {
+
+                    tr.append("<td id='date312' style='display: block;'><input type=\"checkbox\" value=\"31\"  name=\"workDates2\"></td>");
+                    // }
+                }
+                tr.appendTo(tbody);
+            },
+            error: function (msg) {
+                $("#errormessage2").show();
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                var errormessagediv = document.getElementById("errormessage2");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询失败!";
+                errormessagediv.style.color = "red";
+            }
+        });
+
+    }
+
+
+    function showDateByMonth3() {
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var month = $("#monthId3").val();
+        var positionLevel = $("#positionLevel3").val();
+        var formData = new FormData();
+        var largeMonth = new Array('3', '5', '7', '8', '10', '12');
+        var smallMonth = new Array('4', '6', '9', '11');
+        formData.append('month', month);
+        formData.append('positionLevel', positionLevel);
+        formData.append('type', 2);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/person/getWorkDateByMonth",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                // if (largeMonth.includes(month)) {
+                $("#date31Title3").show();
+                $("#date313").show();
+                // } else {
+                //     $("#date31Title3").hide();
+                //     $("#date313").hide();
+                // }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage3").show();
+                var errormessagediv = document.getElementById("errormessage3");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+                errormessagediv.style.color = "green";
+                var data = eval(msg);//将msg化为数;
+                var tr = "";
+                var td = "";
+                var workDates = data[0].workDate.split(',');
+                var remark = data[0].remark;
+                $("#remark3").val(remark)
+                var tbody = $("#workdateall3");
+                tbody.html("");
+                tr = $("<tr></tr>");
+                if (workDates.includes('1')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"1\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"1\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('2')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"2\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"2\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('3')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"3\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"3\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('4')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"4\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"4\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('5')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"5\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"5\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('6')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"6\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"6\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('7')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"7\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"7\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('8')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"8\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"8\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('9')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"9\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"9\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('10')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"10\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"10\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('11')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"11\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"11\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('12')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"12\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"12\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('13')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"13\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"13\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('14')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"14\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"14\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('15')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"15\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"15\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('16')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"16\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"16\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('17')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"17\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"17\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('18')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"18\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"18\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('19')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"19\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"19\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('20')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"20\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"20\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('21')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"21\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"21\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('22')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"22\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"22\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('23')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"23\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"23\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('24')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"24\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"24\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('25')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"25\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"25\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('26')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"26\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"26\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('27')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"27\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"27\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('28')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"28\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"28\"  name=\"workDates3\"></td>");
+                }
+                if (workDates.includes('29')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"29\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"29\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('30')) {
+                    tr.append("<td><input type=\"checkbox\" value=\"30\"  checked name=\"workDates3\"></td>");
+                } else {
+                    tr.append("<td><input type=\"checkbox\" value=\"30\"  name=\"workDates3\"></td>");
+                }
+
+                if (workDates.includes('31')) {
+                    tr.append("<td id='date313' style='display: block;'><input type=\"checkbox\" value=\"31\"  checked name=\"workDates3\"></td>");
+                } else {
+                    // if (largeMonth.includes(month)) {
+
+                    tr.append("<td id='date313' style='display: block;'><input type=\"checkbox\" value=\"31\"  name=\"workDates3\"></td>");
+                    // }
+                }
+                tr.appendTo(tbody);
+            },
+            error: function (msg) {
+                $("#errormessage3").show();
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                var errormessagediv = document.getElementById("errormessage3");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询失败!";
+                errormessagediv.style.color = "red";
+            }
+        });
+
+    }
+
+    function saveOrUpdateWorkDate() {
+        var isRight = true;
+        var month = $("#monthId").val();
+        var positionLevel = $("#positionLevel").val();
+        var remark = $("#remark").val();
+        var chk_value = [];//定义一个数组
+        var largeMonth = new Array('3', '5', '7', '8', '10', '12');
+        var smallMonth = new Array('4', '6', '9', '11');
+        $('input[name="workDates"]:checked').each(function () {//遍历每一个名字为interest的复选框，其中选中的执行函数
+            chk_value.push($(this).val().trim());//将选中的值添加到数组chk_value中
+        });
+        var formData = new FormData();
+        formData.append('month', month);
+        formData.append('positionLevel', positionLevel);
+        formData.append('remark', remark);
+        formData.append('workDates', chk_value);
+        formData.append('type', 0);
+        if (positionLevel == 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请选择属性后再保存!";
+            errormessagediv.style.color = "red";
+            isRight = false;
+            return;
+        }
+        if (isRight) {
+            window.parent.document.getElementById('coverbehidepage').style.display = "block";
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: "/person/saveOrUpdateWorkDate",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;保存成功!";
+                    errormessagediv.style.color = "green";
+                    var data = eval(msg);//将msg化为数;
+                    var tr = "";
+                    var td = "";
+                    var workDates = data[0].workDate.split(',');
+                    var remark = data[0].remark;
+                    $("#remark").val(remark);
+                    var tbody = $("#workdateall");
+                    tbody.html("");
+                    tr = $("<tr></tr>");
+                    if (workDates.includes('1')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"1\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"1\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('2')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"2\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"2\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('3')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"3\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"3\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('4')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"4\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"4\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('5')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"5\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"5\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('6')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"6\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"6\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('7')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"7\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"7\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('8')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"8\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"8\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('9')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"9\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"9\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('10')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"10\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"10\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('11')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"11\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"11\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('12')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"12\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"12\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('13')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"13\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"13\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('14')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"14\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"14\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('15')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"15\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"15\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('16')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"16\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"16\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('17')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"17\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"17\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('18')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"18\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"18\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('19')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"19\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"19\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('20')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"20\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"20\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('21')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"21\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"21\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('22')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"22\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"22\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('23')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"23\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"23\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('24')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"24\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"24\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('25')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"25\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"25\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('26')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"26\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"26\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('27')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"27\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"27\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('28')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"28\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"28\"  name=\"workDates\"></td>");
+                    }
+                    if (workDates.includes('29')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"29\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"29\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('30')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"30\"  checked name=\"workDates\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"30\"  name=\"workDates\"></td>");
+                    }
+
+                    if (workDates.includes('31')) {
+                        tr.append("<td id='date31' style='display: block;'><input type=\"checkbox\" value=\"31\"  checked name=\"workDates\"></td>");
+                    } else {
+                        // if (largeMonth.includes(month)) {
+
+                        tr.append("<td id='date31' style='display: block;'><input type=\"checkbox\" value=\"31\"  name=\"workDates\"></td>");
+                        // }
+                    }
+                    tr.appendTo(tbody);
+                },
+                error: function (msg) {
+                    $("#errormessage").show();
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;保存失败!";
+                    errormessagediv.style.color = "red";
+                }
+            });
+        }
+
+    }
+
+
+    function saveOrUpdateWorkDate2() {
+        var isRight = true;
+        var month = $("#monthId2").val();
+        var name = $("#name").val();
+        var positionLevel = $("#positionLevel2").val();
+        var remark = $("#remark2").val();
+        var chk_value = [];//定义一个数组
+        var largeMonth = new Array('3', '5', '7', '8', '10', '12');
+        var smallMonth = new Array('4', '6', '9', '11');
+        $('input[name="workDates2"]:checked').each(function () {//遍历每一个名字为interest的复选框，其中选中的执行函数
+            chk_value.push($(this).val().trim());//将选中的值添加到数组chk_value中
+        });
+        var formData = new FormData();
+        formData.append('month', month);
+        formData.append('positionLevel', positionLevel);
+        formData.append('remark', remark);
+        formData.append('workDates', chk_value);
+        formData.append('type', 1);
+        formData.append('empNos', name);
+        if (positionLevel == 0) {
+            $("#errormessage2").show();
+            var errormessagediv = document.getElementById("errormessage2");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请选择属性后再保存!";
+            errormessagediv.style.color = "red";
+            isRight = false;
+            return;
+        }
+        if (isRight) {
+            window.parent.document.getElementById('coverbehidepage').style.display = "block";
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: "/person/saveOrUpdateWorkDate",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    $("#errormessage2").show();
+                    var errormessagediv = document.getElementById("errormessage2");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;保存成功!";
+                    errormessagediv.style.color = "green";
+                    var data = eval(msg);//将msg化为数;
+                    var tr = "";
+                    var td = "";
+                    var workDates = data[0].workDate.split(',');
+                    var remark = data[0].remark;
+                    $("#remark2").val(remark);
+                    var tbody = $("#workdateall2");
+                    tbody.html("");
+                    tr = $("<tr></tr>");
+                    if (workDates.includes('1')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"1\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"1\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('2')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"2\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"2\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('3')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"3\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"3\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('4')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"4\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"4\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('5')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"5\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"5\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('6')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"6\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"6\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('7')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"7\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"7\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('8')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"8\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"8\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('9')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"9\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"9\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('10')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"10\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"10\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('11')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"11\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"11\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('12')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"12\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"12\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('13')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"13\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"13\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('14')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"14\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"14\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('15')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"15\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"15\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('16')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"16\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"16\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('17')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"17\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"17\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('18')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"18\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"18\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('19')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"19\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"19\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('20')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"20\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"20\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('21')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"21\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"21\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('22')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"22\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"22\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('23')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"23\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"23\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('24')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"24\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"24\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('25')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"25\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"25\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('26')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"26\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"26\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('27')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"27\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"27\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('28')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"28\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"28\"  name=\"workDates2\"></td>");
+                    }
+                    if (workDates.includes('29')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"29\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"29\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('30')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"30\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"30\"  name=\"workDates2\"></td>");
+                    }
+
+                    if (workDates.includes('31')) {
+                        tr.append("<td id='date312' style='display: block;'><input type=\"checkbox\" value=\"31\"  checked name=\"workDates2\"></td>");
+                    } else {
+                        // if (largeMonth.includes(month)) {
+
+                        tr.append("<td id='date312' style='display: block;'><input type=\"checkbox\" value=\"31\"  name=\"workDates2\"></td>");
+                        // }
+                    }
+                    tr.appendTo(tbody);
+                },
+                error: function (msg) {
+                    $("#errormessage2").show();
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    var errormessagediv = document.getElementById("errormessage2");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;保存失败!";
+                    errormessagediv.style.color = "red";
+                }
+            });
+        }
+
+    }
+
+
+    function saveOrUpdateWorkDate3() {
+        var isRight = true;
+        var month = $("#monthId3").val();
+        var positionLevel = $("#positionLevel3").val();
+        var remark = $("#remark3").val();
+        var chk_value = [];//定义一个数组
+        var largeMonth = new Array('3', '5', '7', '8', '10', '12');
+        var smallMonth = new Array('4', '6', '9', '11');
+        $('input[name="workDates3"]:checked').each(function () {//遍历每一个名字为interest的复选框，其中选中的执行函数
+            chk_value.push($(this).val().trim());//将选中的值添加到数组chk_value中
+        });
+        var formData = new FormData();
+        formData.append('month', month);
+        formData.append('positionLevel', positionLevel);
+        formData.append('remark', remark);
+        formData.append('workDates', chk_value);
+        formData.append('type', 2);
+        if (positionLevel == 0) {
+            $("#errormessage3").show();
+            var errormessagediv = document.getElementById("errormessage3");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请选择属性后再保存!";
+            errormessagediv.style.color = "red";
+            isRight = false;
+            return;
+        }
+        if (isRight) {
+            window.parent.document.getElementById('coverbehidepage').style.display = "block";
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: "/person/saveOrUpdateWorkDate",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    $("#errormessage3").show();
+                    var errormessagediv = document.getElementById("errormessage3");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;保存成功!";
+                    errormessagediv.style.color = "green";
+                    var data = eval(msg);//将msg化为数;
+                    var tr = "";
+                    var td = "";
+                    var workDates = data[0].workDate.split(',');
+                    var remark = data[0].remark;
+                    $("#remark3").val(remark);
+                    var tbody = $("#workdateall3");
+                    tbody.html("");
+                    tr = $("<tr></tr>");
+                    if (workDates.includes('1')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"1\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"1\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('2')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"2\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"2\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('3')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"3\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"3\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('4')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"4\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"4\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('5')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"5\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"5\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('6')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"6\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"6\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('7')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"7\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"7\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('8')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"8\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"8\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('9')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"9\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"9\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('10')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"10\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"10\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('11')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"11\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"11\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('12')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"12\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"12\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('13')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"13\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"13\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('14')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"14\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"14\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('15')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"15\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"15\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('16')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"16\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"16\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('17')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"17\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"17\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('18')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"18\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"18\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('19')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"19\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"19\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('20')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"20\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"20\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('21')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"21\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"21\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('22')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"22\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"22\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('23')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"23\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"23\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('24')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"24\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"24\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('25')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"25\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"25\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('26')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"26\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"26\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('27')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"27\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"27\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('28')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"28\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"28\"  name=\"workDates3\"></td>");
+                    }
+                    if (workDates.includes('29')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"29\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"29\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('30')) {
+                        tr.append("<td><input type=\"checkbox\" value=\"30\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        tr.append("<td><input type=\"checkbox\" value=\"30\"  name=\"workDates3\"></td>");
+                    }
+
+                    if (workDates.includes('31')) {
+                        tr.append("<td id='date313' style='display: block;'><input type=\"checkbox\" value=\"31\"  checked name=\"workDates3\"></td>");
+                    } else {
+                        // if (largeMonth.includes(month)) {
+                        tr.append("<td id='date313' style='display: block;'><input type=\"checkbox\" value=\"31\"  name=\"workDates3\"></td>");
+                        // }
+                    }
+                    tr.appendTo(tbody);
+                },
+                error: function (msg) {
+                    $("#errormessage3").show();
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    var errormessagediv = document.getElementById("errormessage3");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;保存失败!";
+                    errormessagediv.style.color = "red";
+                }
+            });
+        }
+
+    }
+
+    function selectAllworkDates() {
+        var boxes = document.getElementsByName("workDates"); //----根据name获取页面上的复选框
+
+        //循环值，默认勾选处理
+        for (var i = 0; i < boxes.length; i++) {
+            boxes[i].checked = true;
+
+
+        }
+    }
+</script>
+<div>
+
+    <div id='app'>
+        <form>
+            <input type="hidden" id="flag" th:value="${flag}">
+
+            <ul id="myTab" class="nav nav-tabs">
+                <li><a th:href="@{/person/toworksetpage}">考勤设置</a>
+                </li>
+                <li class="active">
+                    <a href="#compreAttendRecord" data-toggle="tab">排班设置</a>
+                </li>
+                <li>
+                    <a th:href="@{/person/tooutsetpage}">外出考勤设置</a>
+                </li>
+                <!--<li>-->
+                    <!--<a th:href="@{/person/togongzhonghao}">公众号绑定</a>-->
+                <!--</li>-->
+                <li>
+                    <a th:href="@{/person/toZhongKong}">考勤机绑定</a>
+                </li>
+                <li>
+                    <a th:href="@{/person/toBanGongShiPinShiJiaBanRenYuan}">办公室加班</a>
+                </li>
+                <li>
+                    <a th:href="@{/person/toDaKaPianCha}">打卡偏差</a>
+                </li>
+            </ul>
+            <br>
+            <p>
+
+            <div id="compreAttendRecord">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">2019年正班排班设置</h3>
+                    </div>
+                    <div class="panel-body form-inline">
+                        <table>
+                            <tr>
+                                <!--<td style="text-align: right">-->
+                                <!--<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月份：</label>-->
+                                <!--</td>-->
+                                <!--<td style="width: 150px">-->
+                                <!--<select id="monthId" class="selectpicker show-tick form-control"-->
+                                <!--data-live-search="true" onchange="showDateByMonth()">-->
+                                <!--<option th:value="3">3</option>-->
+                                <!--<option th:value="4">4</option>-->
+                                <!--<option th:value="5">5</option>-->
+                                <!--<option th:value="6">6</option>-->
+                                <!--<option th:value="7">7</option>-->
+                                <!--<option th:value="8">8</option>-->
+                                <!--<option th:value="9">9</option>-->
+                                <!--<option th:value="10">10</option>-->
+                                <!--<option th:value="11">11</option>-->
+                                <!--<option th:value="12">12</option>-->
+                                <!--</select>-->
+                                <!--</td>-->
+
+                                <td><label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年月选择:</label></td>
+                                <td>
+                                    <input type="text" id="monthId"
+                                           style="width:130px;height: 34px;text-align: center"
+                                           class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM'})"
+                                           onchange="showDateByMonth()"/>
+                                </td>
+
+                                <td style="text-align: right">
+                                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;职位类别：</label>
+                                </td>
+                                <td style="width: 150px">
+                                    <select id="positionLevel" class="selectpicker show-tick form-control"
+                                            data-live-search="true" onchange="showDateByMonth()">
+                                        <option th:value="0">请选择</option>
+                                        <option th:value="A">A</option>
+                                        <option th:value="B">B</option>
+                                        <option th:value="C">C</option>
+                                        <option th:value="D">D</option>
+                                        <option th:value="E">E</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary"
+                                                                                 href="javascript:void(0);"
+                                                                                 onclick="saveOrUpdateWorkDate()">保存</a>
+                                </td>
+
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="button" class="btn btn-primary" onclick="selectAllworkDates()">一键全选
+                                    </button>
+                                </td>
+                                <td>
+                                    <div style="display: none" id="errormessage">
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+        </form>
+        <table class="table table-bordered table-hover table-striped text-center" id="showlistbody">
+            <thead style="background-color:lightsteelblue">
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            <th>13</th>
+            <th>14</th>
+            <th>15</th>
+            <th>16</th>
+            <th>17</th>
+            <th>18</th>
+            <th>19</th>
+            <th>20</th>
+            <th>21</th>
+            <th>22</th>
+            <th>23</th>
+            <th>24</th>
+            <th>25</th>
+            <th>26</th>
+            <th>27</th>
+            <th>28</th>
+            <th>29</th>
+            <th>30</th>
+            <th id="date31Title" style="display: block;">31</th>
+            </thead>
+            <tbody id="workdateall">
+            <tr>
+                <td><input type="checkbox" value="1" name="workDates"></td>
+                <td><input type="checkbox" value="2" name="workDates"></td>
+                <td><input type="checkbox" value="3" name="workDates"></td>
+                <td><input type="checkbox" value="4" name="workDates"></td>
+                <td><input type="checkbox" value="5" name="workDates"></td>
+                <td><input type="checkbox" value="6" name="workDates"></td>
+                <td><input type="checkbox" value="7" name="workDates"></td>
+                <td><input type="checkbox" value="8" name="workDates"></td>
+                <td><input type="checkbox" value="9" name="workDates"></td>
+                <td><input type="checkbox" value="10" name="workDates"></td>
+                <td><input type="checkbox" value="11" name="workDates"></td>
+                <td><input type="checkbox" value="12" name="workDates"></td>
+                <td><input type="checkbox" value="13" name="workDates"></td>
+                <td><input type="checkbox" value="14" name="workDates"></td>
+                <td><input type="checkbox" value="15" name="workDates"></td>
+                <td><input type="checkbox" value="16" name="workDates"></td>
+                <td><input type="checkbox" value="17" name="workDates"></td>
+                <td><input type="checkbox" value="18" name="workDates"></td>
+                <td><input type="checkbox" value="19" name="workDates"></td>
+                <td><input type="checkbox" value="20" name="workDates"></td>
+                <td><input type="checkbox" value="21" name="workDates"></td>
+                <td><input type="checkbox" value="22" name="workDates"></td>
+                <td><input type="checkbox" value="23" name="workDates"></td>
+                <td><input type="checkbox" value="24" name="workDates"></td>
+                <td><input type="checkbox" value="25" name="workDates"></td>
+                <td><input type="checkbox" value="26" name="workDates"></td>
+                <td><input type="checkbox" value="27" name="workDates"></td>
+                <td><input type="checkbox" value="28" name="workDates"></td>
+                <td><input type="checkbox" value="29" name="workDates"></td>
+                <td><input type="checkbox" value="30" name="workDates"></td>
+                <td id="date31" style="display:block;"><input type="checkbox" value="31" name="workDates"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5"><label>备注</label></td>
+                <td colspan="25" style="text-align: left"><input id="remark" class="form-control" type="text"
+                                                                 style="width: 500px"></td>
+            </tr>
+            </tfoot>
+        </table>
+
+
+        <form>
+            <input type="hidden" id="flag2" th:value="${flag2}">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">2019年周末排班设置</h3>
+                </div>
+                <div class="panel-body form-inline">
+                    <table>
+                        <tr>
+                            <!--<td style="text-align: right">-->
+                            <!--<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月份：</label>-->
+                            <!--</td>-->
+                            <!--<td style="width: 150px">-->
+                            <!--<select id="monthId2" class="selectpicker show-tick form-control"-->
+                            <!--data-live-search="true" onchange="showDateByMonth2()">-->
+                            <!--<option th:value="3">3</option>-->
+                            <!--<option th:value="4">4</option>-->
+                            <!--<option th:value="5">5</option>-->
+                            <!--<option th:value="6">6</option>-->
+                            <!--<option th:value="7">7</option>-->
+                            <!--<option th:value="8">8</option>-->
+                            <!--<option th:value="9">9</option>-->
+                            <!--<option th:value="10">10</option>-->
+                            <!--<option th:value="11">11</option>-->
+                            <!--<option th:value="12">12</option>-->
+                            <!--</select>-->
+
+                            <td><label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年月选择:</label></td>
+                            <td>
+                                <input type="text" id="monthId2"
+                                       style="width:130px;height: 34px;text-align: center"
+                                       class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM'})"
+                                       onchange="showDateByMonth2()"/>
+                            </td>
+
+                            <td style="text-align: right">
+                                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;职位类别：</label>
+                            </td>
+                            <td style="width: 150px">
+                                <select id="positionLevel2" class="selectpicker show-tick form-control"
+                                        data-live-search="true" onchange="showDateByMonth2()">
+                                    <option th:value="0">请选择</option>
+                                    <option th:value="A">A</option>
+                                    <option th:value="B">B</option>
+                                    <option th:value="C">C</option>
+                                    <option th:value="D">D</option>
+                                    <option th:value="E">E</option>
+                                </select>
+                            </td>
+                            <!--员工-->
+
+                            <td style="text-align: right">
+                                <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;员工选择：</label>
+                            </td>
+                            <td>
+                                <label>
+                                    <select id="name" name="name" multiple class="selectpicker show-tick form-control"
+                                            data-live-search="true" data-actions-box="true"
+                                            data-selected-text-format="count > 2">
+                                        　　
+                                        <option th:each="c:${empList}" th:value="${c.empNo}"
+                                                th:text="${c.name}"></option>
+                                    </select>
+                                </label>
+                            </td>
+
+
+                            <td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary"
+                                                                             href="javascript:void(0);"
+                                                                             onclick="saveOrUpdateWorkDate2()">保存</a>
+                            </td>
+
+
+                            <td>
+                                <div style="display: none" id="errormessage2">
+
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </form>
+        <table class="table table-bordered table-hover table-striped text-center" id="showlistbody2">
+            <thead style="background-color:lightsteelblue">
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            <th>13</th>
+            <th>14</th>
+            <th>15</th>
+            <th>16</th>
+            <th>17</th>
+            <th>18</th>
+            <th>19</th>
+            <th>20</th>
+            <th>21</th>
+            <th>22</th>
+            <th>23</th>
+            <th>24</th>
+            <th>25</th>
+            <th>26</th>
+            <th>27</th>
+            <th>28</th>
+            <th>29</th>
+            <th>30</th>
+            <th id="date31Title2" style="display: block;">31</th>
+            </thead>
+            <tbody id="workdateall2">
+            <tr>
+                <td><input type="checkbox" value="1" name="workDates2"></td>
+                <td><input type="checkbox" value="2" name="workDates2"></td>
+                <td><input type="checkbox" value="3" name="workDates2"></td>
+                <td><input type="checkbox" value="4" name="workDates2"></td>
+                <td><input type="checkbox" value="5" name="workDates2"></td>
+                <td><input type="checkbox" value="6" name="workDates2"></td>
+                <td><input type="checkbox" value="7" name="workDates2"></td>
+                <td><input type="checkbox" value="8" name="workDates2"></td>
+                <td><input type="checkbox" value="9" name="workDates2"></td>
+                <td><input type="checkbox" value="10" name="workDates2"></td>
+                <td><input type="checkbox" value="11" name="workDates2"></td>
+                <td><input type="checkbox" value="12" name="workDates2"></td>
+                <td><input type="checkbox" value="13" name="workDates2"></td>
+                <td><input type="checkbox" value="14" name="workDates2"></td>
+                <td><input type="checkbox" value="15" name="workDates2"></td>
+                <td><input type="checkbox" value="16" name="workDates2"></td>
+                <td><input type="checkbox" value="17" name="workDates2"></td>
+                <td><input type="checkbox" value="18" name="workDates2"></td>
+                <td><input type="checkbox" value="19" name="workDates2"></td>
+                <td><input type="checkbox" value="20" name="workDates2"></td>
+                <td><input type="checkbox" value="21" name="workDates2"></td>
+                <td><input type="checkbox" value="22" name="workDates2"></td>
+                <td><input type="checkbox" value="23" name="workDates2"></td>
+                <td><input type="checkbox" value="24" name="workDates2"></td>
+                <td><input type="checkbox" value="25" name="workDates2"></td>
+                <td><input type="checkbox" value="26" name="workDates2"></td>
+                <td><input type="checkbox" value="27" name="workDates2"></td>
+                <td><input type="checkbox" value="28" name="workDates2"></td>
+                <td><input type="checkbox" value="29" name="workDates2"></td>
+                <td><input type="checkbox" value="30" name="workDates2"></td>
+                <td id="date312" style="display:block;"><input type="checkbox" value="31" name="workDates2"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5"><label>备注</label></td>
+                <td colspan="25" style="text-align: left"><input id="remark2" class="form-control" type="text"
+                                                                 style="width: 500px"></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+    <form>
+        <input type="hidden" id="flag3" th:value="${flag3}">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">2019年法定节假日设置</h3>
+            </div>
+            <div class="panel-body form-inline">
+                <table>
+                    <tr>
+                        <!--<td style="text-align: right">-->
+                        <!--<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月份：</label>-->
+                        <!--</td>-->
+                        <!--<td style="width: 150px">-->
+                        <!--<select id="monthId3" class="selectpicker show-tick form-control"-->
+                        <!--data-live-search="true" onchange="showDateByMonth3()">-->
+                        <!--<option th:value="3">3</option>-->
+                        <!--<option th:value="4">4</option>-->
+                        <!--<option th:value="5">5</option>-->
+                        <!--<option th:value="6">6</option>-->
+                        <!--<option th:value="7">7</option>-->
+                        <!--<option th:value="8">8</option>-->
+                        <!--<option th:value="9">9</option>-->
+                        <!--<option th:value="10">10</option>-->
+                        <!--<option th:value="11">11</option>-->
+                        <!--<option th:value="12">12</option>-->
+                        <!--</select>-->
+
+                        <td><label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年月选择:</label></td>
+                        <td>
+                            <input type="text" id="monthId3"
+                                   style="width:130px;height: 34px;text-align: center"
+                                   class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM'})"
+                                   onchange="showDateByMonth3()"/>
+                        </td>
+
+
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary"
+                                                                         href="javascript:void(0);"
+                                                                         onclick="saveOrUpdateWorkDate3()">保存</a>
+                        </td>
+
+
+                        <td>
+                            <div style="display: none" id="errormessage3">
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </form>
+    <table class="table table-bordered table-hover table-striped text-center" id="showlistbody3">
+        <thead style="background-color:lightsteelblue">
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+        <th>5</th>
+        <th>6</th>
+        <th>7</th>
+        <th>8</th>
+        <th>9</th>
+        <th>10</th>
+        <th>11</th>
+        <th>12</th>
+        <th>13</th>
+        <th>14</th>
+        <th>15</th>
+        <th>16</th>
+        <th>17</th>
+        <th>18</th>
+        <th>19</th>
+        <th>20</th>
+        <th>21</th>
+        <th>22</th>
+        <th>23</th>
+        <th>24</th>
+        <th>25</th>
+        <th>26</th>
+        <th>27</th>
+        <th>28</th>
+        <th>29</th>
+        <th>30</th>
+        <th id="date31Title3" style="display: block;">31</th>
+        </thead>
+        <tbody id="workdateall3">
+        <tr>
+            <td><input type="checkbox" value="1" name="workDates3"></td>
+            <td><input type="checkbox" value="2" name="workDates3"></td>
+            <td><input type="checkbox" value="3" name="workDates3"></td>
+            <td><input type="checkbox" value="4" name="workDates3"></td>
+            <td><input type="checkbox" value="5" name="workDates3"></td>
+            <td><input type="checkbox" value="6" name="workDates3"></td>
+            <td><input type="checkbox" value="7" name="workDates3"></td>
+            <td><input type="checkbox" value="8" name="workDates3"></td>
+            <td><input type="checkbox" value="9" name="workDates3"></td>
+            <td><input type="checkbox" value="10" name="workDates3"></td>
+            <td><input type="checkbox" value="11" name="workDates3"></td>
+            <td><input type="checkbox" value="12" name="workDates3"></td>
+            <td><input type="checkbox" value="13" name="workDates3"></td>
+            <td><input type="checkbox" value="14" name="workDates3"></td>
+            <td><input type="checkbox" value="15" name="workDates3"></td>
+            <td><input type="checkbox" value="16" name="workDates3"></td>
+            <td><input type="checkbox" value="17" name="workDates3"></td>
+            <td><input type="checkbox" value="18" name="workDates3"></td>
+            <td><input type="checkbox" value="19" name="workDates3"></td>
+            <td><input type="checkbox" value="20" name="workDates3"></td>
+            <td><input type="checkbox" value="21" name="workDates3"></td>
+            <td><input type="checkbox" value="22" name="workDates3"></td>
+            <td><input type="checkbox" value="23" name="workDates3"></td>
+            <td><input type="checkbox" value="24" name="workDates3"></td>
+            <td><input type="checkbox" value="25" name="workDates3"></td>
+            <td><input type="checkbox" value="26" name="workDates3"></td>
+            <td><input type="checkbox" value="27" name="workDates3"></td>
+            <td><input type="checkbox" value="28" name="workDates3"></td>
+            <td><input type="checkbox" value="29" name="workDates3"></td>
+            <td><input type="checkbox" value="30" name="workDates3"></td>
+            <td id="date313" style="display:block;"><input type="checkbox" value="31" name="workDates3"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5"><label>备注</label></td>
+            <td colspan="25" style="text-align: left"><input id="remark3" class="form-control" type="text"
+                                                             style="width: 500px"></td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+</body>
+</html>

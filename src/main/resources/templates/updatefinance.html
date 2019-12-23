@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>工资-编辑</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+</head>
+<script>
+    $(window).on('load', function () {
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        $('.selectpicker').selectpicker();
+    });
+
+    function showEmployeeData() {
+        var employeeId = $("#nameId").val();
+        if (employeeId != 0) {
+            $.ajax({
+                data: employeeId,
+                type: "POST",
+                contentType: "application/json",//上传内容格式为json结构
+                url: "/person/getemployeebyId",
+                success: function (msg) {
+                    var data = eval(msg);//将msg化为数;
+                    $("#employeeNo").val(data[0].empNo);
+                    $("#empnono").val(data[0].empNo);
+                    $("#employeeId").val(data[0].id);
+                    $("#incompDate").val(data[0].incomdateStr);
+                    $("#deptId").val(data[0].deptName);
+                    $("#positionId").val(data[0].positionName);
+                    $("#jobSalary").val(data[0].jobSalary)
+                    $("#compreSalary").val(data[0].compreSalary)
+                    $("#meritSalary").val(data[0].meritSalary)
+                    $("#posSalary").val(data[0].posSalary)
+                    $("#remark").val(data[0].remark)
+                     computeAllSalary();
+                    $("#errormessage").hide();
+                },
+                error: function (msg) {
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+            });
+        }
+
+    }
+
+    function datedifference(sDate1, sDate2) {    //sDate1和sDate2是2006-12-18格式
+        var dateSpan,
+            tempDate,
+            iDays;
+        sDate1 = Date.parse(sDate1);
+        sDate2 = Date.parse(sDate2);
+        dateSpan = sDate2 - sDate1;
+        dateSpan = Math.abs(dateSpan);
+        iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
+        return iDays+1;
+    }
+
+    function computeLeaveLong() {
+        if ($("#endLeaveStr").val().length > 1 && $("#beginLeaveStr").val().length > 1) {
+            var endLeaveStr = new Date($("#endLeaveStr").val());
+            var splitA = $("#endLeaveStr").val().split("T");
+            var splitC = splitA[0].split(" ");
+            var splitEndDate = splitC[0]
+            var splitAA = $("#beginLeaveStr").val().split("T");
+            var splitCC = splitAA[0].split(" ");
+            var splitBeginDate = splitCC[0]
+            var beginLeaveStr = new Date($("#beginLeaveStr").val());
+            var leaveLong = 0;
+            if (endLeaveStr != null && beginLeaveStr != null) {
+                if (splitBeginDate == splitEndDate) {
+                    var ms = endLeaveStr.getTime() - beginLeaveStr.getTime();
+                    console.log(ms);
+                    if (ms < 0) leaveLong = 0;
+                    leaveLong = Math.floor(ms / 1000 / 60 / 60);
+                    if (ms >= 32400000) {
+                        leaveLong = leaveLong - 1;
+                    }
+                    if (!isNaN(leaveLong))
+                        $("#leaveLong").val(leaveLong);
+                } else {
+                    var interDay = datedifference(splitBeginDate, splitEndDate);
+                    var sampleBegin = new Date(splitBeginDate + " 08:30:00").getTime();
+                    var sampleEnd = new Date(splitEndDate + " 17:30:00").getTime();
+                    if (sampleBegin >= beginLeaveStr.getTime() && sampleEnd <= endLeaveStr.getTime()) {
+                        leaveLong = interDay * 8;
+                        if (!isNaN(leaveLong))
+                            $("#leaveLong").val(leaveLong);
+                    }else if(sampleBegin< beginLeaveStr.getTime() && sampleEnd > endLeaveStr.getTime()) {
+                        $("#leaveLong").val(interDay * 8);
+                    }else if(sampleBegin< beginLeaveStr.getTime())  {
+                        $("#leaveLong").val(interDay * 8);
+                    }else if(sampleEnd > endLeaveStr.getTime()) {
+                        $("#leaveLong").val(interDay * 8);
+                    }
+
+                }
+            }
+
+            var formData = new FormData();
+            formData.append('beginLeaveStr', $("#beginLeaveStr").val());
+            formData.append('endLeaveStr', $("#endLeaveStr").val());
+            formData.append('employeeId', $("#employeeId").val());
+            $.ajax({
+                data: formData,
+                type: "POST",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                url: "/person/checkBeginLeaveRight",
+                success: function (msg) {
+                    if (msg == 0) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请假时间正确!";
+                        errormessagediv.style.color = "green";
+                    } else {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统中已存在此人的请假条，请重新编辑!";
+                        errormessagediv.style.color = "red";
+                        $("#endLeaveStr").val("");
+                        $("#beginLeaveStr").val("");
+                        $("#leaveLong").val("");
+
+                    }
+                },
+                error: function (msg) {
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+            });
+
+        }
+    }
+
+    function addSalaryToMysql() {
+        var employeeNo = $("#employeeNo").val();
+        var remark = $("#remark").val();
+        var allSalary = $("#allSalary").val();
+        if (employeeNo.trim().length > 0 && allSalary.trim().length >0) {
+            // window.location.href = "/finance/addSalaryToMysql?empNo=" + employeeNo
+            //     + "&compreSalary=" + $("#compreSalary").val() + "&endLeaveStr=" + endLeaveStr + "&leaveLong=" + leaveLong + "&leaveDescrip=" + leaveDescrip
+            //     + "&remark=" + remark+"&type="+typeValue;
+            document.forms["addEmployee"].submit();
+        } else {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请填写相关信息再提交!";
+            errormessagediv.style.color = "red";
+        }
+    }
+
+
+    String.prototype.trim = function () {
+        return this.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+    function today() {
+        var today = new Date();
+        var h = today.getFullYear();
+        var m = today.getMonth() + 1;
+        var d = today.getDate();
+        var hh = today.getHours();
+        var mm = today.getMinutes();
+        var ss = today.getSeconds();
+        m = m < 10 ? "0" + m : m;
+        d = d < 10 ? "0" + d : d;
+        return h + "-" + m + "-" + d;
+    }
+
+    function computeAllSalary() {
+        var compreSalary = Number($("#compreSalary").val());
+        var posSalary = Number($("#posSalary").val());
+        var jobSalary = Number($("#jobSalary").val());
+        var meritSalary = Number($("#meritSalary").val());
+        var all;
+        all = compreSalary + posSalary + jobSalary + meritSalary + 0;
+        $("#allSalary").val(all);
+    }
+</script>
+<style type="text/css">
+    #innerdiv {
+        height: 600px;
+        padding-left: 420px;
+    }
+
+    #bottomdiv {
+        padding-left: 575px;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+</style>
+<body>
+<div id='app'>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">工资</h3>
+        </div>
+        <div class="panel-body form-inline">
+            <div id="innerdiv">
+                <form id="addEmployee" th:action="@{/finance/addsalary}" th:method="post" th:object="${employee}">
+                    <input type="hidden" th:field="*{empNo}" id="empnono">
+                    <table class="table table-hover table-striped text-center" style="text-align: right;width: auto;border-spacing:0px 3px;">
+                        <tr>
+                            <td><label>姓名：</label></td>
+                            <td>
+                                <input type="text" class="form-control" th:field="*{name}"
+                                       disabled="">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><label>工号：</label></td>
+                            <td><input type="text" class="form-control"  id="employeeNo"
+                                       disabled="" th:field="*{empNo}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>职位：</label></td>
+                            <td>
+                                <input type="text" class="form-control" th:field="*{positionName}" id="positionId"
+                                       disabled="">
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp; <a href="/person/topositanddeptpage?">没有？新增职位</a></td>
+                        </tr>
+                        <tr>
+                            <td><label>部门：</label></td>
+                            <td>
+                                <input type="text" class="form-control" th:field="*{deptName}" id="deptId"
+                                       disabled="">
+
+                            </td>
+                            <td> &nbsp;&nbsp;&nbsp;<a href="/person/topositanddeptpage?flaga=66">没有？新增部门</a></td>
+
+                        </tr>
+                        <tr>
+                            <td><label>综合工资(元)：</label></td>
+                            <td style="width:200px">
+                                <input type="text" class="form-controlspan12 form-control"
+                                       onblur="computeAllSalary()"
+                                       id="compreSalary" th:field="*{compreSalary}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>岗位工资(元)：</label></td>
+                            <td style="width:200px">
+                                <input type="text" class="form-controlspan12 form-control"
+                                       onblur="computeAllSalary()"
+                                       id="posSalary" th:field="*{posSalary}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>职务工资(元)：</label></td>
+                            <td style="width:200px">
+                                <input type="text" class="form-controlspan12 form-control"
+                                       onblur="computeAllSalary()"
+                                       id="jobSalary" th:field="*{jobSalary}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>绩效工资(元)：</label></td>
+                            <td style="width:200px">
+                                <input type="text" class="form-controlspan12 form-control"
+                                       onblur="computeAllSalary()"
+                                       id="meritSalary" th:field="*{meritSalary}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>审核状态：</label></td>
+                            <td style="width:200px">
+                                <select id="state"  class="selectpicker show-tick form-control"
+                                        data-live-search="true" data-actions-box="true"
+                                        data-selected-text-format="count > 2" th:field="*{state}">
+                                    　　
+                                    <option  th:selected="${employee.state eq 0}" th:value="0">未审核</option>
+                                    <option  th:selected="${employee.state eq 0}" th:value="1">审核通过</option>
+                                    <option  th:selected="${employee.state eq 0}" th:value="2">审核未通过</option>
+
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>工资合计(元)：</label></td>
+                            <td style="width:200px">
+                                <input type="text" class="form-controlspan12 form-control"
+                                       id="allSalary" readonly th:field="*{allMoney}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>备注：</label></td>
+                            <td>
+                                <input type="text" class="form-control span12 form-control"
+                                       id="remark" th:field="*{remark}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center;">
+                                <input type="button" value="返回" class="btn btn-primary" onclick="javascript:history.back(-1);">
+                                <input type="button" value="添加" class="btn btn-primary" onclick="addSalaryToMysql()">
+
+                            </td>
+                            <td>
+                                <div id="errormessage" style="display: block">
+
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

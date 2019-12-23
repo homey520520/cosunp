@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>工时-更新</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../static/lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+    <script src="../static/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+</head>
+<script>
+    $(window).on('load', function () {
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        $('.selectpicker').selectpicker();
+        // var educationLe = $("#educationLe").val();
+        // var sateListAndLeaCerti = $("#sateListAndLeaCerti").val();
+        // var otherCerti = $("#otherCerti").val();
+        // if (educationLe > 7) {
+        //     $("#educationLeFileId").show();
+        // } else {
+        //     $("#educationLeFileId").hide();
+        // }
+        //
+        // if (sateListAndLeaCerti == 0) {
+        //     $("#sateListAndLeaCertiFileId").hide();
+        // } else {
+        //     $("#sateListAndLeaCertiFileId").show();
+        //
+        // }
+        //
+        // if (otherCerti == 0) {
+        //     $("#otherCertiFileId").hide();
+        // } else {
+        //     $("#otherCertiFileId").show();
+        // }
+    });
+
+    function updatePersonToMysql() {
+        var isflag = true;
+        var zhengbanHours = $("#zhengbanHours").val();
+        var workendHours = $("#workendHours").val();
+        var otherAllo = $("#otherAllo").val();
+        var fullWorkReword = $("#fullWorkReword").val();
+        var foodExpense = $("#foodExpense").val();
+        var roomOrWaterEleExpense = $("#roomOrWaterEleExpense").val();
+        var oldAgeINsuran = $("#oldAgeINsuran").val();
+        var medicalInsuran = $("#medicalInsuran").val();
+        var unEmployeeInsur = $("#unEmployeeInsur").val();
+        var accumulaFund = $("#accumulaFund").val();
+        var errorInWork = $("#errorInWork").val();
+        var meritScore = $("#meritScore").val();
+        // var sixDeductions = $("#sixDeductions").val();
+        var usualExtHours = $("#usualExtHours").val();
+        var chinaPaidLeave = $("#chinaPaidLeave").val();
+        var otherPaidLeave = $("#otherPaidLeave").val();
+        var leaveOfAbsense = $("#leaveOfAbsense").val();
+        var sickLeave = $("#sickLeave").val();
+
+        if (zhengbanHours.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;正班工时不为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (workendHours.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;周末加班不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (otherAllo.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;其它补贴不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (fullWorkReword.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;全勤奖不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (foodExpense.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;伙食费不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (roomOrWaterEleExpense.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;房租水电费不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (oldAgeINsuran.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;养老险不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (medicalInsuran.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;医疗险不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (unEmployeeInsur.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;失业险不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (accumulaFund.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;公积金不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (errorInWork.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;工作失误不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (meritScore.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;绩效分不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (usualExtHours.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;平时加班不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (chinaPaidLeave.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;国家法定工时不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (otherPaidLeave.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;其它有薪假不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (leaveOfAbsense.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;事假不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }else if (sickLeave.trim().length == 0) {
+            isflag = false;
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;病假不能为空!";
+            errormessagediv.style.color = "red";
+            return;
+        }
+        // else if (sixDeductions.trim().length == 0) {
+        //     isflag = false;
+        //     $("#errormessage").show();
+        //     var errormessagediv = document.getElementById("errormessage");
+        //     errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;六个代扣项不能为空!";
+        //     errormessagediv.style.color = "red";
+        //     return;
+        // }
+
+        if (isflag) {
+            $("#errormessage").hide();
+            document.forms[0].submit();
+        } else {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请将信息填写完整再保存!";
+            errormessagediv.style.color = "red";
+        }
+
+    }
+
+    function checkemployno(valuestr) {
+        $("#errormessageempNo").hide();
+        $("#rightmessageempNo").hide();
+        var empoyeeNo = valuestr.trim();
+        var reg = new RegExp(/^CS20[1-2]{1}[0-9]{1}[0-1]{1}[0-9]{1}[0-3]{1}[0-9]{1}[0-9]{2}$/g);
+        if (empoyeeNo.length > 0) {
+            if (reg.test(empoyeeNo)) {
+                $.ajax({
+                    data: empoyeeNo,
+                    type: "POST",
+                    contentType: "application/json",//上传内容格式为json结构
+                    url: "/person/checkEmployNoIsExsit",
+                    success: function (msg) {
+                        var amsg = eval(msg)
+                        if (amsg > 0) {
+                            $("#employeeNo").val("");
+                            $("#errormessageempNo").show();
+                            $("#errormessageempNo").html("<img src=\"../static/images/icon/error.jpg\"\n" +
+                                "                                         style=\"width: 20px; height: 20px; vertical-align: middle\" border=\"0\"\n" +
+                                "                                         align=\"center\"><strong><font size=\"2\" color=\"red\">工号已存在</font></strong>\n" +
+                                "                                ");
+                            $("#rightmessageempNo").hide();
+                        } else {
+                            $("#errormessageempNo").hide();
+                            $("#rightmessageempNo").show();
+                        }
+                    },
+                    error: function (msg) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                        errormessagediv.style.color = "red";
+                    }
+
+                });
+            } else {
+                $("#employeeNo").val("");
+                $("#errormessageempNo").html("<img src=\"../static/images/icon/error.jpg\"\n" +
+                    "                                         style=\"width: 20px; height: 20px; vertical-align: middle\" border=\"0\"\n" +
+                    "                                         align=\"center\"><strong><font size=\"2\" color=\"red\">工号不合法</font></strong>\n" +
+                    "                                ");
+                $("#errormessageempNo").show();
+                $("#rightmessageempNo").hide();
+            }
+        }
+
+    }
+
+    function checkNameisChineseOrRepeat(namestr) {
+        $("#rightmessagename").hide();
+        $("#errormessagename").hide();
+        //中文匹配后续补充
+        var name = namestr.trim();
+        if (name.length > 0) {
+            $.ajax({
+                data: name,
+                type: "POST",
+                contentType: "application/json",//上传内容格式为json结构
+                url: "/person/checkEmployIsExsit",
+                success: function (msg) {
+                    var amsg = eval(msg)
+                    if (amsg > 0) {
+                        $("#employeeName").val("");
+                        $("#errormessagename").show();
+                        $("#rightmessagename").hide();
+                    } else {
+                        $("#errormessagename").hide();
+                        $("#rightmessagename").show();
+                        $("#usernamere").val(name);
+                    }
+                },
+                error: function (msg) {
+                    $("#errormessage").show();
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+
+            });
+        }
+    }
+
+    String.prototype.trim = function () {
+        return this.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+
+    function checkPersonIDNo(ID_NO) {
+        var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if (ID_NO.value.trim().length > 0) {
+            if (!reg.test(ID_NO.value)) {
+                $("#ID_NO").val("");
+                $("#errormessageID").show();
+                $("#rightmessageID").hide();
+                return;
+            } else {
+                $("#errormessageID").hide();
+                $("#rightmessageID").show();
+            }
+        }
+    }
+
+    function checkMobileNo(mobile) {
+        var reg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+        if (mobile.trim().length > 0) {
+            if (!reg.test(mobile)) {
+                $("#contactPhone").val("");
+                $("#errormessageempMobile").show();
+                $("#rightmessageempMobile").hide();
+            } else {
+                $("#errormessageempMobile").hide();
+                $("#rightmessageempMobile").show();
+            }
+        }
+    }
+
+    function today() {
+        var today = new Date();
+        var h = today.getFullYear();
+        var m = today.getMonth() + 1;
+        var d = today.getDate();
+        var hh = today.getHours();
+        var mm = today.getMinutes();
+        var ss = today.getSeconds();
+        m = m < 10 ? "0" + m : m;
+        d = d < 10 ? "0" + d : d;
+        return h + "-" + m + "-" + d;
+    }
+
+    function showUploadeduAtta() {
+        var educationLe = $("#educationLe").val();
+        if (educationLe > 7) {
+            document.getElementById("educationLeFileId").style.display = "block";
+        } else {
+            document.getElementById("educationLeFileId").style.display = "none";
+        }
+    }
+
+    function showuploadsaftleav() {
+        var sateListAndLeaCerti = $("#sateListAndLeaCerti").val();
+        if (sateListAndLeaCerti > 0) {
+            document.getElementById("sateListAndLeaCertiFileId").style.display = "block";
+        } else {
+            document.getElementById("sateListAndLeaCertiFileId").style.display = "none";
+        }
+    }
+
+    function showOtherCerUpload() {
+        var otherCerti = $("#otherCerti").val();
+        if (otherCerti > 0) {
+            document.getElementById("otherCertiFileId").style.display = "block";
+        } else {
+            document.getElementById("otherCertiFileId").style.display = "none";
+        }
+    }
+
+    function fillRe() {
+        $("#deptNamere").val($("#deptId").val());
+    }
+
+
+    function checkpasswordA() {
+        $("#errormessageRe").hide();
+        var password = $("#password1").val();
+        var passwordregul = /^[a-zA-Z]\w{4,11}$/;
+        if (password == "") {
+            $("#password2").val("");
+            passwordflag = false;
+        }
+        if (passwordregul.test(password)) {
+            passwordflag = true;
+        } else {
+            $("#errormessageRe").show();
+            var errormessagediv = document.getElementById("errormessageRe");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;以字母开头，长度在5~12之间，只能包含字母、数字和下划线!";
+            errormessagediv.style.color = "red";
+            $("#password1").val("");
+            passwordflag = false;
+        }
+    }
+
+    function checkpassword2A() {
+        $("#errormessageRe").hide();
+        var password = $("#password1").val();
+        var password2 = $("#password2").val();
+        var passwordregul = /^[a-zA-Z]\w{4,11}$/;
+        if (password != "") {
+            if (passwordflag) {
+                if (passwordregul.test(password)) {
+                    if (password != password2) {
+                        $("#errormessageRe").show();
+                        var errormessagediv = document.getElementById("errormessageRe");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;密码确认错误!";
+                        errormessagediv.style.color = "red";
+                        $("#password2").val("");
+                        passwordflag1 = false;
+                    } else {
+                        passwordflag1 = true;
+                    }
+                } else {
+                    $("#errormessageRe").show();
+                    var errormessagediv = document.getElementById("errormessageRe");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;以字母开头，长度在5~12之间，只能包含字母、数字和下划线!";
+                    errormessagediv.style.color = "red";
+                    $("#password1").val("");
+                    passwordflag1 = false;
+                }
+            }
+        } else {
+            $("#password2").val("");
+            $("#errormessageRe").show();
+            var errormessagediv = document.getElementById("errormessageRe");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请先输入密码再确认!";
+            errormessagediv.style.color = "red";
+            passwordflag1 = false;
+        }
+    }
+
+    function checkUserExsitAndReturnPinyinNameA() {
+        $("#errormessageRe").hide();
+        var empNo = $("#empNo").val();
+        $.ajax({
+            data: empNo,
+            type: "POST",
+            contentType: "application/json",//上传内容格式为json结构
+            url: "/account/checkUserExsitAndReturnPinyinName",
+            success: function (msg) {
+                var nameStr = msg.substring(1, msg.length - 1);
+                if (nameStr != 1) {
+                    var arr = nameStr.split(",");
+                    $("#username").val(arr[0]);
+                    $("#deptName").val(arr[1]);
+                    $("#empNoPost").val($("#empNo").val());
+                } else {
+                    $("#errormessageRe").show();
+                    var errormessagediv = document.getElementById("errormessageRe");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;您已注册过,不能重复注册!";
+                    errormessagediv.style.color = "red";
+                }
+            },
+            error: function (msg) {
+                $("#errormessageRe").show();
+                var errormessagediv = document.getElementById("errormessageRe");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+        });
+    }
+
+    function checkUserNameExsitA() {
+        // 当鼠标不聚焦验证用户名input
+        var username = $("#username").val();
+        var str2 = check_user_name(username);
+        if ("该用户名合法" == str2) {
+            usernameflag = true;
+            $("#errormessageRe").hide();
+        } else {
+            usernameflag = false;
+            $("#username").val("")
+            $("#errormessageRe").show();
+            var errormessagediv = document.getElementById("errormessageRe");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;" + str2;
+            errormessagediv.style.color = "red";
+        }
+
+        if (usernameflag) {
+            $.ajax({
+                data: username,
+                type: "POST",
+                contentType: "application/json",//上传内容格式为json结构
+                url: "/account/checkUserNameExsit",
+                success: function (msg) {
+                    var nameStr = msg.substring(1, msg.length - 1);
+                    if (nameStr == 0) {
+                        $("#errormessageRe").hide();
+                    } else {
+                        $("#errormessageRe").show();
+                        var errormessagediv = document.getElementById("errormessageRe");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;用户名已存在!";
+                        errormessagediv.style.color = "red";
+                    }
+                },
+                error: function (msg) {
+                    $("#errormessageRe").show();
+                    var errormessagediv = document.getElementById("errormessageRe");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+            });
+        }
+    }
+
+    function check_user_name(str) {
+        var str2 = "该用户名合法";
+        if ("" == str) {
+            str2 = "用户名为空";
+            return str2;
+        } else if ((str.length < 4) || (str.length > 20)) {
+            str2 = "用户名必须为4 ~ 20位";
+            return str2;
+        } else if (check_other_char(str)) {
+            str2 = "不能含有特殊字符";
+            return str2;
+        }
+        return str2;
+    }
+
+    // 验证用户名是否含有特殊字符
+    function check_other_char(str) {
+        var arr = ["&", "\\", "/", "*", ">", "<", "@", "!"];
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = 0; j < str.length; j++) {
+                if (arr[i] == str.charAt(j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    function computeAllSalary() {
+        var compreSalary = Number($("#compreSalary").val());
+        var posSalary = Number($("#posSalary").val());
+        var jobSalary = Number($("#jobSalary").val());
+        var meritSalary = Number($("#meritSalary").val());
+        var all;
+        all = compreSalary + posSalary + jobSalary + meritSalary + 0;
+        $("#allSalary").val(all);
+    }
+
+    function validateDouble(idname){
+        $("#errormessage").hide();
+        var reg = new RegExp("^[0-9]+(.[0-9]{1,3})?$");
+        var obj = document.getElementById(idname);
+        if(!reg.test(obj.value)){
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;请输入数字!";
+            errormessagediv.style.color = "red";
+            obj.value="0.0";
+        }
+    }
+</script>
+<style type="text/css">
+    #line-chart {
+        height: 300px;
+        width: 800px;
+        margin: 0px auto;
+        margin-top: 1em;
+    }
+
+    .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+        color: #fff;
+    }
+
+    .panel-body {
+        height: 300px;
+        width: 400px;
+    }
+
+    #panel2 {
+        height: 350px;
+        width: 400px;
+    }
+
+    /*.panel {*/
+        /*height: 300px;*/
+        /*width: 400px;*/
+    /*}*/
+
+    #innerdiv {
+        height: 560px;
+        padding-left: 20px;
+        padding-top: 10px;
+    }
+
+    #salarymessage {
+        height: 300px;
+        width: 100%;
+        padding-left: 38%;
+        padding-top: 5%;
+    }
+
+    #registerDiv {
+        height: 500px;
+        width: 100%;
+        padding-left: 38%;
+        padding-top: 5%;
+    }
+
+    #bottomdiv {
+        padding-left: 575px;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+</style>
+<body>
+<div>
+    <form id="addEmployee" th:action="@{/finance/updateEmpHoursToMysql}" th:method="post" th:object="${empHours}"
+          enctype="multipart/form-data">
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#employeemessage" role="tab" data-toggle="tab">工时信息</a></li>
+        </ul>
+
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="employeemessage">
+                <div id='app'>
+                    <div id="innerdiv">
+                        <table class="table table-hover table-striped text-center"
+                               style="text-align: right;width: 80%;align-content: right">
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;姓名：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="employeeName" th:field="*{name}"
+                                           readonly>
+                                </td>
+
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;工时年月：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" th:field="*{yearMonth}"
+                                            readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;工号：</label></td>
+                                <td align="center">
+                                    <input type="text" class="form-control" th:field="*{empNo}"
+                                           readonly>
+                                </td>
+
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;部门：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" th:field="*{deptName}"
+                                           readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;正班出勤工时：</label></td>
+                                <td>
+                                    <input type="text" onblur="validateDouble('zhengbanHours')" class="form-control" id ="zhengbanHours" th:field="*{zhengbanHours}">
+                                </td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;平时加班：</label></td>
+                                <td>
+                                    <input type="text" onblur="validateDouble('usualExtHours')" id="usualExtHours" class="form-control" th:field="*{usualExtHours}"
+                                           >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;周末加班：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" onblur="validateDouble('workendHours')" id="workendHours"  th:field="*{workendHours}">
+                                </td>
+
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;国家有薪假：</label></td>
+                                <td align="center">
+                                    <input type="text" class="form-control" onblur="validateDouble('chinaPaidLeave')" id="chinaPaidLeave" th:field="*{chinaPaidLeave}">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;其它有薪假：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" onblur="validateDouble('otherPaidLeave')" id="otherPaidLeave" th:field="*{otherPaidLeave}">
+
+                                </td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;事假：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" onblur="validateDouble('leaveOfAbsense')" id="leaveOfAbsense" th:field="*{leaveOfAbsense}">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;病假：</label></td>
+                                <td><input type="text" class="form-control" onblur="validateDouble('sickLeave')" id="sickLeave" th:field="*{sickLeave}"
+                                          ></td>
+
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;其它补贴：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" onblur="validateDouble('otherAllo')" id="otherAllo" th:field="*{otherAllo}"
+                                    >
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;全勤奖：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" onblur="validateDouble('fullWorkReword')" id="fullWorkReword" th:field="*{fullWorkReword}"
+                                    >
+                                </td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;伙食费：</label></td>
+                                <td align="center">
+                                    <input type="text" class="form-control" th:field="*{foodExpense}" onblur="validateDouble('foodExpense')" id="foodExpense"
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;房租及水电费：</label></td>
+                                <td>
+
+                                    <input type="text" class="form-control" th:field="*{roomOrWaterEleExpense}" onblur="validateDouble('roomOrWaterEleExpense')" id="roomOrWaterEleExpense"
+                                    >
+                                </td>
+
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;养老金：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" th:field="*{oldAgeINsuran}" onblur="validateDouble('oldAgeINsuran')" id="oldAgeINsuran">
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;医疗险：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" th:field="*{medicalInsuran}" onblur="validateDouble('medicalInsuran')" id="medicalInsuran">
+
+                                </td>
+                                <td><label>失业险：</label></td>
+                                <td align="center">
+                                    <input type="text" class="form-control" th:field="*{unEmployeeInsur}" onblur="validateDouble('unEmployeeInsur')" id="unEmployeeInsur">
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;公积金：</label></td>
+                                <td>
+
+                                    <input type="text" class="form-control" th:field="*{accumulaFund}" onblur="validateDouble('accumulaFund')" id="accumulaFund">
+
+
+                                </td>
+
+                                <td><label>工作失误：</label></td>
+                                <td>
+                                    <input type="text" class="form-control" th:field="*{errorInWork}" onblur="validateDouble('errorInWork')" id="errorInWork">
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;绩效分：</label></td>
+                                <td colspan="1">
+                                    <input type="text" class="form-control" onblur="validateDouble('meritScore')" id="meritScore" th:field="*{meritScore}">
+                                </td>
+                                <td><label><font color="#FF0000" size="2">*</font>&nbsp;备注：</label></td>
+                                <td colspan="1">
+                                    <input type="text" class="form-control" id="remark" th:field="*{remark}">
+                                </td>
+                                <!--<td><label><font color="#FF0000" size="2">*</font>&nbsp;六个代扣项：</label></td>-->
+                                <!--<td colspan="1">-->
+                                    <!--<input type="text" class="form-control" onblur="validateDouble('sixDeductions')" id="sixDeductions"-->
+                                           <!--th:field="*{sixDeductions}">-->
+                                <!--</td>-->
+                            </tr>
+                            <!--<tr>-->
+
+                              <!---->
+                            <!--</tr>-->
+                            <tr>
+                                <td colspan="5" style="text-align: center;">
+                                    <div id="errormessage" style="display: none">
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p>
+                    <p>
+                    <div id="bottomdiv">
+                        <input type="button" value="返回" class="btn btn-primary" onclick="javascript:history.back(-1);">
+                        <input type="button" value="更新" class="btn btn-primary" onclick="updatePersonToMysql()">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

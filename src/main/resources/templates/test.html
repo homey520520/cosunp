@@ -1,0 +1,128 @@
+<html>
+<head><title>pdf.js展示1，上一页，下一页</title></head>
+<h1>PDF.js Previous/Next example</h1>
+<link rel="stylesheet" type="text/css" href="../static/lib/bootstrap/css/bootstrap.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="../static/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+<script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+<div>
+    <i class="fa fa-camera-retro"></i> fa-camera-retro
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#home" role="tab" data-toggle="tab">Home</a></li>
+        <li role="presentation"><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>
+        <li role="presentation"><a href="#messages" role="tab" data-toggle="tab">Messages</a></li>
+        <li role="presentation"><a href="#settings" role="tab" data-toggle="tab">Settings</a></li>
+    </ul>
+
+    <!-- 面板区 -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="home">工</div>
+        <div role="tabpanel" class="tab-pane" id="profile">厅</div>
+        <div role="tabpanel" class="tab-pane" id="messages">要</div>
+        <div role="tabpanel" class="tab-pane" id="settings">..有.</div>
+
+
+    </div>
+</div>
+    <canvas id="the-canvas"></canvas>
+    <script src="/lib/pdf.js"></script>
+    <script src="/lib/pdf.worker.js"></script>
+    <script>
+        var url = 'localhost:8080/okok.pdf';
+
+        var pdfDoc = null,
+            pageNum = 1,
+            pageRendering = false,
+            pageNumPending = null,
+            scale = 0.8,
+            canvas = document.getElementById('the-canvas'),
+            ctx = canvas.getContext('2d');
+
+        /**
+         * Get page info from document, resize canvas accordingly, and render page.
+         * @param num Page number.
+         */
+        function renderPage(num) {
+            pageRendering = true;
+            // Using promise to fetch the page
+            pdfDoc.getPage(num).then(function (page) {
+                var viewport = page.getViewport(scale);
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+
+                // Wait for rendering to finish
+                renderTask.promise.then(function () {
+                    pageRendering = false;
+                    if (pageNumPending !== null) {
+                        // New page rendering is pending
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            });
+
+            // Update page counters
+            document.getElementById('page_num').textContent = num;
+        }
+
+        /**
+         * If another page rendering in progress, waits until the rendering is
+         * finised. Otherwise, executes rendering immediately.
+         */
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        /**
+         * Displays previous page.
+         */
+        function onPrevPage() {
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+        }
+
+        document.getElementById('prev').addEventListener('click', onPrevPage);
+
+        /**
+         * Displays next page.
+         */
+        function onNextPage() {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+        }
+
+        document.getElementById('next').addEventListener('click', onNextPage);
+
+        /**
+         * Asynchronously downloads PDF.
+         */
+        PDFJS.getDocument(url).then(function (pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+            // Initial/first page rendering
+            renderPage(pageNum);
+        });
+    </script>
+
+
+</html>

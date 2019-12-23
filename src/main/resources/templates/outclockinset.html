@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>外出考勤设置</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+    <script src="/lib/defaults-zh_CN.js" type="text/javascript"></script>
+</head>
+<style type="text/css">
+    td, th {
+        white-space: nowrap;
+    }
+</style>
+<script>
+
+    $(function () {
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        var flag = $("#flag").val();
+        var aflag = eval(flag)
+        if (aflag == 1) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;添加成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 2) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;删除成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 3) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;更改成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 4) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+            errormessagediv.style.color = "green";
+        }
+    });
+    var len;
+
+    function addTableRow() {
+        len = $("#tabletbody > tr").length;
+        len++;
+        var tbody = $("#tabletbody");
+        var tr = $("<tr id='tr" + len + "'></tr>");
+        tr.append("<td>   \n" +
+            "    <a id=\"savebutton\"\n" +
+            "    href=\"javascript:void(0);\" onclick=\"saveDateToMysql(this," + len + ")\">保存</a>" +
+            " <a href=\"javascript:void(0);\"\n" +
+            "    onclick=\"deleteTR(this," + len + ");\">删除</a></td>");
+        tr.append("<td id='tr" + len + "'>" + len + "</td>")
+        tr.append("<td><=<input type='text' onblur='checkisNum(this," + len + ")' placeholder='请输入天数'>天</td>")
+        tr.append("<td><input type='text' onblur='checkisNum2(this," + len + ")' placeholder='请输入打卡次数'>次</td>")
+        tr.append("<td><input type='text' placeholder='请输入备注'></td>")
+        tr.appendTo(tbody);
+    }
+
+    function checkisNum2(obj, len) {
+        $("#errormessage").hide();
+        var reg = new RegExp("^[1-3]{1}?$");
+        if (!reg.test(obj.value)) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;第" + len + "行日打卡次数并且只能1~3!";
+            errormessagediv.style.color = "red";
+            obj.value = "1";
+        }
+    }
+
+    function checkisNum(obj, len) {
+        $("#errormessage").hide();
+        var reg = new RegExp("^[0-9]+(.[5]{1})?$");
+        if (!reg.test(obj.value)) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;第" + len + "行外出天数请输入数字,小数点后数字只能为5!";
+            errormessagediv.style.color = "red";
+            obj.value = "1.0";
+        }
+    }
+
+    function deleteTR(obj, len) {
+        var outdays = $(obj).parent().parent().find("td").eq(2).find("input").eq(0).val();
+        obj.parentElement.parentElement.remove();
+        window.location.href = "/person/deleteClockInDataByOutDays?outDays=" + outdays;
+    }
+
+    function saveDateToMysql(obj, len) {
+        $("#errormessage").hide();
+        var formData = new FormData();
+        formData.append("outDays", $(obj).parent().parent().find("td").eq(2).find("input").eq(0).val());
+        formData.append("dayClockInTimes", $(obj).parent().parent().find("td").eq(3).find("input").eq(0).val());
+        formData.append("remark", $(obj).parent().parent().find("td").eq(4).find("input").eq(0).val());
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/person/saveClockInSetUp",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                if (msg == 'true') {
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;保存成功!";
+                    errormessagediv.style.color = "green";
+                } else {
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;编辑成功!";
+                    errormessagediv.style.color = "green";
+                }
+            },
+            error: function (msg) {
+                $("#errormessagee").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+
+        });
+    }
+</script>
+<body>
+
+<div id='app'>
+    <form>
+        <input type="hidden" id="flag" th:value="${flag}">
+
+        <ul id="myTab" class="nav nav-tabs">
+            <li>
+                <a th:href="@{/person/toworksetpage}">考勤设置</a>
+            </li>
+            <li>
+                <a th:href="@{/person/toworkdatepage}">排班设置</a>
+            </li>
+            <li  class="active">
+                <a href="#compreAttendRecord" data-toggle="tab">外出考勤设置</a>
+            </li>
+            <!--<li>-->
+                <!--<a th:href="@{/person/togongzhonghao}">公众号绑定</a>-->
+            <!--</li>-->
+            <li>
+                <a th:href="@{/person/toZhongKong}">考勤机绑定</a>
+            </li>
+            <li>
+                <a th:href="@{/person/toBanGongShiPinShiJiaBanRenYuan}">办公室加班</a>
+            </li>
+            <li>
+                <a th:href="@{/person/toDaKaPianCha}">打卡偏差</a>
+            </li>
+        </ul>
+        <br>
+        <p>
+
+        <div id="compreAttendRecord">
+            <div class="panel panel-primary">
+                <div class="panel-body form-inline">
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="width: 20%;text-align: center"><a class="btn btn-primary" id="addbutton"
+                                                                         href="javascript:void(0);"
+                                                                         onclick="addTableRow()">新增</a>
+                            </td>
+                            <td>
+                                <div id="errormessage" style="display: none">
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-hover table-striped text-center hongmei" id="showlistbody">
+                <thead style="background-color:lightsteelblue">
+                <tr>
+                    <th style="text-align: center"> 操作</th>
+                    <th style="text-align: center"> 序号</th>
+                    <th style="text-align: center"> 外出天数</th>
+                    <th style="text-align: center"> 日打卡次数</th>
+                    <th style="text-align: center"> 备注</th>
+                </tr>
+                </thead>
+                <tbody id="tabletbody">
+                <div th:unless="${#lists.isEmpty(clockInSetUpList)}">
+                    <div th:each="clocksetup ,iterStat: ${clockInSetUpList}" align="center">
+                        <tr>
+                            <td>
+                                <a id="savebutton" href="javascript:void(0);"
+                                   th:onclick="saveDateToMysql(this,[[${iterStat.index+1}]]);">保存</a>
+                                &nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);"
+                                   th:onclick="deleteTR(this,[[${iterStat.index+1}]]);">删除</a>
+                            </td>
+                            <td align="center" th:text="${iterStat.index+1}"></td>
+                            <td><=<input type='text' th:onblur='checkisNum(this,[[${iterStat.index+1}]])'
+                                         placeholder='请输入天数' th:value="${clocksetup.outDays}">天
+                            </td>
+                            <td><=<input type='text' th:onblur='checkisNum2(this,[[${iterStat.index+1}]])'
+                                         placeholder='请输入打卡次数' th:value="${clocksetup.dayClockInTimes}">次
+                            </td>
+
+                            <td>
+                                <input type='text' placeholder='请输入备注' th:value="${clocksetup.remark}">
+                            </td>
+                        </tr>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(clockInSetUpList)}">
+                    <tr>
+                        <td colspan="5">查无数据</td>
+                    </tr>
+                </div>
+
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+</div>
+</body>
+</html>
