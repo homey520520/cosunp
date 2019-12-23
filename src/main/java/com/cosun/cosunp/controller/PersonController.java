@@ -151,14 +151,14 @@ public class PersonController {
     }
 
     public void getBeforeDayZhongKongData() throws Exception {
-        String beforDay = "2019-12-19";
+        String beforDay = "2019-12-22";
         pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
         jedis = pool.getResource();
         String[] afterDay = beforDay.split("-");
         Map<String, Object> map = new HashMap<String, Object>();
         List<ZhongKongBean> strList = new ArrayList<ZhongKongBean>();
         boolean connFlag = ZkemSDKUtils.connect("192.168.2.12", 4370);
-        if (connFlag) {
+        if(connFlag) {
             boolean flag = ZkemSDKUtils.readGeneralLogData();
             strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 4));
         }
@@ -334,7 +334,7 @@ public class PersonController {
         all.add(afterUserList3);
         all.add(afterUserList4);
         String day = null;
-        String beforDay = "2019-12-19";
+        String beforDay = "2019-12-22";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateStart = sdf.parse(beforDay + " 00:00:00");
         Date dateEnd = sdf.parse(beforDay + " 23:59:59");
@@ -3461,6 +3461,30 @@ public class PersonController {
         }
     }
 
+
+    @ResponseBody
+    @RequestMapping(value = "/queryTXByCondition", method = RequestMethod.POST)
+    public void queryTXByCondition(TiaoXiu jiaBan, HttpServletResponse response) throws Exception {
+        try {
+            List<TiaoXiu> leaveList = personServ.queryTXByCondition(jiaBan);
+            int recordCount = personServ.queryTXByConditionCount(jiaBan);
+            int maxPage = recordCount % jiaBan.getPageSize() == 0 ? recordCount / jiaBan.getPageSize() : recordCount / jiaBan.getPageSize() + 1;
+            if (leaveList.size() > 0) {
+                leaveList.get(0).setMaxPage(maxPage);
+                leaveList.get(0).setRecordCount(recordCount);
+                leaveList.get(0).setCurrentPage(jiaBan.getCurrentPage());
+            }
+            ObjectMapper x = new ObjectMapper();
+            String str1 = x.writeValueAsString(leaveList);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().print(str1);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
     @ResponseBody
     @RequestMapping(value = "/queryJBByCondition", method = RequestMethod.POST)

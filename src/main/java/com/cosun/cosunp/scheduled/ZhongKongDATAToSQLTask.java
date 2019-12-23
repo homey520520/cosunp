@@ -27,7 +27,7 @@ public class ZhongKongDATAToSQLTask {
 
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(cron = "0 0 05 * * ?")
-    @Scheduled(cron = "0 0 8 ? * *")
+    @Scheduled(cron = "0 55 06 ? * *")
     private void configureTasks() {
         try {
             new PersonController().getBeforeDayZhongKongData();

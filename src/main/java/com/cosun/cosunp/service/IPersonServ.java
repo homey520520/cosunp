@@ -395,6 +395,10 @@ public interface IPersonServ {
 
     List<JiaBan> queryJBByCondition(JiaBan jiaBan) throws Exception;
 
+    List<TiaoXiu> queryTXByCondition(TiaoXiu tiaoXiu) throws Exception;
+
+    int queryTXByConditionCount(TiaoXiu tiaoXiu) throws Exception;
+
     List<Out> queryOutByCondition(Out out) throws Exception;
 
     int queryOutByConditionCount(Out out) throws Exception;

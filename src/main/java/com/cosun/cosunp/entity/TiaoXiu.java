@@ -33,6 +33,7 @@ public class TiaoXiu implements Serializable {
     private String typeStr;
     private String usagedStr;
 
+
     private String fromDateFromStr;
     private String fromDateEndStr;
     private String toDateFromStr;
@@ -46,6 +47,24 @@ public class TiaoXiu implements Serializable {
 
     private List<Integer> ids;
     private List<String> empNoList;
+    private List<Integer> names;
+    private List<Integer> deptIds;
+
+    public List<Integer> getDeptIds() {
+        return deptIds;
+    }
+
+    public void setDeptIds(List<Integer> deptIds) {
+        this.deptIds = deptIds;
+    }
+
+    public List<Integer> getNames() {
+        return names;
+    }
+
+    public void setNames(List<Integer> names) {
+        this.names = names;
+    }
 
     public String getFromDateFromStr() {
         return fromDateFromStr;

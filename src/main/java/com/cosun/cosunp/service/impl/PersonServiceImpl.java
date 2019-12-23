@@ -5845,6 +5845,15 @@ public class PersonServiceImpl implements IPersonServ {
     }
 
 
+    public List<TiaoXiu> queryTXByCondition(TiaoXiu tiaoXiu) throws Exception {
+        return personMapper.queryTXByCondition(tiaoXiu);
+    }
+
+    public int queryTXByConditionCount(TiaoXiu tiaoXiu) throws Exception {
+        return personMapper.queryTXByConditionCount(tiaoXiu);
+    }
+
+
     public int saveTiaoXiuDateToMysql(TiaoXiu tiaoXiu) throws Exception {
         if (tiaoXiu.getEmpNoList() != null) {
             if (tiaoXiu.getEmpNoList().size() == 1) {

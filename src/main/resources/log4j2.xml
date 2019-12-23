@@ -5,10 +5,7 @@
     <Properties>
         <Property name="fileName">/opt/spring-boot/logs</Property>
         <Property name="fileGz">/opt/spring-boot/logs/7z</Property>
-        <property name="PATTERN">%highlight{%d{HH:mm:ss.SSS} [%t] %-5level %logger{1.}:%L -
-            %msg%n}{%throwable{short.fileName}}{FATAL=white,ERROR=red,
-            WARN=blue, INFO=black, DEBUG=green, TRACE=blue}
-        </property>
+        <property name="PATTERN">%highlight{%d{HH:mm:ss.SSS} [%t] %-5level %logger{1.}:%L - %msg%n}{%throwable{short.fileName}}{FATAL=white,ERROR=red, WARN=blue, INFO=black, DEBUG=green, TRACE=blue}</property>
     </Properties>
 
     <Appenders>
@@ -18,10 +15,8 @@
             <PatternLayout pattern="${PATTERN}"/>
         </Console>
 
-        <RollingRandomAccessFile name="infoFile" fileName="${fileName}/web-info.log" immediateFlush="false"
-                                 filePattern="${fileGz}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.web-info.gz">
+        <RollingRandomAccessFile name="infoFile" fileName="${fileName}/web-info.log" immediateFlush="false" filePattern="${fileGz}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.web-info.gz">
             <PatternLayout pattern="${PATTERN}"/>
-
             <Policies>
                 <TimeBasedTriggeringPolicy interval="6" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="50 MB"/>
@@ -35,8 +30,7 @@
             <DefaultRolloverStrategy max="50"/>
         </RollingRandomAccessFile>
 
-        <RollingRandomAccessFile name="errorFile" fileName="${fileName}/web-error.log" immediateFlush="false"
-                                 filePattern="${fileGz}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.web-error.gz">
+        <RollingRandomAccessFile name="errorFile" fileName="${fileName}/web-error.log" immediateFlush="false" filePattern="${fileGz}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.web-error.gz">
             <PatternLayout pattern="${PATTERN}"/>
 
             <Policies>

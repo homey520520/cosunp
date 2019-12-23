@@ -724,6 +724,14 @@ public interface PersonMapper {
     @SelectProvider(type = PseronDaoProvider.class, method = "queryJBByCondition")
     List<JiaBan> queryJBByCondition(JiaBan jiaBan);
 
+
+    @SelectProvider(type = PseronDaoProvider.class, method = "queryTXByConditionCount")
+    int queryTXByConditionCount(TiaoXiu tiaoXiu);
+
+    @SelectProvider(type = PseronDaoProvider.class, method = "queryTXByCondition")
+    List<TiaoXiu> queryTXByCondition(TiaoXiu tiaoXiu);
+
+
     @SelectProvider(type = PseronDaoProvider.class, method = "checkBeginLeaveRight")
     int checkBeginLeaveRight(Leave leave);
 
@@ -5836,6 +5844,80 @@ public interface PersonMapper {
 
             return sb.toString();
         }
+
+
+        public String queryTXByCondition(TiaoXiu jiaBan) {
+            StringBuilder sb = new StringBuilder("SELECT\n" +
+                    "\ttx.id,\n" +
+                    "\ttx.empNo,\n" +
+                    "\ttx.`name`,\n" +
+                    "\ttx.fromDate as fromDateStr,\n" +
+                    "\ttx.hours,\n" +
+                    "\ttx.totalHours,\n" +
+                    "\ttx.toDate as toDateStr,\n" +
+                    "\ttx.fromDateWeek,\n" +
+                    "\ttx.toDateWeek,\n" +
+                    "\ttx.type,\n" +
+                    "\ttx.USAGEd,\n" +
+                    "\ttx.remark\n" +
+                    "FROM\n" +
+                    "\ttiaoxiu tx " +
+                    "  join  employee ee on tx.empNo = ee.empNo " +
+                    " left join dept t on t.id = ee.deptId ");
+            if (jiaBan.getNames() != null && jiaBan.getNames().size() > 0) {
+                sb.append(" and tx.empNo in (" + StringUtils.strip(jiaBan.getNames().toString(), "[]") + ") ");
+            }
+
+
+            if (jiaBan.getDeptIds() != null && jiaBan.getDeptIds().size() > 0) {
+                sb.append(" and ee.deptId in (" + StringUtils.strip(jiaBan.getDeptIds().toString(), "[]") + ") ");
+            }
+
+            if (jiaBan.getUsaged() != null) {
+                sb.append(" and tx.USAGEd in (" + jiaBan.getUsaged() + ") ");
+            }
+
+            if (jiaBan.getFromDateStr() != null && jiaBan.getFromDateStr().length() > 0 && jiaBan.getToDateStr() != null && jiaBan.getToDateStr().length() > 0) {
+                sb.append(" and tx.fromDate  >= #{fromDateStr} and tx.toDate  <= #{toDateStr}");
+            } else if (jiaBan.getFromDateStr() != null && jiaBan.getFromDateStr().length() > 0) {
+                sb.append(" and tx.fromDate >= #{fromDateStr}");
+            } else if (jiaBan.getToDateStr() != null && jiaBan.getToDateStr().length() > 0) {
+                sb.append(" and tx.toDate <= #{toDateStr}");
+            }
+            sb.append(" order by tx.fromDate desc,tx.name asc limit #{currentPageTotalNum},#{pageSize}");
+            return sb.toString();
+        }
+
+
+        public String queryTXByConditionCount(TiaoXiu jiaBan) {
+            StringBuilder sb = new StringBuilder("SELECT count(*) " +
+                    "FROM\n" +
+                    "\ttiaoxiu tx " +
+                    "  join employee ee on tx.empNo = ee.empNo " +
+                    " left join dept t on t.id = ee.deptId ");
+            if (jiaBan.getNames() != null && jiaBan.getNames().size() > 0) {
+                sb.append(" and tx.empNo in (" + StringUtils.strip(jiaBan.getNames().toString(), "[]") + ") ");
+            }
+
+
+            if (jiaBan.getDeptIds() != null && jiaBan.getDeptIds().size() > 0) {
+                sb.append(" and ee.deptId in (" + StringUtils.strip(jiaBan.getDeptIds().toString(), "[]") + ") ");
+            }
+
+            if (jiaBan.getUsaged() != null) {
+                sb.append(" and tx.USAGEd in (" + jiaBan.getUsaged() + ") ");
+            }
+
+            if (jiaBan.getFromDateStr() != null && jiaBan.getFromDateStr().length() > 0 && jiaBan.getToDateStr() != null && jiaBan.getToDateStr().length() > 0) {
+                sb.append(" and tx.fromDate  >= #{fromDateStr} and tx.toDate  <= #{toDateStr}");
+            } else if (jiaBan.getFromDateStr() != null && jiaBan.getFromDateStr().length() > 0) {
+                sb.append(" and tx.fromDate >= #{fromDateStr}");
+            } else if (jiaBan.getToDateStr() != null && jiaBan.getToDateStr().length() > 0) {
+                sb.append(" and tx.toDate <= #{toDateStr}");
+            }
+            return sb.toString();
+        }
+
     }
 
 }

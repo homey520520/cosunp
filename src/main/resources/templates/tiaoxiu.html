@@ -174,16 +174,18 @@
                     maxpageid.val(totalPage);
                     n_currentPage.val(currentPage);
                     inputpage.val(currentPage);
+
                     $.each(data, function (num) {
                             tr = $("<tr id='" + data[num].id + "'></tr>");
                             tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
                             tr.append("<td>" + isNull(data[num].name) + "</td>");
-                            tr.append("<td>" + isNull(data[num].deptName) + "</td>");
-                            tr.append("<td>" + isNull(data[num].extDateFromStr) + "</td>");
-                            tr.append("<td>" + isNull(data[num].extDateEndStr) + "</td>");
-                            tr.append("<td>" + isNull(data[num].extWorkHours) + "</td>");
+                            tr.append("<td>" + isNull(data[num].fromDateStr) + "</td>");
+                            tr.append("<td>" + isNull(data[num].totalHours) + "</td>");
+                            tr.append("<td>" + data[num].hours+ "</td>");
+                            tr.append("<td>" + isNull(data[num].toDateStr) + "</td>");
                             tr.append("<td>" + isNull(data[num].typeStr) + "</td>");
                             tr.append("<td>" + isNull(data[num].remark) + "</td>");
+                            tr.append("<td>" + isNull(data[num].usagedStr) + "</td>");
                             td = "<td>";
                             td += " <a href=\"javascript:void(0);\"\n" +
                                 "  onclick=\"saveJiaBanDateToMysql(this);\">保存</a>\n" +
