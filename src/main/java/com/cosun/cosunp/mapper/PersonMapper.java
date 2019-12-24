@@ -1136,6 +1136,15 @@ public interface PersonMapper {
     LinShiHours getLinShiHoursByNameAndDateStr(String name, String dateStr);
 
 
+    @Update("update tiaoxiu set ausaged = 1 where id = #{id} ")
+    void updateUsagedStatusByIdFromDate(Integer id);
+
+
+    @Update("update tiaoxiu set usaged = 1 where id = #{id}")
+    void updateUsagedStatusByIdToDate(Integer id);
+
+
+
     @Select("SELECT\n" +
             "e.empNo,e.name \n" +
             "FROM\n" +
@@ -1565,6 +1574,25 @@ public interface PersonMapper {
     void updateMonthKQInfoByCheckKQBean(MonthKQInfo mk);
 
 
+    @Select("SELECT\n" +
+            "\tid,\n" +
+            "\tempNo,\n" +
+            "\t`name`,\n" +
+            "\tfromDate as fromDateStr,\n" +
+            "\thours,\n" +
+            "\ttotalHours,\n" +
+            "\ttoDate as toDateStr,\n" +
+            "\tfromDateWeek,\n" +
+            "\ttoDateWeek,\n" +
+            "\ttype,\n" +
+            "\tUSAGEd,\n" +
+            "\taUSAGEd as aUSAGEd,\n" +
+            "\tremark\n" +
+            "FROM\n" +
+            "\ttiaoxiu where (USAGEd = 0 or aUSAGEd = 0) and empNo = #{empNo} and (fromDate = #{dateStr} or toDate = #{dateStr} ) ")
+    List<TiaoXiu> getTiaoXiuDanByEmpNoAndFromDateOrToDate(String empNo,String dateStr);
+
+
     @Insert("insert into kqbean (enrollNumber,\n" +
             "\tyearMonth,\n" +
             "\tdateStr,\n" +
@@ -1717,6 +1745,7 @@ public interface PersonMapper {
             "\ttoDate,\n" +
             "\ttype,\n" +
             "\tusaged,\n" +
+            "\tausaged,\n" +
             "\tremark,\n" +
             "\ttotalHours) values " +
             "(" +
@@ -1727,6 +1756,7 @@ public interface PersonMapper {
             "#{toDateStr}," +
             "#{type}," +
             "#{usaged}," +
+            "#{ausaged}," +
             "#{remark}," +
             "#{totalHours}" +
             ")")

@@ -5860,6 +5860,7 @@ public class PersonServiceImpl implements IPersonServ {
                 tiaoXiu.setEmpNo(tiaoXiu.getEmpNoList().get(0));
                 tiaoXiu.setName(personMapper.getNameByEmpNo(tiaoXiu.getEmpNo()));
                 tiaoXiu.setUsaged(0);
+                tiaoXiu.setAusaged(0);
                 tiaoXiu.setType(1);
                 tiaoXiu.setFromDateWeek(DateUtil.getWeek(tiaoXiu.getFromDateStr()));
                 tiaoXiu.setToDateWeek(DateUtil.getWeek(tiaoXiu.getToDateStr()));
@@ -5869,6 +5870,7 @@ public class PersonServiceImpl implements IPersonServ {
                     tiaoXiu.setEmpNo(str);
                     tiaoXiu.setName(personMapper.getNameByEmpNo(tiaoXiu.getEmpNo()));
                     tiaoXiu.setUsaged(0);
+                    tiaoXiu.setAusaged(0);
                     tiaoXiu.setTotalHours(0D);
                     tiaoXiu.setHours(0D);
                     tiaoXiu.setType(0);
@@ -6068,8 +6070,10 @@ public class PersonServiceImpl implements IPersonServ {
 
 
         List<String> timeList;
+        List<TiaoXiu> tiaoXiuList = null;
         for (KQBean kqb : kqBeanList) {
             timeList = new ArrayList<String>();
+            tiaoXiuList = personMapper.getTiaoXiuDanByEmpNoAndFromDateOrToDate(kqb.getEmpNo(), kqb.getDateStr());
             List<Time> times = null;
             dayNum = "";
             String[] timeStr = null;
@@ -6093,11 +6097,6 @@ public class PersonServiceImpl implements IPersonServ {
                     lianBanTotalH += lianBan.getNightHours();
                 }
             }
-//            if (!kqb.getHavePinShi().equals("1")) {
-//                mkf.setUsualExtHours(lianBanTotalH + (mkf.getUsualExtHours() == null ? 0.0 : mkf.getUsualExtHours()) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()));
-//            } else {
-//                mkf.setUsualExtHours(0.0);
-//            }
             mkf.setRemark(kqb.getRemark());
             daytitleSql = "day".concat(dayStr);
             daytitleSqlRe = daytitleSql.concat("Remark");
@@ -6106,7 +6105,21 @@ public class PersonServiceImpl implements IPersonServ {
             String aOffStr = null;
             String pOnStr = null;
             String pOffStr = null;
+            Double totalTiaoXiuByDay = 0.0;
             LinShiHours lsh = personMapper.getLinShiHoursByNameAndDateStr(kqb.getName(), kqb.getDateStr());
+            if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                for (TiaoXiu tiaoXiu : tiaoXiuList) {
+                    if (tiaoXiu.getFromDateStr().equals(kqb.getDateStr())) {
+                        totalTiaoXiuByDay -= tiaoXiu.getHours();
+                        personMapper.updateUsagedStatusByIdFromDate(tiaoXiu.getId());
+                    }
+
+                    if (tiaoXiu.getToDateStr().equals(kqb.getDateStr())) {
+                        totalTiaoXiuByDay += tiaoXiu.getHours();
+                        personMapper.updateUsagedStatusByIdToDate(tiaoXiu.getId());
+                    }
+                }
+            }
 
             if (linShiEmpList.contains(kqb.getNameReal())) {
                 if (lsh != null) {
@@ -6153,15 +6166,22 @@ public class PersonServiceImpl implements IPersonServ {
             } else {
                 if (kqb.getWeek() == 6 || kqb.getWeek() == 7) {
                     if (kqb.getClockResult() == 1) {
-//                    mkf.setWorkendHours(lianBanTotalH + (mkf.getWorkendHours() == null ? 0.0 : mkf.getWorkendHours()) + 8.0);
-                        dayNum = "18,18,";
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = "318,318,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + (8.0 + totalTiaoXiuByDay) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat((8.0 + totalTiaoXiuByDay) + "");
+                            }
                         } else {
-                            dayNum = dayNum.concat("8.0");
+                            dayNum = "18,18,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("8.0");
+                            }
                         }
                     } else if (kqb.getClockResult() == 4) {
-//                    mkf.setChinaPaidLeave(lianBanTotalH + (mkf.getChinaPaidLeave() == null ? 0.0 : mkf.getChinaPaidLeave()) + 8.0);
                         dayNum = "4,4,";
                         if (!kqb.getHavePinShi().equals("1")) {
                             dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
@@ -6169,7 +6189,6 @@ public class PersonServiceImpl implements IPersonServ {
                             dayNum = dayNum.concat("8.0");
                         }
                     } else if (kqb.getClockResult() == 6) {
-//                    mkf.setLeaveOfAbsense(lianBanTotalH + (mkf.getLeaveOfAbsense() == null ? 0.0 : mkf.getLeaveOfAbsense()) + 8.0);
                         dayNum = "18,18,";
                         if (!kqb.getHavePinShi().equals("1")) {
                             dayNum = dayNum.concat(lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
@@ -6177,15 +6196,22 @@ public class PersonServiceImpl implements IPersonServ {
                             dayNum = dayNum.concat("0.0");
                         }
                     } else if (kqb.getClockResult() == 13) {
-//                    mkf.setWorkendHours((mkf.getWorkendHours() == null ? 0.0 : mkf.getWorkendHours()) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()));
-                        dayNum = "13,13,";
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = "313,313,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + (8.0 + totalTiaoXiuByDay) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat((8.0 + totalTiaoXiuByDay) + "");
+                            }
                         } else {
-                            dayNum = dayNum.concat("8.0");
+                            dayNum = "13,13,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("8.0");
+                            }
                         }
                     } else if (kqb.getClockResult() == 11) {
-//                    mkf.setSickLeave((mkf.getSickLeave() == null ? 0.0 : mkf.getSickLeave()) + 8.0);
                         dayNum = "11,11,";
                         if (!kqb.getHavePinShi().equals("1")) {
                             dayNum = dayNum.concat(lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
@@ -6193,23 +6219,38 @@ public class PersonServiceImpl implements IPersonServ {
                             dayNum = dayNum.concat("0.0");
                         }
                     } else if (kqb.getClockResult() == 2) {
-//                    mkf.setWorkendHours((mkf.getWorkendHours() == null ? 0.0 : mkf.getWorkendHours()) + 8.0);
-                        dayNum = "2,2,";
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = "302,302,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("8.0");
+                            }
                         } else {
-                            dayNum = dayNum.concat("8.0");
+                            dayNum = "2,2,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("8.0");
+                            }
                         }
                     } else if (kqb.getClockResult() == 12) {
-//                    mkf.setWorkendHours((mkf.getWorkendHours() == null ? 0.0 : mkf.getWorkendHours()) + 8.0);
-                        dayNum = "12,12,";
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = "312,312,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("8.0");
+                            }
                         } else {
-                            dayNum = dayNum.concat("8.0");
+                            dayNum = "12,12,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("8.0");
+                            }
                         }
                     } else if (kqb.getClockResult() == 3) {
-//                    mkf.setOtherPaidLeave((mkf.getOtherPaidLeave() == null ? 0.0 : mkf.getOtherPaidLeave()) + 8.0);
                         dayNum = "3,3,";
                         if (!kqb.getHavePinShi().equals("1")) {
                             dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
@@ -6299,11 +6340,21 @@ public class PersonServiceImpl implements IPersonServ {
                         nowDate.setDateEnd(ws.getNoonOff());
                         jiabanHours = DateUtil.getJiaBanHoursByDateSplitAndTimeStr(nowDate, kqb.getTimeStr(), ws, kqb.getWorkType());
                         jiaHours = Double.valueOf(jiabanHours.split(",")[2]);
-                        dayNum = aOffStr + pOffStr;
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat((lianBanTotalH + jiaHours + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = "3".concat(aOffStr).concat("3").concat(pOffStr);
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat((lianBanTotalH + (jiaHours + totalTiaoXiuByDay) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                            } else {
+                                dayNum = dayNum.concat((jiaHours + totalTiaoXiuByDay) + "");
+                            }
                         } else {
-                            dayNum = dayNum.concat(jiaHours.toString());
+                            dayNum = aOffStr + pOffStr;
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat((lianBanTotalH + jiaHours + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                            } else {
+                                dayNum = dayNum.concat(jiaHours.toString());
+                            }
                         }
                     } else if (kqb.getClockResult() == 8) {
                         ws = personMapper.getWorkSetByMonthAndPositionLevelA(kqb.getYearMonth(), kqb.getPositionLevel());
@@ -6347,12 +6398,6 @@ public class PersonServiceImpl implements IPersonServ {
                                 dayNum = dayNum.concat("0.0");
                             }
                         }
-//                    dayNum = "8,8,";
-//                    if (!kqb.getHavePinShi().equals("1")) {
-//                        dayNum = dayNum.concat(lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
-//                    } else {
-//                        dayNum = dayNum.concat("0.0");
-//                    }
                     } else if (kqb.getClockResult() == 21) {
                         dayNum = "18,18,";
                         if (!kqb.getHavePinShi().equals("1")) {
@@ -6372,19 +6417,38 @@ public class PersonServiceImpl implements IPersonServ {
                             if (oci != null) {
                                 cishu = StringUtil.calTimesByOutClockIn(oci);
                                 if (cishu >= csu.getDayClockInTimes()) {
-                                    dayNum = "1080,1080,";
-                                    if (!kqb.getHavePinShi().equals("1")) {
-                                        dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                    if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                        dayNum = "31080,31080,";
+                                        if (!kqb.getHavePinShi().equals("1")) {
+                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                        } else {
+                                            dayNum = dayNum.concat((8.0 + totalTiaoXiuByDay) + "");
+                                        }
                                     } else {
-                                        dayNum = dayNum.concat("8.0");
+                                        dayNum = "1080,1080,";
+                                        if (!kqb.getHavePinShi().equals("1")) {
+                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                        } else {
+                                            dayNum = dayNum.concat("8.0");
+                                        }
                                     }
                                 } else {
-                                    dayNum = "1070,1070,";
-                                    if (!kqb.getHavePinShi().equals("1")) {
-                                        dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                    if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                        dayNum = "31070,31070,";
+                                        if (!kqb.getHavePinShi().equals("1")) {
+                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                        } else {
+                                            dayNum = dayNum.concat((8.0 + totalTiaoXiuByDay) + "");
+                                        }
                                     } else {
-                                        dayNum = dayNum.concat("8.0");
+                                        dayNum = "1070,1070,";
+                                        if (!kqb.getHavePinShi().equals("1")) {
+                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                        } else {
+                                            dayNum = dayNum.concat("8.0");
+                                        }
                                     }
+
                                 }
                             } else {
                                 dayNum = "1060,1060,";
@@ -6404,7 +6468,6 @@ public class PersonServiceImpl implements IPersonServ {
                         }
 
                     } else if (kqb.getClockResult() == 17) {
-                        dayNum = "18,18,";
                         String[] plusValue = kqb.getRemark().split(",");
                         Double ona = 0.0;
                         Double onb = 0.0;
@@ -6419,9 +6482,13 @@ public class PersonServiceImpl implements IPersonServ {
                         } else {
                             onb = Double.valueOf(plusValue[1]);
                         }
-
-                        dayNum = dayNum.concat((lianBanTotalH + ona + onb + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = "318,318,";
+                            dayNum = dayNum.concat((lianBanTotalH + (ona + onb + totalTiaoXiuByDay) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                        } else {
+                            dayNum = "18,18,";
+                            dayNum = dayNum.concat((lianBanTotalH + ona + onb + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                        }
                     }
                     if (kqb.getClockResult() == 13) {
                         dayNum = dayNum.concat(kqb.getExtWorkHours().toString());
@@ -6430,32 +6497,23 @@ public class PersonServiceImpl implements IPersonServ {
                     mkf.setDayNum(dayNum);
                     mkf.setDaytitleSql(daytitleSql);
                     mkf.setDaytitleSqlRemark(daytitleSqlRe);
-//                mkf.setWorkendHours(lianBanTotalH + 8.0 + (mkf.getWorkendHours() == null ? 0.0 : mkf.getWorkendHours()) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()));
                 } else {
                     if (!youGuess.contains(kqb.getDateStr())) {
                         if (kqb.getClockResult() == 1) {
-//                        mkf.setZhengbanHours((lianBanTotalH + (mkf.getZhengbanHours() == null ? 0.0 : mkf.getZhengbanHours())) + 8.0);
                             dayNum = "1,1,";
                         } else if (kqb.getClockResult() == 4) {
-//                        mkf.setChinaPaidLeave((lianBanTotalH + (mkf.getChinaPaidLeave() == null ? 0.0 : mkf.getChinaPaidLeave())) + 8.0);
                             dayNum = "4,4,";
                         } else if (kqb.getClockResult() == 6) {
-//                        mkf.setLeaveOfAbsense((lianBanTotalH + (mkf.getLeaveOfAbsense() == null ? 0.0 : mkf.getLeaveOfAbsense())) + 8.0);
                             dayNum = "6,6,";
                         } else if (kqb.getClockResult() == 11) {
-//                        mkf.setSickLeave((lianBanTotalH + (mkf.getSickLeave() == null ? 0.0 : mkf.getSickLeave())) + 8.0);
                             dayNum = "11,11,";
                         } else if (kqb.getClockResult() == 2) {
-//                        mkf.setZhengbanHours(lianBanTotalH + (mkf.getZhengbanHours() == null ? 0.0 : mkf.getZhengbanHours()) + 8.0);
                             dayNum = "2,2,";
                         } else if (kqb.getClockResult() == 13) {
-//                        mkf.setZhengbanHours((lianBanTotalH + (mkf.getZhengbanHours() == null ? 0.0 : mkf.getZhengbanHours())) + 8.0);
                             dayNum = "13,13,";
                         } else if (kqb.getClockResult() == 12) {
-//                        mkf.setZhengbanHours(lianBanTotalH + 8.0);
                             dayNum = "12,12,";
                         } else if (kqb.getClockResult() == 3) {
-//                        mkf.setOtherPaidLeave(lianBanTotalH + (mkf.getOtherPaidLeave() == null ? 0.0 : mkf.getOtherPaidLeave()) + 8.0);
                             dayNum = "15,15,";
                         } else if (kqb.getClockResult() == 16) {
                             Double ho = 0.0;
@@ -6726,8 +6784,6 @@ public class PersonServiceImpl implements IPersonServ {
                             }
                             dayNum = a + b;
                             mkf.setDayNumRemark(kqb.getRemark());
-//                        mkf.setZhengbanHours((lianBanTotalH + (mkf.getZhengbanHours() == null ? 0.0 : mkf.getZhengbanHours())) + ho);
-//                        mkf.setLeaveOfAbsense((lianBanTotalH + (mkf.getLeaveOfAbsense() == null ? 0.0 : mkf.getLeaveOfAbsense())) + (8.0 - ho));
                         } else if (kqb.getClockResult() == 18) {
                             dayNum = "20,20,";
                         } else if (kqb.getClockResult() == 19) {
@@ -6821,8 +6877,6 @@ public class PersonServiceImpl implements IPersonServ {
                                 }
                                 dayNum = aOffStr + pOffStr;
                                 mkf.setDayNumRemark(kqb.getRemark());
-//                            mkf.setZhengbanHours((lianBanTotalH + (mkf.getZhengbanHours() == null ? 0.0 : mkf.getZhengbanHours())) + hoa + hob);
-//                            mkf.setLeaveOfAbsense((lianBanTotalH + (mkf.getLeaveOfAbsense() == null ? 0.0 : mkf.getLeaveOfAbsense())) + (8.0 - (hoa + hob)));
                             } else {
                                 Double ho = 0.0;
                                 String a;
@@ -6845,8 +6899,6 @@ public class PersonServiceImpl implements IPersonServ {
                                 }
                                 dayNum = a + b;
                                 mkf.setDayNumRemark(kqb.getRemark());
-//                            mkf.setZhengbanHours((lianBanTotalH + (mkf.getZhengbanHours() == null ? 0.0 : mkf.getZhengbanHours())) + ho);
-//                            mkf.setLeaveOfAbsense((lianBanTotalH + (mkf.getLeaveOfAbsense() == null ? 0.0 : mkf.getLeaveOfAbsense())) + (8.0 - ho));
                             }
                         } else if (kqb.getClockResult() == 7) {
                             aOnStr = "7,";
@@ -6969,12 +7021,7 @@ public class PersonServiceImpl implements IPersonServ {
                                     csu = personMapper.getClockSetUpByDays(out.getInterDays());
                                     oci = personMapper.getOutClockInByEmpNoAndDateAM(kqb.getEmpNo(), kqb.getDateStr());
                                     if (oci != null) {
-                                        //cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        // if (cishu >= csu.getDayClockInTimes()) {
                                         aOnStr = "108,";
-                                        //  } else {
-                                        //    aOnStr = "107,";
-                                        // }
                                     } else {
                                         aOnStr = "106,";
                                     }
@@ -6994,12 +7041,7 @@ public class PersonServiceImpl implements IPersonServ {
                                     csu = personMapper.getClockSetUpByDays(out.getInterDays());
                                     oci = personMapper.getOutClockInByEmpNoAndDateAM(kqb.getEmpNo(), kqb.getDateStr());
                                     if (oci != null) {
-                                        // cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        //  if (cishu >= csu.getDayClockInTimes()) {
                                         aOffStr = "108,";
-                                        //  } else {
-                                        //     aOffStr = "107,";
-                                        // }
                                     } else {
                                         aOffStr = "106,";
                                     }
@@ -7007,7 +7049,6 @@ public class PersonServiceImpl implements IPersonServ {
                                     aOffStr = "7,";
                                 }
                             }
-
 
                             if (pOnStr.equals("7,")) {
                                 ws = personMapper.getWorkSetByMonthAndPositionLevelA(kqb.getYearMonth(), kqb.getPositionLevel());
@@ -7019,12 +7060,7 @@ public class PersonServiceImpl implements IPersonServ {
                                     csu = personMapper.getClockSetUpByDays(out.getInterDays());
                                     oci = personMapper.getOutClockInByEmpNoAndDatePM(kqb.getEmpNo() == null ? "" : kqb.getEmpNo(), kqb.getDateStr());
                                     if (oci != null) {
-                                        // cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        // if (cishu >= csu.getDayClockInTimes()) {
                                         pOnStr = "108,";
-                                        // } else {
-                                        //    pOnStr = "107,";
-                                        // }
                                     } else {
                                         pOnStr = "106,";
                                     }
@@ -7044,12 +7080,7 @@ public class PersonServiceImpl implements IPersonServ {
                                     csu = personMapper.getClockSetUpByDays(out.getInterDays());
                                     oci = personMapper.getOutClockInByEmpNoAndDatePM(kqb.getEmpNo() == null ? "" : kqb.getEmpNo(), kqb.getDateStr());
                                     if (oci != null) {
-                                        //  cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        // if (cishu >= csu.getDayClockInTimes()) {
                                         pOffStr = "108,";
-                                        // } else {
-                                        //     pOffStr = "107,";
-                                        // }
                                     } else {
                                         pOffStr = "106,";
                                     }
@@ -7180,7 +7211,6 @@ public class PersonServiceImpl implements IPersonServ {
                                     pOffStr = "8,";
                                 }
                             }
-
                             dayNum = aOffStr + pOffStr;
                         }
                         if (kqb.getClockResult() == 13) {
@@ -7196,28 +7226,20 @@ public class PersonServiceImpl implements IPersonServ {
                         mkf.setDaytitleSql(daytitleSql);
                         mkf.setDayNumRemark(kqb.getRemark());
                         mkf.setDaytitleSqlRemark(daytitleSqlRe);
-//                    mkf.setUsualExtHours(lianBanTotalH + (mkf.getUsualExtHours() == null ? 0.0 : mkf.getUsualExtHours()) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()));
                     } else {
                         if (kqb.getClockResult() == 1) {
-//                        mkf.setWorkendHours(lianBanTotalH + (mkf.getWorkendHours() == null ? 0.0 : mkf.getWorkendHours()) + 8.0);
                             dayNum = "18,18,";
                         } else if (kqb.getClockResult() == 4) {
-//                        mkf.setChinaPaidLeave(lianBanTotalH + (mkf.getChinaPaidLeave() == null ? 0.0 : mkf.getChinaPaidLeave()) + 8.0);
                             dayNum = "4,4,";
                         } else if (kqb.getClockResult() == 6) {
-//                        mkf.setLeaveOfAbsense(lianBanTotalH + (mkf.getLeaveOfAbsense() == null ? 0.0 : mkf.getLeaveOfAbsense()) + 8.0);
                             dayNum = "6,6,";
                         } else if (kqb.getClockResult() == 11) {
-//                        mkf.setSickLeave((mkf.getSickLeave() == null ? 0.0 : mkf.getSickLeave()) + 8.0);
                             dayNum = "11,11,";
                         } else if (kqb.getClockResult() == 2) {
-//                        mkf.setWorkendHours((mkf.getWorkendHours() == null ? 0.0 : mkf.getWorkendHours()) + 8.0);
                             dayNum = "2,2,";
                         } else if (kqb.getClockResult() == 12) {
-//                        mkf.setWorkendHours((mkf.getWorkendHours() == null ? 0.0 : mkf.getWorkendHours()) + 8.0);
                             dayNum = "12,12,";
                         } else if (kqb.getClockResult() == 3) {
-//                        mkf.setOtherPaidLeave((mkf.getOtherPaidLeave() == null ? 0.0 : mkf.getOtherPaidLeave()) + 8.0);
                             dayNum = "3,3,";
                         } else if (kqb.getClockResult() == 7) {
                             aOnStr = "77,";
@@ -7301,12 +7323,7 @@ public class PersonServiceImpl implements IPersonServ {
                                     csu = personMapper.getClockSetUpByDays(out.getInterDays());
                                     oci = personMapper.getOutClockInByEmpNoAndDateAM(kqb.getEmpNo(), kqb.getDateStr());
                                     if (oci != null) {
-                                        //   cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        //   if (cishu >= csu.getDayClockInTimes()) {
                                         aOnStr = "1080,";
-                                        //   } else {
-                                        //  aOnStr = "1070,";
-                                        //  }
                                     } else {
                                         aOnStr = "1060,";
                                     }
@@ -7326,12 +7343,7 @@ public class PersonServiceImpl implements IPersonServ {
                                     csu = personMapper.getClockSetUpByDays(out.getInterDays());
                                     oci = personMapper.getOutClockInByEmpNoAndDateAM(kqb.getEmpNo(), kqb.getDateStr());
                                     if (oci != null) {
-                                        // cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        //  if (cishu >= csu.getDayClockInTimes()) {
                                         aOffStr = "1080,";
-                                        // } else {
-                                        //     aOffStr = "1070,";
-                                        //  }
                                     } else {
                                         aOffStr = "1060,";
                                     }
@@ -7351,12 +7363,7 @@ public class PersonServiceImpl implements IPersonServ {
                                     csu = personMapper.getClockSetUpByDays(out.getInterDays());
                                     oci = personMapper.getOutClockInByEmpNoAndDatePM(kqb.getEmpNo(), kqb.getDateStr());
                                     if (oci != null) {
-                                        // cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        // if (cishu >= csu.getDayClockInTimes()) {
                                         pOnStr = "1080,";
-                                        // } else {
-                                        //      pOnStr = "1070,";
-                                        //  }
                                     } else {
                                         pOnStr = "1060,";
                                     }
@@ -7376,12 +7383,7 @@ public class PersonServiceImpl implements IPersonServ {
                                     csu = personMapper.getClockSetUpByDays(out.getInterDays());
                                     oci = personMapper.getOutClockInByEmpNoAndDatePM(kqb.getEmpNo(), kqb.getDateStr());
                                     if (oci != null) {
-                                        //  cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        //  if (cishu >= csu.getDayClockInTimes()) {
                                         pOffStr = "1080,";
-                                        //  } else {
-                                        //      pOffStr = "1070,";
-                                        //  }
                                     } else {
                                         pOffStr = "1060,";
                                     }
@@ -7445,8 +7447,6 @@ public class PersonServiceImpl implements IPersonServ {
                         mkf.setDaytitleSql(daytitleSql);
                         mkf.setDaytitleSqlRemark(daytitleSqlRe);
                         mkf.setDayNumRemark(kqb.getRemark());
-//                    mkf.setWorkendHours(lianBanTotalH + 8.0 + (mkf.getWorkendHours() == null ? 0.0 : mkf.getWorkendHours()) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()));
-
                     }
                 }
             }

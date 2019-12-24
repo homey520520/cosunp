@@ -26,6 +26,7 @@ public class TiaoXiu implements Serializable {
     private Integer toDateWeek;
     private Integer type;
     private Integer usaged;
+    private Integer ausaged;
     private String remark;
 
     private String fromDateStr;
@@ -49,6 +50,14 @@ public class TiaoXiu implements Serializable {
     private List<String> empNoList;
     private List<Integer> names;
     private List<Integer> deptIds;
+
+    public Integer getAusaged() {
+        return ausaged;
+    }
+
+    public void setAusaged(Integer ausaged) {
+        this.ausaged = ausaged;
+    }
 
     public List<Integer> getDeptIds() {
         return deptIds;
