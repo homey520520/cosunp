@@ -151,7 +151,7 @@ public class PersonController {
     }
 
     public void getBeforeDayZhongKongData() throws Exception {
-        String beforDay = "2019-12-23";
+        String beforDay = "2019-12-27";
         pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
         jedis = pool.getResource();
         String[] afterDay = beforDay.split("-");
@@ -334,7 +334,7 @@ public class PersonController {
         all.add(afterUserList3);
         all.add(afterUserList4);
         String day = null;
-        String beforDay = "2019-12-23";
+        String beforDay = "2019-12-27";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateStart = sdf.parse(beforDay + " 00:00:00");
         Date dateEnd = sdf.parse(beforDay + " 23:59:59");
@@ -1033,7 +1033,6 @@ public class PersonController {
     }
 
 
-    //saveTiaoXiuDateToMysql
     @ResponseBody
     @RequestMapping(value = "/saveTiaoXiuDateToMysql", method = RequestMethod.POST)
     public void saveTiaoXiuDateToMysql(TiaoXiu tiaoXiu, HttpServletResponse response, HttpSession session) throws

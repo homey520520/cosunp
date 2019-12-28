@@ -1144,7 +1144,6 @@ public interface PersonMapper {
     void updateUsagedStatusByIdToDate(Integer id);
 
 
-
     @Select("SELECT\n" +
             "e.empNo,e.name \n" +
             "FROM\n" +
@@ -1566,12 +1565,21 @@ public interface PersonMapper {
     void saveMonthKQInfoByCheckKQBean(MonthKQInfo mk);
 
 
+
+
     @Update("update monthkqinfo   " +
             " set remark = #{remark}, " +
             "  ${daytitleSql} = #{dayNum}, " +
             "  ${daytitleSqlRemark} = #{dayNumRemark} " +
             "where yearMonth = #{yearMonth} and empNo = #{empNo}")
     void updateMonthKQInfoByCheckKQBean(MonthKQInfo mk);
+
+    @Update("update monthkqinfo   " +
+            "  set ${dayNum} = #{dayNumVa}, " +
+            "  ${dayNumRemark} = #{dayNumRemarkVa} " +
+            "where yearMonth = #{yearMonth} and empNo = #{empNo}")
+    void updateMKbyEmpNoAndYMAndDayNumAndDayNumReMark(String empNo,String yearMonth,String dayNum,String dayNumRemark,String dayNumVa,String dayNumRemarkVa);
+
 
 
     @Select("SELECT\n" +
@@ -1589,8 +1597,56 @@ public interface PersonMapper {
             "\taUSAGEd as aUSAGEd,\n" +
             "\tremark\n" +
             "FROM\n" +
-            "\ttiaoxiu where (USAGEd = 0 or aUSAGEd = 0) and empNo = #{empNo} and (fromDate = #{dateStr} or toDate = #{dateStr} ) ")
-    List<TiaoXiu> getTiaoXiuDanByEmpNoAndFromDateOrToDate(String empNo,String dateStr);
+            "\ttiaoxiu where (USAGEd = 0 or aUSAGEd = 0) and empNo = #{empNo} and (fromDate = #{dateStr} or" +
+            "  toDate = #{dateStr} ) and type = 1  ")
+    List<TiaoXiu> getTiaoXiuDanByEmpNoAndFromDateOrToDate(String empNo, String dateStr);
+
+
+    @Select("SELECT\n" +
+            "\tid,\n" +
+            "\tempNo,\n" +
+            "\t`name`,\n" +
+            "\tfromDate as fromDateStr,\n" +
+            "\thours,\n" +
+            "\ttotalHours,\n" +
+            "\ttoDate as toDateStr,\n" +
+            "\tfromDateWeek,\n" +
+            "\ttoDateWeek,\n" +
+            "\ttype,\n" +
+            "\tUSAGEd,\n" +
+            "\taUSAGEd as aUSAGEd,\n" +
+            "\tsaveStr as saveStr,\n" +
+            "\tsaveStrRemark as saveStrRemark,\n" +
+            "\tremark\n" +
+            "FROM\n" +
+            "\ttiaoxiu where (USAGEd = 0 or aUSAGEd = 0) and (fromDate = #{dateStr} or toDate = #{dateStr}) and type = 0 ")
+    List<TiaoXiu> getTiaoXiuDanByDateStrAndNoUse(String dateStr);
+
+
+    @Update("update tiaoxiu set aUSAGEd = 0 where fromDate = #{dateStr}")
+    void updateFromDateStatus(String dateStr);
+
+    @Update("update tiaoxiu set USAGEd = 0 where toDate  = #{dateStr}")
+    void updateToDateStatus(String dateStr);
+
+
+    @Select("select ${daytitleSql} as dayNum,${daytitleSqlRe} as dayNumRemark from monthkqinfo where empNo = #{empNo} and yearMonth = #{yearMonth} ")
+    ReturnBean getMKbyYearMonthAndDayNumAndEmpNo(String empNo, String yearMonth, String daytitleSql, String daytitleSqlRe);
+
+    @Select("select ${daytitleSql} as dayNum,${daytitleSqlR} as dayNumRemark from monthkqinfo where empNo = #{empNo} and yearMonth = #{yearMonth} ")
+    ReturnBean getMkfByEmpNoAndYearMonthAndDayNumAndDayNumRemark(String empNo, String yearMonth, String daytitleSql, String daytitleSqlR);
+
+    @Update("update monthkqinfo set ${daytitleSql} = '318,318,0',${daytitleSqlRe} = ''  where empNo = #{empNo} and yearMonth = #{yearMonth} ")
+    void deleteMKBeanByYMAndDNAEN(String empNo, String yearMonth, String daytitleSql, String daytitleSqlRe);
+
+    @Update("update tiaoxiu set saveStr = #{dayNum} ,saveStrRemark = #{dayNumRe},ausaged = 1 where id = #{id}")
+    void updateTiaoXiuById(Integer id, String dayNum, String dayNumRe);
+
+    @Update("update tiaoxiu set ausaged = 1,usaged = 1 where id = #{id}")
+    void updateTiaoXiuStatusById(Integer id);
+
+    @Update("update monthkqinfo set ${daytitleSql} = #{dayNum},${daytitleSqlRe} = #{dayNumRearmk}  where empNo = #{empNo} and yearMonth = #{yearMonth} ")
+    void updateToDateMKByParam(String empNo, String yearMonth, String dayNum, String dayNumRearmk, String daytitleSql, String daytitleSqlRe);
 
 
     @Insert("insert into kqbean (enrollNumber,\n" +

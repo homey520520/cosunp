@@ -895,12 +895,13 @@ public class MonthKQInfo implements Serializable {
     }
 
     public Double getDay26AMRemark() {
-        if (day26Remark != null&& day25Remark.contains(",")) {
+        if (day26Remark != null&& day26Remark.contains(",")) {
             String[] remark = day26Remark.split(",");
             return Double.valueOf(remark[0]);
         }
         return day26AMRemark;
     }
+
 
     public void setDay26AMRemark(Double day26AMRemark) {
         this.day26AMRemark = day26AMRemark;

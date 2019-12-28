@@ -40,6 +40,10 @@ public class TiaoXiu implements Serializable {
     private String toDateFromStr;
     private String toDateEndStr;
 
+
+    private String saveStr;
+    private String saveStrRemark;
+
     private int currentPage = 1;
     private int maxPage;
     private int recordCount;
@@ -50,6 +54,22 @@ public class TiaoXiu implements Serializable {
     private List<String> empNoList;
     private List<Integer> names;
     private List<Integer> deptIds;
+
+    public String getSaveStr() {
+        return saveStr;
+    }
+
+    public void setSaveStr(String saveStr) {
+        this.saveStr = saveStr;
+    }
+
+    public String getSaveStrRemark() {
+        return saveStrRemark;
+    }
+
+    public void setSaveStrRemark(String saveStrRemark) {
+        this.saveStrRemark = saveStrRemark;
+    }
 
     public Integer getAusaged() {
         return ausaged;

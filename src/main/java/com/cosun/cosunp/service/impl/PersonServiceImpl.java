@@ -5861,7 +5861,6 @@ public class PersonServiceImpl implements IPersonServ {
                 tiaoXiu.setName(personMapper.getNameByEmpNo(tiaoXiu.getEmpNo()));
                 tiaoXiu.setUsaged(0);
                 tiaoXiu.setAusaged(0);
-                tiaoXiu.setType(1);
                 tiaoXiu.setFromDateWeek(DateUtil.getWeek(tiaoXiu.getFromDateStr()));
                 tiaoXiu.setToDateWeek(DateUtil.getWeek(tiaoXiu.getToDateStr()));
                 personMapper.saveTiaoXiuDateToMysql(tiaoXiu);
@@ -5977,6 +5976,21 @@ public class PersonServiceImpl implements IPersonServ {
 
 
     public void saveMonthKQInfoByCheckKQBean(List<OutClockIn> outClockInList) throws Exception {
+        String day = "";
+        String yearMonth = "";
+        String fromDay = "";
+        String fromYM = "";
+        String dayNumRemark = "";
+        ReturnBean rb = null;
+        String daytitleSqlTo = "";
+        String daytitleSqlReTo = "";
+        List<TiaoXiu> tiaoXiuList = null;
+        List<TiaoXiu> tiaoXiuList1 = null;
+        for (OutClockIn oci : outClockInList) {
+            personMapper.updateFromDateStatus(oci.getClockInDateStr());
+            personMapper.updateToDateStatus(oci.getClockInDateStr());
+        }
+
         List<KQBean> kqBeanList = personMapper.deleteKQBeanByDateStrs(outClockInList);
         List<MonthKQInfo> monthKQInfoList = new ArrayList<MonthKQInfo>();
         String[] yearMos = outClockInList.get(0).getClockInDateStr().split("-");
@@ -5996,8 +6010,29 @@ public class PersonServiceImpl implements IPersonServ {
                 youGuess.add(yearMos[0] + "-" + yearMos[1] + "-" + da);
             }
         }
+        List<String> timeList;
+        Double totalOneDayHours = 0.0;
+        String aOnStr = null;
+        String aOffStr = null;
+        String pOnStr = null;
+        String pOffStr = null;
+        String aOffStrRe = null;
+        String pOffStrRe = null;
+        Double totalTiaoXiuByDay = 0.0;
+        String beFStr = "";
+        StringBuilder sb = null;
+        String[] timeStr = null;
+        WorkSet ws = null;
+        QianKa qk = null;
+        Double hh = 0.0;
+        LianBan lianBan = null;
+        Double lianBanTotalH = 0.0;
+        String fromDateStrs = "";
+        String toDateStrs = "";
+        String asplit[] = null;
 
-
+        String[] splitDouble = null;
+        Double extHours = 0.0;
         List<JiaBan> jiaBanList = null;
         ZhongKongBean zkb = null;
         MonthKQInfo mkf = null;
@@ -6012,11 +6047,19 @@ public class PersonServiceImpl implements IPersonServ {
         DateSplit nowDate = null;
         QianKa qkk = null;
         WorkSet wsw = null;
+        List<JiaBanList> jiaBanLists = new ArrayList<>();
+        List<String> sqlTitleList = null;
+        JiaBanList jiaBanList1 = null;
+        boolean comin = false;
         for (OutClockIn ock : outClockInList) {
             jiaBanList = personMapper.getJiaBanDanByDateStr(ock.getClockInDateStr());
             for (JiaBan jb : jiaBanList) {
+                tiaoXiuList1 = personMapper.getTiaoXiuDanByEmpNoAndFromDateOrToDate(jb.getEmpNo(), ock.getClockInDateStr());
+                sb = new StringBuilder();
+                comin = false;
                 jiaHours = 0.0;
                 jiabanHours = "";
+                sqlTitleList = new ArrayList<>();
                 dateSplitList = DateUtil.splitDateToDateArray(jb.getExtDateFrom(), jb.getExtDateEnd());
                 zkb = personMapper.getZKBeanByEmpNoAndDateStr(jb.getEmpNo(), ock.getClockInDateStr());
                 qkk = personMapper.getQianKaByDateAndEmpnoA(jb.getEmpNo(), ock.getClockInDateStr());
@@ -6054,6 +6097,25 @@ public class PersonServiceImpl implements IPersonServ {
                     mkf.setYearMonth(yearM[0] + "-" + yearM[1]);
                     monthKQInfoList.add(mkf);
 
+                    sqlTitleList.add(mkf.getDaytitleSql());
+
+                    for (JiaBanList jbl : jiaBanLists) {
+                        if (jbl.getEmpNo().equals(mkf.getEmpNo()) && jbl.getYearMonth().equals(mkf.getYearMonth())) {
+                            sqlTitleList.addAll(jbl.getDayJiStr());
+                            sqlTitleList.add(mkf.getDaytitleSql());
+                            jbl.setDayJiStr(sqlTitleList);
+                            comin = true;
+                        }
+                    }
+
+                    if (!comin) {
+                        jiaBanList1 = new JiaBanList();
+                        jiaBanList1.setEmpNo(mkf.getEmpNo());
+                        jiaBanList1.setYearMonth(mkf.getYearMonth());
+                        jiaBanList1.setDayJiStr(sqlTitleList);
+                        jiaBanLists.add(jiaBanList1);
+                    }
+
                     if (mkf.getId() != null) {
                         mkf.setNameReal(jb.getName());
                         personMapper.updateMonthKQInfoByCheckKQBean(mkf);
@@ -6062,25 +6124,47 @@ public class PersonServiceImpl implements IPersonServ {
                         personMapper.saveMonthKQInfoByCheckKQBean(mkf);
                     }
 
+                    for (TiaoXiu tiaoXiu : tiaoXiuList1) {
+                        rb = personMapper.getMkfByEmpNoAndYearMonthAndDayNumAndDayNumRemark(mkf.getEmpNo(), mkf.getYearMonth(), daytitleSql,
+                                daytitleSqlRe);
+                        if (rb != null) {
+                            totalTiaoXiuByDay -= (tiaoXiu.getHours() == 0 ? tiaoXiu.getTotalHours() : tiaoXiu.getHours());
+                            beFStr = "3";
+                            fromDateStrs += tiaoXiu.getToDateStr() + " ";
+                            sb.append("被调休" + totalTiaoXiuByDay + "个小时 参考" + fromDateStrs);
+                            asplit = rb.getDayNum().split(",");
+                            hh = Double.valueOf(asplit[2]) - (tiaoXiu.getHours() == 0 ? tiaoXiu.getTotalHours() : tiaoXiu.getHours());
+                            personMapper.updateMKbyEmpNoAndYMAndDayNumAndDayNumReMark(mkf.getEmpNo(), mkf.getYearMonth(), daytitleSql
+                                    , daytitleSqlRe, beFStr.concat(asplit[0]).concat(",").concat(beFStr).concat(asplit[1]).concat(",").concat(hh + ""), rb.getDayNumRemark());
+                            personMapper.updateUsagedStatusByIdFromDate(tiaoXiu.getId());
+                        }
+                    }
+
                 } else if (zkb == null && qkk != null) {
 
                 }
             }
+
         }
 
 
-        List<String> timeList;
-        List<TiaoXiu> tiaoXiuList = null;
         for (KQBean kqb : kqBeanList) {
+            splitDouble = null;
+            extHours = 0.0;
+            hh = 0.0;
+            sb = new StringBuilder();
+            totalTiaoXiuByDay = 0.0;
+            totalOneDayHours = 0.0;
+            lianBanTotalH = 0.0;
+            fromDateStrs = "";
+            toDateStrs = "";
+            beFStr = "";
             timeList = new ArrayList<String>();
             tiaoXiuList = personMapper.getTiaoXiuDanByEmpNoAndFromDateOrToDate(kqb.getEmpNo(), kqb.getDateStr());
             List<Time> times = null;
             dayNum = "";
-            String[] timeStr = null;
-            WorkSet ws = null;
-            Double lianBanTotalH = 0.0;
-            QianKa qk;
-            LianBan lianBan = personMapper.getLianBanByEmpNoAndDateStr(kqb.getEmpNo(), kqb.getDateStr());
+            timeStr = null;
+            lianBan = personMapper.getLianBanByEmpNoAndDateStr(kqb.getEmpNo(), kqb.getDateStr());
             mkf = personMapper.getMonthKqInfoByEmpNoandYearMonth(kqb.getEmpNo(), kqb.getYearMonth());
             if (mkf == null) {
                 mkf = new MonthKQInfo();
@@ -6100,22 +6184,22 @@ public class PersonServiceImpl implements IPersonServ {
             mkf.setRemark(kqb.getRemark());
             daytitleSql = "day".concat(dayStr);
             daytitleSqlRe = daytitleSql.concat("Remark");
-            Double totalOneDayHours = 0.0;
-            String aOnStr = null;
-            String aOffStr = null;
-            String pOnStr = null;
-            String pOffStr = null;
-            Double totalTiaoXiuByDay = 0.0;
             LinShiHours lsh = personMapper.getLinShiHoursByNameAndDateStr(kqb.getName(), kqb.getDateStr());
             if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
                 for (TiaoXiu tiaoXiu : tiaoXiuList) {
                     if (tiaoXiu.getFromDateStr().equals(kqb.getDateStr())) {
-                        totalTiaoXiuByDay -= tiaoXiu.getHours();
+                        totalTiaoXiuByDay -= (tiaoXiu.getHours() == 0 ? tiaoXiu.getTotalHours() : tiaoXiu.getHours());
+                        beFStr = "3";
+                        fromDateStrs += tiaoXiu.getToDateStr() + " ";
+                        sb.append("被调休" + totalTiaoXiuByDay + "个小时 参考" + fromDateStrs);
                         personMapper.updateUsagedStatusByIdFromDate(tiaoXiu.getId());
                     }
 
                     if (tiaoXiu.getToDateStr().equals(kqb.getDateStr())) {
-                        totalTiaoXiuByDay += tiaoXiu.getHours();
+                        totalTiaoXiuByDay += (tiaoXiu.getHours() == 0 ? tiaoXiu.getTotalHours() : tiaoXiu.getHours());
+                        beFStr = "6";
+                        toDateStrs += tiaoXiu.getFromDateStr() + " ";
+                        sb.append("调休了" + totalTiaoXiuByDay + "个小时 参考" + toDateStrs);
                         personMapper.updateUsagedStatusByIdToDate(tiaoXiu.getId());
                     }
                 }
@@ -6162,12 +6246,11 @@ public class PersonServiceImpl implements IPersonServ {
                 mkf.setDaytitleSql(daytitleSql);
                 mkf.setDaytitleSqlRemark(daytitleSqlRe);
                 mkf.setDayNumRemark(kqb.getRemark());
-
             } else {
                 if (kqb.getWeek() == 6 || kqb.getWeek() == 7) {
                     if (kqb.getClockResult() == 1) {
                         if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                            dayNum = "318,318,";
+                            dayNum = beFStr.concat("18,").concat(beFStr.concat("18,"));
                             if (!kqb.getHavePinShi().equals("1")) {
                                 dayNum = dayNum.concat(lianBanTotalH + (8.0 + totalTiaoXiuByDay) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
                             } else {
@@ -6182,22 +6265,40 @@ public class PersonServiceImpl implements IPersonServ {
                             }
                         }
                     } else if (kqb.getClockResult() == 4) {
-                        dayNum = "4,4,";
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = beFStr.concat("04,").concat(beFStr.concat("04,"));
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat((8.0 + totalTiaoXiuByDay) + "");
+                            }
                         } else {
-                            dayNum = dayNum.concat("8.0");
+                            dayNum = "4,4,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("8.0");
+                            }
                         }
                     } else if (kqb.getClockResult() == 6) {
-                        dayNum = "18,18,";
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat(lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = beFStr.concat("18,").concat(beFStr.concat("18,"));
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 0.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat((0.0 + totalTiaoXiuByDay) + "");
+                            }
                         } else {
-                            dayNum = dayNum.concat("0.0");
+                            dayNum = "18,18,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("0.0");
+                            }
                         }
                     } else if (kqb.getClockResult() == 13) {
                         if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                            dayNum = "313,313,";
+                            dayNum = beFStr.concat("13,").concat(beFStr.concat("13,"));
                             if (!kqb.getHavePinShi().equals("1")) {
                                 dayNum = dayNum.concat(lianBanTotalH + (8.0 + totalTiaoXiuByDay) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
                             } else {
@@ -6212,15 +6313,24 @@ public class PersonServiceImpl implements IPersonServ {
                             }
                         }
                     } else if (kqb.getClockResult() == 11) {
-                        dayNum = "11,11,";
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat(lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = beFStr.concat("11,").concat(beFStr.concat("11,"));
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 0.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat((0.0 + totalTiaoXiuByDay) + "");
+                            }
                         } else {
-                            dayNum = dayNum.concat("0.0");
+                            dayNum = "11,11,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("0.0");
+                            }
                         }
                     } else if (kqb.getClockResult() == 2) {
                         if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                            dayNum = "302,302,";
+                            dayNum = beFStr.concat("02,").concat(beFStr.concat("02,"));
                             if (!kqb.getHavePinShi().equals("1")) {
                                 dayNum = dayNum.concat(lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
                             } else {
@@ -6236,7 +6346,7 @@ public class PersonServiceImpl implements IPersonServ {
                         }
                     } else if (kqb.getClockResult() == 12) {
                         if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                            dayNum = "312,312,";
+                            dayNum = beFStr.concat("12,").concat(beFStr.concat("12,"));
                             if (!kqb.getHavePinShi().equals("1")) {
                                 dayNum = dayNum.concat(lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
                             } else {
@@ -6251,11 +6361,20 @@ public class PersonServiceImpl implements IPersonServ {
                             }
                         }
                     } else if (kqb.getClockResult() == 3) {
-                        dayNum = "3,3,";
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = beFStr.concat("03,").concat(beFStr.concat("03,"));
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("8.0");
+                            }
                         } else {
-                            dayNum = dayNum.concat("8.0");
+                            dayNum = "3,3,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat(lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                            } else {
+                                dayNum = dayNum.concat("8.0");
+                            }
                         }
                     } else if (kqb.getClockResult() == 7) {
                         aOnStr = "77,";
@@ -6342,7 +6461,7 @@ public class PersonServiceImpl implements IPersonServ {
                         jiaHours = Double.valueOf(jiabanHours.split(",")[2]);
 
                         if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                            dayNum = "3".concat(aOffStr).concat("3").concat(pOffStr);
+                            dayNum = beFStr.concat(aOffStr).concat(beFStr.concat(pOffStr));
                             if (!kqb.getHavePinShi().equals("1")) {
                                 dayNum = dayNum.concat((lianBanTotalH + (jiaHours + totalTiaoXiuByDay) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
                             } else {
@@ -6392,6 +6511,17 @@ public class PersonServiceImpl implements IPersonServ {
                             }
                         } else {
                             dayNum = "8,8,";
+
+                            if (totalTiaoXiuByDay >= 8) {
+                                dayNum = "601,601,";
+                            } else if (totalTiaoXiuByDay >= 4 && totalTiaoXiuByDay < 8) {
+                                dayNum = "601,".concat("619,");
+                                kqb.setRemark("0.0,".concat((totalTiaoXiuByDay - 4) + ""));
+                            } else if (totalTiaoXiuByDay < 4 && totalTiaoXiuByDay > 0) {
+                                dayNum = "619,8,";
+                                kqb.setRemark("0.0," + totalTiaoXiuByDay);
+                            }
+
                             if (!kqb.getHavePinShi().equals("1")) {
                                 dayNum = dayNum.concat((lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
                             } else {
@@ -6399,11 +6529,20 @@ public class PersonServiceImpl implements IPersonServ {
                             }
                         }
                     } else if (kqb.getClockResult() == 21) {
-                        dayNum = "18,18,";
-                        if (!kqb.getHavePinShi().equals("1")) {
-                            dayNum = dayNum.concat((lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                        if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                            dayNum = beFStr.concat("18,").concat(beFStr.concat("18,"));
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat((lianBanTotalH + 0.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                            } else {
+                                dayNum = dayNum.concat((0.0 + totalTiaoXiuByDay) + "");
+                            }
                         } else {
-                            dayNum = dayNum.concat("0.0");
+                            dayNum = "18,18,";
+                            if (!kqb.getHavePinShi().equals("1")) {
+                                dayNum = dayNum.concat((lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                            } else {
+                                dayNum = dayNum.concat("0.0");
+                            }
                         }
                     } else if (kqb.getClockResult() == 5) {
                         ws = personMapper.getWorkSetByMonthAndPositionLevelA(kqb.getYearMonth(), kqb.getPositionLevel());
@@ -6418,7 +6557,7 @@ public class PersonServiceImpl implements IPersonServ {
                                 cishu = StringUtil.calTimesByOutClockIn(oci);
                                 if (cishu >= csu.getDayClockInTimes()) {
                                     if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                                        dayNum = "31080,31080,";
+                                        dayNum = beFStr.concat("1080,").concat(beFStr.concat("1080,"));
                                         if (!kqb.getHavePinShi().equals("1")) {
                                             dayNum = dayNum.concat((lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
                                         } else {
@@ -6434,7 +6573,7 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                                        dayNum = "31070,31070,";
+                                        dayNum = beFStr.concat("1070,").concat(beFStr.concat("1070,"));
                                         if (!kqb.getHavePinShi().equals("1")) {
                                             dayNum = dayNum.concat((lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
                                         } else {
@@ -6451,19 +6590,37 @@ public class PersonServiceImpl implements IPersonServ {
 
                                 }
                             } else {
-                                dayNum = "1060,1060,";
-                                if (!kqb.getHavePinShi().equals("1")) {
-                                    dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                    dayNum = beFStr.concat("1060,").concat(beFStr.concat("1060,"));
+                                    if (!kqb.getHavePinShi().equals("1")) {
+                                        dayNum = dayNum.concat((lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                    } else {
+                                        dayNum = dayNum.concat((8.0 + totalTiaoXiuByDay) + "");
+                                    }
                                 } else {
-                                    dayNum = dayNum.concat("8.0");
+                                    dayNum = "1060,1060,";
+                                    if (!kqb.getHavePinShi().equals("1")) {
+                                        dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                    } else {
+                                        dayNum = dayNum.concat("8.0");
+                                    }
                                 }
                             }
                         } else {
-                            dayNum = "18,18,";
-                            if (!kqb.getHavePinShi().equals("1")) {
-                                dayNum = dayNum.concat((lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                            if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                dayNum = beFStr.concat("18,").concat(beFStr.concat("18,"));
+                                if (!kqb.getHavePinShi().equals("1")) {
+                                    dayNum = dayNum.concat((lianBanTotalH + 0.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                } else {
+                                    dayNum = dayNum.concat((0.0 + totalTiaoXiuByDay) + "");
+                                }
                             } else {
-                                dayNum = dayNum.concat("0.0");
+                                dayNum = "18,18,";
+                                if (!kqb.getHavePinShi().equals("1")) {
+                                    dayNum = dayNum.concat((lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
+                                } else {
+                                    dayNum = dayNum.concat("0.0");
+                                }
                             }
                         }
 
@@ -6483,7 +6640,7 @@ public class PersonServiceImpl implements IPersonServ {
                             onb = Double.valueOf(plusValue[1]);
                         }
                         if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                            dayNum = "318,318,";
+                            dayNum = beFStr.concat("18,").concat(beFStr.concat("18,"));
                             dayNum = dayNum.concat((lianBanTotalH + (ona + onb + totalTiaoXiuByDay) + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
                         } else {
                             dayNum = "18,18,";
@@ -6497,7 +6654,9 @@ public class PersonServiceImpl implements IPersonServ {
                     mkf.setDayNum(dayNum);
                     mkf.setDaytitleSql(daytitleSql);
                     mkf.setDaytitleSqlRemark(daytitleSqlRe);
+                    mkf.setDayNumRemark(kqb.getRemark());
                 } else {
+                    Double subTotal = 0.0;
                     if (!youGuess.contains(kqb.getDateStr())) {
                         if (kqb.getClockResult() == 1) {
                             dayNum = "1,1,";
@@ -6525,7 +6684,6 @@ public class PersonServiceImpl implements IPersonServ {
                             if (Double.valueOf(ab[0]) == 0.0) {
                                 if (kqb.getaOnTime() != null && kqb.getaOffTime() != null) {
                                     a = "1,";
-//                                ho += 4.0;
                                 } else if (kqb.getaOnTime() != null || kqb.getaOffTime() != null) {
                                     a = "7,";
                                     qk = personMapper.getQianKaByDateAndEmpnoA(kqb.getEmpNo(), kqb.getDateStr());
@@ -6588,7 +6746,6 @@ public class PersonServiceImpl implements IPersonServ {
 //                                ho += 4.0;
                                 } else {
                                     a = "8,";
-
                                     qk = personMapper.getQianKaByDateAndEmpnoA(kqb.getEmpNo(), kqb.getDateStr());
                                     ws = personMapper.getWorkSetByMonthAndPositionLevelA(kqb.getYearMonth(), kqb.getPositionLevel());
                                     if (qk != null && qk.getTimeStr() != null) {
@@ -6782,16 +6939,79 @@ public class PersonServiceImpl implements IPersonServ {
                                 b = "16,";
 //                            ho += Double.valueOf(ab[1]);
                             }
-                            dayNum = a + b;
+
                             mkf.setDayNumRemark(kqb.getRemark());
+                            if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                if (a.equals("16,") || a.equals("19,") || a.equals("8,")) {
+                                    if (a.equals("16,") || a.equals("19,")) {
+                                        splitDouble = kqb.getRemark().split(",");
+                                        if (totalTiaoXiuByDay >= (4 - Double.valueOf(splitDouble[0]))) {
+                                            a = "601,";
+                                            extHours = totalTiaoXiuByDay - (4 - Double.valueOf(splitDouble[0]));
+                                        } else {
+                                            a = "619,";
+                                            splitDouble[0] = (Double.valueOf(splitDouble[0]) + totalTiaoXiuByDay) + "";
+                                        }
+                                    } else if (a.equals("8,")) {
+                                        splitDouble = kqb.getRemark().split(",");
+                                        if (totalTiaoXiuByDay >= 4) {
+                                            a = "601,";
+                                            extHours = totalTiaoXiuByDay - 4;
+                                        } else {
+                                            a = "619,";
+                                            splitDouble[0] = totalTiaoXiuByDay + "";
+                                        }
+                                    }
+                                }
+
+                                if (b.equals("16,") || b.equals("19,") || b.equals("8,")) {
+                                    if (b.equals("16,") || b.equals("19,")) {
+                                        splitDouble = kqb.getRemark().split(",");
+                                        if (totalTiaoXiuByDay >= (4 - Double.valueOf(splitDouble[1]))) {
+                                            b = "601,";
+                                            extHours = totalTiaoXiuByDay - (4 - Double.valueOf(splitDouble[1]));
+                                        } else {
+                                            b = "619,";
+                                            splitDouble[1] = (Double.valueOf(splitDouble[1]) + totalTiaoXiuByDay) + "";
+                                        }
+                                    } else if (b.equals("8,")) {
+                                        splitDouble = kqb.getRemark().split(",");
+                                        if (totalTiaoXiuByDay >= 4) {
+                                            b = "601,";
+                                            extHours = totalTiaoXiuByDay - 4;
+                                        } else {
+                                            b = "619,";
+                                            splitDouble[1] = totalTiaoXiuByDay + "";
+                                        }
+                                    }
+                                }
+                                mkf.setDayNumRemark(splitDouble[0] + "," + splitDouble[1]);
+                            }
+                            dayNum = a + b;
                         } else if (kqb.getClockResult() == 18) {
-                            dayNum = "20,20,";
+                            if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                dayNum = beFStr.concat("20").concat(beFStr.concat("20"));
+                            } else {
+                                dayNum = "20,20,";
+                            }
                         } else if (kqb.getClockResult() == 19) {
-                            dayNum = "21,21,";
+                            if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                dayNum = beFStr.concat("21").concat(beFStr.concat("21"));
+                            } else {
+                                dayNum = "21,21,";
+                            }
                         } else if (kqb.getClockResult() == 20) {
-                            dayNum = "22,22,";
+                            if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                dayNum = beFStr.concat("22").concat(beFStr.concat("22"));
+                            } else {
+                                dayNum = "22,22,";
+                            }
                         } else if (kqb.getClockResult() == 21) {
-                            dayNum = "23,23,";
+                            if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                dayNum = beFStr.concat("23").concat(beFStr.concat("23"));
+                            } else {
+                                dayNum = "23,23,";
+                            }
                         } else if (kqb.getClockResult() == 17) {
                             qk = personMapper.getQianKaByDateAndEmpnoA(kqb.getEmpNo(), kqb.getDateStr());
                             ws = personMapper.getWorkSetByMonthAndPositionLevelA(kqb.getYearMonth(), kqb.getPositionLevel());
@@ -6897,8 +7117,56 @@ public class PersonServiceImpl implements IPersonServ {
                                     b = "19,";
                                     ho += Double.valueOf(ab[1]);
                                 }
-                                dayNum = a + b;
+
                                 mkf.setDayNumRemark(kqb.getRemark());
+
+                                if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                    if (a.equals("16,") || a.equals("19,") || a.equals("8,")) {
+                                        if (a.equals("16,") || a.equals("19,")) {
+                                            splitDouble = kqb.getRemark().split(",");
+                                            if (totalTiaoXiuByDay >= (4 - Double.valueOf(splitDouble[0]))) {
+                                                a = "601,";
+                                                extHours = totalTiaoXiuByDay - (4 - Double.valueOf(splitDouble[0]));
+                                            } else {
+                                                a = "619,";
+                                                splitDouble[0] = (Double.valueOf(splitDouble[0]) + totalTiaoXiuByDay) + "";
+                                            }
+                                        } else if (a.equals("8,")) {
+                                            splitDouble = kqb.getRemark().split(",");
+                                            if (totalTiaoXiuByDay >= 4) {
+                                                a = "601,";
+                                                extHours = totalTiaoXiuByDay - 4;
+                                            } else {
+                                                a = "619,";
+                                                splitDouble[0] = totalTiaoXiuByDay + "";
+                                            }
+                                        }
+                                    }
+
+                                    if (b.equals("16,") || b.equals("19,") || b.equals("8,")) {
+                                        if (b.equals("16,") || b.equals("19,")) {
+                                            splitDouble = kqb.getRemark().split(",");
+                                            if (totalTiaoXiuByDay >= (4 - Double.valueOf(splitDouble[1]))) {
+                                                b = "601,";
+                                                extHours = totalTiaoXiuByDay - (4 - Double.valueOf(splitDouble[1]));
+                                            } else {
+                                                b = "619,";
+                                                splitDouble[1] = (Double.valueOf(splitDouble[1]) + totalTiaoXiuByDay) + "";
+                                            }
+                                        } else if (b.equals("8,")) {
+                                            splitDouble = kqb.getRemark().split(",");
+                                            if (totalTiaoXiuByDay >= 4) {
+                                                b = "601,";
+                                                extHours = totalTiaoXiuByDay - 4;
+                                            } else {
+                                                b = "619,";
+                                                splitDouble[1] = totalTiaoXiuByDay + "";
+                                            }
+                                        }
+                                    }
+                                    mkf.setDayNumRemark(splitDouble[0] + "," + splitDouble[1]);
+                                }
+                                dayNum = a + b;
                             }
                         } else if (kqb.getClockResult() == 7) {
                             aOnStr = "7,";
@@ -7211,13 +7479,44 @@ public class PersonServiceImpl implements IPersonServ {
                                     pOffStr = "8,";
                                 }
                             }
+                            aOffStrRe = "0.0";
+                            pOffStrRe = "0.0";
+
+                            if (aOffStr.equals("8,") || pOffStr.equals("8,")) {
+                                if (aOffStr.equals("8,")) {
+                                    if (totalTiaoXiuByDay >= 4) {
+                                        aOffStr = "601,";
+                                        aOffStrRe = "0.0,";
+                                        totalTiaoXiuByDay -= 4;
+                                    } else if (totalTiaoXiuByDay < 4 && totalTiaoXiuByDay > 0) {
+                                        aOffStr = "619,";
+                                        aOffStr = totalTiaoXiuByDay + "";
+                                        totalTiaoXiuByDay = 0.0;
+                                    }
+
+                                }
+
+                                if (pOffStr.equals("8,")) {
+                                    if (totalTiaoXiuByDay >= 4) {
+                                        pOffStr = "601,";
+                                        pOffStrRe = "0.0";
+                                        totalTiaoXiuByDay -= 4;
+                                    } else if (totalTiaoXiuByDay < 4 && totalTiaoXiuByDay > 0) {
+                                        pOffStr = "619,";
+                                        pOffStr = totalTiaoXiuByDay + "";
+                                        totalTiaoXiuByDay = 0.0;
+                                    }
+                                }
+                            }
+
                             dayNum = aOffStr + pOffStr;
+                            kqb.setRemark(aOffStrRe.concat(pOffStrRe));
                         }
                         if (kqb.getClockResult() == 13) {
                             dayNum = dayNum.concat((kqb.getExtWorkHours() - 8.0) + "");
                         } else {
                             if (!kqb.getHavePinShi().equals("1")) {
-                                dayNum = dayNum.concat(lianBanTotalH + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + "");
+                                dayNum = dayNum.concat(lianBanTotalH + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()) + totalTiaoXiuByDay + "");
                             } else {
                                 dayNum = dayNum.concat("0.0");
                             }
@@ -7279,10 +7578,8 @@ public class PersonServiceImpl implements IPersonServ {
                                             } else {
                                                 aOffStr = "67,";
                                             }
-
                                         }
                                     }
-
                             }
 
 
@@ -7429,12 +7726,25 @@ public class PersonServiceImpl implements IPersonServ {
                                 }
                             } else {
                                 dayNum = "8,8,";
+
+                                if (totalTiaoXiuByDay >= 8) {
+                                    dayNum = "601,601,";
+                                } else if (totalTiaoXiuByDay >= 4 && totalTiaoXiuByDay < 8) {
+                                    dayNum = "601,".concat("619,");
+                                    kqb.setRemark("0.0,".concat((totalTiaoXiuByDay - 4) + ""));
+                                } else if (totalTiaoXiuByDay < 4 && totalTiaoXiuByDay > 0) {
+                                    dayNum = "619,8,";
+                                    kqb.setRemark("0.0," + totalTiaoXiuByDay);
+                                }
+
+
                                 if (!kqb.getHavePinShi().equals("1")) {
                                     dayNum = dayNum.concat((lianBanTotalH + 0.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
                                 } else {
                                     dayNum = dayNum.concat("0.0");
                                 }
                             }
+
                         }
 
 
@@ -7450,6 +7760,7 @@ public class PersonServiceImpl implements IPersonServ {
                     }
                 }
             }
+
             monthKQInfoList.add(mkf);
 
             if (mkf.getId() != null) {
@@ -7461,6 +7772,90 @@ public class PersonServiceImpl implements IPersonServ {
             }
         }
 
+        for (OutClockIn oci : outClockInList) {
+            tiaoXiuList = personMapper.getTiaoXiuDanByDateStrAndNoUse(oci.getClockInDateStr());
+            for (TiaoXiu tx : tiaoXiuList) {
+                day = "";
+                yearMonth = "";
+                fromDay = "";
+                fromYM = "";
+                dayNumRemark = "";
+                rb = null;
+                daytitleSqlTo = "";
+                daytitleSqlReTo = "";
+                if (tx.getFromDateStr().equals(oci.getClockInDateStr()) && tx.getAusaged() == 0) {
+                    day = tx.getFromDateStr().split("-")[2];
+                    beFStr = "6";
+                    yearMonth = tx.getFromDateStr().split("-")[0] + "-" + tx.getFromDateStr().split("-")[1];
+
+                    daytitleSql = "day".concat(day);
+                    daytitleSqlRe = daytitleSql.concat("Remark");
+
+                    fromDay = tx.getToDateStr().split("-")[2];
+                    fromYM = tx.getToDateStr().split("-")[0] + "-" + tx.getToDateStr().split("-")[1];
+
+                    daytitleSqlTo = "day".concat(fromDay);
+                    daytitleSqlReTo = daytitleSqlTo.concat("Remark");
+
+                    rb = personMapper.getMKbyYearMonthAndDayNumAndEmpNo(tx.getEmpNo(), yearMonth, daytitleSql, daytitleSqlRe);
+                    personMapper.deleteMKBeanByYMAndDNAEN(tx.getEmpNo(), yearMonth, daytitleSql, daytitleSqlRe);
+                    if (rb == null || rb.getDayNum() == null) {
+                        rb = new ReturnBean();
+                        rb.setDayNum("618,618,0");
+                        rb.setDayNumRemark("对调给" + tx.getToDateStr());
+                    } else {
+                        asplit = rb.getDayNum().split(",");
+                        if (asplit[0].length() <= 1) {
+                            asplit[0] = beFStr.concat("0").concat(asplit[0]);
+                        } else {
+                            asplit[0] = beFStr.concat(asplit[0]);
+                        }
+                        if (asplit[1].length() <= 1) {
+                            asplit[1] = beFStr.concat("0").concat(asplit[1]);
+                        } else {
+                            asplit[1] = beFStr.concat(asplit[1]);
+                        }
+
+                        rb.setDayNum(asplit[0] + "," + asplit[1] + "," + asplit[2]);
+                    }
+                    personMapper.updateTiaoXiuById(tx.getId(), ((rb == null || rb.getDayNum() == null) ? "" : rb.getDayNum()),
+                            ((rb == null || rb.getDayNumRemark() == null) ? "" : rb.getDayNumRemark()));
+
+                }
+                if (tx.getToDateStr().equals(oci.getClockInDateStr()) && tx.getUsaged() == 0) {
+                    beFStr = "6";
+                    day = tx.getToDateStr().split("-")[2];
+                    yearMonth = tx.getToDateStr().split("-")[0] + "-" + tx.getToDateStr().split("-")[1];
+
+                    daytitleSqlTo = "day".concat(day);
+                    daytitleSqlReTo = daytitleSqlTo.concat("Remark");
+
+                    fromDay = tx.getFromDateStr().split("-")[2];
+                    fromYM = tx.getFromDateStr().split("-")[0] + "-" + tx.getFromDateStr().split("-")[1];
+
+                    daytitleSql = "day".concat(fromDay);
+                    daytitleSqlRe = daytitleSql.concat("Remark");
+
+                    if (tx.getAusaged() == 0) {
+                        rb = personMapper.getMKbyYearMonthAndDayNumAndEmpNo(tx.getEmpNo(), fromYM, daytitleSql, daytitleSqlRe);
+                    } else {
+                        rb = new ReturnBean();
+                        rb.setDayNum(tx.getSaveStr() == null ? "" : tx.getSaveStr());
+                        rb.setDayNumRemark(tx.getSaveStrRemark() == null ? "" : tx.getSaveStrRemark());
+                    }
+
+                    personMapper.deleteMKBeanByYMAndDNAEN(tx.getEmpNo(), fromYM, daytitleSql, daytitleSqlRe);
+
+                    if (rb == null || rb.getDayNum() == null) {
+                        rb = new ReturnBean();
+                        rb.setDayNum("318,318,0");
+                        rb.setDayNumRemark("被对调" + tx.getFromDateStr());
+                    }
+                    personMapper.updateToDateMKByParam(tx.getEmpNo(), yearMonth, rb.getDayNum(), rb.getDayNumRemark(), daytitleSqlTo, daytitleSqlReTo);
+                    personMapper.updateTiaoXiuStatusById(tx.getId());
+                }
+            }
+        }
     }
 
     public void deleteQianKaDateToMysql(Integer id) throws Exception {
@@ -7577,6 +7972,10 @@ public class PersonServiceImpl implements IPersonServ {
         zhengChangDaKa.add(17);
         zhengChangDaKa.add(7);
         zhengChangDaKa.add(13);
+        zhengChangDaKa.add(301);
+        zhengChangDaKa.add(323);
+        zhengChangDaKa.add(601);
+        zhengChangDaKa.add(623);
 
         List<Integer> otherPaidDaKa = new ArrayList<Integer>();
         otherPaidDaKa.add(20);
@@ -7587,6 +7986,10 @@ public class PersonServiceImpl implements IPersonServ {
         List<Integer> weekEndDaka = new ArrayList<Integer>();
         weekEndDaka.add(67);
         weekEndDaka.add(61);
+        weekEndDaka.add(367);
+        weekEndDaka.add(361);
+        weekEndDaka.add(661);
+        weekEndDaka.add(667);
 
         List<Integer> outDaka = new ArrayList<Integer>();
         weekEndDaka.add(2);
@@ -7594,6 +7997,16 @@ public class PersonServiceImpl implements IPersonServ {
         weekEndDaka.add(106);
         weekEndDaka.add(107);
         weekEndDaka.add(108);
+        weekEndDaka.add(302);
+        weekEndDaka.add(312);
+        weekEndDaka.add(3106);
+        weekEndDaka.add(3107);
+        weekEndDaka.add(3108);
+        weekEndDaka.add(602);
+        weekEndDaka.add(612);
+        weekEndDaka.add(6106);
+        weekEndDaka.add(6107);
+        weekEndDaka.add(6108);
 
         String wd = personMapper.getWorkDateByMonthC(yearMonth);
         DayJI dj;

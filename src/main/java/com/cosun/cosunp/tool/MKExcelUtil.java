@@ -72,30 +72,54 @@ public class MKExcelUtil {
     CellStyle cellStyle = null;
     CellStyle cellStyleABC = null;
     CellStyle cellStyleRR = null;
+    CellStyle cellStyleBOPY = null;
+    CellStyle cellStyleBOY = null;
+    CellStyle cellStyleBOYG = null;
+    CellStyle cellStyleBOPYG = null;
     CellStyle cellStyleRRThin = null;
     CellStyle cellStylePP = null;
     CellStyle cellStyleBB = null;
     CellStyle cellStyleBBThin = null;
+    CellStyle cellStyle4BOY = null;
+    CellStyle cellStyle4BOYG = null;
     CellStyle cellStyleA = null;
+    CellStyle cellStyleAY = null;
+    CellStyle cellStyleAYG = null;
     CellStyle cellStyle2 = null;
     CellStyle cellStyle3 = null;
     CellStyle cellStyleGT = null;
     CellStyle cellStyle3P = null;
     CellStyle cellStyle4P = null;
+    CellStyle cellStyle4PY = null;
+    CellStyle cellStyle4PYG = null;
     CellStyle cellStyle3BOP = null;
     CellStyle cellStyle3BO = null;
     CellStyle cellStyle6BOP = null;
+    CellStyle cellStyle6BOPY = null;
+    CellStyle cellStyle6BOPYG = null;
     CellStyle cellStyle6BO = null;
+    CellStyle cellStyle6BOY = null;
+    CellStyle cellStyle6BOYG = null;
     CellStyle cellStyle4BOP = null;
+    CellStyle cellStyle4BOPY = null;
+    CellStyle cellStyle4BOPYG = null;
     CellStyle cellStyle4BO = null;
     CellStyle cellStyleBG = null;
     CellStyle cellStyleBR = null;
     CellStyle cellStyleBOP = null;
     CellStyle cellStyleAP = null;
+    CellStyle cellStyleAPY = null;
+    CellStyle cellStyleAPYG = null;
     CellStyle cellStyle4 = null;
+    CellStyle cellStyle4Y = null;
+    CellStyle cellStyle4YG = null;
     CellStyle cellStyle5 = null;
     CellStyle cellStyle6 = null;
+    CellStyle cellStyle6Y = null;
+    CellStyle cellStyle6YG = null;
     CellStyle cellStyle6P = null;
+    CellStyle cellStyle6PY = null;
+    CellStyle cellStyle6PYG = null;
     CellStyle cellStyleBO = null;
     HSSFRow row = null;
     HSSFRow row2 = null;
@@ -821,6 +845,40 @@ public class MKExcelUtil {
         cellStyleA.setFont(font3);
         cellStyleA.setWrapText(true);
 
+
+        cellStyleAY = wb.createCellStyle();
+        cellStyleAY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyleAY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyleAY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyleAY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyleAY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyleAY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyleAY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyleAY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyleAY.setFont(font3);
+        cellStyleAY.setWrapText(true);
+
+
+        cellStyleAYG = wb.createCellStyle();
+        cellStyleAYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyleAYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyleAYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyleAYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyleAYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyleAYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyleAYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyleAYG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyleAYG.setFont(font3);
+        cellStyleAYG.setWrapText(true);
+
         cellStyle2 = wb.createCellStyle();
         cellStyle2.setAlignment(CellStyle.ALIGN_CENTER);
         cellStyle2.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -849,7 +907,6 @@ public class MKExcelUtil {
         cellStyle3.setTopBorderColor(IndexedColors.BLACK.getIndex());
         cellStyle3.setFont(font4);
         cellStyle3.setWrapText(true);
-
 
 
         cellStyleGT = wb.createCellStyle();
@@ -882,6 +939,40 @@ public class MKExcelUtil {
         cellStyleAP.setFont(font3);
         cellStyleAP.setWrapText(true);
 
+
+        cellStyleAPY = wb.createCellStyle();
+        cellStyleAPY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyleAPY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyleAPY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyleAPY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAPY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyleAPY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAPY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyleAPY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAPY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyleAPY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAPY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyleAPY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyleAPY.setFont(font3);
+        cellStyleAPY.setWrapText(true);
+
+
+        cellStyleAPYG = wb.createCellStyle();
+        cellStyleAPYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyleAPYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyleAPYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyleAPYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAPYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyleAPYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAPYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyleAPYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAPYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyleAPYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleAPYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyleAPYG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyleAPYG.setFont(font3);
+        cellStyleAPYG.setWrapText(true);
+
         cellStyle4 = wb.createCellStyle();
         cellStyle4.setAlignment(CellStyle.ALIGN_CENTER);
         cellStyle4.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -895,6 +986,41 @@ public class MKExcelUtil {
         cellStyle4.setTopBorderColor(IndexedColors.BLACK.getIndex());
         cellStyle4.setFont(font5);
         cellStyle4.setWrapText(true);
+
+
+        cellStyle4Y = wb.createCellStyle();
+        cellStyle4Y.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle4Y.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle4Y.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle4Y.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4Y.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle4Y.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4Y.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle4Y.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4Y.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle4Y.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4Y.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle4Y.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyle4Y.setFont(font5);
+        cellStyle4Y.setWrapText(true);
+
+
+        cellStyle4YG = wb.createCellStyle();
+        cellStyle4YG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle4YG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle4YG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle4YG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4YG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle4YG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4YG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle4YG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4YG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle4YG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4YG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle4YG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyle4YG.setFont(font5);
+        cellStyle4YG.setWrapText(true);
+
 
         cellStyle5 = wb.createCellStyle();
         cellStyle5.setAlignment(CellStyle.ALIGN_CENTER);
@@ -924,6 +1050,35 @@ public class MKExcelUtil {
         cellStyle6.setFont(font7);
         cellStyle6.setWrapText(true);
 
+        cellStyle6Y = wb.createCellStyle();
+        cellStyle6Y.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle6Y.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle6Y.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle6Y.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6Y.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle6Y.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6Y.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle6Y.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6Y.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle6Y.setTopBorderColor(IndexedColors.YELLOW.getIndex());
+        cellStyle6Y.setFont(font7);
+        cellStyle6Y.setWrapText(true);
+
+
+        cellStyle6YG = wb.createCellStyle();
+        cellStyle6YG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle6YG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle6YG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle6YG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6YG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle6YG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6YG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle6YG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6YG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle6YG.setTopBorderColor(IndexedColors.DARK_YELLOW.getIndex());
+        cellStyle6YG.setFont(font7);
+        cellStyle6YG.setWrapText(true);
+
 
         cellStyle6P = wb.createCellStyle();
         cellStyle6P.setAlignment(CellStyle.ALIGN_CENTER);
@@ -941,6 +1096,38 @@ public class MKExcelUtil {
         cellStyle6P.setFont(font7);
         cellStyle6P.setWrapText(true);
 
+        cellStyle6PY = wb.createCellStyle();
+        cellStyle6PY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle6PY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle6PY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle6PY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6PY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle6PY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6PY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle6PY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6PY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle6PY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6PY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle6PY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyle6PY.setFont(font7);
+        cellStyle6PY.setWrapText(true);
+
+        cellStyle6PYG = wb.createCellStyle();
+        cellStyle6PYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle6PYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle6PYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle6PYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6PYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle6PYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6PYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle6PYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6PYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle6PYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6PYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle6PYG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyle6PYG.setFont(font7);
+        cellStyle6PYG.setWrapText(true);
+
         cellStyleBO = wb.createCellStyle();
         cellStyleBO.setAlignment(CellStyle.ALIGN_CENTER);
         cellStyleBO.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -957,6 +1144,38 @@ public class MKExcelUtil {
         cellStyleBO.setFont(font3);
         cellStyleBO.setWrapText(true);
 
+        cellStyleBOY = wb.createCellStyle();
+        cellStyleBOY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyleBOY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyleBOY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyleBOY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyleBOY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyleBOY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyleBOY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyleBOY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyleBOY.setFont(font3);
+        cellStyleBOY.setWrapText(true);
+
+        cellStyleBOYG = wb.createCellStyle();
+        cellStyleBOYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyleBOYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyleBOYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyleBOYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyleBOYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyleBOYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyleBOYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyleBOYG.setFillForegroundColor(HSSFColor.SEA_GREEN.index);
+        cellStyleBOYG.setFont(font3);
+        cellStyleBOYG.setWrapText(true);
+
         cellStyleBOP = wb.createCellStyle();
         cellStyleBOP.setAlignment(CellStyle.ALIGN_CENTER);
         cellStyleBOP.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -972,6 +1191,39 @@ public class MKExcelUtil {
         cellStyleBOP.setFillForegroundColor(HSSFColor.GOLD.index);
         cellStyleBOP.setFont(font3);
         cellStyleBOP.setWrapText(true);
+
+
+        cellStyleBOPY = wb.createCellStyle();
+        cellStyleBOPY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyleBOPY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyleBOPY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyleBOPY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOPY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyleBOPY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOPY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyleBOPY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOPY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyleBOPY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOPY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyleBOPY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyleBOPY.setFont(font3);
+        cellStyleBOPY.setWrapText(true);
+
+        cellStyleBOPYG = wb.createCellStyle();
+        cellStyleBOPYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyleBOPYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyleBOPYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyleBOPYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOPYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyleBOPYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOPYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyleBOPYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOPYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyleBOPYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyleBOPYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyleBOPYG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyleBOPYG.setFont(font3);
+        cellStyleBOPYG.setWrapText(true);
 
 
         cellStyleBR = wb.createCellStyle();
@@ -1023,6 +1275,39 @@ public class MKExcelUtil {
         cellStyle4BO.setFont(font5);
         cellStyle4BO.setWrapText(true);
 
+
+        cellStyle4BOY = wb.createCellStyle();
+        cellStyle4BOY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle4BOY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle4BOY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle4BOY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle4BOY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle4BOY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle4BOY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle4BOY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyle4BOY.setFont(font5);
+        cellStyle4BOY.setWrapText(true);
+
+        cellStyle4BOYG = wb.createCellStyle();
+        cellStyle4BOYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle4BOYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle4BOYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle4BOYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle4BOYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle4BOYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle4BOYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle4BOYG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyle4BOYG.setFont(font5);
+        cellStyle4BOYG.setWrapText(true);
+
         cellStyle4BOP = wb.createCellStyle();
         cellStyle4BOP.setAlignment(CellStyle.ALIGN_CENTER);
         cellStyle4BOP.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -1039,6 +1324,37 @@ public class MKExcelUtil {
         cellStyle4BOP.setFont(font5);
         cellStyle4BOP.setWrapText(true);
 
+        cellStyle4BOPY = wb.createCellStyle();
+        cellStyle4BOPY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle4BOPY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle4BOPY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle4BOPY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOPY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle4BOPY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOPY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle4BOPY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOPY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle4BOPY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOPY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle4BOPY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyle4BOPY.setFont(font5);
+        cellStyle4BOPY.setWrapText(true);
+
+        cellStyle4BOPYG = wb.createCellStyle();
+        cellStyle4BOPYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle4BOPYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle4BOPYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle4BOPYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOPYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle4BOPYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOPYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle4BOPYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOPYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle4BOPYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4BOPYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle4BOPYG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyle4BOPYG.setFont(font5);
+        cellStyle4BOPYG.setWrapText(true);
 
         cellStyle6BO = wb.createCellStyle();
         cellStyle6BO.setAlignment(CellStyle.ALIGN_CENTER);
@@ -1056,6 +1372,38 @@ public class MKExcelUtil {
         cellStyle6BO.setFont(font7);
         cellStyle6BO.setWrapText(true);
 
+        cellStyle6BOY = wb.createCellStyle();
+        cellStyle6BOY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle6BOY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle6BOY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle6BOY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle6BOY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle6BOY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle6BOY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle6BOY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyle6BOY.setFont(font7);
+        cellStyle6BOY.setWrapText(true);
+
+        cellStyle6BOYG = wb.createCellStyle();
+        cellStyle6BOYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle6BOYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle6BOYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle6BOYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle6BOYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle6BOYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle6BOYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle6BOYG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyle6BOYG.setFont(font7);
+        cellStyle6BOYG.setWrapText(true);
+
         cellStyle6BOP = wb.createCellStyle();
         cellStyle6BOP.setAlignment(CellStyle.ALIGN_CENTER);
         cellStyle6BOP.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -1071,6 +1419,41 @@ public class MKExcelUtil {
         cellStyle6BOP.setFillForegroundColor(HSSFColor.GOLD.index);
         cellStyle6BOP.setFont(font7);
         cellStyle6BOP.setWrapText(true);
+
+
+        cellStyle6BOPY = wb.createCellStyle();
+        cellStyle6BOPY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle6BOPY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle6BOPY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle6BOPY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOPY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle6BOPY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOPY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle6BOPY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOPY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle6BOPY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOPY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle6BOPY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyle6BOPY.setFont(font7);
+        cellStyle6BOPY.setWrapText(true);
+
+
+        cellStyle6BOPYG = wb.createCellStyle();
+        cellStyle6BOPYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle6BOPYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle6BOPYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle6BOPYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOPYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle6BOPYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOPYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle6BOPYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOPYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle6BOPYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle6BOPYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle6BOPYG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyle6BOPYG.setFont(font7);
+        cellStyle6BOPYG.setWrapText(true);
+
 
         cellStyle3BO = wb.createCellStyle();
         cellStyle3BO.setAlignment(CellStyle.ALIGN_CENTER);
@@ -1121,6 +1504,38 @@ public class MKExcelUtil {
         cellStyle4P.setWrapText(true);
 
 
+        cellStyle4PY = wb.createCellStyle();
+        cellStyle4PY.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle4PY.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle4PY.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle4PY.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4PY.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle4PY.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4PY.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle4PY.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4PY.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle4PY.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4PY.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle4PY.setFillForegroundColor(HSSFColor.YELLOW.index);
+        cellStyle4PY.setFont(font5);
+        cellStyle4PY.setWrapText(true);
+
+        cellStyle4PYG = wb.createCellStyle();
+        cellStyle4PYG.setAlignment(CellStyle.ALIGN_CENTER);
+        cellStyle4PYG.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        cellStyle4PYG.setBorderBottom(CellStyle.BORDER_THIN);
+        cellStyle4PYG.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4PYG.setBorderLeft(CellStyle.BORDER_THIN);
+        cellStyle4PYG.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4PYG.setBorderRight(CellStyle.BORDER_THIN);
+        cellStyle4PYG.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4PYG.setBorderTop(CellStyle.BORDER_THIN);
+        cellStyle4PYG.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        cellStyle4PYG.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle4PYG.setFillForegroundColor(HSSFColor.DARK_YELLOW.index);
+        cellStyle4PYG.setFont(font5);
+        cellStyle4PYG.setWrapText(true);
+
         cellStyle3P = wb.createCellStyle();
         cellStyle3P.setAlignment(CellStyle.ALIGN_CENTER);
         cellStyle3P.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -1137,6 +1552,3436 @@ public class MKExcelUtil {
         cellStyle3P.setFont(font4);
         cellStyle3P.setWrapText(true);
     }
+
+    int week;
+
+    public void init29(List<MonthKQInfo> mkList, HSSFSheet hssfSheet, String yearMonth, String wd, String fd) {
+        try {
+            if (29 <= days) {
+                if (oh.getEmpNo().contains("CS")) {
+                    inComStr = StringUtil.StringToDateStr(oh.getEmpNo());
+                } else {
+                    inComStr = personServ.getLinShiInComDateByName(oh.getName());
+                }
+                isWeekEnd = DateUtil.checkIsWeekEnd(wd, 29 + "");
+                ymdStr = yearMonth + "-29";
+                week = DateUtil.getWeek(ymdStr);
+                if (oh != null && oh.getDay29AM() != null) {
+                    if (oh.getDay29AM() == 1) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 2) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 4) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("休");
+                        cell.setCellStyle(cellStyleBR);
+                    } else if (oh.getDay29AM() == 6) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("△");
+                        cell.setCellStyle(cellStyleBG);
+//                            if (week == 6 || week == 7 || isWeekEnd) {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleBOP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleBO);
+//                                }
+//                            } else {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleAP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleA);
+//                                }
+//                            }
+                    } else if (oh.getDay29AM() == 11) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("▲");
+                        cell.setCellStyle(cellStyleBG);
+//                            if (week == 6 || week == 7 || isWeekEnd) {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleBOP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleBO);
+//                                }
+//                            } else {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleAP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleA);
+//                                }
+//                            }
+                    } else if (oh.getDay29AM() == 12) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 13) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("夜");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 15) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("休");
+                        cell.setCellStyle(cellStyleBR);
+                    } else if (oh.getDay29AM() == 18) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 7) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 8) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("✖");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 17) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle3BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle3BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle3P);
+                            } else {
+                                cell.setCellStyle(cellStyle3);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 67) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 77) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 61) {
+                        cell = row.createCell(4 + 29);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 16) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue(oh.getDay29AMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 19) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue(oh.getDay29AMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 20) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("婚");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 21) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("丧");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 22) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("产");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 23) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("陪");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 108) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29AM() == 107) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle6BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6P);
+                            } else {
+                                cell.setCellStyle(cellStyle6);
+                            }
+                        }
+
+                    } else if (oh.getDay29AM() == 106) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 301) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 302) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 312) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 313) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("夜");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 318) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 367) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 377) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 361) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 316) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 319) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PY);
+                            } else {
+                                cell.setCellStyle(cellStyle4Y);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 3108) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 3107) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle6BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6PY);
+                            } else {
+                                cell.setCellStyle(cellStyle6Y);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiAM() == 3106) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PY);
+                            } else {
+                                cell.setCellStyle(cellStyle4Y);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 325) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        cell.setCellStyle(cellStyle4BOPY);
+                    } else if (dayJI.getDayJiAM() == 601) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 602) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 612) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 613) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("夜");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 618) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 667) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 677) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 661) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 616) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 619) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4YG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 6108) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 6107) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle6BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle6YG);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiAM() == 6106) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4YG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 625) {
+                        cell = row.createCell(4 + 28);
+                        cell.setCellValue("");
+                        cell.setCellStyle(cellStyle4BOPYG);
+                    }
+                } else {
+                    cell = row.createCell(4 + 28);
+                    cell.setCellValue("");
+                    if (week == 6 || week == 7 || isWeekEnd) {
+                        if (inComStr.equals(ymdStr)) {
+                            cell.setCellStyle(cellStyle4BOP);
+                        } else {
+                            cell.setCellStyle(cellStyle4BO);
+                        }
+                    } else {
+                        if (inComStr.equals(ymdStr)) {
+                            cell.setCellStyle(cellStyle4P);
+                        } else {
+                            cell.setCellStyle(cellStyle4);
+                        }
+                    }
+                }
+
+                if (oh != null && oh.getDay29PM() != null) {
+                    if (oh.getDay29PM() == 1) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 2) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 4) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("假");
+                        cell.setCellStyle(cellStyleBR);
+                    } else if (oh.getDay29PM() == 6) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("△");
+                        cell.setCellStyle(cellStyleBG);
+//                            if (week == 6 || week == 7 || isWeekEnd) {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleBOP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleBO);
+//                                }
+//                            } else {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleAP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleA);
+//                                }
+//                            }
+                    } else if (oh.getDay29PM() == 11) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("▲");
+                        cell.setCellStyle(cellStyleBG);
+//                            if (week == 6 || week == 7 || isWeekEnd) {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleBOP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleBO);
+//                                }
+//                            } else {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleAP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleA);
+//                                }
+//                            }
+                    } else if (oh.getDay29PM() == 12) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 13) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("班");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 15) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("休");
+                        cell.setCellStyle(cellStyleBR);
+                    } else if (oh.getDay29PM() == 18) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 7) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 8) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("✖");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 17) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle3BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle3BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle3P);
+                            } else {
+                                cell.setCellStyle(cellStyle3);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 67) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 77) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 61) {
+                        cell = row2.createCell(4 + 29);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 16) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue(oh.getDay29PMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 19) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue(oh.getDay29PMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 20) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("婚");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 21) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("丧");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 22) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("产");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 23) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("产");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 108) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (oh.getDay29PM() == 107) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle6BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6P);
+                            } else {
+                                cell.setCellStyle(cellStyle6);
+                            }
+                        }
+
+                    } else if (oh.getDay29PM() == 106) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 601) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 602) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 612) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 613) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("班");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 618) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 667) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 677) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 661) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 616) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 619) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4YG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 6108) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 6107) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle6BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle6YG);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiPM() == 6106) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4YG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 625) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        cell.setCellStyle(cellStyle4BOPYG);
+                    } else if (dayJI.getDayJiPM() == 301) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 302) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 312) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 313) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("班");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 318) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 367) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 377) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 361) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 316) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 319) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PY);
+                            } else {
+                                cell.setCellStyle(cellStyle4Y);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 3108) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 3107) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle6BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6PY);
+                            } else {
+                                cell.setCellStyle(cellStyle6Y);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiPM() == 3106) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PY);
+                            } else {
+                                cell.setCellStyle(cellStyle4Y);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 325) {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        cell.setCellStyle(cellStyle4BOPY);
+                    } else {
+                        cell = row2.createCell(4 + 28);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    }
+                } else {
+                    cell = row2.createCell(4 + 28);
+                    cell.setCellValue("");
+                    if (week == 6 || week == 7 || isWeekEnd) {
+                        if (inComStr.equals(ymdStr)) {
+                            cell.setCellStyle(cellStyle4BOP);
+                        } else {
+                            cell.setCellStyle(cellStyle4BO);
+                        }
+                    } else {
+                        if (inComStr.equals(ymdStr)) {
+                            cell.setCellStyle(cellStyle4P);
+                        } else {
+                            cell.setCellStyle(cellStyle4);
+                        }
+                    }
+                }
+
+                if (oh != null && oh.getDay29ExHours() != null) {
+                    cell = row3.createCell(4 + 28);
+                    cell.setCellValue(oh.getDay29ExHours() == 0.0 ? "" : oh.getDay29ExHours().toString());
+                    if (week == 6 || week == 7 || isWeekEnd) {
+                        if (inComStr.equals(ymdStr)) {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleBOP);
+                            }
+                        } else {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        }
+                    } else {
+                        if (inComStr.equals(ymdStr)) {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleAP);
+                            }
+                        } else {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    }
+
+                } else {
+                    cell = row3.createCell(4 + 28);
+                    cell.setCellValue(oh.getDay29ExHours() == null ? "" : oh.getDay29ExHours().toString());
+                    if (week == 6 || week == 7 || isWeekEnd) {
+                        if (inComStr.equals(ymdStr)) {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleBOP);
+                            }
+                        } else {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        }
+                    } else {
+                        if (inComStr.equals(ymdStr)) {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleAP);
+                            }
+                        } else {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void init28(List<MonthKQInfo> mkList, HSSFSheet hssfSheet, String yearMonth, String wd, String fd) {
+        try {
+            for (int n = 0; n < dayJIList.size(); n++) {
+                dayJI = dayJIList.get(n);
+                if (oh.getEmpNo().contains("CS")) {
+                    inComStr = StringUtil.StringToDateStr(oh.getEmpNo());
+                } else {
+                    inComStr = personServ.getLinShiInComDateByName(oh.getName());
+                }
+                isWeekEnd = DateUtil.checkIsWeekEnd(wd, (n + 1) + "");
+                isFaDing = DateUtil.checkIsFaDing(fd, (n + 1) + "");
+                if (n < 9) {
+                    ymdStr = yearMonth + "-0" + (n + 1);
+                } else {
+                    ymdStr = yearMonth + "-" + (n + 1);
+                }
+                week = DateUtil.getWeek(ymdStr);
+                if (oh != null && dayJI.getDayJiAM() != null) {
+                    if (dayJI.getDayJiAM() == 1) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 2) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 4) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("休");
+                        cell.setCellStyle(cellStyleBR);
+                    } else if (dayJI.getDayJiAM() == 6) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("△");
+                        cell.setCellStyle(cellStyleBG);
+//                            if (week == 6 || week == 7 || isWeekEnd) {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleBOP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleBO);
+//                                }
+//                            } else {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleAP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleA);
+//                                }
+//                            }
+                    } else if (dayJI.getDayJiAM() == 11) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("▲");
+                        cell.setCellStyle(cellStyleBG);
+//                            if (week == 6 || week == 7 || isWeekEnd) {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleBOP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleBO);
+//                                }
+//                            } else {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleAP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleA);
+//                                }
+//                            }
+                    } else if (dayJI.getDayJiAM() == 12) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 13) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("夜");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 15) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("休");
+                        cell.setCellStyle(cellStyleBR);
+                    } else if (dayJI.getDayJiAM() == 18) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 7) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 8) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("✖");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 17) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle3BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle3BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle3P);
+                            } else {
+                                cell.setCellStyle(cellStyle3);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 67) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 77) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 61) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 16) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 19) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 20) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("婚");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 21) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("丧");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 22) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("产");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 23) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("陪");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 108) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 107) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle6BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6P);
+                            } else {
+                                cell.setCellStyle(cellStyle6);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiAM() == 106) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 301) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 302) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 312) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 313) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("夜");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 318) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 367) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 377) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 361) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 316) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 319) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PY);
+                            } else {
+                                cell.setCellStyle(cellStyle4Y);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 3108) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 3107) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle6BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6PY);
+                            } else {
+                                cell.setCellStyle(cellStyle6Y);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiAM() == 3106) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PY);
+                            } else {
+                                cell.setCellStyle(cellStyle4Y);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 325) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        cell.setCellStyle(cellStyle4BOPY);
+                    } else if (dayJI.getDayJiAM() == 601) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 602) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 612) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 613) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("夜");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 618) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 667) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 677) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 661) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 616) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 619) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiAMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4YG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 6108) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 6107) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle6BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle6YG);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiAM() == 6106) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4YG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiAM() == 625) {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        cell.setCellStyle(cellStyle4BOPYG);
+                    } else {
+                        cell = row.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    }
+                }
+                if (oh != null && dayJI.getDayJiPM() != null) {
+
+                    if (dayJI.getDayJiPM() == 1) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 2) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 4) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("假");
+                        cell.setCellStyle(cellStyleBR);
+                    } else if (dayJI.getDayJiPM() == 6) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("△");
+                        cell.setCellStyle(cellStyleBG);
+//                            if (week == 6 || week == 7 || isWeekEnd) {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleBOP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleBO);
+//                                }
+//                            } else {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleAP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleA);
+//                                }
+//                            }
+                    } else if (dayJI.getDayJiPM() == 11) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("▲");
+                        cell.setCellStyle(cellStyleBG);
+//                            if (week == 6 || week == 7 || isWeekEnd) {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleBOP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleBO);
+//                                }
+//                            } else {
+//                                if (inComStr.equals(ymdStr)) {
+//                                    cell.setCellStyle(cellStyleAP);
+//                                } else {
+//                                    cell.setCellStyle(cellStyleA);
+//                                }
+//                            }
+                    } else if (dayJI.getDayJiPM() == 12) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 13) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("班");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 15) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("假");
+                        cell.setCellStyle(cellStyleBR);
+                    } else if (dayJI.getDayJiPM() == 18) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 7) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 8) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("✖");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 17) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle3BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle3BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle3P);
+                            } else {
+                                cell.setCellStyle(cellStyle3);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 67) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 77) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 61) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 16) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 19) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 20) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("假");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 21) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("假");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 22) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("假");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 23) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("产");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 108) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOP);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAP);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 107) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle6BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6P);
+                            } else {
+                                cell.setCellStyle(cellStyle6);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiPM() == 106) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 601) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 602) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 612) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 613) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("班");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 618) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 667) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 677) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 661) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 616) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 619) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4YG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 6108) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleAYG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 6107) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle6BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle6YG);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiPM() == 6106) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PYG);
+                            } else {
+                                cell.setCellStyle(cellStyle4YG);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 625) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        cell.setCellStyle(cellStyle4BOPYG);
+                    } else if (dayJI.getDayJiPM() == 301) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("√");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 302) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 312) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("●");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 313) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("班");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPYG);
+                            } else {
+                                cell.setCellStyle(cellStyleBOYG);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 318) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 367) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 377) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 361) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 316) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 319) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue(dayJI.getDayJiPMRemark());
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PY);
+                            } else {
+                                cell.setCellStyle(cellStyle4Y);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 3108) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleBOPY);
+                            } else {
+                                cell.setCellStyle(cellStyleBOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyleAPY);
+                            } else {
+                                cell.setCellStyle(cellStyleAY);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 3107) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle6BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle6PY);
+                            } else {
+                                cell.setCellStyle(cellStyle6Y);
+                            }
+                        }
+
+                    } else if (dayJI.getDayJiPM() == 3106) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("О");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOPY);
+                            } else {
+                                cell.setCellStyle(cellStyle4BOY);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4PY);
+                            } else {
+                                cell.setCellStyle(cellStyle4Y);
+                            }
+                        }
+                    } else if (dayJI.getDayJiPM() == 325) {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        cell.setCellStyle(cellStyle4BOPY);
+                    } else {
+                        cell = row2.createCell(4 + n);
+                        cell.setCellValue("");
+                        if (week == 6 || week == 7 || isWeekEnd) {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4BOP);
+                            } else {
+                                cell.setCellStyle(cellStyle4BO);
+                            }
+                        } else {
+                            if (inComStr.equals(ymdStr)) {
+                                cell.setCellStyle(cellStyle4P);
+                            } else {
+                                cell.setCellStyle(cellStyle4);
+                            }
+                        }
+                    }
+                }
+                if (oh != null && dayJI.getDayJiExHours() != null) {
+                    cell = row3.createCell(4 + n);
+                    cell.setCellValue((dayJI.getDayJiExHours() == 0.0 ? "" : dayJI.getDayJiExHours()).toString());
+                    if (week == 6 || week == 7 || isWeekEnd) {
+                        if (inComStr.equals(ymdStr)) {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleBOP);
+                            }
+                        } else {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        }
+                    } else {
+                        if (inComStr.equals(ymdStr)) {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleAP);
+                            }
+                        } else {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    }
+
+                } else {
+                    cell = row3.createCell(4 + n);
+                    cell.setCellValue((dayJI.getDayJiExHours() == null ? "" : dayJI.getDayJiExHours()).toString());
+                    if (week == 6 || week == 7 || isWeekEnd) {
+                        if (inComStr.equals(ymdStr)) {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleBOP);
+                            }
+                        } else {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleBO);
+                            }
+                        }
+                    } else {
+                        if (inComStr.equals(ymdStr)) {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleAP);
+                            }
+                        } else {
+                            if (isFaDing) {
+                                cell.setCellStyle(cellStyleBR);
+                            } else {
+                                cell.setCellStyle(cellStyleA);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void createThreeSheet(List<MonthKQInfo> mkList1, HSSFSheet hssfSheet3, String yearMonth, String wd, String fd) {
         beginRow = 3;
@@ -5840,1718 +9685,10 @@ public class MKExcelUtil {
                 cell.setCellValue("加班");
                 cell.setCellStyle(cellStyleA);
 
-                int week;
-                for (int n = 0; n < dayJIList.size(); n++) {
-                    dayJI = dayJIList.get(n);
-                    if (oh.getEmpNo().contains("CS")) {
-                        inComStr = StringUtil.StringToDateStr(oh.getEmpNo());
-                    } else {
-                        inComStr = personServ.getLinShiInComDateByName(oh.getName());
-                    }
-                    isWeekEnd = DateUtil.checkIsWeekEnd(wd, (n + 1) + "");
-                    isFaDing = DateUtil.checkIsFaDing(fd, (n + 1) + "");
-                    if (n < 9) {
-                        ymdStr = yearMonth + "-0" + (n + 1);
-                    } else {
-                        ymdStr = yearMonth + "-" + (n + 1);
-                    }
-                    week = DateUtil.getWeek(ymdStr);
-                    if (oh != null && dayJI.getDayJiAM() != null) {
-                        if (dayJI.getDayJiAM() == 1) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 2) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 4) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("休");
-                            cell.setCellStyle(cellStyleBR);
-                        } else if (dayJI.getDayJiAM() == 6) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("△");
-                            cell.setCellStyle(cellStyleBG);
-//                            if (week == 6 || week == 7 || isWeekEnd) {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleBOP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleBO);
-//                                }
-//                            } else {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleAP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleA);
-//                                }
-//                            }
-                        } else if (dayJI.getDayJiAM() == 11) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("▲");
-                            cell.setCellStyle(cellStyleBG);
-//                            if (week == 6 || week == 7 || isWeekEnd) {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleBOP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleBO);
-//                                }
-//                            } else {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleAP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleA);
-//                                }
-//                            }
-                        } else if (dayJI.getDayJiAM() == 12) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("●");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 13) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("夜");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 15) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("休");
-                            cell.setCellStyle(cellStyleBR);
-                        } else if (dayJI.getDayJiAM() == 18) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 7) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
+                init28(mkList, hssfSheet, yearMonth, wd, fd);
 
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 8) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("✖");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 17) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle3BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle3BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle3P);
-                                } else {
-                                    cell.setCellStyle(cellStyle3);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 67) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 77) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 61) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 16) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue(dayJI.getDayJiAMRemark());
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 19) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue(dayJI.getDayJiAMRemark());
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 20) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("婚");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 21) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("丧");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 22) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("产");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 23) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("陪");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 108) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiAM() == 107) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle6BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle6BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle6P);
-                                } else {
-                                    cell.setCellStyle(cellStyle6);
-                                }
-                            }
+                init29(mkList, hssfSheet, yearMonth, wd, fd);
 
-                        } else if (dayJI.getDayJiAM() == 106) {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else {
-                            cell = row.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        }
-                    }
-                    if (oh != null && dayJI.getDayJiPM() != null) {
-
-                        if (dayJI.getDayJiPM() == 1) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 2) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 4) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("假");
-                            cell.setCellStyle(cellStyleBR);
-                        } else if (dayJI.getDayJiPM() == 6) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("△");
-                            cell.setCellStyle(cellStyleBG);
-//                            if (week == 6 || week == 7 || isWeekEnd) {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleBOP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleBO);
-//                                }
-//                            } else {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleAP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleA);
-//                                }
-//                            }
-                        } else if (dayJI.getDayJiPM() == 11) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("▲");
-                            cell.setCellStyle(cellStyleBG);
-//                            if (week == 6 || week == 7 || isWeekEnd) {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleBOP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleBO);
-//                                }
-//                            } else {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleAP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleA);
-//                                }
-//                            }
-                        } else if (dayJI.getDayJiPM() == 12) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("●");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 13) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("班");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 15) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("假");
-                            cell.setCellStyle(cellStyleBR);
-                        } else if (dayJI.getDayJiPM() == 18) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 7) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 8) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("✖");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 17) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle3BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle3BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle3P);
-                                } else {
-                                    cell.setCellStyle(cellStyle3);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 67) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 77) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 61) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 16) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue(dayJI.getDayJiPMRemark());
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 19) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue(dayJI.getDayJiPMRemark());
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 20) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("假");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 21) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("假");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 22) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("假");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 23) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("产");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 108) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (dayJI.getDayJiPM() == 107) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle6BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle6BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle6P);
-                                } else {
-                                    cell.setCellStyle(cellStyle6);
-                                }
-                            }
-
-                        } else if (dayJI.getDayJiPM() == 106) {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else {
-                            cell = row2.createCell(4 + n);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        }
-                    }
-                    if (oh != null && dayJI.getDayJiExHours() != null) {
-                        cell = row3.createCell(4 + n);
-                        cell.setCellValue((dayJI.getDayJiExHours() == 0.0 ? "" : dayJI.getDayJiExHours()).toString());
-                        if (week == 6 || week == 7 || isWeekEnd) {
-                            if (inComStr.equals(ymdStr)) {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleBOP);
-                                }
-                            } else {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            }
-                        } else {
-                            if (inComStr.equals(ymdStr)) {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleAP);
-                                }
-                            } else {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        }
-
-                    } else {
-                        cell = row3.createCell(4 + n);
-                        cell.setCellValue((dayJI.getDayJiExHours() == null ? "" : dayJI.getDayJiExHours()).toString());
-                        if (week == 6 || week == 7 || isWeekEnd) {
-                            if (inComStr.equals(ymdStr)) {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleBOP);
-                                }
-                            } else {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            }
-                        } else {
-                            if (inComStr.equals(ymdStr)) {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleAP);
-                                }
-                            } else {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        }
-                    }
-                }
-
-
-                if (29 <= days) {
-                    if (oh.getEmpNo().contains("CS")) {
-                        inComStr = StringUtil.StringToDateStr(oh.getEmpNo());
-                    } else {
-                        inComStr = personServ.getLinShiInComDateByName(oh.getName());
-                    }
-                    isWeekEnd = DateUtil.checkIsWeekEnd(wd, 29 + "");
-                    ymdStr = yearMonth + "-29";
-                    week = DateUtil.getWeek(ymdStr);
-                    if (oh != null && oh.getDay29AM() != null) {
-                        if (oh.getDay29AM() == 1) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 2) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 4) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("休");
-                            cell.setCellStyle(cellStyleBR);
-                        } else if (oh.getDay29AM() == 6) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("△");
-                            cell.setCellStyle(cellStyleBG);
-//                            if (week == 6 || week == 7 || isWeekEnd) {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleBOP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleBO);
-//                                }
-//                            } else {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleAP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleA);
-//                                }
-//                            }
-                        } else if (oh.getDay29AM() == 11) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("▲");
-                            cell.setCellStyle(cellStyleBG);
-//                            if (week == 6 || week == 7 || isWeekEnd) {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleBOP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleBO);
-//                                }
-//                            } else {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleAP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleA);
-//                                }
-//                            }
-                        } else if (oh.getDay29AM() == 12) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("●");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 13) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("夜");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 15) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("休");
-                            cell.setCellStyle(cellStyleBR);
-                        } else if (oh.getDay29AM() == 18) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 7) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 8) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("✖");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 17) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle3BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle3BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle3P);
-                                } else {
-                                    cell.setCellStyle(cellStyle3);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 67) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 77) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 61) {
-                            cell = row.createCell(4 + 29);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 16) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue(oh.getDay29AMRemark());
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 19) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue(oh.getDay29AMRemark());
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 20) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("婚");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 21) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("丧");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 22) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("产");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 23) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("陪");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 108) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29AM() == 107) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle6BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle6BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle6P);
-                                } else {
-                                    cell.setCellStyle(cellStyle6);
-                                }
-                            }
-
-                        } else if (oh.getDay29AM() == 106) {
-                            cell = row.createCell(4 + 28);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        }
-                    } else {
-                        cell = row.createCell(4 + 28);
-                        cell.setCellValue("");
-                        if (week == 6 || week == 7 || isWeekEnd) {
-                            if (inComStr.equals(ymdStr)) {
-                                cell.setCellStyle(cellStyle4BOP);
-                            } else {
-                                cell.setCellStyle(cellStyle4BO);
-                            }
-                        } else {
-                            if (inComStr.equals(ymdStr)) {
-                                cell.setCellStyle(cellStyle4P);
-                            } else {
-                                cell.setCellStyle(cellStyle4);
-                            }
-                        }
-                    }
-
-                    if (oh != null && oh.getDay29PM() != null) {
-                        if (oh.getDay29PM() == 1) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 2) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 4) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("假");
-                            cell.setCellStyle(cellStyleBR);
-                        } else if (oh.getDay29PM() == 6) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("△");
-                            cell.setCellStyle(cellStyleBG);
-//                            if (week == 6 || week == 7 || isWeekEnd) {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleBOP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleBO);
-//                                }
-//                            } else {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleAP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleA);
-//                                }
-//                            }
-                        } else if (oh.getDay29PM() == 11) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("▲");
-                            cell.setCellStyle(cellStyleBG);
-//                            if (week == 6 || week == 7 || isWeekEnd) {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleBOP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleBO);
-//                                }
-//                            } else {
-//                                if (inComStr.equals(ymdStr)) {
-//                                    cell.setCellStyle(cellStyleAP);
-//                                } else {
-//                                    cell.setCellStyle(cellStyleA);
-//                                }
-//                            }
-                        } else if (oh.getDay29PM() == 12) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("●");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 13) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("班");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 15) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("休");
-                            cell.setCellStyle(cellStyleBR);
-                        } else if (oh.getDay29PM() == 18) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 7) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 8) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("✖");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 17) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("√");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle3BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle3BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle3P);
-                                } else {
-                                    cell.setCellStyle(cellStyle3);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 67) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 77) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 61) {
-                            cell = row2.createCell(4 + 29);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 16) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue(oh.getDay29PMRemark());
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 19) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue(oh.getDay29PMRemark());
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 20) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("婚");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 21) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("丧");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 22) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("产");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 23) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("产");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 108) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleBOP);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyleAP);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        } else if (oh.getDay29PM() == 107) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle6BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle6BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle6P);
-                                } else {
-                                    cell.setCellStyle(cellStyle6);
-                                }
-                            }
-
-                        } else if (oh.getDay29PM() == 106) {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("О");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        } else {
-                            cell = row2.createCell(4 + 28);
-                            cell.setCellValue("");
-                            if (week == 6 || week == 7 || isWeekEnd) {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4BOP);
-                                } else {
-                                    cell.setCellStyle(cellStyle4BO);
-                                }
-                            } else {
-                                if (inComStr.equals(ymdStr)) {
-                                    cell.setCellStyle(cellStyle4P);
-                                } else {
-                                    cell.setCellStyle(cellStyle4);
-                                }
-                            }
-                        }
-                    } else {
-                        cell = row2.createCell(4 + 28);
-                        cell.setCellValue("");
-                        if (week == 6 || week == 7 || isWeekEnd) {
-                            if (inComStr.equals(ymdStr)) {
-                                cell.setCellStyle(cellStyle4BOP);
-                            } else {
-                                cell.setCellStyle(cellStyle4BO);
-                            }
-                        } else {
-                            if (inComStr.equals(ymdStr)) {
-                                cell.setCellStyle(cellStyle4P);
-                            } else {
-                                cell.setCellStyle(cellStyle4);
-                            }
-                        }
-                    }
-
-                    if (oh != null && oh.getDay29ExHours() != null) {
-                        cell = row3.createCell(4 + 28);
-                        cell.setCellValue(oh.getDay29ExHours() == 0.0 ? "" : oh.getDay29ExHours().toString());
-                        if (week == 6 || week == 7 || isWeekEnd) {
-                            if (inComStr.equals(ymdStr)) {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleBOP);
-                                }
-                            } else {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            }
-                        } else {
-                            if (inComStr.equals(ymdStr)) {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleAP);
-                                }
-                            } else {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        }
-
-                    } else {
-                        cell = row3.createCell(4 + 28);
-                        cell.setCellValue(oh.getDay29ExHours() == null ? "" : oh.getDay29ExHours().toString());
-                        if (week == 6 || week == 7 || isWeekEnd) {
-                            if (inComStr.equals(ymdStr)) {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleBOP);
-                                }
-                            } else {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleBO);
-                                }
-                            }
-                        } else {
-                            if (inComStr.equals(ymdStr)) {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleAP);
-                                }
-                            } else {
-                                if (isFaDing) {
-                                    cell.setCellStyle(cellStyleBR);
-                                } else {
-                                    cell.setCellStyle(cellStyleA);
-                                }
-                            }
-                        }
-                    }
-                }
 
                 if (30 <= days) {
                     if (oh.getEmpNo().contains("CS")) {
@@ -7927,6 +10064,432 @@ public class MKExcelUtil {
                                     cell.setCellStyle(cellStyle4);
                                 }
                             }
+                        } else if (dayJI.getDayJiAM() == 301) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("√");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 302) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 312) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("●");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 313) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("夜");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 318) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 367) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 377) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 361) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 316) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue(dayJI.getDayJiAMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 319) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue(dayJI.getDayJiAMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4Y);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 3108) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 3107) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle6BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle6Y);
+                                }
+                            }
+
+                        } else if (dayJI.getDayJiAM() == 3106) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4Y);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 325) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            cell.setCellStyle(cellStyle4BOPY);
+                        } else if (dayJI.getDayJiAM() == 601) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("√");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 602) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 612) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("●");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 613) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("夜");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 618) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 667) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 677) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 661) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 616) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue(dayJI.getDayJiAMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 619) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue(dayJI.getDayJiAMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4YG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 6108) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 6107) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle6BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle6YG);
+                                }
+                            }
+
+                        } else if (dayJI.getDayJiAM() == 6106) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4YG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 625) {
+                            cell = row.createCell(4 + 29);
+                            cell.setCellValue("");
+                            cell.setCellStyle(cellStyle4BOPYG);
                         } else {
                             cell = row.createCell(4 + 29);
                             cell.setCellValue("");
@@ -8326,6 +10889,432 @@ public class MKExcelUtil {
                                     cell.setCellStyle(cellStyle4);
                                 }
                             }
+                        } else if (dayJI.getDayJiPM() == 601) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("√");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 602) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 612) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("●");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 613) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("班");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 618) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 667) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 677) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 661) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 616) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue(dayJI.getDayJiPMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 619) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue(dayJI.getDayJiPMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4YG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 6108) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 6107) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle6BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle6YG);
+                                }
+                            }
+
+                        } else if (dayJI.getDayJiPM() == 6106) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4YG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 625) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            cell.setCellStyle(cellStyle4BOPYG);
+                        } else if (dayJI.getDayJiPM() == 301) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("√");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 302) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 312) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("●");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 313) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("班");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 318) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 367) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 377) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 361) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 316) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue(dayJI.getDayJiPMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 319) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue(dayJI.getDayJiPMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4Y);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 3108) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 3107) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle6BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle6Y);
+                                }
+                            }
+
+                        } else if (dayJI.getDayJiPM() == 3106) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4Y);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 325) {
+                            cell = row2.createCell(4 + 29);
+                            cell.setCellValue("");
+                            cell.setCellStyle(cellStyle4BOPY);
                         } else {
                             cell = row2.createCell(4 + 29);
                             cell.setCellValue("");
@@ -8803,6 +11792,432 @@ public class MKExcelUtil {
                                     cell.setCellStyle(cellStyle4);
                                 }
                             }
+                        } else if (dayJI.getDayJiAM() == 301) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("√");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 302) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 312) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("●");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 313) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("夜");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 318) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 367) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 377) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 361) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 316) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue(dayJI.getDayJiAMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 319) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue(dayJI.getDayJiAMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4Y);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 3108) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 3107) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle6BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle6Y);
+                                }
+                            }
+
+                        } else if (dayJI.getDayJiAM() == 3106) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4Y);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 325) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            cell.setCellStyle(cellStyle4BOPY);
+                        } else if (dayJI.getDayJiAM() == 601) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("√");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 602) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 612) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("●");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 613) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("夜");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 618) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 667) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 677) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 661) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 616) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue(dayJI.getDayJiAMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 619) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue(dayJI.getDayJiAMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4YG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 6108) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 6107) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle6BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle6YG);
+                                }
+                            }
+
+                        } else if (dayJI.getDayJiAM() == 6106) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4YG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiAM() == 625) {
+                            cell = row.createCell(4 + 30);
+                            cell.setCellValue("");
+                            cell.setCellStyle(cellStyle4BOPYG);
                         } else {
                             cell = row.createCell(4 + 30);
                             cell.setCellValue("");
@@ -9203,6 +12618,432 @@ public class MKExcelUtil {
                                     cell.setCellStyle(cellStyle4);
                                 }
                             }
+                        } else if (dayJI.getDayJiPM() == 601) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("√");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 602) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 612) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("●");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 613) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("班");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 618) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 667) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 677) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 661) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 616) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue(dayJI.getDayJiPMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 619) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue(dayJI.getDayJiPMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4YG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 6108) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleAYG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 6107) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle6BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle6YG);
+                                }
+                            }
+
+                        } else if (dayJI.getDayJiPM() == 6106) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PYG);
+                                } else {
+                                    cell.setCellStyle(cellStyle4YG);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 625) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            cell.setCellStyle(cellStyle4BOPYG);
+                        } else if (dayJI.getDayJiPM() == 301) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("√");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 302) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 312) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("●");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 313) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("班");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPYG);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOYG);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 318) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 367) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 377) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 361) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 316) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue(dayJI.getDayJiPMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 319) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue(dayJI.getDayJiPMRemark());
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4Y);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 3108) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleBOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleBOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyleAPY);
+                                } else {
+                                    cell.setCellStyle(cellStyleAY);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 3107) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle6BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle6PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle6Y);
+                                }
+                            }
+
+                        } else if (dayJI.getDayJiPM() == 3106) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("О");
+                            if (week == 6 || week == 7 || isWeekEnd) {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4BOPY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4BOY);
+                                }
+                            } else {
+                                if (inComStr.equals(ymdStr)) {
+                                    cell.setCellStyle(cellStyle4PY);
+                                } else {
+                                    cell.setCellStyle(cellStyle4Y);
+                                }
+                            }
+                        } else if (dayJI.getDayJiPM() == 325) {
+                            cell = row2.createCell(4 + 30);
+                            cell.setCellValue("");
+                            cell.setCellStyle(cellStyle4BOPY);
                         } else {
                             cell = row2.createCell(4 + 30);
                             cell.setCellValue("");
