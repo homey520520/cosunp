@@ -18,13 +18,13 @@ public class OutPunch implements Serializable {
     private Integer id;
     private String userid;
     private String groupname;
-    private String checkin_type;
-    private String exception_type;
+    private String checkin_type;     //***   上班打卡
+    private String exception_type;   //***   地点异常
     private Long checkin_time;
     private String location_title;
     private String location_detail;
     private String wifiname;
-    private String notes;
+    private String notes;     //***  路上堵车，迟到了5分钟
     private String wifimac;
     private String[] mediaids; //
 

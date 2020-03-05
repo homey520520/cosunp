@@ -1,11 +1,9 @@
 package com.cosun.cosunp.service;
 
 import com.cosun.cosunp.entity.*;
-import com.cosun.cosunp.weixin.OutClockIn;
+import com.cosun.cosunp.entity.OutClockIn;
 import org.springframework.web.multipart.MultipartFile;
-import sun.reflect.annotation.ExceptionProxy;
 
-import java.time.Month;
 import java.util.List;
 
 public interface IPersonServ {
@@ -15,6 +13,8 @@ public interface IPersonServ {
     int checkAndSavePosition(Position position) throws Exception;
 
     List<String> getAllUserName() throws Exception;
+
+    void fillEmpNoWhenQYWXNull() throws Exception;
 
     List<ClockInOrgin> translateTabletoBean(MultipartFile file) throws Exception;
 
@@ -134,6 +134,8 @@ public interface IPersonServ {
 
     List<String> getAllKQDateList() throws Exception;
 
+    List<String> getAllKQDateListAAA() throws Exception;
+
     List<String> getAllMKMonthList() throws Exception;
 
     List<String> getAllKQMonthList() throws Exception;
@@ -190,6 +192,8 @@ public interface IPersonServ {
 
     int findAllZKAndOutDataConditionCount(Employee ee) throws Exception;
 
+    List<String> getAllKQDateListABC(String yearMonth) throws Exception;
+
     List<Employee> findAllLSZKAndOutDataCondition(Employee employee) throws Exception;
 
     int findAllLSZKAndOutDataConditionCount(Employee employee) throws Exception;
@@ -232,6 +236,10 @@ public interface IPersonServ {
 
     void saveOutClockInList(List<OutClockIn> outClockInList) throws Exception;
 
+    void saveZKQYList(List<ZhongKongBeanQY> qyList) throws Exception;
+
+    void saveQKData(List<QYWXSPFROM> fromList) throws Exception;
+
     List<KQBean> getAfterOperatorDataByOriginData(List<OutClockIn> clockDates, List<KQBean> kqBeans) throws Exception;
 
     List<KQBean> getgetAfterOperatorDataByOriginDataLinShi(List<OutClockIn> clockDates, List<KQBean> kqBeans) throws Exception;
@@ -241,6 +249,10 @@ public interface IPersonServ {
     List<KQBean> getAllKQDataByYearMonthDays(List<OutClockIn> clockDates) throws Exception;
 
     WeiXinUsrId getUserIdByUSerId(String userId) throws Exception;
+
+    String getTimeStrByDateStrAndEmpNo(String empNo,String ymdStr) throws Exception;
+
+    String getTimeStrByDateStrAndNameLinShiGong(String name,String ymdStr) throws Exception;
 
     void saveWeiXinUserIdByBean(WeiXinUsrId wx) throws Exception;
 
@@ -327,6 +339,9 @@ public interface IPersonServ {
     int findAllWorkSetCount(WorkSet workSet) throws Exception;
 
     List<Employee> getEmployeeById(Integer id) throws Exception;
+
+
+    List<Employee> getEmployeeById(String id) throws Exception;
 
     WorkSet getWorkSetById(Integer id) throws Exception;
 

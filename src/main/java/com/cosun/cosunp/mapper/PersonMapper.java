@@ -1,7 +1,7 @@
 package com.cosun.cosunp.mapper;
 
 import com.cosun.cosunp.entity.*;
-import com.cosun.cosunp.weixin.OutClockIn;
+import com.cosun.cosunp.entity.OutClockIn;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @author:homey Wong
- * @date:2019/5/9 0009 下午 5:04
+ * @date:2019/5/9  下午 5:04
  * @Description:
  * @Modified By:
  * @Modified-date:
@@ -149,7 +149,7 @@ public interface PersonMapper {
     @Select("select * from qianka where date = #{dateStr} and empNo = #{empNo} ")
     QianKa getQianKaByDateAndEmpno(QianKa qianKa);
 
-    @Select(" select * from qianka where date = #{dateStr} and empNo = #{empNo}  ")
+    @Select(" select * from qianka where date = #{dateStr} and empNo = #{empNo} limit 1  ")
     QianKa getQianKaByDateAndEmpnoA(String empNo, String dateStr);
 
     @Select("SELECT * FROM outdan where empNo = #{empNo} and  outtime <= #{dateStrStart} and realcomtime >= #{dateStrEnd} ")
@@ -243,13 +243,12 @@ public interface PersonMapper {
     @Select("select yearMonth from zhongkongbean group by yearMonth order by yearMonth desc")
     List<String> getAllKQMonthListKQBean();
 
-
     @SelectProvider(type = PseronDaoProvider.class, method = "isClockInAlready")
     int isClockInAlready(String openId, String dateStr, String titleName);
 
     @Select("select " +
             "weixinNo,\n" +
-            "\tifnull(date_format(clockInDateAMOn, '%h:%i:%s'),'')  as clockInDateAMOnStr,\n" +
+            "\tifnull(date_format(clockInDateAMOn, '%H:%i:%s'),'')  as clockInDateAMOnStr,\n" +
             "\tifnull(clockInAddrAMOn,'') as clockInAddrAMOn,\n" +
             "\t \tCASE\n" +
             "WHEN amOnUrl IS NULL THEN\n" +
@@ -259,7 +258,7 @@ public interface PersonMapper {
             "ELSE\n" +
             "\t'other' \n" +
             "END as amOnUrl ,\n" +
-            "\tifnull(date_format(clockInDatePMOn, '%h:%i:%s'),'') as clockInDatePMOnStr,\n" +
+            "\tifnull(date_format(clockInDatePMOn, '%H:%i:%s'),'') as clockInDatePMOnStr,\n" +
             "\tifnull(clockInAddrPMOn,'') as clockInAddrPMOn,\n" +
             "\t\tCASE\n" +
             "WHEN pmOnUrl IS NULL THEN\n" +
@@ -269,7 +268,7 @@ public interface PersonMapper {
             "ELSE\n" +
             "\t'other' \n" +
             "END as pmOnUrl,\n" +
-            "\tifnull(date_format(clockInDateNMOn, '%h:%i:%s'),'') as clockInDateNMOnStr,\n" +
+            "\tifnull(date_format(clockInDateNMOn, '%H:%i:%s'),'') as clockInDateNMOnStr,\n" +
             "\tifnull(clockInAddNMOn,'') as clockInAddNMOn,\n" +
             "\t\tCASE\n" +
             "WHEN nmOnUrl IS NULL THEN\n" +
@@ -288,6 +287,9 @@ public interface PersonMapper {
 
     @Select("select empNo from employee where name = #{name} limit 1 ")
     String getEmpNoByNameA(String name);
+
+    @Update("update qyweixinbd set empNo = #{empNo} where userid = #{userId}")
+    void saveEmpNoByUserId(String userId,String empNo);
 
     @Select("select ot.* from outdan ot left join employee ee on ot.empNo = ee.empNo  where ee.name = #{name} and ot.date = #{dateStr}")
     Out getOutDanByNameAndDateStr(Out out);
@@ -346,24 +348,42 @@ public interface PersonMapper {
             "\tclockInDateAMOn,\n" +
             "\tclockInAddrAMOn,\n" +
             "\tamOnUrl,\n" +
+            "\tcheckin_typeA,\n" +
+            "\texception_typeA,\n" +
+            "\tnotesA,\n" +
             "\tclockInDatePMOn,\n" +
             "\tclockInAddrPMOn,\n" +
             "\tpmOnUrl,\n" +
+            "\tcheckin_typeP,\n" +
+            "\texception_typeP,\n" +
+            "\tnotesP,\n" +
             "\tclockInDateNMOn,\n" +
             "\tclockInAddNMOn,\n" +
             "\tnmOnUrl,\n" +
+            "\tcheckin_typeN,\n" +
+            "\texception_typeN,\n" +
+            "\tnotesN,\n" +
             "\tclockInDate)\n" +
             " values(" +
             "#{userid}," +
             "#{clockInDateAMOnStr}," +
             "#{clockInAddrAMOn}," +
             "#{amOnUrl}," +
+            "#{checkin_typeA}," +
+            "#{exception_typeA}," +
+            "#{notesA}," +
             "#{clockInDatePMOnStr}," +
             "#{clockInAddrPMOn}," +
             "#{pmOnUrl}," +
+            "#{checkin_typeP}," +
+            "#{exception_typeP}," +
+            "#{notesP}," +
             "#{clockInDateNMOnStr}," +
             "#{clockInAddNMOn}," +
             "#{nmOnUrl}," +
+            "#{checkin_typeN}," +
+            "#{exception_typeN}," +
+            "#{notesN}," +
             "#{clockInDateStr})\n")
     void addOutClockInDateByBean(OutClockIn outClockIn);
 
@@ -422,8 +442,8 @@ public interface PersonMapper {
     @Select("SELECT\n" +
             "\te.empno as empNo,\n" +
             "\te.`name` as name,\n" +
-            "\tdate_format(ld.beginleave, '%Y-%m-%d %h:%i:%s')  as beginleaveStr,\n" +
-            "\tdate_format(ld.endleave, '%Y-%m-%d %h:%i:%s') as endleaveStr,\n" +
+            "\tdate_format(ld.beginleave, '%Y-%m-%d %H:%i:%s')  as beginleaveStr,\n" +
+            "\tdate_format(ld.endleave, '%Y-%m-%d %H:%i:%s') as endleaveStr,\n" +
             "\tld.leavelong,\n" +
             "\tld.leaveDescrip\n" +
             "FROM\n" +
@@ -971,7 +991,7 @@ public interface PersonMapper {
             "LEFT JOIN position n ON e.positionId = n.id\n" +
             "LEFT JOIN outdan od ON od.empNo = e.empno  and od.date = o.clockInDate\n" +
             "ORDER BY\n" +
-            "\te.empno ASC " +
+            "\te.empno desc " +
             " limit #{currentPageTotalNum},#{pageSize} ")
     List<Employee> findAllEmployeeOutClockIn(Employee employee);
 
@@ -1043,7 +1063,7 @@ public interface PersonMapper {
             "\t\tFROM\n" +
             "\t\t\temployee e LEFT JOIN dept d on e.deptId = d.id \n" +
             "LEFT JOIN position n on e.positionId = n.id\n" +
-            "\t\t    ORDER BY\n" +
+            "\t\t  ORDER BY\n" +
             "\t\t\tNAME ASC ")
     List<Employee> findAllEmployeeAll();
 
@@ -1223,11 +1243,23 @@ public interface PersonMapper {
     @Select("select *,#{currentPage} as currentPage from dept where deptname like  CONCAT('%',#{deptname},'%') order by deptname desc limit #{currentPageTotalNum},#{pageSize}")
     List<Dept> queryDeptByNameA(Dept dept);
 
+    @Select("select EnrollNumber,date as dateStr,timeStr,remark  from zhongkongbean  where EnrollNumber = #{userId} and date = #{dateStr} limit 1 ")
+    ZhongKongBean getZKBByUserIdAndDateStr(String userId,String dateStr);
+
+    @Select("select *  from zhongkongbeanqy  where userid = #{userId} and date = #{dateStr} limit 1")
+    ZhongKongBeanQY getZKQYByUserIdAndDate(String userId,String dateStr);
+
     @SelectProvider(type = PseronDaoProvider.class, method = "findAllPositionByConditionCount")
     int findAllPositionByConditionCount(Position position);
 
-    @Insert("insert into zhongkongbean (EnrollNumber,Date,timeStr,yearMonth,machineNum) values(#{EnrollNumber},#{dateStr},#{timeStr},#{yearMonth},#{machineNum})")
+    @Insert("insert into zhongkongbean (EnrollNumber,Date,timeStr,yearMonth,machineNum,remark) values(#{EnrollNumber},#{dateStr},#{timeStr},#{yearMonth},#{machineNum},#{remark})")
     void saveBeforeDayZhongKongData(ZhongKongBean zkb);
+
+    @Update("update zhongkongbean set timeStr = #{timeStr} ,remark = #{remark} where EnrollNumber = #{EnrollNumber} and date = #{dateStr}")
+    void updateBeforeDayZhongKongData(ZhongKongBean zkb);
+
+    @Insert("insert into zhongkongbeanQY (yearMonth,userId,date,timeStr,remark) values(#{yearMonth},#{userId},#{dateStr},#{timeStr},#{remark})")
+    void addZKQY(ZhongKongBeanQY zkq);
 
     @Select("SELECT\n" +
             "\tzk.yearMonth,\n" +
@@ -1341,7 +1373,7 @@ public interface PersonMapper {
             "\ta.type as type\n" +
             "FROM\n" +
             "\tleavedata a\n" +
-            "LEFT JOIN employee e ON a.employeeid = e.id\n" +
+            "LEFT JOIN employee e ON a.empNo = e.empNo\n" +
             "LEFT JOIN position n ON n.id = e.positionId\n" +
             "LEFT JOIN dept t ON t.id = e.deptId\n" +
             " where a.id = #{id} " +
@@ -1405,9 +1437,14 @@ public interface PersonMapper {
     @Select("select * from workset where month = #{month} and workLevel = #{positionLevel}")
     WorkSet getWorkSetByMonthAndPositionLevel2(String month, String positionLevel);
 
-    @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %h:%i:%s') as beginLeaveStr ,date_format(endleave, '%Y-%m-%d %h:%i:%s') as endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type  " +
-            "from leavedata where employeeid = #{employeeId} and  beginleave<= #{dataStrStart} and endleave>= #{dataEnd} limit 1 ")
+    @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %H:%i:%s') as beginLeaveStr ,date_format(endleave, '%Y-%m-%d %H:%i:%s') as endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type  " +
+            "from leavedata where employeeid = #{employeeId} and  beginleave<= date_format(#{dataStrStart},'%Y-%m-%d %H:%i') and endleave>= date_format(#{dataEnd},'%Y-%m-%d %H:%i') limit 1 ")
     Leave getLeaveByEmIdAndMonth(Integer employeeId, String dataStrStart, String dataEnd);
+
+
+    @Select("select  empNo as empNo,date_format(beginleave, '%Y-%m-%d %H:%i:%s') as beginLeaveStr ,date_format(endleave, '%Y-%m-%d %H:%i:%s') as endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type  " +
+            "from leavedata where empNo = #{name} and  beginleave<= date_format(#{dataStrStart},'%Y-%m-%d %H:%i') and endleave>= date_format(#{dataEnd},'%Y-%m-%d %H:%i') limit 1 ")
+    Leave getLeaveByEmIdAndMonthLinShi(String name, String dataStrStart, String dataEnd);
 
     @Select("SELECT\n" +
             "\tmk.*, ee.`name` AS nameReal\n" +
@@ -1486,15 +1523,32 @@ public interface PersonMapper {
     @Select("select * from zhongkongbean where enrollNumber = #{num} and date = #{date}")
     ZhongKongBean getZhongKongBeanByNumAndDate(String num, String date);
 
-    @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %h:%i:%s" +
-            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %h:%i:%s') endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type " +
-            "  from leavedata where employeeid = #{employeeId} and beginleave <= #{dataStr} and endleave >= #{dataStr} limit 1 ")
+    @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %H:%i:%s" +
+            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %H:%i:%s') endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type " +
+            "  from leavedata where employeeid = #{employeeId} and beginleave <= date_format(#{dataStr}, '%Y-%m-%d %H:%i') and endleave >= date_format(#{dataStr}, '%Y-%m-%d %H:%i') limit 1 ")
+    Leave getLeaveByEmIdAndMonthAFFF(Integer employeeId, String dataStr);
+
+
+    @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %H:%i:%s" +
+            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %H:%i:%s') endLeaveStr," +
+            "leavelong as leaveLong,leaveDescrip,remark,type " +
+            "  from leavedata where employeeid = #{employeeId} and beginleave <= " +
+            "date_format(#{dataStr}, '%Y-%m-%d %H:%i') and " +
+            "endleave >= date_format(#{dataStr}, '%Y-%m-%d %H:%i') limit 1 ")
     Leave getLeaveByEmIdAndMonthA(Integer employeeId, String dataStr);
 
+    @Select("select  empNo as empNo,date_format(beginleave, '%Y-%m-%d %H:%i:%s" +
+            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %H:%i:%s') endLeaveStr," +
+            "leavelong as leaveLong,leaveDescrip,remark,type " +
+            "  from leavedata where empNo = #{name} and beginleave <= " +
+            "date_format(#{dataStr}, '%Y-%m-%d %H:%i') and " +
+            "endleave >= date_format(#{dataStr}, '%Y-%m-%d %H:%i') limit 1 ")
+    Leave getLeaveByEmIdAndMonthALinShi(String name, String dataStr);
+
     @Select("select a.employeeid as employeeId," +
-            "date_format(a.beginleave, '%Y-%m-%d %h:%i:%s" +
+            "date_format(a.beginleave, '%Y-%m-%d %H:%i:%s" +
             "') as beginLeaveStr," +
-            "date_format(a.endleave, '%Y-%m-%d %h:%i:%s') endLeaveStr," +
+            "date_format(a.endleave, '%Y-%m-%d %H:%i:%s') endLeaveStr," +
             "a.leavelong as leaveLong," +
             "a.leaveDescrip," +
             "a.remark," +
@@ -1502,8 +1556,24 @@ public interface PersonMapper {
             "  from leavedata a" +
             "  join employee e on e.id = a.employeeid " +
             " where " +
-            "e.empNo = #{empNo} and a.beginleave <= #{dataStr} and a.endleave >= #{dataStr} limit 1 ")
+            "e.empNo = #{empNo} and a.beginleave <= date_format(#{dataStr}, '%Y-%m-%d %H:%i') and a.endleave >= date_format(#{dataStr}, '%Y-%m-%d %H:%i') limit 1 ")
     Leave getLeaveByEmIdAndMonthAB(String empNo, String dataStr);
+
+
+
+    @Select("select a.empNo as empNo," +
+            "date_format(a.beginleave, '%Y-%m-%d %H:%i:%s" +
+            "') as beginLeaveStr," +
+            "date_format(a.endleave, '%Y-%m-%d %H:%i:%s') endLeaveStr," +
+            "a.leavelong as leaveLong," +
+            "a.leaveDescrip," +
+            "a.remark," +
+            "a.type " +
+            "  from leavedata a" +
+            "  join linshiemp e on e.name = a.empNo " +
+            " where " +
+            "a.empNo = #{empNo} and a.beginleave <= date_format(#{dataStr}, '%Y-%m-%d %H:%i') and a.endleave >= date_format(#{dataStr}, '%Y-%m-%d %H:%i') limit 1 ")
+    Leave getLeaveByEmIdAndMonthABLinShi(String empNo, String dataStr);
 
     @Select("select date_format(a.incompdate, '%Y-%m-%d" +
             "') as incompdate " +
@@ -1512,16 +1582,28 @@ public interface PersonMapper {
             "a.name = #{name} limit 1 ")
     String getLinShiInComDateByName(String name);
 
-    @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %h:%i:%s" +
-            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %h:%i:%s') endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type " +
-            "  from leavedata where employeeid = #{empId} and beginleave <= #{leaveFrom} and endleave >= #{leaveEnd} limit 1 ")
+    @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %H:%i:%s" +
+            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %H:%i:%s') endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type " +
+            "  from leavedata where employeeid = #{empId} and beginleave <= date_format(#{leaveFrom}, '%Y-%m-%d %H:%i') and endleave >= date_format(#{leaveEnd}, '%Y-%m-%d %H:%i') limit 1 ")
     Leave getLeaveByEmpIdAndDateStr(String leaveFrom, String leaveEnd, Integer empId);
 
 
-    @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %h:%i:%s" +
-            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %h:%i:%s') endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type " +
-            "  from leavedata where employeeid = #{empId} and beginleave <= #{leaveFrom} and endleave >= #{leaveFrom} limit 1 ")
-    Leave getLeaveByEmpIdAndDateStrABC(String leaveFrom, Integer empId);
+    @Select("select  empNo as empNo,date_format(beginleave, '%Y-%m-%d %H:%i:%s" +
+            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %H:%i:%s') endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type " +
+            "  from leavedata where empNo = #{empId} and beginleave <= date_format(#{leaveFrom}, '%Y-%m-%d %H:%i') and endleave >= date_format(#{leaveEnd}, '%Y-%m-%d %H:%i') limit 1 ")
+    Leave getLeaveByEmpIdAndDateStrAAAB(String leaveFrom, String leaveEnd, String empId);
+
+
+    @Select("select  empNo as empNo,date_format(beginleave, '%Y-%m-%d %H:%i:%s" +
+            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %H:%i:%s') endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type " +
+            "  from leavedata where empNo = #{name} and beginleave <= date_format(#{leaveFrom}, '%Y-%m-%d %H:%i') and endleave >= date_format(#{leaveEnd}, '%Y-%m-%d %H:%i') limit 1 ")
+    Leave getLeaveByEmpIdAndDateStrLinShi(String leaveFrom, String leaveEnd, String name);
+
+
+    @Select("select  empNo as empNo,date_format(beginleave, '%Y-%m-%d %H:%i:%s" +
+            "') as beginLeaveStr,date_format(endleave, '%Y-%m-%d %H:%i:%s') endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type " +
+            "  from leavedata where empNo = #{empId} and beginleave <= #{leaveFrom} and endleave >= #{leaveFrom} limit 1 ")
+    Leave getLeaveByEmpIdAndDateStrABC(String leaveFrom, String empId);
 
 
     @Select("SELECT\n" +
@@ -1737,6 +1819,34 @@ public interface PersonMapper {
             "\t)\n" +
             "group by Date asc")
     List<String> getAllKQDateList();
+
+
+    @Select("SELECT\n" +
+            "\ta.date \n" +
+            "FROM\n" +
+            "\tzhongkongbean a\n" +
+            "where\n" +
+            "\ta.yearMonth  = (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tyearMonth\n" +
+            "\t\tFROM\n" +
+            "\t\t\tzhongkongbean  where yearMonth = #{yearMonth} \n" +
+            "\t\tORDER BY\n" +
+            "\t\t\tdate DESC\n" +
+            "\t\tLIMIT 1\n" +
+            "\t)\n" +
+            "group by Date asc")
+    List<String> getAllKQDateListABC(String yearMonth);
+
+
+    @Select("SELECT\n" +
+            "\ta.date \n" +
+            "FROM\n" +
+            "\tzhongkongbean a\n" +
+            "where\n" +
+            "\ta.yearMonth  = (select yearMonth from monthkqinfo order by yearMonth desc limit 1)\n" +
+            "group by Date asc")
+    List<String> getAllKQDateListAAA();
 
     @Select("SELECT count(*) " +
             "FROM\n" +
@@ -1967,6 +2077,53 @@ public interface PersonMapper {
             "LEFT JOIN userinfo o ON o.empno = e.empno " +
             "LEFT JOIN position n ON n.id = e.positionId " +
             "LEFT JOIN dept t ON t.id = e.deptId " +
+            "where e.empNo = #{id}")
+    List<Employee> getEmployeeByIdA(String id);
+
+
+    @Select("SELECT\n" +
+            "\te. NAME,\n" +
+            "\te. NAME AS namea,\n" +
+            "\te.sex,\n" +
+            "\te.deptId,\n" +
+            "\te.empno,\n" +
+            "\te.positionId,\n" +
+            "\te.incompdate,\n" +
+            "\te.conExpDate,\n" +
+            "\te.birthDay,\n" +
+            "\te.ID_NO,\n" +
+            "\te.nativePla,\n" +
+            "\te.homeAddr,\n" +
+            "\te.valiPeriodOfID,\n" +
+            "\te.nation,\n" +
+            "\te.marriaged,\n" +
+            "\te.contactPhone,\n" +
+            "\te.educationLe,\n" +
+            "\te.educationLeUrl,\n" +
+            "\te.screAgreement,\n" +
+            "\te.healthCerti,\n" +
+            "\te.sateListAndLeaCerti,\n" +
+            "\te.sateListAndLeaCertiUrl,\n" +
+            "\te.otherCerti,\n" +
+            "\totherCertiUrl,\n" +
+            "\te.positionAttrId,\n" +
+            "\to.username,\n" +
+            "\to.userpwd AS passowrd,\n" +
+            "\to.userpwd AS passowrd22,\n" +
+            "\ts.compresalary,\n" +
+            "\ts.possalary,\n" +
+            "\ts.jobsalary,\n" +
+            "\ts.meritsalary,\n" +
+            "\tn.positionname,\n" +
+            "\tt.deptname,\n" +
+            "\ts.remark,\n" +
+            "\ts.state,e.isQuit \n" +
+            "FROM\n" +
+            "\temployee e\n" +
+            "LEFT JOIN salary s ON e.empno = s.empno\n" +
+            "LEFT JOIN userinfo o ON o.empno = e.empno " +
+            "LEFT JOIN position n ON n.id = e.positionId " +
+            "LEFT JOIN dept t ON t.id = e.deptId " +
             "where e.id = #{id}")
     List<Employee> getEmployeeById(Integer id);
 
@@ -2019,6 +2176,81 @@ public interface PersonMapper {
             "where e.id = #{id}")
     Employee getEmployeeOneById(Integer id);
 
+    @Select("SELECT\n" +
+            "\te.NAME,\n" +
+            "\tn.positionLevel,\n" +
+            "\te.NAME AS namea,\n" +
+            "\te.sex,\n" +
+            "\te.deptId,\n" +
+            "\te.empno,\n" +
+            "\te.positionId,\n" +
+            "\te.incompdate,\n" +
+            "\te.conExpDate,\n" +
+            "\te.birthDay,\n" +
+            "\te.ID_NO,\n" +
+            "\te.nativePla,\n" +
+            "\te.homeAddr,\n" +
+            "\te.valiPeriodOfID,\n" +
+            "\te.nation,\n" +
+            "\te.marriaged,\n" +
+            "\te.contactPhone,\n" +
+            "\te.educationLe,\n" +
+            "\te.educationLeUrl,\n" +
+            "\te.screAgreement,\n" +
+            "\te.healthCerti,\n" +
+            "\te.sateListAndLeaCerti,\n" +
+            "\te.sateListAndLeaCertiUrl,\n" +
+            "\te.otherCerti,\n" +
+            "\totherCertiUrl,\n" +
+            "\te.positionAttrId,\n" +
+            "\to.username,\n" +
+            "\to.userpwd AS passowrd,\n" +
+            "\to.userpwd AS passowrd22,\n" +
+            "\ts.compresalary,\n" +
+            "\ts.possalary,\n" +
+            "\ts.jobsalary,\n" +
+            "\ts.meritsalary,\n" +
+            "\tn.positionname,\n" +
+            "\tt.deptname,\n" +
+            "\tn.positionlevel,\n" +
+            "\ts.remark,\n" +
+            "\ts.state,e.isQuit \n" +
+            "FROM\n" +
+            "\temployee e\n" +
+            "LEFT JOIN salary s ON e.empno = s.empno\n" +
+            "LEFT JOIN userinfo o ON o.empno = e.empno " +
+            "LEFT JOIN position n ON n.id = e.positionId " +
+            "LEFT JOIN dept t ON t.id = e.deptId " +
+            "where e.empNo = #{empNo}")
+    Employee getPersonByEmpNo(String empNo);
+
+
+    @Select("SELECT\n" +
+            "\te. NAME,\n" +
+            "\tn.positionLevel,\n" +
+            "\te. NAME AS namea,\n" +
+            "\te.sex,\n" +
+            "\te.deptId,\n" +
+            "\te.`name`,\n" +
+            "\te.positionId,\n" +
+            "\te.incompdate,\n" +
+            "\te.birthDay,\n" +
+            "\te.ID_NO,\n" +
+            "\te.nativePla,\n" +
+            "\te.homeAddr,\n" +
+            "\te.nation,\n" +
+            "\tn.positionname,\n" +
+            "\tt.deptname,\n" +
+            "\tn.positionlevel,\n" +
+            "\te.isQuit\n" +
+            "FROM\n" +
+            "\tlinshiemp e\n" +
+            "LEFT JOIN position n ON n.id = e.positionId\n" +
+            "LEFT JOIN dept t ON t.id = e.deptId\n" +
+            "WHERE\n" +
+            "\te.NAME = #{Name} ")
+    Employee getPersonByName(String Name);
+
     @Select("select * from outdan where empNo = #{empNo} and date = #{dateStr}")
     Out getOutByEmpNoAndDateStr(String empNo, String dateStr);
 
@@ -2048,6 +2280,22 @@ public interface PersonMapper {
 
     @Select("select id from position where positionName = #{deptName} limit 1 ")
     Integer getDeptIdByDeptName(String deptName);
+
+    @Select("select ifnull(empNo,name) from qyweixinbd where userid = #{userId} limit 1")
+    String getEmpNoByUserId(String userId);
+
+
+    @Select("SELECT\n" +
+            "\tee.id\n" +
+            "FROM\n" +
+            "\tqyweixinbd qys\n" +
+            "LEFT JOIN employee ee ON qys.empNo = ee.empno\n" +
+            "WHERE\n" +
+            "\tqys.userid = #{userId} limit 1")
+    Integer getEmpIdByUserId(String userId);
+
+    @Select(" select ifnull(empNo,name) from qyweixinbd where userid = #{userId} limit 1")
+    String getEmpIdByUserId2(String userId);
 
     @Update("update employee set positionId = #{deptId} where id = #{empId} ")
     void updateEmployeeDeptIdById(Integer empId, Integer deptId);
@@ -2089,11 +2337,59 @@ public interface PersonMapper {
     KQBean getKQBeanByDateStrAndEmpNo(String dateStr, String empNo);
 
 
+    @Select("SELECT\n" +
+            "\tkq.id,\n" +
+            "\tkq.enrollNumber,\n" +
+            "\tkq.yearMonth,\n" +
+            "\tkq.dateStr,\n" +
+            "\tkq.`week`,\n" +
+            "\tkq.timeStr,\n" +
+            "\tIFNULL(\n" +
+            "\t\tkq.clockResultByRenShi,\n" +
+            "\t\tkq.clockResult\n" +
+            "\t) AS clockResult,\n" +
+            "\tkq.extWorkHours,\n" +
+            "\tkq.remark,\n" +
+            "\tkq.aOnTime,\n" +
+            "\tkq.aOffTime,\n" +
+            "\tkq.pOnTime,\n" +
+            "\tkq.pOffTime,\n" +
+            "\tkq.extWorkOnTime,\n" +
+            "\tkq.extWorkOffTime,\n" +
+            "\tkq.rensheCheck\n" +
+            "FROM\n" +
+            "\tkqbean kq\n" +
+            "LEFT JOIN qyweixinbd zke ON zke.userid = kq.enrollNumber\n" +
+            " where  kq.dateStr = #{dateStr} and zke.name =  #{name} limit 1 ")
+    KQBean getKQBeanByDateStrAndName(String dateStr, String name);
+
+
     @Select("select * from kqbean where enrollNumber = #{num} and dateStr = #{date} ")
     KQBean getKQBeanByEnroNumAndDate(String num, String date);
 
     @Select("select * from lianban where empNo = #{empNo} and date = #{dateStr} ")
     LianBan getLianBanByEmpNoAndDateStr(String empNo, String dateStr);
+
+    @Select("SELECT\n" +
+            "\tCONCAT(ifnull(zk.timeStr,''),ifnull(qk.timeStr,''))\n" +
+            "FROM\n" +
+            "\tzhongkongbean zk\n" +
+            "LEFT JOIN qyweixinbd qy ON qy.userid = zk.EnrollNumber\n" +
+            "left join qianka qk on qk.empNo = qy.empNo and qk.date = zk.Date\n" +
+            "WHERE\n" +
+            "\tqy.empNo = #{empNo}\n" +
+            "AND zk.Date = #{dateStr}\n")
+    String getTimeStrByDateStrAndEmpNo(String empNo,String dateStr);
+
+    @Select("SELECT\n" +
+            "\tifnull(zk.timeStr,'')\n" +
+            "FROM\n" +
+            "\tzhongkongbean zk\n" +
+            " left JOIN qyweixinbd qy ON qy.userid = zk.EnrollNumber\n" +
+            "WHERE\n" +
+            "\tqy.`name` = #{name} \n" +
+            "AND zk.Date = #{dateStr} \n")
+    String getTimeStrByDateStrAndNameLinShiGong(String name,String dateStr);
 
 
     @Insert(" insert into lianban (empNo,\n" +
@@ -2280,6 +2576,9 @@ public interface PersonMapper {
     @Select("select * from position where positionName like  CONCAT('%',#{positionName},'%')")
     List<Position> queryPositionByName(String positionName);
 
+    @Select("select * from qyweixinbd where empNo is null")
+    List<WeiXinUsrId> getAllWeiXinUserId();
+
     @Select("SELECT\n" +
             "\ta.id,\n" +
             "\te.`name` as name,\n" +
@@ -2295,7 +2594,7 @@ public interface PersonMapper {
             "\n" +
             "FROM\n" +
             "\tleavedata a\n" +
-            "LEFT JOIN employee e ON a.employeeid = e.id\n" +
+            "LEFT JOIN employee e ON e.empNo = e.empNo\n" +
             "LEFT JOIN position n ON n.id = e.positionId\n" +
             "LEFT JOIN dept t ON t.id = e.deptId\n" +
             "ORDER BY\n" +
@@ -2322,9 +2621,9 @@ public interface PersonMapper {
 
     @Select(" SELECT\n" +
             "\tqk.id,\n" +
-            "\tee.`name` as name,\n" +
-            "\tee.empno,\n" +
-            "\tt.deptname as deptName,\n" +
+            "\tifnull(ee.`name`, ep.NAME) AS NAME,\n" +
+            "\tifnull(ee.empno, ep.`name`),\n" +
+            "\tIFNULL(t.deptname, tt.deptname) AS deptName,\n" +
             "\tqk.date AS dateStr,\n" +
             "\tqk.timeStr AS timeStr,\n" +
             "\tqk.type,\n" +
@@ -2332,7 +2631,12 @@ public interface PersonMapper {
             "FROM\n" +
             "\tqianka qk\n" +
             "LEFT JOIN employee ee ON ee.empno = qk.empNo\n" +
-            "LEFT JOIN dept t ON ee.deptId = t.id order by ee.empNo asc limit #{currentPageTotalNum},#{pageSize}")
+            "LEFT JOIN linshiemp ep ON ep.`name` = qk.empNo\n" +
+            "LEFT JOIN dept tt ON tt.id = ep.deptId\n" +
+            "LEFT JOIN dept t ON ee.deptId = t.id\n" +
+            "ORDER BY\n" +
+            "\tee.empNo ASC\n" +
+            " limit #{currentPageTotalNum},#{pageSize}")
     List<QianKa> findAllQianKa(QianKa qianKa);
 
 
@@ -2450,7 +2754,7 @@ public interface PersonMapper {
     @Select("select count(id) from leavedata ")
     int findAllLeaveCount();
 
-    @Select("select id,name from employee ")
+    @Select("select id,name,empNo from employee ")
     List<Employee> findAllEmployees();
 
     @Select("SELECT\n" +
@@ -2511,8 +2815,8 @@ public interface PersonMapper {
             ",leaveDescrip = #{leaveDescrip},remark = #{remark},type = #{type }  where id = #{id} ")
     void updateLeaveToMysql(Leave leave);
 
-    @Insert("insert into leavedata (employeeid,beginleave,endleave,leavelong,leaveDescrip,remark,type)\n" +
-            "VALUES(#{employeeId},#{beginLeaveStr},#{endLeaveStr},#{leaveLong},#{leaveDescrip},#{remark},#{type})")
+    @Insert("insert into leavedata (employeeid,empNo,beginleave,endleave,leavelong,leaveDescrip,remark,type)\n" +
+            "VALUES(#{employeeId},#{empNo},#{beginLeaveStr},#{endLeaveStr},#{leaveLong},#{leaveDescrip},#{remark},#{type})")
     void addLeaveData(Leave leave);
 
     @Insert("insert into insurance (name,ID_NO,endowInsur,medicalInsur,unWorkInsur) values (" +
@@ -4304,16 +4608,18 @@ public interface PersonMapper {
         public String queryQKByCondition(QianKa qianKa) {
             StringBuilder sb = new StringBuilder(" SELECT\n" +
                     "\tqk.id,\n" +
-                    "\tee.`name` as name,\n" +
-                    "\tee.empno,\n" +
-                    "\tt.deptname as deptName,\n" +
+                    "\tifnull(ee.`name`, ep. NAME) AS NAME,\n" +
+                    "\tifnull(ee.empno, ep.`name`) as empNo,\n" +
+                    "\tIFNULL(t.deptname, tt.deptname) AS deptName," +
                     "\tqk.date AS dateStr,\n" +
                     "\tqk.timeStr AS timeStr,\n" +
                     "\tqk.type,\n" +
                     "\tqk.remark\n" +
                     "FROM\n" +
                     "\tqianka qk\n" +
-                    "LEFT JOIN employee ee ON ee.empno = qk.empNo\n" +
+                    "LEFT JOIN employee ee ON ee.empno = qk.empNo\n " +
+                    "LEFT JOIN linshiemp ep ON ep.`name` = qk.empNo\n " +
+                    "LEFT JOIN dept tt ON tt.id = ep.deptId "+
                     "LEFT JOIN dept t ON ee.deptId = t.id " +
                     "left join position n on ee.positionId = n.id where 1=1 ");
             if (qianKa.getNames() != null && qianKa.getNames().size() > 0) {
@@ -4391,8 +4697,8 @@ public interface PersonMapper {
                     "\tdate_format(a.date, '%Y-%m-%d') AS dateStr,\n" +
                     "\ta.outaddr,\n" +
                     "\ta.outfor,\n" +
-                    "\tdate_format(a.outtime, '%Y-%m-%d %h:%i:%s')  AS outtimeStr,\n" +
-                    "\tdate_format(a.realcomtime, '%Y-%m-%d %h:%i:%s')   AS realcomtimeStr,\n" +
+                    "\tdate_format(a.outtime, '%Y-%m-%d %H:%i:%s')  AS outtimeStr,\n" +
+                    "\tdate_format(a.realcomtime, '%Y-%m-%d %H:%i:%s')   AS realcomtimeStr,\n" +
                     "\ta.remark " +
                     "FROM\n" +
                     "\t outdan a join  " +
@@ -4437,15 +4743,15 @@ public interface PersonMapper {
                     "\tdate_format(e.incompdate, '%Y-%m-%d') AS incomdateStr,\n" +
                     "\tt.deptname AS deptName,\n" +
                     "\tn.positionName AS positionName,\n" +
-                    "\tdate_format(a.beginleave, '%Y-%m-%d %h:%i:%s')  AS beginLeaveStr,\n" +
-                    "\tdate_format(a.endleave, '%Y-%m-%d %h:%i:%s')   AS endleaveStr,\n" +
+                    "\tdate_format(a.beginleave, '%Y-%m-%d %H:%i:%s')  AS beginLeaveStr,\n" +
+                    "\tdate_format(a.endleave, '%Y-%m-%d %H:%i:%s')   AS endleaveStr,\n" +
                     "\ta.remark AS remark,\n" +
                     "\ta.leaveDescrip AS leaveDescrip,\n" +
                     "\ta.leavelong AS leaveLong," +
                     "\ta.type AS type,e.isQuit" +
                     "\n" +
                     "FROM\n" +
-                    "\t leavedata a join  employee e on a.employeeid = e.id \n" +
+                    "\t leavedata a join  employee e on a.empNo = e.empNo \n" +
                     "JOIN dept t ON e.deptId = t.id\n" +
                     "JOIN position n ON e.positionId = n.id where 1=1");
 

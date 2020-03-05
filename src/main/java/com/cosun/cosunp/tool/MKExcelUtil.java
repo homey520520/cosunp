@@ -5,10 +5,7 @@ import com.cosun.cosunp.entity.DayJI;
 import com.cosun.cosunp.entity.Insurance;
 import com.cosun.cosunp.entity.MonthKQInfo;
 import com.cosun.cosunp.service.IPersonServ;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -1566,6 +1563,14 @@ public class MKExcelUtil {
                 isWeekEnd = DateUtil.checkIsWeekEnd(wd, 29 + "");
                 ymdStr = yearMonth + "-29";
                 week = DateUtil.getWeek(ymdStr);
+                String commentstr = null;
+                if (oh.getEmpNo().contains("CS")) {
+                    commentstr = personServ.getTimeStrByDateStrAndEmpNo(oh.getEmpNo(), ymdStr);
+                } else {
+                    commentstr = personServ.getTimeStrByDateStrAndNameLinShiGong(oh.getEmpNo(), ymdStr);
+                }
+
+
                 if (oh != null && oh.getDay29AM() != null) {
                     if (oh.getDay29AM() == 1) {
                         cell = row.createCell(4 + 28);
@@ -2357,6 +2362,13 @@ public class MKExcelUtil {
                         cell = row.createCell(4 + 28);
                         cell.setCellValue("");
                         cell.setCellStyle(cellStyle4BOPYG);
+                    }
+                    if (commentstr != null && commentstr.trim().length() > 0) {
+                        HSSFPatriarch p = hssfSheet.createDrawingPatriarch();
+                        comment = p.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 3, 3, (short) 5, 6));
+                        comment.setString(new HSSFRichTextString(commentstr));
+                        comment.setAuthor("程序员");
+                        cell.setCellComment(comment);
                     }
                 } else {
                     cell = row.createCell(4 + 28);
@@ -3275,6 +3287,7 @@ public class MKExcelUtil {
     }
 
     public void init28(List<MonthKQInfo> mkList, HSSFSheet hssfSheet, String yearMonth, String wd, String fd) {
+
         try {
             for (int n = 0; n < dayJIList.size(); n++) {
                 dayJI = dayJIList.get(n);
@@ -3291,7 +3304,14 @@ public class MKExcelUtil {
                     ymdStr = yearMonth + "-" + (n + 1);
                 }
                 week = DateUtil.getWeek(ymdStr);
+                String commentstr = null;
                 if (oh != null && dayJI.getDayJiAM() != null) {
+                    if (oh.getEmpNo().contains("CS")) {
+                        commentstr = personServ.getTimeStrByDateStrAndEmpNo(oh.getEmpNo(), ymdStr);
+                    } else {
+                        commentstr = personServ.getTimeStrByDateStrAndNameLinShiGong(oh.getEmpNo(), ymdStr);
+                    }
+
                     if (dayJI.getDayJiAM() == 1) {
                         cell = row.createCell(4 + n);
                         cell.setCellValue("√");
@@ -4016,6 +4036,7 @@ public class MKExcelUtil {
                     } else if (dayJI.getDayJiAM() == 619) {
                         cell = row.createCell(4 + n);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
+                        cell.setCellComment(comment);
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
                                 cell.setCellStyle(cellStyle4BOPYG);
@@ -4032,6 +4053,7 @@ public class MKExcelUtil {
                     } else if (dayJI.getDayJiAM() == 6108) {
                         cell = row.createCell(4 + n);
                         cell.setCellValue("О");
+                        cell.setCellComment(comment);
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
                                 cell.setCellStyle(cellStyleBOPYG);
@@ -4048,6 +4070,7 @@ public class MKExcelUtil {
                     } else if (dayJI.getDayJiAM() == 6107) {
                         cell = row.createCell(4 + n);
                         cell.setCellValue("О");
+                        cell.setCellComment(comment);
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
                                 cell.setCellStyle(cellStyle6BOPYG);
@@ -4098,6 +4121,13 @@ public class MKExcelUtil {
                                 cell.setCellStyle(cellStyle4);
                             }
                         }
+                    }
+                    if (commentstr != null && commentstr.trim().length() > 0) {
+                        HSSFPatriarch p = hssfSheet.createDrawingPatriarch();
+                        comment = p.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 3, 3, (short) 5, 6));
+                        comment.setString(new HSSFRichTextString(commentstr));
+                        comment.setAuthor("程序员");
+                        cell.setCellComment(comment);
                     }
                 }
                 if (oh != null && dayJI.getDayJiPM() != null) {
@@ -4983,7 +5013,7 @@ public class MKExcelUtil {
     }
 
 
-    public void createThreeSheet(List<MonthKQInfo> mkList1, HSSFSheet hssfSheet3, String yearMonth, String wd, String fd) {
+    public void createThreeSheet(List<MonthKQInfo> mkList1, HSSFSheet hssfSheet3, String yearMonth, String wd, String fd) throws Exception{
         beginRow = 3;
         row = hssfSheet3.createRow(0);
         cell = row.createCell(0);
@@ -5351,6 +5381,12 @@ public class MKExcelUtil {
                     week = DateUtil.getWeek(ymdStr);
                 } catch (Exception ee) {
                     ee.printStackTrace();
+                }
+                String commentstr = null;
+                if (oh.getEmpNo().contains("CS")) {
+                    commentstr = personServ.getTimeStrByDateStrAndEmpNo(oh.getEmpNo(), ymdStr);
+                } else {
+                    commentstr = personServ.getTimeStrByDateStrAndNameLinShiGong(oh.getEmpNo(), ymdStr);
                 }
                 if (oh != null && dayJI.getDayJiAM() != null) {
                     if (dayJI.getDayJiAM() == 1) {
@@ -5733,6 +5769,14 @@ public class MKExcelUtil {
                                 cell.setCellStyle(cellStyle4);
                             }
                         }
+                    }
+
+                    if (commentstr != null && commentstr.trim().length() > 0) {
+                        HSSFPatriarch p = hssfSheet3.createDrawingPatriarch();
+                        comment = p.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 3, 3, (short) 5, 6));
+                        comment.setString(new HSSFRichTextString(commentstr));
+                        comment.setAuthor("程序员");
+                        cell.setCellComment(comment);
                     }
                 }
                 if (oh != null && dayJI.getDayJiPM() != null) {
@@ -6205,6 +6249,12 @@ public class MKExcelUtil {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                String commentstr = null;
+                if (oh.getEmpNo().contains("CS")) {
+                    commentstr = personServ.getTimeStrByDateStrAndEmpNo(oh.getEmpNo(), ymdStr);
+                } else {
+                    commentstr = personServ.getTimeStrByDateStrAndNameLinShiGong(oh.getEmpNo(), ymdStr);
+                }
                 if (oh != null && oh.getDay29AM() != null) {
                     if (oh.getDay29AM() == 1) {
                         cell = row.createCell(4 + 28);
@@ -6570,6 +6620,13 @@ public class MKExcelUtil {
                                 cell.setCellStyle(cellStyle4);
                             }
                         }
+                    }
+                    if (commentstr != null && commentstr.trim().length() > 0) {
+                        HSSFPatriarch p = hssfSheet3.createDrawingPatriarch();
+                        comment = p.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 3, 3, (short) 5, 6));
+                        comment.setString(new HSSFRichTextString(commentstr));
+                        comment.setAuthor("程序员");
+                        cell.setCellComment(comment);
                     }
                 } else {
                     cell = row.createCell(4 + 28);
@@ -7074,6 +7131,12 @@ public class MKExcelUtil {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                String commentstr = null;
+                if (oh.getEmpNo().contains("CS")) {
+                    commentstr = personServ.getTimeStrByDateStrAndEmpNo(oh.getEmpNo(), ymdStr);
+                } else {
+                    commentstr = personServ.getTimeStrByDateStrAndNameLinShiGong(oh.getEmpNo(), ymdStr);
+                }
                 if (oh != null && oh.getDay30AM() != null) {
                     if (oh.getDay30AM() == 1) {
                         cell = row.createCell(4 + 29);
@@ -7455,6 +7518,13 @@ public class MKExcelUtil {
                                 cell.setCellStyle(cellStyle4);
                             }
                         }
+                    }
+                    if (commentstr != null && commentstr.trim().length() > 0) {
+                        HSSFPatriarch p = hssfSheet3.createDrawingPatriarch();
+                        comment = p.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 3, 3, (short) 5, 6));
+                        comment.setString(new HSSFRichTextString(commentstr));
+                        comment.setAuthor("程序员");
+                        cell.setCellComment(comment);
                     }
                 } else {
                     cell = row.createCell(4 + 29);
@@ -7958,6 +8028,12 @@ public class MKExcelUtil {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                String commentstr = null;
+                if (oh.getEmpNo().contains("CS")) {
+                    commentstr = personServ.getTimeStrByDateStrAndEmpNo(oh.getEmpNo(), ymdStr);
+                } else {
+                    commentstr = personServ.getTimeStrByDateStrAndNameLinShiGong(oh.getEmpNo(), ymdStr);
+                }
                 if (oh != null && oh.getDay31AM() != null) {
                     if (oh.getDay31AM() == 1) {
                         cell = row.createCell(4 + 30);
@@ -8339,6 +8415,13 @@ public class MKExcelUtil {
                                 cell.setCellStyle(cellStyle4);
                             }
                         }
+                    }
+                    if (commentstr != null && commentstr.trim().length() > 0) {
+                        HSSFPatriarch p = hssfSheet3.createDrawingPatriarch();
+                        comment = p.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 3, 3, (short) 5, 6));
+                        comment.setString(new HSSFRichTextString(commentstr));
+                        comment.setAuthor("程序员");
+                        cell.setCellComment(comment);
                     }
                 } else {
                     cell = row.createCell(4 + 30);
@@ -9272,6 +9355,8 @@ public class MKExcelUtil {
 
     }
 
+    HSSFComment comment;
+
     public void createOneSheet(List<MonthKQInfo> mkList, HSSFSheet hssfSheet, String yearMonth, String wd, String fd) {
         beginRow = 3;
         try {
@@ -9699,6 +9784,13 @@ public class MKExcelUtil {
                     isWeekEnd = DateUtil.checkIsWeekEnd(wd, 30 + "");
                     ymdStr = yearMonth + "-30";
                     week = DateUtil.getWeek(ymdStr);
+                    String commentstr = null;
+                    if (oh.getEmpNo().contains("CS")) {
+                        commentstr = personServ.getTimeStrByDateStrAndEmpNo(oh.getEmpNo(), ymdStr);
+                    } else {
+                        commentstr = personServ.getTimeStrByDateStrAndNameLinShiGong(oh.getEmpNo(), ymdStr);
+                    }
+
                     if (oh != null && oh.getDay30AM() != null) {
                         if (oh.getDay30AM() == 1) {
                             cell = row.createCell(4 + 29);
@@ -10507,6 +10599,15 @@ public class MKExcelUtil {
                                 }
                             }
                         }
+
+                        if (commentstr != null && commentstr.trim().length() > 0) {
+                            HSSFPatriarch p = hssfSheet.createDrawingPatriarch();
+                            comment = p.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 3, 3, (short) 5, 6));
+                            comment.setString(new HSSFRichTextString(commentstr));
+                            comment.setAuthor("程序员");
+                            cell.setCellComment(comment);
+                        }
+
                     } else {
                         cell = row.createCell(4 + 29);
                         cell.setCellValue("");
@@ -11427,6 +11528,12 @@ public class MKExcelUtil {
                     isWeekEnd = DateUtil.checkIsWeekEnd(wd, 31 + "");
                     ymdStr = yearMonth + "-31";
                     week = DateUtil.getWeek(ymdStr);
+                    String commentstr = null;
+                    if (oh.getEmpNo().contains("CS")) {
+                        commentstr = personServ.getTimeStrByDateStrAndEmpNo(oh.getEmpNo(), ymdStr);
+                    } else {
+                        commentstr = personServ.getTimeStrByDateStrAndNameLinShiGong(oh.getEmpNo(), ymdStr);
+                    }
                     if (oh != null && oh.getDay31AM() != null) {
                         if (oh.getDay31AM() == 1) {
                             cell = row.createCell(4 + 30);
@@ -12234,6 +12341,13 @@ public class MKExcelUtil {
                                     cell.setCellStyle(cellStyle4);
                                 }
                             }
+                        }
+                        if (commentstr != null && commentstr.trim().length() > 0) {
+                            HSSFPatriarch p = hssfSheet.createDrawingPatriarch();
+                            comment = p.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 3, 3, (short) 5, 6));
+                            comment.setString(new HSSFRichTextString(commentstr));
+                            comment.setAuthor("程序员");
+                            cell.setCellComment(comment);
                         }
                     } else {
                         cell = row.createCell(4 + 30);

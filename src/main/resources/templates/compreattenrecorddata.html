@@ -209,31 +209,31 @@
                             tr.append("<td>" + isNull(data[num].weekStr) + "</td>");
                             tr.append("<td align='left'>" + isNull(data[num].timeStr) + "</td>");
                             td = ("<td align=\"center\">");
-                            td += ("<select id=\""+data[num].id+"\">");
-                            td += ("<option value=\"1\" "+((data[num].clockResult== 1)?'selected':'')+">正常出勤</option>");
-                            td += ("<option value=\"2\" "+((data[num].clockResult== 2)?'selected':'')+">因公外出</option>");
-                            td += ("<option value=\"3\" "+((data[num].clockResult== 3)?'selected':'')+">带薪年假</option>");
-                            td += ("<option value=\"4\" "+((data[num].clockResult== 4)?'selected':'')+">法定节假日</option>");
-                            td += ("<option value=\"5\" "+((data[num].clockResult== 5)?'selected':'')+">放假</option>");
-                            td += ("<option value=\"6\" "+((data[num].clockResult== 6)?'selected':'')+">请假</option>");
-                            td += ("<option value=\"7\" "+((data[num].clockResult== 7)?'selected':'')+">未正常打卡</option>");
-                            td += ("<option value=\"8\" "+((data[num].clockResult== 8)?'selected':'')+">旷工</option>");
-                            td += ("<option value=\"9\" "+((data[num].clockResult== 9)?'selected':'')+">法定节假日加班</option>");
-                            td += ("<option value=\"10\" "+((data[num].clockResult== 10)?'selected':'')+">无此人打卡记录</option>");
+                            td += ("<select id=\"" + data[num].id + "\">");
+                            td += ("<option value=\"1\" " + ((data[num].clockResult == 1) ? 'selected' : '') + ">正常出勤</option>");
+                            td += ("<option value=\"2\" " + ((data[num].clockResult == 2) ? 'selected' : '') + ">因公外出</option>");
+                            td += ("<option value=\"3\" " + ((data[num].clockResult == 3) ? 'selected' : '') + ">带薪年假</option>");
+                            td += ("<option value=\"4\" " + ((data[num].clockResult == 4) ? 'selected' : '') + ">法定节假日</option>");
+                            td += ("<option value=\"5\" " + ((data[num].clockResult == 5) ? 'selected' : '') + ">放假</option>");
+                            td += ("<option value=\"6\" " + ((data[num].clockResult == 6) ? 'selected' : '') + ">请假</option>");
+                            td += ("<option value=\"7\" " + ((data[num].clockResult == 7) ? 'selected' : '') + ">未正常打卡</option>");
+                            td += ("<option value=\"8\" " + ((data[num].clockResult == 8) ? 'selected' : '') + ">旷工</option>");
+                            td += ("<option value=\"9\" " + ((data[num].clockResult == 9) ? 'selected' : '') + ">法定节假日加班</option>");
+                            td += ("<option value=\"10\" " + ((data[num].clockResult == 10) ? 'selected' : '') + ">无此人打卡记录</option>");
                             td += ("</select>");
                             td += ("</td>");
 
                             tr.append(td);
-                            tr.append("<td align=\"center\"><input type=\"text\" style=\"width:50px;height: 25px\" className=\"form-control\" value=\""+isNull(data[num].extWorkHours)+"\"></td>");
-                            tr.append("<td align=\"center\"><a class=\"btn btn-xs btn-primary\" "+((data[num].rensheCheck == 1)?'disabled':'') +" onclick=\"updateKQBeanData(this);\">保存</a></td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].remark)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].aOnTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].aOffTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].pOnTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].pOffTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].extWorkOnTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].extWorkOffTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].extWorkHours)+"</td>");
+                            tr.append("<td align=\"center\"><input type=\"text\" style=\"width:50px;height: 25px\" className=\"form-control\" value=\"" + isNull(data[num].extWorkHours) + "\"></td>");
+                            tr.append("<td align=\"center\"><a class=\"btn btn-xs btn-primary\" " + ((data[num].rensheCheck == 1) ? 'disabled' : '') + " onclick=\"updateKQBeanData(this);\">保存</a></td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].remark) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].aOnTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].aOffTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].pOnTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].pOffTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].extWorkOnTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].extWorkOffTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].extWorkHours) + "</td>");
 
                             tr.appendTo(tbody);
                         });
@@ -362,31 +362,31 @@
                             tr.append("<td>" + isNull(data[num].weekStr) + "</td>");
                             tr.append("<td align='left'>" + isNull(data[num].timeStr) + "</td>");
                             td = ("<td align=\"center\">");
-                            td += ("<select id=\""+data[num].id+"\">");
-                            td += ("<option value=\"1\" "+((data[num].clockResult== 1)?'selected':'')+">正常出勤</option>");
-                            td += ("<option value=\"2\" "+((data[num].clockResult== 2)?'selected':'')+">因公外出</option>");
-                            td += ("<option value=\"3\" "+((data[num].clockResult== 3)?'selected':'')+">带薪年假</option>");
-                            td += ("<option value=\"4\" "+((data[num].clockResult== 4)?'selected':'')+">法定节假日</option>");
-                            td += ("<option value=\"5\" "+((data[num].clockResult== 5)?'selected':'')+">放假</option>");
-                            td += ("<option value=\"6\" "+((data[num].clockResult== 6)?'selected':'')+">请假</option>");
-                            td += ("<option value=\"7\" "+((data[num].clockResult== 7)?'selected':'')+">未正常打卡</option>");
-                            td += ("<option value=\"8\" "+((data[num].clockResult== 8)?'selected':'')+">旷工</option>");
-                            td += ("<option value=\"9\" "+((data[num].clockResult== 9)?'selected':'')+">法定节假日加班</option>");
-                            td += ("<option value=\"10\" "+((data[num].clockResult== 10)?'selected':'')+">无此人打卡记录</option>");
+                            td += ("<select id=\"" + data[num].id + "\">");
+                            td += ("<option value=\"1\" " + ((data[num].clockResult == 1) ? 'selected' : '') + ">正常出勤</option>");
+                            td += ("<option value=\"2\" " + ((data[num].clockResult == 2) ? 'selected' : '') + ">因公外出</option>");
+                            td += ("<option value=\"3\" " + ((data[num].clockResult == 3) ? 'selected' : '') + ">带薪年假</option>");
+                            td += ("<option value=\"4\" " + ((data[num].clockResult == 4) ? 'selected' : '') + ">法定节假日</option>");
+                            td += ("<option value=\"5\" " + ((data[num].clockResult == 5) ? 'selected' : '') + ">放假</option>");
+                            td += ("<option value=\"6\" " + ((data[num].clockResult == 6) ? 'selected' : '') + ">请假</option>");
+                            td += ("<option value=\"7\" " + ((data[num].clockResult == 7) ? 'selected' : '') + ">未正常打卡</option>");
+                            td += ("<option value=\"8\" " + ((data[num].clockResult == 8) ? 'selected' : '') + ">旷工</option>");
+                            td += ("<option value=\"9\" " + ((data[num].clockResult == 9) ? 'selected' : '') + ">法定节假日加班</option>");
+                            td += ("<option value=\"10\" " + ((data[num].clockResult == 10) ? 'selected' : '') + ">无此人打卡记录</option>");
                             td += ("</select>");
                             td += ("</td>");
 
                             tr.append(td);
-                            tr.append("<td align=\"center\"><input type=\"text\" style=\"width:50px;height: 25px\" className=\"form-control\" value=\""+isNull(data[num].extWorkHours)+"\"></td>");
-                            tr.append("<td align=\"center\"><a class=\"btn btn-xs btn-primary\" "+((data[num].rensheCheck == 1)?'disabled':'') +" onclick=\"updateKQBeanData(this);\">保存</a></td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].remark)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].aOnTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].aOffTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].pOnTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].pOffTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].extWorkOnTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].extWorkOffTime)+"</td>");
-                            tr.append("<td align=\"center\" >"+isNull(data[num].extWorkHours)+"</td>");
+                            tr.append("<td align=\"center\"><input type=\"text\" style=\"width:50px;height: 25px\" className=\"form-control\" value=\"" + isNull(data[num].extWorkHours) + "\"></td>");
+                            tr.append("<td align=\"center\"><a class=\"btn btn-xs btn-primary\" " + ((data[num].rensheCheck == 1) ? 'disabled' : '') + " onclick=\"updateKQBeanData(this);\">保存</a></td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].remark) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].aOnTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].aOffTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].pOnTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].pOffTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].extWorkOnTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].extWorkOffTime) + "</td>");
+                            tr.append("<td align=\"center\" >" + isNull(data[num].extWorkHours) + "</td>");
 
                             tr.appendTo(tbody);
                         });
@@ -524,6 +524,40 @@
             }
         }
 
+        function showDateAByMonthAAA() {
+            var yearM = $("#clockDateA").val();
+            var formData = new FormData();
+            formData.append('yearMonth', yearM);
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: "/person/showDateAByMonthAAA",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    document.getElementById("clockDate").options.length = 0;
+                    var dateList = eval(msg);
+                    for (var i = 0; i < dateList.length; i++) {
+                        $('#clockDate').append("<option value=" + dateList[i] + ">" + dateList[i] + "</option>");
+                    }
+                    // 缺一不可
+                    $('#clockDate').selectpicker('refresh');
+                    $('#clockDate').selectpicker('render');
+                },
+                error: function (msg) {
+                    $("#errormessage").show();
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+
+            });
+        }
+
     </script>
     <div>
 
@@ -548,7 +582,7 @@
                     <li class="active">
                         <a href="#compreAttendRecord" data-toggle="tab">综合考勤</a>
                     </li>
-                    <li >
+                    <li>
                         <a th:href="@{/person/toMonthKQList}">月考勤明细</a>
                     </li>
                 </ul>
@@ -627,7 +661,7 @@
                                             &nbsp;&nbsp;&nbsp;<label>考勤月份：</label>
                                         </td>
                                         <td>
-                                            <select id="clockDateA"
+                                            <select id="clockDateA" onchange="showDateAByMonthAAA()"
                                                     class="selectpicker show-tick form-control"
                                                     data-live-search="true" data-actions-box="true"
                                                     data-selected-text-format="count > 1">

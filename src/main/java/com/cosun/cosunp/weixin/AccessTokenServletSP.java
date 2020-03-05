@@ -9,18 +9,17 @@ import java.io.IOException;
 
 /**
  * @author:homey Wong
- * @Date: 2019/9/16  上午 11:26
+ * @Date: 2020/02/26  上午 11:26
  * @Description:
  * @Modified By:
  * @Modified-date:
  **/
-@WebServlet(name = "AccessTokenServlet")
-public class AccessTokenServlet extends HttpServlet {
+@WebServlet(name = "AccessTokenServletSP")
+public class AccessTokenServletSP extends HttpServlet {
 
 
     public void init() throws ServletException {
         TokenThread.appId = WeiXinConfig.appid;
-        TokenThread.appSecret = WeiXinConfig.secret;
         TokenThread.appSecretsp = WeiXinConfig.secretsp;
         new Thread(new TokenThread()).start();
     }

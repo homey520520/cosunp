@@ -1,5 +1,6 @@
 package com.cosun.cosunp.weixin;
 
+import com.cosun.cosunp.entity.OutClockIn;
 import com.cosun.cosunp.service.IPersonServ;
 import com.cosun.cosunp.tool.Constants;
 import org.apache.logging.log4j.LogManager;
@@ -165,7 +166,13 @@ public class WeiXinServlet extends HttpServlet {
         jedis = pool.getResource();
         jedis.set(Constants.accessToken, accessToken.getAccessToken());
         jedis.set(Constants.expiresin, accessToken.getExpiresin() + "");
-        //jedis.set(Constants.jsapi_ticket, accessToken.getJsapi_ticket());
+    }
+
+    public void setRedisValueSP(AccessToken accessToken) {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        jedis = pool.getResource();
+        jedis.set(Constants.accessTokensp, accessToken.getAccessToken());
+        jedis.set(Constants.expiresinsp, accessToken.getExpiresin() + "");
     }
 
 }

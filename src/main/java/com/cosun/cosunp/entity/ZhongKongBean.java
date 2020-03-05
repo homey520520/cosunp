@@ -23,6 +23,7 @@ public class ZhongKongBean implements Serializable {
     private Date timeTime;
     private Date date;
     private Integer machineNum;
+    private String remark;
 
     private Integer VerifyMode;
     private Integer InOutMode;
@@ -36,6 +37,14 @@ public class ZhongKongBean implements Serializable {
 
     private String positionLevel;
     private Integer workType;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public Integer getWorkType() {
         return workType;

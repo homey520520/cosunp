@@ -1,12 +1,13 @@
 package com.cosun.cosunp.tool;
 
 import com.cosun.cosunp.entity.*;
-import com.cosun.cosunp.weixin.OutClockIn;
+import com.cosun.cosunp.entity.OutClockIn;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +46,23 @@ public class StringUtil {
         }
     }
 
+
+    public static Integer LeaveTypeTransf(String oldType) throws Exception {
+        if (oldType.equals("年假")) {
+            return 2;
+        } else if (oldType.equals("事假")) {
+            return 0;
+        } else if (oldType.equals("病假")) {
+            return 7;
+        } else if (oldType.equals("婚假")) {
+            return 4;
+        } else if (oldType.equals("产假")) {
+            return 5;
+        } else if (oldType.equals("陪产假")) {
+            return 6;
+        }
+        return 8;
+    }
 
     public static WorkSet plusPianCha(WorkSet oldSet, DaKaPianCha daKaPianCha) throws Exception {
         WorkSet newSet = new WorkSet();
@@ -247,6 +265,9 @@ public class StringUtil {
             allStr.add(f);
         }
         List<Time> times = formTime(allStr);
+
+        times = new ArrayList<Time>(new HashSet<Time>(times));
+
         for (int i = 0; i < times.size() - 1; i++) {
             for (int j = 0; j < times.size() - 1 - i; j++) {
                 if (times.get(j).after(times.get(j + 1))) {
@@ -403,7 +424,6 @@ public class StringUtil {
     }
 
 
-
     public static String subMyString(String str, String a) {
         int index = str.lastIndexOf(a);
         if (index >= 1) {
@@ -459,12 +479,12 @@ public class StringUtil {
         String year = empNo.substring(2, 6);
         String month = empNo.substring(6, 8);
         String day = empNo.substring(8, 10);
-        return year + "-" + month + "-" +day;
+        return year + "-" + month + "-" + day;
     }
 
     public static Double computeFullWorkHours(String dateStr) {
         String[] dateArray = dateStr.split(",");
-        return dateArray.length*8D;
+        return dateArray.length * 8D;
     }
 
 }

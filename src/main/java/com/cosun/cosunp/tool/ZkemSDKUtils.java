@@ -139,15 +139,15 @@ public class ZkemSDKUtils {
                     if (valiDateDate.equals(endDatedateTime)) {
                         ZhongKongBean m = new ZhongKongBean();
                         m.setEnrollNumber(enrollNumber);
-                        m.setTime(dwYear.getIntRef() + "-" + dwMonth.getIntRef() + "-" + dwDay.getIntRef() + " " + dwHour.getIntRef() + ":" + dwMinute.getIntRef() + ":" + dwSecond.getIntRef());
-                        m.setDateStr(dwYear.getIntRef() + "-" + dwMonth.getIntRef() + "-" + dwDay.getIntRef());
+                        m.setTime(dwYear.getIntRef() + "-" + month + "-" + day + " " + dwHour.getIntRef() + ":" + dwMinute.getIntRef() + ":" + dwSecond.getIntRef());
+                        m.setDateStr(dwYear.getIntRef() + "-" + month + "-" + day);
                         m.setTimeStr(dwHour.getIntRef() + ":" + dwMinute.getIntRef() + ":" + dwSecond.getIntRef());
                         m.setTimeTime(ti.parse(dwHour.getIntRef() + ":" + dwMinute.getIntRef() + ":" + dwSecond.getIntRef()));
-                        m.setYearMonth(dwYear.getIntRef() + "-" + dwMonth.getIntRef());
+                        m.setYearMonth(dwYear.getIntRef() + "-" + month);
                         m.setVerifyMode(dwVerifyMode.getIntRef());
                         m.setInOutMode(dwInOutMode.getIntRef());
                         m.setYear(dwYear.getIntRef());
-                        m.setMonth(dwMonth.getIntRef() + "");
+                        m.setMonth(month + "");
                         m.setDay(dwDay.getIntRef());
                         m.setHour(dwHour.getIntRef());
                         m.setMinute(dwMinute.getIntRef());

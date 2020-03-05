@@ -1,4 +1,4 @@
-package com.cosun.cosunp.weixin;
+package com.cosun.cosunp.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,14 +21,23 @@ public class OutClockIn implements Serializable {
     private Date clockInDateAMOn;
     private String clockInAddrAMOn;
     private String amOnUrl;
+    private String checkin_typeA;     //***   上班打卡
+    private String exception_typeA;   //***   地点异常
+    private String notesA;     //***  路上堵车，迟到了5分钟
 
     private Date clockInDatePMOn;
     private String clockInAddrPMOn;
     private String pmOnUrl;
+    private String checkin_typeP;     //***   上班打卡
+    private String exception_typeP;   //***   地点异常
+    private String notesP;     //***  路上堵车，迟到了5分钟
 
     private Date clockInDateNMOn;
     private String clockInAddNMOn;
     private String nmOnUrl;
+    private String checkin_typeN;     //***   上班打卡
+    private String exception_typeN;   //***   地点异常
+    private String notesN;     //***  路上堵车，迟到了5分钟
 
 
     private String clockInDateAMOnStr;
@@ -40,6 +49,79 @@ public class OutClockIn implements Serializable {
     private String weixinNo;
     public String getWeixinNo() {
         return weixinNo;
+    }
+
+
+    public String getCheckin_typeA() {
+        return checkin_typeA;
+    }
+
+    public void setCheckin_typeA(String checkin_typeA) {
+        this.checkin_typeA = checkin_typeA;
+    }
+
+    public String getException_typeA() {
+        return exception_typeA;
+    }
+
+    public void setException_typeA(String exception_typeA) {
+        this.exception_typeA = exception_typeA;
+    }
+
+    public String getNotesA() {
+        return notesA;
+    }
+
+    public void setNotesA(String notesA) {
+        this.notesA = notesA;
+    }
+
+    public String getCheckin_typeP() {
+        return checkin_typeP;
+    }
+
+    public void setCheckin_typeP(String checkin_typeP) {
+        this.checkin_typeP = checkin_typeP;
+    }
+
+    public String getException_typeP() {
+        return exception_typeP;
+    }
+
+    public void setException_typeP(String exception_typeP) {
+        this.exception_typeP = exception_typeP;
+    }
+
+    public String getNotesP() {
+        return notesP;
+    }
+
+    public void setNotesP(String notesP) {
+        this.notesP = notesP;
+    }
+
+    public String getCheckin_typeN() {
+        return checkin_typeN;
+    }
+
+    public void setCheckin_typeN(String checkin_typeN) {
+        this.checkin_typeN = checkin_typeN;
+    }
+
+    public String getException_typeN() {
+        return exception_typeN;
+    }
+
+    public void setException_typeN(String exception_typeN) {
+        this.exception_typeN = exception_typeN;
+    }
+
+    public String getNotesN() {
+        return notesN;
+    }
+
+    public void setNotesN(String notesN) {
+        this.notesN = notesN;
     }
 
     public void setWeixinNo(String weixinNo) {

@@ -365,8 +365,38 @@
         }
 
         function showDateAByMonth() {
-            var yearMonth = $("#clockDateA").val();
-            alert(yearMonth)
+            var yearM = $("#clockDateA").val();
+            var formData = new FormData();
+            formData.append('yearMonth', yearM);
+            $.ajax({
+                data: formData,
+                type: "POST",
+                url: "/person/showDateAByMonthAAA",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    document.getElementById("clockDate").options.length = 0;
+                    var dateList = eval(msg);
+                    for (var i = 0; i < dateList.length; i++) {
+                        $('#clockDate').append("<option value=" + dateList[i] + ">" + dateList[i] + "</option>");
+                    }
+                    // 缺一不可
+                    $('#clockDate').selectpicker('refresh');
+                    $('#clockDate').selectpicker('render');
+                },
+                error: function (msg) {
+                    $("#errormessage").show();
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+
+            });
+
 
         }
 

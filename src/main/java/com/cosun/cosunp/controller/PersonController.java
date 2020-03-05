@@ -7,7 +7,7 @@ import com.cosun.cosunp.service.IFinanceServ;
 import com.cosun.cosunp.service.IPersonServ;
 import com.cosun.cosunp.tool.*;
 import com.cosun.cosunp.weixin.NetWorkHelper;
-import com.cosun.cosunp.weixin.OutClockIn;
+import com.cosun.cosunp.entity.OutClockIn;
 import com.cosun.cosunp.weixin.WeiXinUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sf.json.JSONArray;
@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -150,15 +151,14 @@ public class PersonController {
         }
     }
 
-    public void getBeforeDayZhongKongData() throws Exception {
-        String beforDay = "2019-12-27";
+    public void getBeforeDayZhongKongData(String beforDay) throws Exception {
         pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
         jedis = pool.getResource();
         String[] afterDay = beforDay.split("-");
         Map<String, Object> map = new HashMap<String, Object>();
         List<ZhongKongBean> strList = new ArrayList<ZhongKongBean>();
         boolean connFlag = ZkemSDKUtils.connect("192.168.2.12", 4370);
-        if(connFlag) {
+        if (connFlag) {
             boolean flag = ZkemSDKUtils.readGeneralLogData();
             strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 4));
         }
@@ -290,6 +290,14 @@ public class PersonController {
     }
 
 
+    public void fillEmpNoWhenQYWXNull() throws Exception {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        jedis = pool.getResource();
+        IPersonServ ps = SpringUtil.getBean(IPersonServ.class);
+        ps.fillEmpNoWhenQYWXNull();
+    }
+
+
     public void getAllWeiXinUser() throws Exception {
         pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
         jedis = pool.getResource();
@@ -315,7 +323,7 @@ public class PersonController {
 
     }
 
-    public void getBeforeDayQYWCData() throws Exception {
+    public void getBeforeDayQYWCData(String beforDay) throws Exception {
         pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
         jedis = pool.getResource();
         IPersonServ testDomainMapper = SpringUtil.getBean(IPersonServ.class);
@@ -324,9 +332,9 @@ public class PersonController {
         List<OutClockIn> outClockInList = new ArrayList<OutClockIn>();
         List<String> haveUserId = new ArrayList<String>();
         List<String> afterUserList1 = userList.subList(0, 99);
-        List<String> afterUserList2 = userList.subList(100, 199);
-        List<String> afterUserList3 = userList.subList(200, 299);
-        List<String> afterUserList4 = userList.subList(300, userList.size());
+        List<String> afterUserList2 = userList.subList(99, 199);
+        List<String> afterUserList3 = userList.subList(199, 299);
+        List<String> afterUserList4 = userList.subList(299, userList.size());
 
         List<List<String>> all = new ArrayList<List<String>>();
         all.add(afterUserList1);
@@ -334,7 +342,6 @@ public class PersonController {
         all.add(afterUserList3);
         all.add(afterUserList4);
         String day = null;
-        String beforDay = "2019-12-27";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateStart = sdf.parse(beforDay + " 00:00:00");
         Date dateEnd = sdf.parse(beforDay + " 23:59:59");
@@ -368,15 +375,24 @@ public class PersonController {
                         if (hour < 12 && hour >= 0) {
                             oc.setClockInDateAMOnStr(op.getCheckin_timeStr());
                             oc.setClockInAddrAMOn(op.getLocation_detail());
-                            oc.setAmOnUrl(op.getMediaids()[0]);
+                            oc.setAmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
+                            oc.setCheckin_typeA(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
+                            oc.setException_typeA(op == null || op.getException_type() == null ? "" : op.getException_type());
+                            oc.setNotesA(op == null || op.getNotes() == null ? "" : op.getNotes());
                         } else if (hour >= 12 && hour <= 18) {
                             oc.setClockInDatePMOnStr(op.getCheckin_timeStr());
                             oc.setClockInAddrPMOn(op.getLocation_detail());
-                            oc.setPmOnUrl(op.getMediaids()[0]);
+                            oc.setPmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
+                            oc.setCheckin_typeP(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
+                            oc.setException_typeP(op == null || op.getException_type() == null ? "" : op.getException_type());
+                            oc.setNotesP(op == null || op.getNotes() == null ? "" : op.getNotes());
                         } else if (hour > 18 && hour <= 24) {
                             oc.setClockInDateNMOnStr(op.getCheckin_timeStr());
                             oc.setClockInAddNMOn(op.getLocation_detail());
-                            oc.setNmOnUrl(op.getMediaids()[0]);
+                            oc.setNmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
+                            oc.setCheckin_typeN(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
+                            oc.setException_typeN(op == null || op.getException_type() == null ? "" : op.getException_type());
+                            oc.setNotesN(op == null || op.getNotes() == null ? "" : op.getNotes());
                         }
                     }
                 }
@@ -385,7 +401,290 @@ public class PersonController {
             }
         }
         testDomainMapper.saveOutClockInList(outClockInList);
+    }
 
+
+    public void getBeforeDayQYWXSPData(String beforDay) throws Exception {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<QYWXSPFROM> fromList = new ArrayList<QYWXSPFROM>();
+        jedis = pool.getResource();
+        IPersonServ testDomainMapper = SpringUtil.getBean(IPersonServ.class);
+        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/corp/getapprovaldata?access_token=%s", jedis.get(Constants.accessTokensp));
+        //String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/corp/getapprovaldata?access_token=%s", "rP8GeAzA2vzzsV0jCqT3thu2REEDpW0sP6ef1r67vp2717iLeN89XWBndcGxxG22eQPvRz7PLZu80gmQ_Actlp2kJxxfM8Um5EUY1mTbRDuOHdmsVzcPUoRi3yvQd0atkEWu4B7v-FfFN9_02lnJSN-YPo2GrUpwOW8_HNXE_tleal38nN4Co85YyrRpmd0x7-5ap3IlGjpAyg-OJn93PA");
+        Date dateStart = sdf.parse(beforDay + " 00:00:00");
+        Date dateEnd = sdf.parse(beforDay + " 23:59:59");
+        QYWXSPTO text = new QYWXSPTO();
+        text.setStarttime(dateStart.getTime() / 1000);
+        text.setEndtime(dateEnd.getTime() / 1000);
+        text.setNext_spnum(null);
+        NetWorkHelper netHelper = new NetWorkHelper();
+        String result = netHelper.getHttpsResponse3(Url, text, "POST");
+        JSONObject json = JSON.parseObject(result);
+        String next_spnum = String.valueOf(json.get("next_spnum"));
+        String count = String.valueOf(json.get("count"));
+        com.alibaba.fastjson.JSONArray jsonArrayData = json.getJSONArray("data");
+        com.alibaba.fastjson.JSONArray jsonArrayData2 = null;
+        com.alibaba.fastjson.JSONArray jsonArrayData3 = null;
+        JSONObject data = null;
+        JSONObject data2 = null;
+        JSONObject data3 = null;
+        JSONObject data4 = null;
+        QYWXSPFROM from = null;
+        String title;
+        String spname;
+        for (int i = 0; i < jsonArrayData.size(); i++) {
+            data = jsonArrayData.getJSONObject(i);
+            spname = (String) data.get("spname");
+            if ("补卡申请".equals(spname)) {
+                from = new QYWXSPFROM();
+                from.setSpname(spname);
+                from.setApply_name((String) data.get("apply_name"));
+                from.setApply_org((String) data.get("apply_org"));
+                from.setSp_status((Integer) data.get("sp_status"));
+                from.setSp_num((Long) data.get("sp_num"));
+                from.setApply_time((Integer) data.get("apply_time"));
+                from.setApply_user_id((String) data.get("apply_user_id"));
+                data2 = data.getJSONObject("comm");
+                jsonArrayData2 = data2.getJSONArray("apply_data");
+                for (int j = 0; j < jsonArrayData2.size(); j++) {
+                    data3 = jsonArrayData2.getJSONObject(j);
+                    title = (String) data3.get("title");
+                    if (title.equals("补卡时间")) {
+                        from.setBukaTimeLong((Long) data3.get("value"));
+                        Date date = new Date(from.getBukaTimeLong());
+                        from.setBukaTime(sdf.format(date).split(" ")[1]);
+                        from.setBukaYearM(sdf.format(date).split(" ")[0]);
+                    }
+                    if (title.equals("补卡事由")) {
+                        from.setBukaReason((String) data3.get("value"));
+                    }
+                }
+                if (2 == (Integer) data.get("sp_status")) {
+                    fromList.add(from);
+                }
+            }
+
+            if (spname.contains("请假")) {
+                from = new QYWXSPFROM();
+                from.setSpname("请假");
+                from.setApply_name((String) data.get("apply_name"));
+                from.setApply_org((String) data.get("apply_org"));
+                from.setSp_status((Integer) data.get("sp_status"));
+                from.setSp_num((Long) data.get("sp_num"));
+                from.setApply_time((Integer) data.get("apply_time"));
+                from.setApply_user_id((String) data.get("apply_user_id"));
+                data2 = data.getJSONObject("comm");
+                jsonArrayData2 = data2.getJSONArray("apply_data");
+
+                for (int j = 0; j < jsonArrayData2.size(); j++) {
+                    data3 = jsonArrayData2.getJSONObject(j);
+                    title = (String) data3.get("title");
+                    if (title.equals("请假类型")) {
+                        from.setLeave_type(StringUtil.LeaveTypeTransf((String) data3.get("value")));
+                    }
+                    if (title.equals("请假事由")) {
+                        from.setBukaReason((String) data3.get("value"));
+                    }
+
+                    if (title.equals("请假")) {
+                        jsonArrayData3 = data3.getJSONArray("value");
+                        for (int a = 0; a < jsonArrayData3.size(); a++) {
+                            data4 = jsonArrayData3.getJSONObject(a);
+                            title = (String) data4.get("title");
+                            if (title.equals("开始时间")) {
+                                from.setStart_time((Long) data4.get("value"));
+                                Date date = new Date(from.getStart_time());
+                                from.setStart_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("结束时间")) {
+                                from.setEnd_time((Long) data4.get("value"));
+                                Date date = new Date(from.getEnd_time());
+                                from.setEnd_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("请假时长")) {
+                                from.setDuration((Integer) data4.get("value"));
+                            }
+
+                        }
+                    }
+                }
+
+                if (2 == (Integer) data.get("sp_status")) {
+                    fromList.add(from);
+                }
+            }
+
+            if (spname.contains("外出申请")) {
+                from = new QYWXSPFROM();
+                from.setSpname("外出申请");
+                from.setApply_name((String) data.get("apply_name"));
+                from.setApply_org((String) data.get("apply_org"));
+                from.setSp_status((Integer) data.get("sp_status"));
+                from.setSp_num((Long) data.get("sp_num"));
+                from.setApply_time((Integer) data.get("apply_time"));
+                Date date = new Date(from.getApply_time());
+                from.setApply_timeStr(sdf.format((date)));
+                from.setApply_user_id((String) data.get("apply_user_id"));
+                data2 = data.getJSONObject("comm");
+                jsonArrayData2 = data2.getJSONArray("apply_data");
+
+                for (int j = 0; j < jsonArrayData2.size(); j++) {
+                    data3 = jsonArrayData2.getJSONObject(j);
+                    title = (String) data3.get("title");
+                    if (title.equals("外出地点")) {
+                        from.setOutAddr((String) data3.get("value"));
+                    }
+                    if (title.equals("外出事由")) {
+                        from.setBukaReason((String) data3.get("value"));
+                    }
+
+                    if (title.equals("外出")) {
+                        jsonArrayData3 = data3.getJSONArray("value");
+                        for (int a = 0; a < jsonArrayData3.size(); a++) {
+                            data4 = jsonArrayData3.getJSONObject(a);
+                            title = (String) data4.get("title");
+                            if (title.equals("开始时间")) {
+                                from.setStart_time((Long) data4.get("value"));
+                                date = new Date(from.getStart_time());
+                                from.setStart_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("结束时间")) {
+                                from.setEnd_time((Long) data4.get("value"));
+                                date = new Date(from.getEnd_time());
+                                from.setEnd_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("外出时长")) {
+                                from.setDuration((Integer) data4.get("value"));
+                            }
+
+                        }
+                    }
+                }
+
+                if (2 == (Integer) data.get("sp_status")) {
+                    fromList.add(from);
+                }
+            }
+
+
+            if (spname.contains("出差")) {
+                from = new QYWXSPFROM();
+                from.setSpname("出差");
+                from.setApply_name((String) data.get("apply_name"));
+                from.setApply_org((String) data.get("apply_org"));
+                from.setSp_status((Integer) data.get("sp_status"));
+                from.setSp_num((Long) data.get("sp_num"));
+                from.setApply_time((Integer) data.get("apply_time"));
+                Date date = new Date(from.getApply_time());
+                from.setApply_timeStr(sdf.format((date)));
+                from.setApply_user_id((String) data.get("apply_user_id"));
+                data2 = data.getJSONObject("comm");
+                jsonArrayData2 = data2.getJSONArray("apply_data");
+
+                for (int j = 0; j < jsonArrayData2.size(); j++) {
+                    data3 = jsonArrayData2.getJSONObject(j);
+                    title = (String) data3.get("title");
+                    if (title.equals("出差地点")) {
+                        from.setOutAddr((String) data3.get("value"));
+                    }
+                    if (title.equals("出差事由")) {
+                        from.setBukaReason((String) data3.get("value"));
+                    }
+
+                    if (title.equals("出差")) {
+                        jsonArrayData3 = data3.getJSONArray("value");
+                        for (int a = 0; a < jsonArrayData3.size(); a++) {
+                            data4 = jsonArrayData3.getJSONObject(a);
+                            title = (String) data4.get("title");
+                            if (title.equals("开始时间")) {
+                                from.setStart_time((Long) data4.get("value"));
+                                date = new Date(from.getStart_time());
+                                from.setStart_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("结束时间")) {
+                                from.setEnd_time((Long) data4.get("value"));
+                                date = new Date(from.getEnd_time());
+                                from.setEnd_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("出差时长")) {
+                                from.setDuration((Integer) data4.get("value"));
+                            }
+
+                        }
+                    }
+                }
+
+                if (2 == (Integer) data.get("sp_status")) {
+                    fromList.add(from);
+                }
+            }
+
+
+        }
+        testDomainMapper.saveQKData(fromList);
+    }
+
+    public void getBeforeDayQYWCDataAAA(String beforDay) throws Exception {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        jedis = pool.getResource();
+        IPersonServ testDomainMapper = SpringUtil.getBean(IPersonServ.class);
+        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/checkin/getcheckindata?access_token=%s", jedis.get(Constants.accessToken));
+        List<String> userList = testDomainMapper.getAllUserName();
+        List<ZhongKongBeanQY> outClockInList = new ArrayList<ZhongKongBeanQY>();
+        List<String> haveUserId = new ArrayList<String>();
+        List<String> afterUserList1 = userList.subList(0, 99);
+        List<String> afterUserList2 = userList.subList(99, 199);
+        List<String> afterUserList3 = userList.subList(199, 299);
+        List<String> afterUserList4 = userList.subList(299, userList.size());
+
+        List<List<String>> all = new ArrayList<List<String>>();
+        all.add(afterUserList1);
+        all.add(afterUserList2);
+        all.add(afterUserList3);
+        all.add(afterUserList4);
+        String day = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dateStart = sdf.parse(beforDay + " 00:00:00");
+        Date dateEnd = sdf.parse(beforDay + " 23:59:59");
+        QYweixinSend text = new QYweixinSend();
+        text.setOpencheckindatatype(1);
+        text.setStarttime(dateStart.getTime() / 1000);
+        text.setEndtime(dateEnd.getTime() / 1000);
+        NetWorkHelper netHelper = new NetWorkHelper();
+        for (int aa = 0; aa < all.size(); aa++) {
+            text.setUseridlist(all.get(aa));
+            String result = netHelper.getHttpsResponse2(Url, text, "POST");
+            JSONObject json = JSON.parseObject(result);
+            String checkindata = String.valueOf(json.get("checkindata"));
+            com.alibaba.fastjson.JSONArray checkindataStr = JSON.parseArray(checkindata);
+            List<OutPunch> outPunchList = JSONUtils.toList(checkindataStr, OutPunch.class);
+            ZhongKongBeanQY oc = null;
+            String hourStr = null;
+            Integer hour = null;
+            String userId = null;
+            for (int a = 0; a < outPunchList.size(); a++) {
+                userId = outPunchList.get(a).getUserid();
+                if (haveUserId.contains(userId))
+                    continue;
+                oc = new ZhongKongBeanQY();
+                oc.setUserId(userId);
+                oc.setDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
+                oc.setYearMonth(beforDay.split("-")[0] + "-" + beforDay.split("-")[1]);
+                for (OutPunch op : outPunchList) {
+                    if (op.getUserid().equals(userId)) {
+                        if (op != null && (op.getException_type() == null || "".equals(op.getException_type()) || "时间异常".equals(op.getException_type()))) {
+                            oc.setTimeStr((oc.getTimeStr() == null ? "" : oc.getTimeStr()) + op.getCheckin_timeStr().split(" ")[1] + " ");
+                            oc.setRemark((oc.getRemark() == null ? "" : oc.getRemark()) + op.getNotes());
+                        }
+                    }
+                }
+                outClockInList.add(oc);
+                haveUserId.add(userId);
+            }
+        }
+        //outClockInList  = new ArrayList<ZhongKongBeanQY>(new HashSet<ZhongKongBeanQY>(outClockInList));
+        testDomainMapper.saveZKQYList(outClockInList);
     }
 
 
@@ -422,6 +721,25 @@ public class PersonController {
             }
             ObjectMapper x = new ObjectMapper();
             String str1 = x.writeValueAsString(financeImportDataList);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().print(str1);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/showDateAByMonthAAA", method = RequestMethod.POST)
+    public void showDateAByMonthAAA(Employee kqBean, HttpServletResponse response, HttpSession session) throws
+            Exception {
+        try {
+            List<String> dateStr = personServ.getAllKQDateListABC(kqBean.getYearMonth());
+            ObjectMapper x = new ObjectMapper();
+            String str1 = x.writeValueAsString(dateStr);
             response.setCharacterEncoding("UTF-8");
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().print(str1);
@@ -632,7 +950,7 @@ public class PersonController {
             Employee employee = new Employee();
             employee.setPageSize(3);
             List<Position> positionList = personServ.findAllPositionAll();
-            List<String> kqDateList = personServ.getAllKQDateList();
+            List<String> kqDateList = personServ.getAllKQDateListAAA();
             List<String> kqMonthList = personServ.getAllMKMonthList();
             String[] yearMonth = null;
             String today = null;
@@ -823,6 +1141,7 @@ public class PersonController {
             List<Position> positionList = personServ.findAllPositionAll();
             List<String> kqDateList = personServ.getAllKQDateList();
             List<Dept> deptList = personServ.findAllDeptAll();
+            List<String> kqMonthList = personServ.getAllKQMonthListKQBean();
             List<Employee> empList = personServ.findAllEmployeeAll();
             List<KQBean> financeImportDataList = personServ.findAllKQBData(employee);
             int recordCount = personServ.findAllKQBDataCount();
@@ -836,6 +1155,7 @@ public class PersonController {
             view.addObject("deptList", deptList);
             view.addObject("userInfo", userInfo);
             view.addObject("kqDateList", kqDateList);
+            view.addObject("kqMonthList", kqMonthList);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage(), e);
@@ -1442,7 +1762,7 @@ public class PersonController {
             view.addObject("jiaBan", jiaBan);
             view.addObject("positionList", positionList);
             view.addObject("deptList", deptList);
-            view.addObject("flag",2);
+            view.addObject("flag", 2);
             return view;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -2522,7 +2842,7 @@ public class PersonController {
 
     @ResponseBody
     @RequestMapping(value = "/getemployeebyId", method = RequestMethod.POST)
-    public void getemployeebyId(@RequestBody Integer employeeId, HttpServletResponse response) throws Exception {
+    public void getemployeebyId(@RequestBody String employeeId, HttpServletResponse response) throws Exception {
         try {
             List<Employee> employees = personServ.getEmployeeById(employeeId);
             String str1;

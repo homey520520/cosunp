@@ -152,7 +152,7 @@
         var leaveDescrip = $("#leaveDescrip").val();
         var remark = $("#remark").val();
         if (employeeId != 0 && beginLeaveStr.trim().length > 0 && endLeaveStr.trim().length > 0 != null) {
-            window.location.href = "/person/addLeaveToMysql?employeeId=" + employeeId
+            window.location.href = "/person/addLeaveToMysql?empNo=" + employeeId
                 + "&beginLeaveStr=" + beginLeaveStr + "&endLeaveStr=" + endLeaveStr + "&leaveLong=" + leaveLong + "&leaveDescrip=" + leaveDescrip
                 + "&remark=" + remark + "&type=" + typeValue;
         } else {
@@ -217,7 +217,7 @@
                                     　
                                     <option th:value="0">请选择员工</option>
                                     　
-                                    <option th:each="c:${employeeList}" th:value="${c.id}"
+                                    <option th:each="c:${employeeList}" th:value="${c.empNo}"
                                             th:text="${c.name}"></option>
                                 </select>
 
