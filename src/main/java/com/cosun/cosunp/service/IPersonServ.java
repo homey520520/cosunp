@@ -28,6 +28,8 @@ public interface IPersonServ {
 
     String checkEmpNoOrEmpNameRepeat(List<Employee> employeeList) throws Exception;
 
+    void translateAllTable(MultipartFile file) throws Exception;
+
     void saveZKNumEmpNoBangDing(List<Employee> employeeList) throws Exception;
 
     List<Employee> translateTabletoEmployeeBeanZK(List<MultipartFile> files) throws Exception;
@@ -142,6 +144,8 @@ public interface IPersonServ {
 
     void updateKQBeanDataByRenShi(Integer id, Double extHours, Integer state) throws Exception;
 
+    List<ReturnString> getAllDataByName(String name,String dateStr) throws Exception;
+
     int saveOrUpdateZhongKongIdByEmpNo(WeiXinUsrId zhongKongEmployee) throws Exception;
 
     void deleteLeaveByBatch(List<Integer> ids) throws Exception;
@@ -155,6 +159,8 @@ public interface IPersonServ {
     Leave getLeaveById(Integer id) throws Exception;
 
     List<Dept> findAllDeptAll() throws Exception;
+
+    List<Employee> findEmpAndLinS() throws Exception;
 
     List<TiaoXiu> findAllTiaoXiu(TiaoXiu tiaoXiu) throws Exception;
 

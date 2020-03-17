@@ -21,6 +21,29 @@ import java.util.regex.Pattern;
  */
 public class StringUtil {
 
+    public static int getLeaveTypByStr(int line, String str) throws Exception {
+        if (str != null) {
+            if ("正常请假".equals(str)) {
+                return 0;
+            } else if ("因公外出".equals(str)) {
+                return 1;
+            } else if ("带薪年假".equals(str)) {
+                return 2;
+            } else if ("丧假".equals(str)) {
+                return 3;
+            } else if ("婚假".equals(str)) {
+                return 4;
+            } else if ("产假".equals(str)) {
+                return 5;
+            } else if ("陪产假".equals(str)) {
+                return 6;
+            } else {
+                throw new Exception("第" + line + "行输入请假类型有误，请检查");
+            }
+        }
+        return 0;
+    }
+
 
     public static String increateFinishiNoByOrldFinishiNo(String oldnewestProdNo, String shortEngName) throws Exception {
         if (oldnewestProdNo != null) {
@@ -228,6 +251,20 @@ public class StringUtil {
         return 3;
     }
 
+    public static Time returnLargeTime(Time tim, String timestr) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+            Date d = format.parse(timestr);
+            Time time2 = new java.sql.Time(d.getTime());
+            if (time2.after(tim))
+                return time2;
+            return tim;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String sortTimes(String qiankaStr, String timeStr) throws Exception {
         List<String> allStr = new ArrayList<String>();
         String[] strs = timeStr.split(" ");
@@ -252,6 +289,34 @@ public class StringUtil {
         }
 
         return returnStr.toString();
+    }
+
+
+    public static String sortTime(String timeStr) throws Exception {
+        if (timeStr != null && timeStr.trim().length() > 0) {
+            List<String> allStr = new ArrayList<String>();
+            String[] strs = timeStr.split(" ");
+            for (String s : strs) {
+                allStr.add(s);
+            }
+            List<Time> times = formTime(allStr);
+            for (int i = 0; i < times.size() - 1; i++) {
+                for (int j = 0; j < times.size() - 1 - i; j++) {
+                    if (times.get(j).after(times.get(j + 1))) {
+                        Time temp = times.get(j + 1);
+                        times.set(j + 1, times.get(j));
+                        times.set(j, temp);
+                    }
+                }
+            }
+
+            StringBuilder returnStr = new StringBuilder();
+            for (Time Ti : times) {
+                returnStr.append(Ti.toString() + " ");
+            }
+            return returnStr.toString();
+        }
+        return null;
     }
 
     public static String sortTimes2(String zhTimesStr, String qkTimeStr) throws Exception {
@@ -295,7 +360,9 @@ public class StringUtil {
         for (String str : times) {
             d = format.parse(str);
             time = new java.sql.Time(d.getTime());
-            timeList.add(time);
+            if(!timeList.contains(time)) {
+                timeList.add(time);
+            }
         }
         return timeList;
     }

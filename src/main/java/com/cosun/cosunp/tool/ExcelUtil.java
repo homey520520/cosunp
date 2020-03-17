@@ -1,22 +1,21 @@
 package com.cosun.cosunp.tool;
 
-import com.aspose.cad.internal.iG.M;
-import com.cosun.cosunp.entity.MonthKQInfo;
-import com.cosun.cosunp.entity.OutPutWorkData;
-import com.cosun.cosunp.entity.SalaryDataOutPut;
-import com.cosun.cosunp.entity.SubEmphours;
+import com.cosun.cosunp.entity.*;
+import jxl.CellType;
+import jxl.DateCell;
+import jxl.WorkbookSettings;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author:homey Wong
@@ -26,6 +25,399 @@ import java.util.List;
  * @Modified-date:
  */
 public class ExcelUtil {
+
+
+    public static Map<String, List<?>> translateAllTable(MultipartFile file) throws Exception {
+        Map<String, List<?>> listMap = new HashMap<String, List<?>>();
+        DateFormat dftdatetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat dftdate = new SimpleDateFormat("yyyy-MM-dd");
+        WorkbookSettings ws = new WorkbookSettings();
+        String fileName = file.getOriginalFilename();
+        ws.setCellValidationDisabled(true);
+        String titleName = null;
+        jxl.Workbook Workbook = null;
+        String fileType = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+        if (fileType.equals("xls")) {
+            Workbook = jxl.Workbook.getWorkbook(file.getInputStream(), ws);
+        } else {
+            throw new Exception("文档格式后缀不正确!!！只接受xls格式.");
+        }
+        jxl.Sheet xlsfSheet = null;
+        jxl.Sheet xlsfSheetqk = null;
+        jxl.Sheet xlsfSheetlb = null;
+        jxl.Sheet xlsfSheetjb = null;
+        jxl.Sheet xlsfSheetyb = null;
+        jxl.Sheet xlsfSheettx = null;
+        if (Workbook != null) {
+            jxl.Sheet[] sheets = Workbook.getSheets();
+            xlsfSheet = sheets[1];
+            xlsfSheetqk = sheets[2];
+            xlsfSheetlb = sheets[3];
+            xlsfSheetjb = sheets[4];
+            xlsfSheetyb = sheets[5];
+            xlsfSheettx = sheets[6];
+        }
+        List<Leave> leaveList = new ArrayList<Leave>();
+        List<QianKa> qianKaList = new ArrayList<QianKa>();
+        List<LianBan> lianBanList = new ArrayList<LianBan>();
+        List<JiaBan> jiaBanList = new ArrayList<JiaBan>();
+        List<YeBan> yeBanList = new ArrayList<YeBan>();
+        List<TiaoXiu> tiaoXiuList = new ArrayList<TiaoXiu>();
+        Leave leave = null;
+        QianKa qianKa = null;
+        LianBan lianBan = null;
+        JiaBan jiaBan = null;
+        YeBan yeBan = null;
+        TiaoXiu tiaoXiu = null;
+        int rowNums = xlsfSheet.getRows();
+        int rowNumsQK = xlsfSheetqk.getRows();
+        int rowNumsLB = xlsfSheetlb.getRows();
+        int rowNumsJB = xlsfSheetjb.getRows();
+        int rowNumsYB = xlsfSheetyb.getRows();
+        int rowNumsTX = xlsfSheettx.getRows();
+        jxl.Cell[] cell = null;
+        String timestr;
+        Date transferDate = null;
+        DateCell dc = null;
+        Date date = null;
+        Calendar c = null;
+        for (int i = 2; i < rowNums; i++) {
+            cell = xlsfSheet.getRow(i);
+            if (cell != null && cell.length > 0 && cell[0].getType() != CellType.EMPTY) {
+                leave = new Leave();
+                try {
+                    if (cell[0].getType() == CellType.DATE) {
+                        titleName = "输单日期";
+                        dc = (DateCell) cell[0];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        leave.setDate(transferDate);
+                        leave.setDateStr(dftdate.format(transferDate));
+                    }
+                    titleName = "姓名";
+                    leave.setName(cell[1].getContents().trim());
+                    titleName = "工号";
+                    if (cell[2].getType() != CellType.EMPTY) {
+                        leave.setEmpNo(cell[2].getContents().trim());
+                    } else {
+                        leave.setEmpNo(leave.getName());
+                    }
+                    if (cell[3].getType() == CellType.DATE) {
+                        titleName = "请假时间始";
+                        dc = (DateCell) cell[3];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        leave.setBeginLeave(transferDate);
+                        leave.setBeginLeaveStr(dftdatetime.format(transferDate));
+                    }
+
+                    if (cell[4].getType() == CellType.DATE) {
+                        titleName = "请假时间止";
+                        dc = (DateCell) cell[4];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        leave.setEndLeave(transferDate);
+                        leave.setEndLeaveStr(dftdatetime.format(transferDate));
+                    }
+
+                    titleName = "请假时长";
+                    leave.setLeaveLong(Double.valueOf(cell[5].getContents().trim()));
+                    titleName = "请假类型";
+                    leave.setType(StringUtil.getLeaveTypByStr(i, cell[6].getContents().trim()));
+                    titleName = "请假说明";
+                    leave.setLeaveDescrip(cell[7].getContents().trim());
+                    leaveList.add(leave);
+                } catch (Exception e) {
+                    throw new Exception("请假单表格第" + (i + 1) + "行" + titleName + "有错误!");
+                }
+            }
+        }
+
+
+        for (int i = 2; i < rowNumsQK; i++) {
+            cell = xlsfSheetqk.getRow(i);
+            if (cell != null && cell.length > 0 && cell[0].getType() != CellType.EMPTY) {
+                qianKa = new QianKa();
+                try {
+                    if (cell[0].getType() == CellType.DATE) {
+                        titleName = "输单日期";
+                        dc = (DateCell) cell[0];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        qianKa.setDanDate(transferDate);
+                        qianKa.setDanDateStr(dftdate.format(transferDate));
+                    }
+                    titleName = "姓名";
+                    qianKa.setName(cell[1].getContents().trim());
+                    titleName = "工号";
+                    if (cell[2].getType() != CellType.EMPTY) {
+                        qianKa.setEmpNo(cell[2].getContents().trim());
+                    } else {
+                        qianKa.setEmpNo(qianKa.getName());
+                    }
+                    if (cell[3].getType() == CellType.DATE) {
+                        titleName = "签卡日期";
+                        dc = (DateCell) cell[3];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        qianKa.setDate(transferDate);
+                        qianKa.setDateStr(dftdate.format(transferDate));
+                    }
+
+
+                    titleName = "签卡时间";
+                    qianKa.setTimeStr(cell[4].getContents().trim());
+                    titleName = "签卡原因";
+                    qianKa.setType(2);
+                    qianKaList.add(qianKa);
+                } catch (Exception e) {
+                    throw new Exception("签卡单表格第" + (i + 1) + "行" + titleName + "有错误!");
+                }
+            }
+        }
+
+        for (int i = 2; i < rowNumsLB; i++) {
+            cell = xlsfSheetlb.getRow(i);
+            if (cell != null && cell.length > 0 && cell[0].getType() != CellType.EMPTY) {
+                lianBan = new LianBan();
+                try {
+                    if (cell[0].getType() == CellType.DATE) {
+                        titleName = "输单日期";
+                        dc = (DateCell) cell[0];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        lianBan.setDanDate(transferDate);
+                        lianBan.setDanDateStr(dftdate.format(transferDate));
+                    }
+                    titleName = "姓名";
+                    lianBan.setName(cell[1].getContents().trim());
+                    titleName = "工号";
+                    if (cell[2].getType() != CellType.EMPTY) {
+                        lianBan.setEmpNo(cell[2].getContents().trim());
+                    } else {
+                        lianBan.setEmpNo(lianBan.getName());
+                    }
+                    if (cell[3].getType() == CellType.DATE) {
+                        titleName = "连班日期";
+                        dc = (DateCell) cell[3];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        lianBan.setDate(transferDate);
+                        lianBan.setDateStr(dftdate.format(transferDate));
+                    }
+
+
+                    titleName = "中午连班小时";
+                    lianBan.setNoonHours(Double.valueOf(cell[4].getContents().trim()));
+                    titleName = "晚上连班小时";
+                    lianBan.setNightHours(Double.valueOf(cell[5].getContents().trim()));
+                    titleName = "连班原因";
+                    lianBan.setRemark(cell[6].getContents().trim());
+                    lianBanList.add(lianBan);
+                } catch (Exception e) {
+                    throw new Exception("连班单表格第" + (i + 1) + "行" + titleName + "有错误!");
+                }
+            }
+        }
+
+        for (int i = 2; i < rowNumsJB; i++) {
+            cell = xlsfSheetjb.getRow(i);
+            if (cell != null && cell.length > 0 && cell[0].getType() != CellType.EMPTY) {
+                jiaBan = new JiaBan();
+                try {
+                    if (cell[0].getType() == CellType.DATE) {
+                        titleName = "输单日期";
+                        dc = (DateCell) cell[0];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        jiaBan.setDanDate(transferDate);
+                        jiaBan.setDanDateStr(dftdate.format(transferDate));
+                    }
+                    titleName = "姓名";
+                    jiaBan.setName(cell[1].getContents().trim());
+                    titleName = "工号";
+                    if (cell[2].getType() != CellType.EMPTY) {
+                        jiaBan.setEmpNo(cell[2].getContents().trim());
+                    } else {
+                        jiaBan.setEmpNo(jiaBan.getName());
+                    }
+                    if (cell[3].getType() == CellType.DATE) {
+                        titleName = "加班时间起";
+                        dc = (DateCell) cell[3];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        jiaBan.setExtDateFrom(transferDate);
+                        jiaBan.setExtDateFromStr(dftdatetime.format(transferDate));
+                    }
+
+                    if (cell[4].getType() == CellType.DATE) {
+                        titleName = "加班时间止";
+                        dc = (DateCell) cell[4];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        jiaBan.setExtDateEnd(transferDate);
+                        jiaBan.setExtDateEndStr(dftdatetime.format(transferDate));
+                    }
+
+
+                    titleName = "加班工时";
+                    jiaBan.setExtWorkHours(Double.valueOf(cell[5].getContents().trim()));
+                    titleName = "加班原因";
+                    jiaBan.setRemark(cell[6].getContents().trim());
+                    jiaBanList.add(jiaBan);
+                } catch (Exception e) {
+                    throw new Exception("加班单表格第" + (i + 1) + "行" + titleName + "有错误!");
+                }
+            }
+        }
+
+        for (int i = 2; i < rowNumsYB; i++) {
+            cell = xlsfSheetyb.getRow(i);
+            if (cell != null && cell.length > 0 && cell[0].getType() != CellType.EMPTY) {
+                yeBan = new YeBan();
+                try {
+                    if (cell[0].getType() == CellType.DATE) {
+                        titleName = "输单日期";
+                        dc = (DateCell) cell[0];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        yeBan.setDanDate(transferDate);
+                        yeBan.setDanDateStr(dftdate.format(transferDate));
+                    }
+                    titleName = "姓名";
+                    yeBan.setName(cell[1].getContents().trim());
+                    titleName = "工号";
+                    if (cell[2].getType() != CellType.EMPTY) {
+                        yeBan.setEmpNo(cell[2].getContents().trim());
+                    } else {
+                        yeBan.setEmpNo(yeBan.getName());
+                    }
+
+                    if (cell[3].getType() == CellType.DATE) {
+                        titleName = "夜班时间";
+                        dc = (DateCell) cell[3];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        yeBan.setDate(transferDate);
+                        yeBan.setDateStr(dftdate.format(transferDate));
+                    }
+
+                    titleName = "备注";
+                    yeBan.setRemark(cell[4].getContents().trim());
+                    yeBanList.add(yeBan);
+                } catch (Exception e) {
+                    throw new Exception("夜班单表格第" + (i + 1) + "行" + titleName + "有错误!");
+                }
+            }
+        }
+
+
+        for (int i = 2; i < rowNumsTX; i++) {
+            cell = xlsfSheettx.getRow(i);
+            if (cell != null && cell.length > 0 && cell[0].getType() != CellType.EMPTY) {
+                tiaoXiu = new TiaoXiu();
+                try {
+                    if (cell[0].getType() == CellType.DATE) {
+                        titleName = "输单日期";
+                        dc = (DateCell) cell[0];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        tiaoXiu.setDanDate(transferDate);
+                        tiaoXiu.setDanDateStr(dftdate.format(transferDate));
+                    }
+                    titleName = "姓名";
+                    tiaoXiu.setName(cell[1].getContents().trim());
+                    titleName = "工号";
+                    if (cell[2].getType() != CellType.EMPTY) {
+                        tiaoXiu.setEmpNo(cell[2].getContents().trim());
+                    } else {
+                        tiaoXiu.setEmpNo(tiaoXiu.getName());
+                    }
+
+                    if (cell[3].getType() == CellType.DATE) {
+                        titleName = "调休从";
+                        dc = (DateCell) cell[3];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        tiaoXiu.setFromDate(transferDate);
+                        tiaoXiu.setFromDateStr(dftdate.format(transferDate));
+                    }
+
+                    titleName = "调休几个小时";
+                    tiaoXiu.setHours(Double.valueOf(cell[4].getContents().trim()));
+                    if (cell[5].getType() == CellType.DATE) {
+                        titleName = "调休至";
+                        dc = (DateCell) cell[5];
+                        date = dc.getDate();
+                        c = Calendar.getInstance();
+                        c.setTime(date);
+                        c.add(Calendar.HOUR, -8);
+                        transferDate = c.getTime();
+                        tiaoXiu.setToDate(transferDate);
+                        tiaoXiu.setToDateStr(dftdate.format(transferDate));
+                    }
+                    titleName = "调休类型";
+                    tiaoXiu.setType("公调".equals(cell[5].getContents().trim()) ? 0 : 1);
+                    titleName = "备注";
+                    tiaoXiu.setRemark(cell[6].getContents().trim());
+                    tiaoXiuList.add(tiaoXiu);
+                } catch (Exception e) {
+                    throw new Exception("调休单表格第" + (i + 1) + "行" + titleName + "有错误!");
+                }
+            }
+        }
+
+        listMap.put("leave", leaveList);
+        listMap.put("qianka", qianKaList);
+        listMap.put("lianban", lianBanList);
+        listMap.put("jiaban", jiaBanList);
+        listMap.put("yeban", yeBanList);
+        listMap.put("tiaoxiu", tiaoXiuList);
+
+        return listMap;
+    }
 
 
     public static List<String> writeExcelSubWorkHours(List<SubEmphours> outDatas, String yearMonth, String finalDirPath) {

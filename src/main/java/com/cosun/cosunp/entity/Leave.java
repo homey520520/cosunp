@@ -14,6 +14,8 @@ import java.util.List;
 public class Leave implements Serializable {
 
     private static final long serialVersionUID = -5472326875954062283L;
+    private Date date;
+    private String dateStr;
     private Integer id;
     private Integer employeeId;
     private Date beginLeave;
@@ -50,6 +52,21 @@ public class Leave implements Serializable {
     private int currentPageTotalNum;
 
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getDateStr() {
+        return dateStr;
+    }
+
+    public void setDateStr(String dateStr) {
+        this.dateStr = dateStr;
+    }
 
     public List<Integer> getSexs() {
         return sexs;
@@ -73,15 +90,15 @@ public class Leave implements Serializable {
                 return "正常请假";
             } else if (type == 1) {
                 return "因公外出";
-            }else if (type == 2) {
+            } else if (type == 2) {
                 return "带薪年假";
-            }else if (type == 3) {
+            } else if (type == 3) {
                 return "丧假";
-            }else if (type == 4) {
+            } else if (type == 4) {
                 return "婚假";
-            }else if(type == 5) {
+            } else if (type == 5) {
                 return "产假";
-            }else if(type == 6) {
+            } else if (type == 6) {
                 return "陪产假";
             }
         }

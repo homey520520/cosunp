@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * @author:homey Wong
- * @date:2019/6/11  上午 9:57
+ * @date:2019/6/11 上午 9:57
  * @Description:
  * @Modified By:
  * @Modified-date:
@@ -27,8 +27,12 @@ public class Test {
     public static void main(String[] arg) {
 
         try {
-            File file = new File("E:\\WAMP\\wamp\\www\\cosunp\\src\\main\\java\\com\\cosun\\cosunp");
-            System.out.println(getProjectFileNumber(file,"java"));
+
+            SimpleDateFormat dft2 = new SimpleDateFormat("yyyy-MM-dd");
+            System.out.println(dft2.parse("2020-03-2"));
+            System.out.println(dft2.parse("2020-03-04"));
+         //   File file = new File("E:\\WAMP\\wamp\\www\\cosunp\\src\\main\\resources\\templates");
+            //System.out.println(getProjectFileNumber(file, "html"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,10 +63,5 @@ public class Test {
         return number;
     }
 
-
-
-
 }
-
-
 

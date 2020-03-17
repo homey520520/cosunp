@@ -20,6 +20,8 @@ public class YeBan implements Serializable {
     private Date date;
     private Integer type;
     private String remark;
+    private Date danDate;
+    private String danDateStr;
 
     private String dateStr;
 
@@ -46,6 +48,21 @@ public class YeBan implements Serializable {
     private List<Integer> types;
     private List<Integer> names;
 
+    public Date getDanDate() {
+        return danDate;
+    }
+
+    public void setDanDate(Date danDate) {
+        this.danDate = danDate;
+    }
+
+    public String getDanDateStr() {
+        return danDateStr;
+    }
+
+    public void setDanDateStr(String danDateStr) {
+        this.danDateStr = danDateStr;
+    }
 
     public String getBeginYeBanStr() {
         return beginYeBanStr;

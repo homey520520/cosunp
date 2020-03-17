@@ -7,7 +7,6 @@ import com.cosun.cosunp.service.IFinanceServ;
 import com.cosun.cosunp.service.IPersonServ;
 import com.cosun.cosunp.tool.*;
 import com.cosun.cosunp.weixin.NetWorkHelper;
-import com.cosun.cosunp.entity.OutClockIn;
 import com.cosun.cosunp.weixin.WeiXinUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sf.json.JSONArray;
@@ -33,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -421,8 +419,6 @@ public class PersonController {
         NetWorkHelper netHelper = new NetWorkHelper();
         String result = netHelper.getHttpsResponse3(Url, text, "POST");
         JSONObject json = JSON.parseObject(result);
-        String next_spnum = String.valueOf(json.get("next_spnum"));
-        String count = String.valueOf(json.get("count"));
         com.alibaba.fastjson.JSONArray jsonArrayData = json.getJSONArray("data");
         com.alibaba.fastjson.JSONArray jsonArrayData2 = null;
         com.alibaba.fastjson.JSONArray jsonArrayData3 = null;
@@ -643,7 +639,6 @@ public class PersonController {
         all.add(afterUserList2);
         all.add(afterUserList3);
         all.add(afterUserList4);
-        String day = null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateStart = sdf.parse(beforDay + " 00:00:00");
         Date dateEnd = sdf.parse(beforDay + " 23:59:59");
@@ -1090,7 +1085,7 @@ public class PersonController {
             int maxPage = recordCount % employee.getPageSize() == 0 ? recordCount / employee.getPageSize() : recordCount / employee.getPageSize() + 1;
             employee.setMaxPage(maxPage);
             employee.setRecordCount(recordCount);
-            view.addObject("financeImportDataList", financeImportDataList);
+            view.addObject("financeImportDataList", financeImportDataList) ;
             view.addObject("empList", empList);
             view.addObject("employee", employee);
             view.addObject("positionList", positionList);
@@ -1213,6 +1208,41 @@ public class PersonController {
         return view;
     }
 
+    @ResponseBody
+    @RequestMapping("/toQuickQuery")
+    public ModelAndView toQuickQuery(HttpSession session) throws Exception {
+        ModelAndView view = new ModelAndView("quickquery");
+        UserInfo userInfo = (UserInfo) session.getAttribute("account");
+        List<Employee> empList = personServ.findEmpAndLinS();
+        view.addObject("empList", empList);
+        view.addObject("userInfo", userInfo);
+        return view;
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/queryQQByCondition", method = RequestMethod.POST)
+    public void queryQQByCondition(KQBean kqb, HttpSession session, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = (UserInfo) session.getAttribute("account");
+        StringBuilder sb = new StringBuilder();
+        List<ReturnString> rsList = personServ.getAllDataByName(kqb.getName(), kqb.getDateStr());
+        String str1 = null;
+        ObjectMapper x = new ObjectMapper();
+//        for (int a = 0; a < rsList.size(); a++) {
+//            sb.append("<font color=\"#FF0000\" size=\"3\" th:align=\"right\">" + rsList.get(a).getTitleName() + "</font><br>");
+//            sb.append("<font color=\"black\" size=\"2\" th:align=\"right\">" + rsList.get(a).getNeirong() + "</font><br>");
+//            sb.append("<font color=\"black\" size=\"2\" th:align=\"right\">" + rsList.get(a).getRemark() + "</font><br><p>");
+//        }
+        try {
+            str1 = x.writeValueAsString(rsList);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().print(str1);
+        } catch (Exception e) {
+            logger.debug(e.getMessage());
+            throw e;
+        }
+    }
 
     @ResponseBody
     @RequestMapping("/updateKQBeanDataByRenShi")
@@ -2533,6 +2563,27 @@ public class PersonController {
             throw e;
         }
     }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/outDataInSql", method = RequestMethod.POST)
+    public ModelAndView outDataInSql(@RequestParam("file8") MultipartFile file) throws Exception {
+        ModelAndView view = new ModelAndView("computeworkdate");
+        try {
+            personServ.translateAllTable(file);
+            view.addObject("compute", new Compute());
+            view.addObject("flag88", 10);
+            return view;
+        } catch (Exception e) {
+            view.addObject("compute", new Compute());
+            view.addObject("flag88", 10);
+            view.addObject("flag88", e.getMessage());
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            return view;
+        }
+    }
+
 
     @ResponseBody
     @RequestMapping(value = "/dataInMysql", method = RequestMethod.POST)
@@ -3941,5 +3992,6 @@ public class PersonController {
             throw e;
         }
     }
+
 
 }

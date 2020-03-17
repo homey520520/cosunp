@@ -28,6 +28,8 @@ public class TiaoXiu implements Serializable {
     private Integer usaged;
     private Integer ausaged;
     private String remark;
+    private Date danDate;
+    private String danDateStr;
 
     private String fromDateStr;
     private String toDateStr;
@@ -54,6 +56,23 @@ public class TiaoXiu implements Serializable {
     private List<String> empNoList;
     private List<Integer> names;
     private List<Integer> deptIds;
+
+
+    public Date getDanDate() {
+        return danDate;
+    }
+
+    public void setDanDate(Date danDate) {
+        this.danDate = danDate;
+    }
+
+    public String getDanDateStr() {
+        return danDateStr;
+    }
+
+    public void setDanDateStr(String danDateStr) {
+        this.danDateStr = danDateStr;
+    }
 
     public String getSaveStr() {
         return saveStr;

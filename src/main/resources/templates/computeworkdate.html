@@ -27,6 +27,7 @@
         var flag5 = $("#flag5").val();
         var flag6 = $("#flag6").val();
         var flag7 = $("#flag7").val();
+        var flag8 = $("#flag88").val();
         var errorMessage = $("#errorMessage").val();
         if (flag == 1) {
             $("#errormessagee").show();
@@ -106,6 +107,13 @@
             $("#errormessagee").show();
             var errormessagediv = document.getElementById("errormessagee");
             errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;重复数据:" + errorMessage;
+            errormessagediv.style.color = "red";
+        }
+
+        if (flag8.length > 2) {
+            $("#errormessagee88").show();
+            var errormessagediv = document.getElementById("errormessagee88");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;" + flag8;
             errormessagediv.style.color = "red";
         }
     });
@@ -302,6 +310,27 @@
     String.prototype.trim = function () {
         return this.replace(/(^\s*)|(\s*$)/g, "");
     }
+
+
+
+    function commitDataInSql() {
+        var originFile = $("#originFile8").val();
+        if (originFile.trim().length > 0) {
+            $("#errormessagee88").show();
+            var errormessagediv1 = document.getElementById("errormessagee88");
+            errormessagediv1.innerHTML = "&nbsp;&nbsp;&nbsp;导入中,请稍等!";
+            errormessagediv1.style.color = "green";
+            var form = document.getElementById('computeForm8');
+            form.submit();
+            window.parent.document.getElementById('coverbehidepage').style.display = "block";
+
+        } else if (originFile.trim().length <= 0) {
+            $("#errormessagee88").show();
+            var errormessagediv1 = document.getElementById("errormessagee88");
+            errormessagediv1.innerHTML = "&nbsp;&nbsp;&nbsp;您还没有上传表格，无法进行下一步操作!";
+            errormessagediv1.style.color = "red";
+        }
+    }
 </script>
 <style type="text/css">
     a {
@@ -316,36 +345,28 @@
 <body>
 
 <div id='app'>
-    <form id="computeForm" action="/person/computeWorkTable" th:method="post" enctype="multipart/form-data">
-        <input type="hidden" id="flag" th:value="${flag}">
-        <input type="hidden" id="flag2" th:value="${flag2}">
-        <input type="hidden" id="errorMessage" th:value="${errorMessage}">
-        <input type="hidden" id="orginLcation" th:value="compute.fileLocation">
+
+    <form id="computeForm8" action="/person/outDataInSql" th:method="post" enctype="multipart/form-data">
+        <input type="hidden" id="flag8" th:value="${flag8}">
+        <input type="hidden" id="flag88" th:value="${flag88}">
+        <input type="hidden" id="errorMessage88" th:value="${errorMessage}">
+        <input type="hidden" id="orginLcation88" th:value="compute.fileLocation">
         <div>
             <div class="panel-heading" style="background-color:lightsteelblue">
-                <h3 class="panel-title">考勤计算<font color="#00008b" size="2px">(仅支持xls格式)</font></h3>
+                <h3 class="panel-title">数据导入<font color="#00008b" size="2px">(仅支持xls格式)</font></h3>
             </div>
             <div class="panel-body form-inline">
                 <table class="table table-bordered table-hover table-striped">
                     <tr>
                         <td><label>文件选择:</label></td>
                         <td>
-                            <input type="file" th:name="file" id="originFile">
+                            <input type="file" th:name="file8" id="originFile8">
                         </td>
                     </tr>
-                    <!--<tr>-->
-                    <!--<td><label>计算结果存放至：</label></td>-->
-                    <!--<td>-->
-                    <!--<input type="text" class="form-control"  th:name="fileLocation" th:value="${compute.fileLocation}" style="width: 500px"-->
-                    <!--id="filelocat">-->
-                    <!--</td>-->
-                    <!--</tr>-->
                     <tr>
                         <td><label>动作：</label></td>
                         <td>
-                            <button type="button" class="btn btn-primary" onclick="computeWorkTable()">打卡计算</button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button type="button" class="btn btn-primary" onclick="computeWorkEmpHours()">工时计算</button>
+                            <button type="button" class="btn btn-primary" onclick="commitDataInSql()">提交</button>
 
                         </td>
                     </tr>
@@ -353,7 +374,7 @@
                     <tr>
                         <td><label>结果提示：</label></td>
                         <td>
-                            <div style="display: none;" id="errormessagee">
+                            <div style="display: none;" id="errormessagee88">
 
                             </div>
                         </td>
@@ -363,7 +384,6 @@
             </div>
         </div>
     </form>
-
 
     <form id="inData" th:action="@{/person/dataInMysql}" th:method="post" enctype="multipart/form-data">
         <input type="hidden" id="flag1" th:value="${flag1}">
@@ -411,6 +431,124 @@
         </div>
     </form>
 
+    <form id="inData6" th:action="@{/person/dataInMysqlsurance}" th:method="post" enctype="multipart/form-data">
+        <input type="hidden" id="flag6" th:value="${flag6}">
+        <div>
+            <div class="panel-heading" style="background-color:lightsteelblue">
+                <h3 class="panel-title">保险数据导入<font color="#00008b" size="2px">(仅支持xls格式)</font></h3>
+            </div>
+            <div class="panel-body form-inline">
+                <table class="table table-bordered table-hover table-striped">
+                    <tr>
+                        <td><label>文件选择:</label></td>
+                        <td>
+                            <input type="file" th:name="file6" id="originFile6">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>动作：</label></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" onclick="inDataToMysq6()">导入执行</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label>结果提示：</label></td>
+                        <td>
+                            <div style="display: none;" id="errormessage6">
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </form>
+
+    <form id="inData7" th:action="@{/person/dataInMysqlAccuFund}" th:method="post" enctype="multipart/form-data">
+        <input type="hidden" id="flag7" th:value="${flag7}">
+        <div>
+            <div class="panel-heading" style="background-color:lightsteelblue">
+                <h3 class="panel-title">公积金数据导入<font color="#00008b" size="2px">(仅支持xls格式)</font></h3>
+            </div>
+            <div class="panel-body form-inline">
+                <table class="table table-bordered table-hover table-striped">
+                    <tr>
+                        <td><label>文件选择:</label></td>
+                        <td>
+                            <input type="file" th:name="file7" id="originFile7">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>动作：</label></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" onclick="inDataToMysq7()">导入执行</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label>结果提示：</label></td>
+                        <td>
+                            <div style="display: none;" id="errormessage7">
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </form>
+
+
+    <form id="computeForm" action="/person/computeWorkTable" th:method="post" enctype="multipart/form-data">
+        <input type="hidden" id="flag" th:value="${flag}">
+        <input type="hidden" id="flag2" th:value="${flag2}">
+        <input type="hidden" id="errorMessage" th:value="${errorMessage}">
+        <input type="hidden" id="orginLcation" th:value="compute.fileLocation">
+        <div>
+            <div class="panel-heading" style="background-color:lightsteelblue">
+                <h3 class="panel-title">考勤计算<font color="#00008b" size="2px">(仅支持xls格式)</font></h3>
+            </div>
+            <div class="panel-body form-inline">
+                <table class="table table-bordered table-hover table-striped">
+                    <tr>
+                        <td><label>文件选择:</label></td>
+                        <td>
+                            <input type="file" th:name="file" id="originFile">
+                        </td>
+                    </tr>
+                    <!--<tr>-->
+                    <!--<td><label>计算结果存放至：</label></td>-->
+                    <!--<td>-->
+                    <!--<input type="text" class="form-control"  th:name="fileLocation" th:value="${compute.fileLocation}" style="width: 500px"-->
+                    <!--id="filelocat">-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <tr>
+                        <td><label>动作：</label></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" onclick="computeWorkTable()">打卡计算</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-primary" onclick="computeWorkEmpHours()">工时计算</button>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label>结果提示：</label></td>
+                        <td>
+                            <div style="display: none;" id="errormessagee">
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </form>
 
     <form id="inData3" th:action="@{/person/dataInMysqlZK}" th:method="post" enctype="multipart/form-data">
         <input type="hidden" id="flag3" th:value="${flag3}">
@@ -495,75 +633,7 @@
     </form>
 
 
-    <form id="inData6" th:action="@{/person/dataInMysqlsurance}" th:method="post" enctype="multipart/form-data">
-        <input type="hidden" id="flag6" th:value="${flag6}">
-        <div>
-            <div class="panel-heading" style="background-color:lightsteelblue">
-                <h3 class="panel-title">保险数据导入<font color="#00008b" size="2px">(仅支持xls格式)</font></h3>
-            </div>
-            <div class="panel-body form-inline">
-                <table class="table table-bordered table-hover table-striped">
-                    <tr>
-                        <td><label>文件选择:</label></td>
-                        <td>
-                            <input type="file" th:name="file6" id="originFile6">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>动作：</label></td>
-                        <td>
-                            <button type="button" class="btn btn-primary" onclick="inDataToMysq6()">导入执行</button>
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <td><label>结果提示：</label></td>
-                        <td>
-                            <div style="display: none;" id="errormessage6">
-
-                            </div>
-                        </td>
-                    </tr>
-
-                </table>
-            </div>
-        </div>
-    </form>
-
-    <form id="inData7" th:action="@{/person/dataInMysqlAccuFund}" th:method="post" enctype="multipart/form-data">
-        <input type="hidden" id="flag7" th:value="${flag7}">
-        <div>
-            <div class="panel-heading" style="background-color:lightsteelblue">
-                <h3 class="panel-title">公积金数据导入<font color="#00008b" size="2px">(仅支持xls格式)</font></h3>
-            </div>
-            <div class="panel-body form-inline">
-                <table class="table table-bordered table-hover table-striped">
-                    <tr>
-                        <td><label>文件选择:</label></td>
-                        <td>
-                            <input type="file" th:name="file7" id="originFile7">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>动作：</label></td>
-                        <td>
-                            <button type="button" class="btn btn-primary" onclick="inDataToMysq7()">导入执行</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td><label>结果提示：</label></td>
-                        <td>
-                            <div style="display: none;" id="errormessage7">
-
-                            </div>
-                        </td>
-                    </tr>
-
-                </table>
-            </div>
-        </div>
-    </form>
 
 
 </div>
