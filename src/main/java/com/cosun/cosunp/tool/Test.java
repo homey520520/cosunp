@@ -5,8 +5,11 @@ import redis.clients.jedis.JedisPool;
 import sun.misc.BASE64Encoder;
 
 import java.io.*;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author:homey Wong
@@ -27,11 +30,7 @@ public class Test {
     public static void main(String[] arg) {
 
         try {
-
-            SimpleDateFormat dft2 = new SimpleDateFormat("yyyy-MM-dd");
-            System.out.println(dft2.parse("2020-03-2"));
-            System.out.println(dft2.parse("2020-03-04"));
-         //   File file = new File("E:\\WAMP\\wamp\\www\\cosunp\\src\\main\\resources\\templates");
+            //   File file = new File("E:\\WAMP\\wamp\\www\\cosunp\\src\\main\\resources\\templates");
             //System.out.println(getProjectFileNumber(file, "html"));
         } catch (Exception e) {
             e.printStackTrace();

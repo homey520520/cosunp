@@ -348,6 +348,9 @@ public class PersonController {
         text.setStarttime(dateStart.getTime() / 1000);
         text.setEndtime(dateEnd.getTime() / 1000);
         NetWorkHelper netHelper = new NetWorkHelper();
+        List<OutClockAll> ocAll = new ArrayList<OutClockAll>();
+        String yearM = beforDay.split("-")[0] + "-" + beforDay.split("-")[1];
+        OutClockAll oca = null;
         for (int aa = 0; aa < all.size(); aa++) {
             text.setUseridlist(all.get(aa));
             String result = netHelper.getHttpsResponse2(Url, text, "POST");
@@ -366,8 +369,13 @@ public class PersonController {
                 oc = new OutClockIn();
                 oc.setUserid(userId);
                 oc.setClockInDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
+                oca = new OutClockAll();
+                oca.setEnrollNumber(userId);
+                oca.setDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
+                oca.setYearMonth(yearM);
                 for (OutPunch op : outPunchList) {
                     if (op.getUserid().equals(userId)) {
+                        oca.setTimeStr((oca.getTimeStr() == null ? "" : oca.getTimeStr()) + " " + op.getCheckin_timeStr().split(" ")[1]);
                         hourStr = op.getCheckin_timeStr().split(" ")[1];
                         hour = Integer.valueOf(hourStr.split(":")[0]);
                         if (hour < 12 && hour >= 0) {
@@ -396,9 +404,10 @@ public class PersonController {
                 }
                 outClockInList.add(oc);
                 haveUserId.add(userId);
+                ocAll.add(oca);
             }
         }
-        testDomainMapper.saveOutClockInList(outClockInList);
+        testDomainMapper.saveOutClockInList(outClockInList,ocAll);
     }
 
 
@@ -1085,7 +1094,7 @@ public class PersonController {
             int maxPage = recordCount % employee.getPageSize() == 0 ? recordCount / employee.getPageSize() : recordCount / employee.getPageSize() + 1;
             employee.setMaxPage(maxPage);
             employee.setRecordCount(recordCount);
-            view.addObject("financeImportDataList", financeImportDataList) ;
+            view.addObject("financeImportDataList", financeImportDataList);
             view.addObject("empList", empList);
             view.addObject("employee", employee);
             view.addObject("positionList", positionList);

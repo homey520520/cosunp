@@ -344,6 +344,9 @@ public interface PersonMapper {
     @Select("select * from outclockin where userid = #{userid} and clockInDate = #{clockInDateStr} ")
     OutClockIn getOutClockInByDateAndWeiXinId(OutClockIn outClockIn);
 
+    @Select("select * from outclockall where enrollNumber = #{enrollNumber} and date = #{dateStr}")
+    OutClockAll getOutClockAllByDateAndWeiXinId(OutClockAll oca);
+
     @Insert("INSERT into outclockin (userid,\n" +
             "\tclockInDateAMOn,\n" +
             "\tclockInAddrAMOn,\n" +
@@ -1403,8 +1406,12 @@ public interface PersonMapper {
     @Insert("insert into zhongkongbean (EnrollNumber,Date,timeStr,yearMonth,machineNum,remark) values(#{EnrollNumber},#{dateStr},#{timeStr},#{yearMonth},#{machineNum},#{remark})")
     void saveBeforeDayZhongKongData(ZhongKongBean zkb);
 
+    @Insert("insert into outclockall (EnrollNumber,Date,timeStr,yearMonth,remark) values(#{enrollNumber},#{dateStr},#{timeStr},#{yearMonth},#{remark})")
+    void addOutClockAllDateByBean(OutClockAll oca);
+
     @Update("update zhongkongbean set timeStr = #{timeStr} ,remark = #{remark} where EnrollNumber = #{EnrollNumber} and date = #{dateStr}")
     void updateBeforeDayZhongKongData(ZhongKongBean zkb);
+
 
     @Insert("insert into zhongkongbeanQY (yearMonth,userId,date,timeStr,remark) values(#{yearMonth},#{userId},#{dateStr},#{timeStr},#{remark})")
     void addZKQY(ZhongKongBeanQY zkq);
@@ -1582,11 +1589,49 @@ public interface PersonMapper {
     @Select("select * from workset where month = #{month} and workLevel = #{positionLevel}")
     WorkSet getWorkSetByMonthAndPositionLevel(WorkDate workDate);
 
-    @Select("select * from workset where month = #{month} and workLevel = #{positionLevel}")
+    @Select("SELECT\n" +
+            "\tid,\n" +
+            "\tworkLevel,\n" +
+            "\t`month`,\n" +
+            "\tupdatedate as updateDate,\n" +
+            "\tmorningon as morningOn,\n" +
+            "\tmorningonfrom as morningOnFrom,\n" +
+            "\tmorningonend as morningOnEnd,\n" +
+            "\tconcat(date_format(morningoff, '%Y-%m-%d %H:%i'),':00') as morningOff,\n" +
+            "\tmorningofffrom as morningOffFrom,\n" +
+            "\tmorningoffend as morningOffEnd,\n" +
+            "\tnoonon as noonOn,\n" +
+            "\tnoononfrom as noonOnFrom,\n" +
+            "\tnoononend as noonOnEnd,\n" +
+            "\tconcat(date_format(noonoff, '%Y-%m-%d %H:%i'),':00') as noonOff,\n" +
+            "\tnoonofffrom as noonOffFrom,\n" +
+            "\tnoonoffend as noonOffEnd,\n" +
+            "\textworkon as extworkon,\n" +
+            "\textworkonfrom as extworkonFrom,\n" +
+            "\textworkonend as extworkonEnd,\n" +
+            "\textworkoff as extworkoff,\n" +
+            "\tremark as remark\n" +
+            "FROM\n" +
+            "\tworkset\n" +
+            "WHERE\n" +
+            "\t workLevel = #{positionLevel} and month = #{month}")
     WorkSet getWorkSetByMonthAndPositionLevelA(String month, String positionLevel);
 
     @Select("select * from workset where month = #{month} and workLevel = #{positionLevel}")
     WorkSet getWorkSetByMonthAndPositionLevel2(String month, String positionLevel);
+
+    @Select("SELECT\n" +
+            "\t*\n" +
+            "FROM\n" +
+            "\toutdan\n" +
+            "WHERE\n" +
+            "\tempNo = #{empNo} \n" +
+            "AND date_format(\n" +
+            "\t#{time},\n" +
+            "\t'%Y-%m-%d %H:%i'\n" +
+            ") BETWEEN outtime\n" +
+            "AND realcomtime limit 1")
+    Out getOutDanByEmpNoAndDateStr(String empNo,String dateStr,String time);
 
     @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %H:%i:%s') as beginLeaveStr ,date_format(endleave, '%Y-%m-%d %H:%i:%s') as endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type  " +
             "from leavedata where employeeid = #{employeeId} and  beginleave<= date_format(#{dataStrStart},'%Y-%m-%d %H:%i') and endleave>= date_format(#{dataEnd},'%Y-%m-%d %H:%i') limit 1 ")
@@ -2535,14 +2580,47 @@ public interface PersonMapper {
     LianBan getLianBanByEmpNoAndDateStr(String empNo, String dateStr);
 
     @Select("SELECT\n" +
-            "\tCONCAT(ifnull(zk.timeStr,''),ifnull(qk.timeStr,''))\n" +
+            "\tgroup_concat(strr)\n" +
+            "FROM\n" +
+            "\t(SELECT\n" +
+            "\tCONCAT(\n" +
+            "\t\tCONCAT(ifnull(zk.timeStr, ' '), ' '),\n" +
+            "\t\tCONCAT(ifnull(qk.timeStr, ' '), ' '),\n" +
+            "\t\tCONCAT(\n" +
+            "\t\t\tIFNULL(\n" +
+            "\t\t\t\tCONCAT(\n" +
+            "\t\t\t\t\t'外出打卡 ',\n" +
+            "\t\t\t\t\toca.timeStr\n" +
+            "\t\t\t\t),\n" +
+            "\t\t\t\t' '\n" +
+            "\t\t\t),\n" +
+            "\t\t\t' '\n" +
+            "\t\t)\n" +
+            "\t) AS strr\n" +
             "FROM\n" +
             "\tzhongkongbean zk\n" +
             "LEFT JOIN qyweixinbd qy ON qy.userid = zk.EnrollNumber\n" +
-            "left join qianka qk on qk.empNo = qy.empNo and qk.date = zk.Date\n" +
+            "LEFT JOIN qianka qk ON qk.empNo = qy.empNo\n" +
+            "AND qk.date = zk.Date\n" +
+            "LEFT JOIN outclockall oca ON oca.enrollNumber = zk.EnrollNumber\n" +
+            "AND zk.Date = oca.date\n" +
             "WHERE\n" +
-            "\tqy.empNo = #{empNo}\n" +
-            "AND zk.Date = #{dateStr}\n")
+            "\tqy.empNo = #{empNo} \n" +
+            "AND zk.Date = #{dateStr} " +
+            "\t\tUNION\n" +
+            "\t\t\tSELECT\n" +
+            "\t\t\t\tCONCAT(\n" +
+            "\t\t\t\t\tCONCAT(IFNULL(ot.outtime,' '), ' '),\n" +
+            "\t\t\t\t\tCONCAT(IFNULL(ot.realcomtime, ' '),' '),\n" +
+            "\t\t\t\t\tCONCAT(IFNULL(ot.outfor,' '),' ')\n" +
+            "\t\t\t\t) AS strr\n" +
+            "\t\t\tFROM\n" +
+            "\t\t\t\toutdan ot\n" +
+            "\t\t\tWHERE\n" +
+            "\t\t\t\tot.empNo = #{empNo}\n" +
+            "\t\t\tAND #{dateStr} BETWEEN date_format(ot.outtime, '%Y-%m-%d')\n" +
+            "\t\t\tAND date_format(ot.realcomtime, '%Y-%m-%d')\n" +
+            "\t) AS aaa")
     String getTimeStrByDateStrAndEmpNo(String empNo, String dateStr);
 
     @Select("SELECT\n" +
@@ -5270,7 +5348,8 @@ public interface PersonMapper {
                 if (dateStr.size() == 1) {
                     sb.append(" and zk.date in ('" + dateStr.get(0).getClockInDateStr() + "')");
                 } else if (dateStr.size() >= 2) {
-                    sb.append(" and  zk.date in (");
+                    //zk.enrollNumber = 'LuLiaoLiao' and
+                    sb.append(" and   zk.date in (");
                     for (int i = 0; i < dateStr.size() - 1; i++) {
                         sb.append("'" + dateStr.get(i).getClockInDateStr() + "'" + ",");
                     }
@@ -5439,6 +5518,7 @@ public interface PersonMapper {
                 if (dateStrs.size() == 1) {
                     sb.append("  where  kb.dateStr in ('" + dateStrs.get(0).getClockInDateStr() + "')");
                 } else if (dateStrs.size() >= 2) {
+                    //
                     sb.append("   where  kb.dateStr in (");
                     for (int i = 0; i < dateStrs.size() - 1; i++) {
                         sb.append("'" + dateStrs.get(i).getClockInDateStr() + "'" + ",");

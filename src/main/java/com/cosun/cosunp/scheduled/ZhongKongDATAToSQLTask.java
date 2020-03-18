@@ -27,30 +27,30 @@ public class ZhongKongDATAToSQLTask {
 
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(cron = "0 0 05 * * ?")
-    @Scheduled(cron = "0 30 09 ? * *")
+    @Scheduled(cron = "0 20 16 ? * *")
     private void configureTasks() {
         try {
-            //String beforDayB = "2020-03-";
-            String beforeDay = "2020-03-16";
-            //  String beforeDay;
-//            for (int a = 1; a <= 11; a++) {
-//                if (a < 10) {
-//                    beforeDay = "0" + a;
-//                } else {
-//                    beforeDay = "" + a;
-//
-//                }
+            String beforDayB = "2020-03-";
+            // String beforeDay = "2020-03-17";
+            String beforeDay;
+            for (int a = 1; a <= 17; a++) {
+                if (a < 10) {
+                    beforeDay = "0" + a;
+                } else {
+                    beforeDay = "" + a;
 
-            new PersonController().getBeforeDayZhongKongData(beforeDay);
-            new PersonController().getBeforeDayQYWCData(beforeDay);
-            new PersonController().getBeforeDayQYWCDataAAA(beforeDay);
-            new PersonController().getBeforeDayQYWXSPData(beforeDay);
+                }
+
+                //new PersonController().getBeforeDayZhongKongData(beforeDay);
+                new PersonController().getBeforeDayQYWCData(beforDayB + beforeDay);
+                //new PersonController().getBeforeDayQYWCDataAAA(beforeDay);
+                //new PersonController().getBeforeDayQYWXSPData(beforeDay);
 //            new PersonController().fillEmptyZKWhenNull();
 //            new PersonController().getAllWeiXinUser();
-           //new PersonController().fillEmpNoWhenQYWXNull();
+                //new PersonController().fillEmpNoWhenQYWXNull();
 //            new PersonController().getKQBean();
 //            new PersonController().fillRightDeptIdToEmployee();
-            // }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

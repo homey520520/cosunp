@@ -240,7 +240,7 @@ public interface IPersonServ {
 
     List<KQBean> getAllKQDataByYearMonthDay(String date) throws Exception;
 
-    void saveOutClockInList(List<OutClockIn> outClockInList) throws Exception;
+    void saveOutClockInList(List<OutClockIn> outClockInList,List<OutClockAll> outClockAllList) throws Exception;
 
     void saveZKQYList(List<ZhongKongBeanQY> qyList) throws Exception;
 
