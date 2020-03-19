@@ -346,10 +346,12 @@
                                 <label>工号：</label>
                             </td>
                             <td>
-                                <label><input type="text" id="empNo" class="form-control" style="width:150px"></label>
+                                <label><input type="text" id="empNo" class="form-control"
+                                              onkeypress="if(event.keyCode==13) {querybutton.click();return false;}"
+                                              style="width:150px"></label>
                             </td>
                             <td style="text-align: right">
-                                <label>部门：</label>
+                                &nbsp;&nbsp;<label>部门：</label>
                             </td>
                             <td>
                                 <select id="deptId" multiple class="selectpicker show-tick form-control"
@@ -362,7 +364,7 @@
                             </td>
 
                             <td style="text-align: right">
-                                <label>职位：</label>
+                                &nbsp;&nbsp;<label>职位：</label>
                             </td>
                             <td>
                                 <select id="positionId" multiple class="selectpicker show-tick form-control"
@@ -394,7 +396,7 @@
                                        onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startLeaveId\')}'})"/>
 
                             </td>
-                            <td><label>请假类别：</label></td>
+                            <td>&nbsp;&nbsp;<label>请假类别：</label></td>
                             <td>
                                 <select id="leaveType" multiple class="selectpicker show-tick form-control"
                                         data-live-search="true" data-actions-box="true"
@@ -411,10 +413,10 @@
 
                             </td>
                             <td style="text-align: right" colspan="3">
-                                <a class="btn btn-primary"
-                                   href="javascript:void(0);" onclick="queryLeaveByCondition()">查找</a>
+                                &nbsp;&nbsp;<a class="btn btn-primary"
+                                   href="javascript:void(0);" id="querybutton" onclick="queryLeaveByCondition()">查找</a>
                                 <!--<input type="button" value="查找" class="btn btn-primary">-->
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;
                                 <a class="btn btn-primary"
                                    href="/person/toaddleavepage">新增</a>
                                 <!--<input type="button" value="新增" class="btn btn-primary" onclick="showAddPersonDiv()">-->

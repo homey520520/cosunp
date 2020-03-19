@@ -508,6 +508,7 @@
                                 </td>
                                 <td>
                                     <label><input type="text" id="empNo" class="form-control"
+                                                  onkeypress="if(event.keyCode==13) {querybutton.click();return false;}"
                                                   style="width:150px"></label>
                                 </td>
                                 <td style="text-align: right">
@@ -588,6 +589,7 @@
                                 <td colspan="2" style="text-align: right">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-primary"
+                                       id="querybutton"
                                        href="javascript:void(0);" onclick="queryZKOUTDataByCondition()">查找</a>
                                 </td>
                                 <td>

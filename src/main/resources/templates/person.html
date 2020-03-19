@@ -587,7 +587,7 @@
                                 <label>工号：</label>
                             </td>
                             <td>
-                                <label><input type="text" id="empNo" class="form-control" style="width:150px"></label>
+                                <label><input type="text" id="empNo" class="form-control" style="width:150px" onkeypress="if(event.keyCode==13) {querybutton.click();return false;}"></label>
                             </td>
                             <td style="text-align: right">
                                 <label>部门：</label>
@@ -603,7 +603,7 @@
                             </td>
 
                             <td style="text-align: right">
-                                <label>职位：</label>
+                                &nbsp;&nbsp;&nbsp;<label>职位：</label>
                             </td>
                             <td>
                                 <select id="positionId" style="width: 100px" multiple
@@ -664,7 +664,7 @@
 
                             <td colspan="2" style="text-align: right">
                                 <a class="btn btn-primary"
-                                   href="javascript:void(0);" onclick="queryEmployeeByCondition()">查找</a>
+                                   href="javascript:void(0);" id="querybutton" onclick="queryEmployeeByCondition()">查找</a>
                                 <!--<input type="button" value="查找" class="btn btn-primary">-->
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <a class="btn btn-primary"

@@ -30,8 +30,7 @@ public class Test {
     public static void main(String[] arg) {
 
         try {
-            //   File file = new File("E:\\WAMP\\wamp\\www\\cosunp\\src\\main\\resources\\templates");
-            //System.out.println(getProjectFileNumber(file, "html"));
+            //https://www.cnblogs.com/jsll/p/11610966.html  接口与抽象类
         } catch (Exception e) {
             e.printStackTrace();
         }

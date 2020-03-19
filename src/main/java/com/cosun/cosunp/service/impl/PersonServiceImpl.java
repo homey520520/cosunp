@@ -5,7 +5,6 @@ import com.cosun.cosunp.mapper.PersonMapper;
 import com.cosun.cosunp.mapper.UserInfoMapper;
 import com.cosun.cosunp.service.IPersonServ;
 import com.cosun.cosunp.tool.*;
-import com.cosun.cosunp.entity.OutClockIn;
 import jxl.Cell;
 import jxl.CellType;
 import jxl.DateCell;
@@ -2259,8 +2258,8 @@ public class PersonServiceImpl implements IPersonServ {
     public void saveOutClockInList(List<OutClockIn> outClockInList, List<OutClockAll> outClockAllList) throws Exception {
         for (OutClockIn oc : outClockInList) {
             OutClockIn orginal = personMapper.getOutClockInByDateAndWeiXinId(oc);
-           // if (orginal == null)
-                //personMapper.addOutClockInDateByBean(oc);
+            if (orginal == null)
+                personMapper.addOutClockInDateByBean(oc);
         }
         for (OutClockAll oc : outClockAllList) {
             OutClockAll orginal = personMapper.getOutClockAllByDateAndWeiXinId(oc);

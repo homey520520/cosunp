@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class RestartLinuxTask {
 
     //@Scheduled(fixedRate=5000)
-    @Scheduled(cron = "0 0 07 * * ?")
+    @Scheduled(cron = "0 0 08 * * ?")
     private void configureTasks() {
         try {
             Runtime.getRuntime().exec("reboot");
