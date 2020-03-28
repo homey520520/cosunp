@@ -2066,7 +2066,7 @@ public interface PersonMapper {
             "FROM\n" +
             "\tmonthkqinfo mk\n" +
             "LEFT JOIN employee ee ON mk.empNo = ee.empno\n" +
-            "LEFT JOIN dept t  ON t.id = ee.deptId where yearMonth = #{yearMonth} order by ee.empNo  limit #{currentPageTotalNum},#{pageSize}  ")
+            "LEFT JOIN dept t  ON t.id = ee.deptId where yearMonth = #{yearMonth} order by ee.empNo asc limit #{currentPageTotalNum},#{pageSize}  ")
     List<MonthKQInfo> findAllMonthKQData(String yearMonth, int currentPageTotalNum, int pageSize);
 
     @Select("SELECT count(*)" +

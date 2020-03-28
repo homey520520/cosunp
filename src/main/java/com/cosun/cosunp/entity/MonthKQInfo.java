@@ -1505,6 +1505,8 @@ public class MonthKQInfo implements Serializable {
     public Double getDay11AMRemark() {
         if (day11Remark != null && day11Remark.contains(",")) {
             String[] remark = day11Remark.split(",");
+            if (remark[0] != null && remark[0].trim().length() == 0)
+                return 0.0;
             return Double.valueOf(remark[0]);
         }
         return day11AMRemark;
@@ -1517,6 +1519,8 @@ public class MonthKQInfo implements Serializable {
     public Double getDay11PMRemark() {
         if (day11Remark != null && day11Remark.contains(",")) {
             String[] remark = day11Remark.split(",");
+            if (remark[1] != null && remark[1].trim().length() == 0)
+                return 0.0;
             return Double.valueOf(remark[1]);
         }
         return day11PMRemark;

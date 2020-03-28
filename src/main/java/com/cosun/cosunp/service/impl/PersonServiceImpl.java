@@ -6051,7 +6051,7 @@ public class PersonServiceImpl implements IPersonServ {
 
     @Transactional
     public void saveCheckKQBeanListByDates(List<OutClockIn> outClockIns) throws Exception {
-        personMapper.saveCheckKQBeanListByDates(outClockIns);
+        //personMapper.saveCheckKQBeanListByDates(outClockIns);
         saveMonthKQInfoByCheckKQBean(outClockIns);
     }
 
@@ -6922,7 +6922,7 @@ public class PersonServiceImpl implements IPersonServ {
                             oci = personMapper.getOutClockInByEmpNoAndDateA(kqb.getEmpNo(), kqb.getDateStr());
                             if (oci != null) {
                                 cishu = StringUtil.calTimesByOutClockIn(oci);
-                                if (cishu >= csu.getDayClockInTimes()) {
+                                if (csu!=null && cishu >= csu.getDayClockInTimes()) {
                                     if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
                                         dayNum = beFStr.concat("1080,").concat(beFStr.concat("1080,"));
                                         if (!kqb.getHavePinShi().equals("1")) {

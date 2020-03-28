@@ -6,6 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @author:homey Wong
  * @date:2019/10/07
@@ -21,11 +24,11 @@ public class ZhongKongDATAToSQLTask {
 
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(cron = "0 0 05 * * ?")
-    @Scheduled(cron = "0 45 08 ? * *")
+    @Scheduled(cron = "0 40 08 ? * *")
     private void configureTasks() {
         try {
-            //String beforDayB = "2020-03-";
-            String beforeDay = "2020-03-18";
+            //String beforDay B = "2020-03-";
+            String beforeDay = "2020-03-27";
 //            String beforeDay;
 //            for (int a = 1; a <= 17; a++) {
 //                if (a < 10) {
@@ -33,14 +36,16 @@ public class ZhongKongDATAToSQLTask {
 //                } else {
 //                    beforeDay = "" + a;
 //
-//                }
-
+////                }
+//            SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
+//            Date date = new Date();
+//            String beforeDay = dft.format(date);
             new PersonController().getBeforeDayZhongKongData(beforeDay);
             new PersonController().getBeforeDayQYWCData(beforeDay);
             new PersonController().getBeforeDayQYWCDataAAA(beforeDay);
             new PersonController().getBeforeDayQYWXSPData(beforeDay);
 //            new PersonController().fillEmptyZKWhenNull();
-//            new PersonController().getAllWeiXinUser();
+            //new PersonController().getAllWeiXinUser();
             //new PersonController().fillEmpNoWhenQYWXNull();
 //            new PersonController().getKQBean();
 //            new PersonController().fillRightDeptIdToEmployee();

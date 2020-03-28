@@ -407,7 +407,7 @@ public class PersonController {
                 ocAll.add(oca);
             }
         }
-        testDomainMapper.saveOutClockInList(outClockInList,ocAll);
+        testDomainMapper.saveOutClockInList(outClockInList, ocAll);
     }
 
 
@@ -1092,6 +1092,7 @@ public class PersonController {
             List<Dept> deptList = personServ.findAllDeptAll();
             List<Employee> empList = personServ.findAllEmployeeAll();
             List<KQBean> financeImportDataList = personServ.findAllKQBData(employee);
+            List<String> kqMonthList = personServ.getAllKQMonthListKQBean();
             int recordCount = personServ.findAllKQBDataCount();
             int maxPage = recordCount % employee.getPageSize() == 0 ? recordCount / employee.getPageSize() : recordCount / employee.getPageSize() + 1;
             employee.setMaxPage(maxPage);
@@ -1102,11 +1103,13 @@ public class PersonController {
             view.addObject("positionList", positionList);
             view.addObject("deptList", deptList);
             view.addObject("userInfo", userInfo);
+            view.addObject("kqMonthList", kqMonthList);
             view.addObject("kqDateList", kqDateList);
             view.addObject("flagb", "启用" + sb.toString() + "考勤成功!");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
+            throw e;
         }
         return view;
     }

@@ -47,6 +47,9 @@ public class CosunpApplication extends SpringBootServletInitializer {
                 fileUploadAndDownServ.deleteAll();
                 fileUploadAndDownServ.init();
                 new AccessTokenServlet().init();
+                //wx16c9442a4b26e6ea
+                //36e571b957c3705964b4398019482dde
+                //https://mp.weixin.qq.com/wxamp/devprofile/get_profile?token=1695344288&lang=zh_CN
             }
         };
     }

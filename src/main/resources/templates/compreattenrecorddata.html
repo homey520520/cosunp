@@ -29,6 +29,8 @@
         $(function () {
             window.parent.document.getElementById('content').style.display = "block";
             window.parent.document.getElementById('contentnew').style.display = "none";
+            window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
             var flag = $("#flag").val();
             var flagb = $("#flagb").val();
             var aflag = eval(flag)
@@ -509,6 +511,7 @@
         function reComputeAttenClockByDate() {
             var clockDate = $("#clockDate").val();
             if (clockDate.length > 0) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "block";
                 window.location.href = "/person/reComputeAttenClockByDate?clockDateArray=" + clockDate;
             } else {
                 alert("请先选择打卡日期再进行重新计算!")
@@ -518,6 +521,7 @@
         function checkZKOUTDataByCondition() {
             var clockDate = $("#clockDate").val();
             if (clockDate.length > 0) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "block";
                 window.location.href = "/person/checkAttenClockByDate?clockDateArray=" + clockDate;
             } else {
                 alert("请先选择您启用的打卡日期!")
