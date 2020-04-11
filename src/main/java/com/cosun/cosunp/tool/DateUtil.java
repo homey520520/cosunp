@@ -196,6 +196,13 @@ public class DateUtil {
 
     }
 
+    public static int calcuLateMinutes(Time fromTi,Time morningOn) {
+        Long abc = fromTi.getTime() - morningOn.getTime();
+        int extHours = ((abc.intValue()) / (1000 * 60));
+        return (extHours+1);
+    }
+
+
     public static Double calcuHours(Time fromTi, Time endTi) {
         Long abc = endTi.getTime() - fromTi.getTime();
         Double extHours = ((abc.doubleValue()) / (1000 * 60 * 60));

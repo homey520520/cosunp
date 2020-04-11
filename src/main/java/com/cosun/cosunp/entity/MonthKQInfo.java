@@ -18,6 +18,11 @@ public class MonthKQInfo implements Serializable {
     private String name;
     private String yearMonth;
     private String deptName;
+    private String imCYM;
+    private Integer imCYMDay;
+
+    private int latetimes;
+    private int lateminites;
 
     private Double zhengbanHours;
     private Double usualExtHours;
@@ -30,6 +35,8 @@ public class MonthKQInfo implements Serializable {
     private Double fullWorkReword;
     private Double highTempAllow;
     private String remark;
+    private Double checkHours;
+    private Double finalCheck;
 
 
     private int currentPage = 1;
@@ -2938,5 +2945,53 @@ public class MonthKQInfo implements Serializable {
 
     public void setSortByName(String sortByName) {
         this.sortByName = sortByName;
+    }
+
+    public Double getCheckHours() {
+        return checkHours;
+    }
+
+    public String getImCYM() {
+        return imCYM;
+    }
+
+    public void setImCYM(String imCYM) {
+        this.imCYM = imCYM;
+    }
+
+    public Integer getImCYMDay() {
+        return imCYMDay;
+    }
+
+    public Double getFinalCheck() {
+        return finalCheck;
+    }
+
+    public void setFinalCheck(Double finalCheck) {
+        this.finalCheck = finalCheck;
+    }
+
+    public void setImCYMDay(Integer imCYMDay) {
+        this.imCYMDay = imCYMDay;
+    }
+
+    public void setCheckHours(Double checkHours) {
+        this.checkHours = checkHours;
+    }
+
+    public int getLatetimes() {
+        return latetimes;
+    }
+
+    public void setLatetimes(int latetimes) {
+        this.latetimes = latetimes;
+    }
+
+    public int getLateminites() {
+        return lateminites;
+    }
+
+    public void setLateminites(int lateminites) {
+        this.lateminites = lateminites;
     }
 }

@@ -15,6 +15,7 @@ public class Position implements Serializable {
     private static final long serialVersionUID = 3282382538666102784L;
 
     private Integer id;
+    private String idd;
     private List<Integer> ids;
     private String positionName;
     private String positionLevel;
@@ -24,6 +25,13 @@ public class Position implements Serializable {
     private int pageSize = 10;
     private int currentPageTotalNum;
 
+    public String getIdd() {
+        return idd;
+    }
+
+    public void setIdd(String idd) {
+        this.idd = idd;
+    }
 
     public List<Integer> getIds() {
         return ids;

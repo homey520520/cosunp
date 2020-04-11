@@ -17,6 +17,9 @@ public interface WeiXinConfig {
     static final String secretsp = "3RNgj_Y3k1FGYsEdMUGhyBbKSuVcPRkN6-ai2Cyufdk";
 
 
+    static final String secretqywx = "leasteJg84Z01Z5ymDPu63xk5B81-Mlpceroo-sEg2Y";
+
+
     //static final String secret = "HyiBevVoLq1lrcjmIXtFcHZ-VwPsJAiF5n4onC9XdGk";
     // static final String fromId = "gh_d88dcf673fd3";
 

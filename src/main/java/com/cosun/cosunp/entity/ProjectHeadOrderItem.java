@@ -20,6 +20,11 @@ public class ProjectHeadOrderItem implements Serializable {
     private Date delivery_Date;
     private String totalBao;
     private String product_Name;
+    private int historyGe;
+    private String versionStr;
+    private String projectName;
+    private String customer_Name;
+
     private Date getOrder_Date_Plan;
     private Date getOrder_Date_Accu;
     private Date zhanCha_Date_Plan;
@@ -38,6 +43,8 @@ public class ProjectHeadOrderItem implements Serializable {
     private Date yanShou_Date_Accu;
     private Date jieSuan_Date_Plan;
     private Date jieSuan_Date_Accu;
+
+
     private String jindu_remark;
     private Double hetong_money;
     private Double daokuan_money;
@@ -46,6 +53,55 @@ public class ProjectHeadOrderItem implements Serializable {
     private String project_Manager1;
     private String project_Manager2;
     private String project_Manager3;
+    private Double version;
+    private int checked;
+    private String salor;
+
+    private String[] salors;
+    private String[] gendans;
+    private String[] salors2;
+    private String[] gendans2;
+    private String salorsStr;
+    private String gendansStr;
+
+
+    public String getCustomer_Name() {
+        return customer_Name;
+    }
+
+    public void setCustomer_Name(String customer_Name) {
+        this.customer_Name = customer_Name;
+    }
+
+    public String getSalor() {
+        return salor;
+    }
+
+    public void setSalor(String salor) {
+        this.salor = salor;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getVersionStr() {
+        return versionStr;
+    }
+
+    public void setVersionStr(String versionStr) {
+        this.versionStr = versionStr;
+    }
+
+    private String saleManager;
+    private String gendan;
+    private Double hetongMoney;
+    private Double hereMoney;
+    private Double weiHuiMoney;
 
 
     private String delivery_DateStr;
@@ -68,6 +124,212 @@ public class ProjectHeadOrderItem implements Serializable {
     private String jieSuan_Date_PlanStr;
     private String jieSuan_Date_AccuStr;
 
+    private String productName;
+    private String orderNo;
+    private String checkedStr;
+    private Double nowhereMoney;
+    private String fapiaoNo;
+
+    private int status;
+    private String statusStr;
+
+
+    public String getFapiaoNo() {
+        return fapiaoNo;
+    }
+
+    public void setFapiaoNo(String fapiaoNo) {
+        this.fapiaoNo = fapiaoNo;
+    }
+
+    public Double getNowhereMoney() {
+        return nowhereMoney;
+    }
+
+    public void setNowhereMoney(Double nowhereMoney) {
+        this.nowhereMoney = nowhereMoney;
+    }
+
+    public int getHistoryGe() {
+        return historyGe;
+    }
+
+    public void setHistoryGe(int historyGe) {
+        this.historyGe = historyGe;
+    }
+
+    public String getCheckedStr() {
+        if (this.checked == 0) {
+            return "未审核";
+        } else if (this.checked == 2) {
+            return "审核通过";
+        } else if (this.checked == 3 ) {
+            return "审核撤销";
+        } else if (this.checked == 1) {
+            return "审核未通过";
+        }
+        return "";
+    }
+
+    public String getStatusStr() {
+        if(this.status==0) {
+            return "进行中";
+        }else if(this.status==1) {
+            return "已完成";
+        }else if(this.status == 2) {
+            return "暂停";
+        }else if(this.status == 3) {
+            return "作废";
+        }
+        return "";
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setCheckedStr(String checkedStr) {
+        this.checkedStr = checkedStr;
+    }
+
+    public Double getVersion() {
+        return version;
+    }
+
+    public void setVersion(Double version) {
+        this.version = version;
+    }
+
+
+    public int getChecked() {
+        return checked;
+    }
+
+    public void setChecked(int checked) {
+        this.checked = checked;
+    }
+
+    public String getSalorsStr() {
+        if(salorsStr==null)
+            return "";
+        return salorsStr;
+    }
+
+    public String[] getSalors2() {
+        return salors2;
+    }
+
+    public void setSalors2(String[] salors2) {
+        this.salors2 = salors2;
+    }
+
+    public String[] getGendans2() {
+        return gendans2;
+    }
+
+    public void setGendans2(String[] gendans2) {
+        this.gendans2 = gendans2;
+    }
+
+    public void setSalorsStr(String salorsStr) {
+        this.salorsStr = salorsStr;
+    }
+
+    public String getGendansStr() {
+        if(gendansStr==null)
+            return "";
+        return gendansStr;
+    }
+
+    public void setGendansStr(String gendansStr) {
+        this.gendansStr = gendansStr;
+    }
+
+    public String[] getSalors() {
+        if (this.salorsStr != null) {
+            return salorsStr.split(",");
+        }
+        return salors;
+    }
+
+    public void setSalors(String[] salors) {
+        this.salors = salors;
+    }
+
+    public String[] getGendans() {
+        if (this.gendansStr != null) {
+            return gendansStr.split(",");
+        }
+        return gendans;
+    }
+
+    public void setGendans(String[] gendans) {
+        this.gendans = gendans;
+    }
+
+    public String getSaleManager() {
+        return saleManager;
+    }
+
+    public void setSaleManager(String saleManager) {
+        this.saleManager = saleManager;
+    }
+
+    public String getGendan() {
+        return gendan;
+    }
+
+    public void setGendan(String gendan) {
+        this.gendan = gendan;
+    }
+
+    public Double getHetongMoney() {
+        return hetongMoney;
+    }
+
+    public void setHetongMoney(Double hetongMoney) {
+        this.hetongMoney = hetongMoney;
+    }
+
+    public Double getHereMoney() {
+        return hereMoney;
+    }
+
+    public void setHereMoney(Double hereMoney) {
+        this.hereMoney = hereMoney;
+    }
+
+    public Double getWeiHuiMoney() {
+        return weiHuiMoney;
+    }
+
+    public void setWeiHuiMoney(Double weiHuiMoney) {
+        this.weiHuiMoney = weiHuiMoney;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 
     public String getDelivery_DateStr() {
         return delivery_DateStr;

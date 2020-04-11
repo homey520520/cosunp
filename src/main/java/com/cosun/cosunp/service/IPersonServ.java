@@ -246,6 +246,8 @@ public interface IPersonServ {
 
     void saveQKData(List<QYWXSPFROM> fromList) throws Exception;
 
+    void getKQ(String beforDay) throws Exception;
+
     List<KQBean> getAfterOperatorDataByOriginData(List<OutClockIn> clockDates, List<KQBean> kqBeans) throws Exception;
 
     List<KQBean> getgetAfterOperatorDataByOriginDataLinShi(List<OutClockIn> clockDates, List<KQBean> kqBeans) throws Exception;

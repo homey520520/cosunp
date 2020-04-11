@@ -6,6 +6,7 @@ import com.cosun.cosunp.entity.*;
 import com.cosun.cosunp.service.IFinanceServ;
 import com.cosun.cosunp.service.IPersonServ;
 import com.cosun.cosunp.tool.*;
+import com.cosun.cosunp.weixin.InMsgEntity;
 import com.cosun.cosunp.weixin.NetWorkHelper;
 import com.cosun.cosunp.weixin.WeiXinUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -147,6 +148,12 @@ public class PersonController {
             testDomainMapper.saveAllNewKQBeansToMysql(newKQBeans);
             ociList.clear();
         }
+    }
+
+
+    public void getKQ(String beforDay) throws Exception {
+        IPersonServ testDomainMapper = SpringUtil.getBean(IPersonServ.class);
+        testDomainMapper.getKQ(beforDay);
     }
 
     public void getBeforeDayZhongKongData(String beforDay) throws Exception {
@@ -306,7 +313,7 @@ public class PersonController {
         haves.clear();
         List<WeiXinUsrId> newUserList = new ArrayList<WeiXinUsrId>();
         for (WeiXinUsrId ww : userList) {
-            if (!haves.contains(ww.getUserid())) {
+            if (!haves.contains(ww.getUserid()) && (!ww.getUserid().equals("XiangMuZhongXinHuangFuYong"))) {
                 newUserList.add(ww);
                 haves.add(ww.getUserid());
             }
@@ -320,6 +327,8 @@ public class PersonController {
 
 
     }
+
+
 
     public void getBeforeDayQYWCData(String beforDay) throws Exception {
         pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
@@ -841,7 +850,6 @@ public class PersonController {
     }
 
 
-    //WinSCP  putty  SecureCRT MFC TeamViewer natapp MindMaster OpenOffice ex4j CLion Visual Studio 2019 SQL Server 2014
 
     @ResponseBody
     @RequestMapping(value = "/computeSignKQByMonth", method = RequestMethod.POST)
@@ -4006,6 +4014,7 @@ public class PersonController {
             throw e;
         }
     }
+
 
 
 }

@@ -17,9 +17,13 @@ public interface Constants {
 
     public static final String accessTokensp = "accessTokensp";
 
+    public static final String accessTokenqywx = "accessTokenqywx";
+
     public static final String expiresin = "expiresin";
 
     public static final String expiresinsp = "expiresin";
+
+    public static final String expiresinqywx = "expiresin";
 
     public static final String jsapi_ticket = "jsapi_ticket";
 

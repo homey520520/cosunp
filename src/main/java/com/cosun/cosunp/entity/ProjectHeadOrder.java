@@ -20,12 +20,53 @@ public class ProjectHeadOrder implements Serializable {
     private String customerName;
     private String orderNo;
     private String remark;
+    private Double weiHuiMoney;
+    private Double hetongMoney;
+    private Integer newOrOld;
 
     private String deliverStr;
     private Double yiShouAmount;
+    private String newOrOldStr;
 
 
     private String provinceStr;
+
+    public String getNewOrOldStr() {
+        if (this.newOrOld != null) {
+            if (this.newOrOld == 0)
+                return "旧店";
+            return "新店";
+        }
+        return "旧新";
+    }
+
+    public void setNewOrOldStr(String newOrOldStr) {
+        this.newOrOldStr = newOrOldStr;
+    }
+
+    public Integer getNewOrOld() {
+        return newOrOld;
+    }
+
+    public void setNewOrOld(Integer newOrOld) {
+        this.newOrOld = newOrOld;
+    }
+
+    public Double getWeiHuiMoney() {
+        return weiHuiMoney;
+    }
+
+    public Double getHetongMoney() {
+        return hetongMoney;
+    }
+
+    public void setHetongMoney(Double hetongMoney) {
+        this.hetongMoney = hetongMoney;
+    }
+
+    public void setWeiHuiMoney(Double weiHuiMoney) {
+        this.weiHuiMoney = weiHuiMoney;
+    }
 
     public String getProvinceStr() {
         return provinceStr;

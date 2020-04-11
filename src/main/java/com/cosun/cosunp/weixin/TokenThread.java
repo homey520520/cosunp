@@ -16,8 +16,10 @@ public class TokenThread implements Runnable {
     public static String appId = "";
     public static String appSecret = "";
     public static String appSecretsp = "";
+    public static String appSecretQYWX = "";
     public static AccessToken accessToken = null;
     public static AccessToken accessTokensp = null;
+    public static AccessToken accessTokenQYWX = null;
     public static String jsapi_ticket = "";
 
     public void run() {
@@ -25,12 +27,16 @@ public class TokenThread implements Runnable {
             try {
                 accessToken = this.getAccessToken();
                 accessTokensp = this.getAccessTokenSP();
-                if (null != accessToken || null != accessTokensp) {
+                accessTokenQYWX = this.getAccessTokenQYWX();
+                if (null != accessToken || null != accessTokensp || null != accessTokenQYWX) {
                     if (null != accessToken) {
                         new WeiXinServlet().setRedisValue(accessToken);
                     }
                     if (null != accessTokensp) {
                         new WeiXinServlet().setRedisValueSP(accessTokensp);
+                    }
+                    if (null != accessTokenQYWX) {
+                        new WeiXinServlet().setRedisValueQYWX(accessTokenQYWX);
                     }
                     Thread.sleep(2 * 60 * 60 * 1000);
                 } else {
@@ -82,4 +88,16 @@ public class TokenThread implements Runnable {
         return token;
     }
 
+    private AccessToken getAccessTokenQYWX() {
+        NetWorkHelper netHelper = new NetWorkHelper();
+        //String Url = String.format("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s", this.appId, this.appSecret);
+        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s", this.appId, this.appSecretQYWX);
+        String result = netHelper.getHttpsResponse(Url, "");
+        //response.getWriter().println(result);
+        JSONObject json = JSON.parseObject(result);
+        AccessToken token = new AccessToken();
+        token.setAccessToken(json.getString("access_token"));
+        token.setExpiresin(json.getInteger("expires_in"));
+        return token;
+    }
 }

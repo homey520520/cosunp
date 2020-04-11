@@ -322,12 +322,17 @@ public class StringUtil {
     public static String sortTimes2(String zhTimesStr, String qkTimeStr) throws Exception {
         List<String> allStr = new ArrayList<String>();
         String[] strs = zhTimesStr.split(" ");
-        String[] strs2 = qkTimeStr.split(" ");
+        String[] strs2 = null;
+        if(qkTimeStr!=null && qkTimeStr.trim().length() >0) {
+            strs2 = qkTimeStr.split(" ");
+        }
         for (String s : strs) {
             allStr.add(s);
         }
-        for (String f : strs2) {
-            allStr.add(f);
+        if(strs2!=null) {
+            for (String f : strs2) {
+                allStr.add(f);
+            }
         }
         List<Time> times = formTime(allStr);
 

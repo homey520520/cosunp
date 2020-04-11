@@ -18,8 +18,35 @@ public class WeiXinUsrId implements Serializable {
     private String userid;
     private String name;
     private String empNo;
+    private String openId;
+    private String nickName;
+    private String shortOrderName;
     private List<Integer> department;
 
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getShortOrderName() {
+        return shortOrderName;
+    }
+
+    public void setShortOrderName(String shortOrderName) {
+        this.shortOrderName = shortOrderName;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     public String getEmpNo() {
         return empNo;

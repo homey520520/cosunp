@@ -141,11 +141,15 @@ public class MKExcelUtil {
         if (!targetFile.exists()) {
             targetFile.mkdirs();
         }
+        //www.homey.nat100.top
+        //keytool -import -v -file D:/keys/client.cer -keystore D:/keys/tomcat.keystor
+        // keytool -export -alias client -keystore D:/keys/client.p12 -storetype PKCS12 -keypass 123456 -file D:/keys/client.cer
         file.createNewFile();
         fis = new FileInputStream(finalDirPath + fileName);
         HSSFSheet hssfSheet = wb.createSheet(yearMonth + "考勤明细");
         hssfSheet.createFreezePane(4, 3, 4, 3);
         this.createOneSheet(mkList, hssfSheet, yearMonth, wd, fd);
+
 
         HSSFSheet hssfSheet2 = wb.createSheet(yearMonth + "考勤汇总");
         hssfSheet2.createFreezePane(3, 2, 3, 2);
@@ -217,7 +221,11 @@ public class MKExcelUtil {
             dayJI.setDayJiAMRemark(oh.getDay06AMRemark() == null ? 0.0 : oh.getDay06AMRemark());
             dayJI.setDayJiPM(oh.getDay06PM() == null ? 0 : oh.getDay06PM());
             dayJI.setDayJiPMRemark(oh.getDay06PMRemark() == null ? 0.0 : oh.getDay06PMRemark());
-            dayJI.setDayJiExHours(oh.getDay06ExHours());
+            try {
+                dayJI.setDayJiExHours(oh.getDay06ExHours());
+            }catch (Exception e) {
+                System.out.println(oh.getName()+"====="+oh.getEmpNo());
+            }
             dayJIList.add(dayJI);
 
             dayJI = new DayJI();
@@ -449,7 +457,11 @@ public class MKExcelUtil {
             dayJI.setDayJiAMRemark(oh.getDay06AMRemark() == null ? 0.0 : oh.getDay06AMRemark());
             dayJI.setDayJiPM(oh.getDay06PM() == null ? 0 : oh.getDay06PM());
             dayJI.setDayJiPMRemark(oh.getDay06PMRemark() == null ? 0.0 : oh.getDay06PMRemark());
-            dayJI.setDayJiExHours(oh.getDay06ExHours());
+            try {
+                dayJI.setDayJiExHours(oh.getDay06ExHours());
+            }catch (Exception e) {
+                System.out.println(oh.getName()+"================"+oh.getEmpNo());
+            }
             dayJIList.add(dayJI);
 
             dayJI = new DayJI();
@@ -1573,7 +1585,7 @@ public class MKExcelUtil {
 
                 if (oh != null && oh.getDay29AM() != null) {
                     if (oh.getDay29AM() == 1) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1589,7 +1601,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 2) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1605,11 +1617,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 4) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("休");
                         cell.setCellStyle(cellStyleBR);
                     } else if (oh.getDay29AM() == 6) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("△");
                         cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -1626,7 +1638,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                     } else if (oh.getDay29AM() == 11) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("▲");
                         cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -1643,7 +1655,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                     } else if (oh.getDay29AM() == 12) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1659,7 +1671,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 13) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("夜");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1675,11 +1687,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 15) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("休");
                         cell.setCellStyle(cellStyleBR);
                     } else if (oh.getDay29AM() == 18) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1695,7 +1707,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 7) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1712,7 +1724,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 8) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("✖");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1728,7 +1740,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 17) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1744,7 +1756,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 67) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1760,7 +1772,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 77) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1776,7 +1788,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 61) {
-                        cell = row.createCell(4 + 29);
+                        cell = row.createCell(5 + 29);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1792,7 +1804,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 16) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue(oh.getDay29AMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1808,7 +1820,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 19) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue(oh.getDay29AMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1824,7 +1836,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 20) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("婚");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1840,7 +1852,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 21) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("丧");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1856,7 +1868,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 22) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("产");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1872,7 +1884,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 23) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("陪");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1888,7 +1900,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 108) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1904,7 +1916,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29AM() == 107) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1921,7 +1933,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (oh.getDay29AM() == 106) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1937,7 +1949,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 301) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1953,7 +1965,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 302) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1969,7 +1981,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 312) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -1985,7 +1997,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 313) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("夜");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2001,7 +2013,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 318) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2017,7 +2029,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 367) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2033,7 +2045,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 377) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2049,7 +2061,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 361) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2065,7 +2077,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 316) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2081,7 +2093,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 319) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2097,7 +2109,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 3108) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2113,7 +2125,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 3107) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2130,7 +2142,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiAM() == 3106) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2146,11 +2158,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 325) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         cell.setCellStyle(cellStyle4BOPY);
                     } else if (dayJI.getDayJiAM() == 601) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2166,7 +2178,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 602) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2182,7 +2194,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 612) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2198,7 +2210,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 613) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("夜");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2214,7 +2226,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 618) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2230,7 +2242,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 667) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2246,7 +2258,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 677) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2262,7 +2274,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 661) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2278,7 +2290,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 616) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2294,7 +2306,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 619) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2310,7 +2322,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 6108) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2326,7 +2338,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 6107) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2343,7 +2355,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiAM() == 6106) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2359,7 +2371,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 625) {
-                        cell = row.createCell(4 + 28);
+                        cell = row.createCell(5 + 28);
                         cell.setCellValue("");
                         cell.setCellStyle(cellStyle4BOPYG);
                     }
@@ -2371,7 +2383,7 @@ public class MKExcelUtil {
                         cell.setCellComment(comment);
                     }
                 } else {
-                    cell = row.createCell(4 + 28);
+                    cell = row.createCell(5 + 28);
                     cell.setCellValue("");
                     if (week == 6 || week == 7 || isWeekEnd) {
                         if (inComStr.equals(ymdStr)) {
@@ -2390,7 +2402,7 @@ public class MKExcelUtil {
 
                 if (oh != null && oh.getDay29PM() != null) {
                     if (oh.getDay29PM() == 1) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2406,7 +2418,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 2) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2422,11 +2434,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 4) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("假");
                         cell.setCellStyle(cellStyleBR);
                     } else if (oh.getDay29PM() == 6) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("△");
                         cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -2443,7 +2455,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                     } else if (oh.getDay29PM() == 11) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("▲");
                         cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -2460,7 +2472,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                     } else if (oh.getDay29PM() == 12) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2476,7 +2488,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 13) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("班");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2492,11 +2504,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 15) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("休");
                         cell.setCellStyle(cellStyleBR);
                     } else if (oh.getDay29PM() == 18) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2512,7 +2524,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 7) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2529,7 +2541,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 8) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("✖");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2545,7 +2557,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 17) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2561,7 +2573,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 67) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2577,7 +2589,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 77) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2593,7 +2605,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 61) {
-                        cell = row2.createCell(4 + 29);
+                        cell = row2.createCell(5 + 29);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2609,7 +2621,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 16) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue(oh.getDay29PMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2625,7 +2637,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 19) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue(oh.getDay29PMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2641,7 +2653,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 20) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("婚");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2657,7 +2669,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 21) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("丧");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2673,7 +2685,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 22) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("产");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2689,7 +2701,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 23) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("产");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2705,7 +2717,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 108) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2721,7 +2733,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (oh.getDay29PM() == 107) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2738,7 +2750,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (oh.getDay29PM() == 106) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2754,7 +2766,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 601) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2770,7 +2782,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 602) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2786,7 +2798,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 612) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2802,7 +2814,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 613) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("班");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2818,7 +2830,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 618) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2834,7 +2846,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 667) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2850,7 +2862,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 677) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2866,7 +2878,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 661) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2882,7 +2894,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 616) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2898,7 +2910,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 619) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2914,7 +2926,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 6108) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2930,7 +2942,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 6107) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2947,7 +2959,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiPM() == 6106) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2963,11 +2975,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 625) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         cell.setCellStyle(cellStyle4BOPYG);
                     } else if (dayJI.getDayJiPM() == 301) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2983,7 +2995,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 302) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -2999,7 +3011,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 312) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3015,7 +3027,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 313) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("班");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3031,7 +3043,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 318) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3047,7 +3059,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 367) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3063,7 +3075,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 377) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3079,7 +3091,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 361) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3095,7 +3107,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 316) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3111,7 +3123,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 319) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3127,7 +3139,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 3108) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3143,7 +3155,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 3107) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3160,7 +3172,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiPM() == 3106) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3176,11 +3188,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 325) {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         cell.setCellStyle(cellStyle4BOPY);
                     } else {
-                        cell = row2.createCell(4 + 28);
+                        cell = row2.createCell(5 + 28);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3197,7 +3209,7 @@ public class MKExcelUtil {
                         }
                     }
                 } else {
-                    cell = row2.createCell(4 + 28);
+                    cell = row2.createCell(5 + 28);
                     cell.setCellValue("");
                     if (week == 6 || week == 7 || isWeekEnd) {
                         if (inComStr.equals(ymdStr)) {
@@ -3215,7 +3227,7 @@ public class MKExcelUtil {
                 }
 
                 if (oh != null && oh.getDay29ExHours() != null) {
-                    cell = row3.createCell(4 + 28);
+                    cell = row3.createCell(5 + 28);
                     cell.setCellValue(oh.getDay29ExHours() == 0.0 ? "" : oh.getDay29ExHours().toString());
                     if (week == 6 || week == 7 || isWeekEnd) {
                         if (inComStr.equals(ymdStr)) {
@@ -3248,7 +3260,7 @@ public class MKExcelUtil {
                     }
 
                 } else {
-                    cell = row3.createCell(4 + 28);
+                    cell = row3.createCell(5  + 28);
                     cell.setCellValue(oh.getDay29ExHours() == null ? "" : oh.getDay29ExHours().toString());
                     if (week == 6 || week == 7 || isWeekEnd) {
                         if (inComStr.equals(ymdStr)) {
@@ -3313,7 +3325,7 @@ public class MKExcelUtil {
                     }
 
                     if (dayJI.getDayJiAM() == 1) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3329,7 +3341,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 2) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3345,11 +3357,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 4) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("休");
                         cell.setCellStyle(cellStyleBR);
                     } else if (dayJI.getDayJiAM() == 6) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("△");
                         cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -3366,7 +3378,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                     } else if (dayJI.getDayJiAM() == 11) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("▲");
                         cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -3383,7 +3395,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                     } else if (dayJI.getDayJiAM() == 12) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3399,7 +3411,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 13) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("夜");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3415,11 +3427,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 15) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("休");
                         cell.setCellStyle(cellStyleBR);
                     } else if (dayJI.getDayJiAM() == 18) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3435,7 +3447,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 7) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3452,7 +3464,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 8) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("✖");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3468,7 +3480,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 17) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3484,7 +3496,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 67) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3500,7 +3512,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 77) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3516,7 +3528,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 61) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3532,7 +3544,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 16) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3548,7 +3560,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 19) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3564,7 +3576,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 20) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("婚");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3580,7 +3592,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 21) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("丧");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3596,7 +3608,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 22) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("产");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3612,7 +3624,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 23) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("陪");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3628,7 +3640,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 108) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3644,7 +3656,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 107) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3661,7 +3673,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiAM() == 106) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3677,7 +3689,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 301) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3693,7 +3705,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 302) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3709,7 +3721,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 312) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3725,7 +3737,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 313) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("夜");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3741,7 +3753,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 318) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3757,7 +3769,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 367) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3773,7 +3785,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 377) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3789,7 +3801,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 361) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3805,7 +3817,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 316) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3821,7 +3833,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 319) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3837,7 +3849,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 3108) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3853,7 +3865,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 3107) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3870,7 +3882,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiAM() == 3106) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3886,11 +3898,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 325) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         cell.setCellStyle(cellStyle4BOPY);
                     } else if (dayJI.getDayJiAM() == 601) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3906,7 +3918,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 602) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3922,7 +3934,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 612) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3938,7 +3950,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 613) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("夜");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3954,7 +3966,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 618) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3970,7 +3982,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 667) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -3986,7 +3998,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 677) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4002,7 +4014,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 661) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4018,7 +4030,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 616) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4034,7 +4046,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 619) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiAMRemark());
                         cell.setCellComment(comment);
                         if (week == 6 || week == 7 || isWeekEnd) {
@@ -4051,7 +4063,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 6108) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         cell.setCellComment(comment);
                         if (week == 6 || week == 7 || isWeekEnd) {
@@ -4068,7 +4080,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 6107) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         cell.setCellComment(comment);
                         if (week == 6 || week == 7 || isWeekEnd) {
@@ -4086,7 +4098,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiAM() == 6106) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4102,11 +4114,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiAM() == 625) {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         cell.setCellStyle(cellStyle4BOPYG);
                     } else {
-                        cell = row.createCell(4 + n);
+                        cell = row.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4133,7 +4145,7 @@ public class MKExcelUtil {
                 if (oh != null && dayJI.getDayJiPM() != null) {
 
                     if (dayJI.getDayJiPM() == 1) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4149,7 +4161,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 2) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4165,11 +4177,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 4) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("假");
                         cell.setCellStyle(cellStyleBR);
                     } else if (dayJI.getDayJiPM() == 6) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("△");
                         cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -4186,7 +4198,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                     } else if (dayJI.getDayJiPM() == 11) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("▲");
                         cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -4203,7 +4215,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                     } else if (dayJI.getDayJiPM() == 12) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4219,7 +4231,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 13) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("班");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4235,11 +4247,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 15) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("假");
                         cell.setCellStyle(cellStyleBR);
                     } else if (dayJI.getDayJiPM() == 18) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4255,7 +4267,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 7) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4272,7 +4284,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 8) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("✖");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4288,7 +4300,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 17) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4304,7 +4316,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 67) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4320,7 +4332,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 77) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4336,7 +4348,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 61) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4352,7 +4364,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 16) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4368,7 +4380,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 19) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4384,7 +4396,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 20) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("假");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4400,7 +4412,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 21) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("假");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4416,7 +4428,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 22) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("假");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4432,7 +4444,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 23) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("产");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4448,7 +4460,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 108) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4464,7 +4476,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 107) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4481,7 +4493,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiPM() == 106) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4497,7 +4509,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 601) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4513,7 +4525,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 602) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4529,7 +4541,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 612) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4545,7 +4557,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 613) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("班");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4561,7 +4573,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 618) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4577,7 +4589,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 667) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4593,7 +4605,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 677) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4609,7 +4621,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 661) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4625,7 +4637,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 616) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4641,7 +4653,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 619) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4657,7 +4669,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 6108) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4673,7 +4685,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 6107) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4690,7 +4702,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiPM() == 6106) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4706,11 +4718,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 625) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         cell.setCellStyle(cellStyle4BOPYG);
                     } else if (dayJI.getDayJiPM() == 301) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("√");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4726,7 +4738,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 302) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4742,7 +4754,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 312) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("●");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4758,7 +4770,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 313) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("班");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4774,7 +4786,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 318) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4790,7 +4802,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 367) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4806,7 +4818,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 377) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4822,7 +4834,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 361) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4838,7 +4850,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 316) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4854,7 +4866,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 319) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue(dayJI.getDayJiPMRemark());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4870,7 +4882,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 3108) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4886,7 +4898,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 3107) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4903,7 +4915,7 @@ public class MKExcelUtil {
                         }
 
                     } else if (dayJI.getDayJiPM() == 3106) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("О");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4919,11 +4931,11 @@ public class MKExcelUtil {
                             }
                         }
                     } else if (dayJI.getDayJiPM() == 325) {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         cell.setCellStyle(cellStyle4BOPY);
                     } else {
-                        cell = row2.createCell(4 + n);
+                        cell = row2.createCell(5 + n);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -4941,7 +4953,7 @@ public class MKExcelUtil {
                     }
                 }
                 if (oh != null && dayJI.getDayJiExHours() != null) {
-                    cell = row3.createCell(4 + n);
+                    cell = row3.createCell(5 + n);
                     cell.setCellValue((dayJI.getDayJiExHours() == 0.0 ? "" : dayJI.getDayJiExHours()).toString());
                     if (week == 6 || week == 7 || isWeekEnd) {
                         if (inComStr.equals(ymdStr)) {
@@ -4974,7 +4986,7 @@ public class MKExcelUtil {
                     }
 
                 } else {
-                    cell = row3.createCell(4 + n);
+                    cell = row3.createCell(5 + n);
                     cell.setCellValue((dayJI.getDayJiExHours() == null ? "" : dayJI.getDayJiExHours()).toString());
                     if (week == 6 || week == 7 || isWeekEnd) {
                         if (inComStr.equals(ymdStr)) {
@@ -5167,6 +5179,16 @@ public class MKExcelUtil {
         hssfSheet3.setColumnWidth(3 + days + 15, 5 * 256);
         cell.setCellStyle(cellStyle);
 
+        cell = row.createCell(3 + days + 16);
+        cell.setCellValue("迟到分钟");
+        hssfSheet3.setColumnWidth(3 + days + 16, 5 * 256);
+        cell.setCellStyle(cellStyle);
+
+        cell = row.createCell(3 + days + 17);
+        cell.setCellValue("迟到次数");
+        hssfSheet3.setColumnWidth(3 + days + 17, 5 * 256);
+        cell.setCellStyle(cellStyle);
+
         region = new CellRangeAddress(1, 2, 0, 0);
         hssfSheet3.addMergedRegion(region);
 
@@ -5305,6 +5327,22 @@ public class MKExcelUtil {
         RegionUtil.setBorderRight(1, region, hssfSheet3, wb);
 
         region = new CellRangeAddress(1, 2, 3 + days + 15, 3 + days + 15);
+        hssfSheet3.addMergedRegion(region);
+
+        RegionUtil.setBorderBottom(1, region, hssfSheet3, wb);
+        RegionUtil.setBorderTop(1, region, hssfSheet3, wb);
+        RegionUtil.setBorderLeft(1, region, hssfSheet3, wb);
+        RegionUtil.setBorderRight(1, region, hssfSheet3, wb);
+
+        region = new CellRangeAddress(1, 2, 3 + days + 16, 3 + days + 16);
+        hssfSheet3.addMergedRegion(region);
+
+        RegionUtil.setBorderBottom(1, region, hssfSheet3, wb);
+        RegionUtil.setBorderTop(1, region, hssfSheet3, wb);
+        RegionUtil.setBorderLeft(1, region, hssfSheet3, wb);
+        RegionUtil.setBorderRight(1, region, hssfSheet3, wb);
+
+        region = new CellRangeAddress(1, 2, 3 + days + 17, 3 + days + 17);
         hssfSheet3.addMergedRegion(region);
 
         RegionUtil.setBorderBottom(1, region, hssfSheet3, wb);
@@ -8974,6 +9012,14 @@ public class MKExcelUtil {
             cell.setCellValue("");
             cell.setCellStyle(cellStyle);
 
+            cell = row.createCell(3 + days + 16);
+            cell.setCellValue(oh.getLateminites());
+            cell.setCellStyle(cellStyle);
+
+            cell = row.createCell(3 + days + 17);
+            cell.setCellValue(oh.getLatetimes());
+            cell.setCellStyle(cellStyle);
+
             region = new CellRangeAddress(beginRow - 3, beginRow - 1, 0, 0);
             hssfSheet3.addMergedRegion(region);
 
@@ -9112,6 +9158,22 @@ public class MKExcelUtil {
             RegionUtil.setBorderRight(1, region, hssfSheet3, wb);
 
             region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 15, 3 + days + 15);
+            hssfSheet3.addMergedRegion(region);
+
+            RegionUtil.setBorderBottom(1, region, hssfSheet3, wb);
+            RegionUtil.setBorderTop(1, region, hssfSheet3, wb);
+            RegionUtil.setBorderLeft(1, region, hssfSheet3, wb);
+            RegionUtil.setBorderRight(1, region, hssfSheet3, wb);
+
+            region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 16, 3 + days + 16);
+            hssfSheet3.addMergedRegion(region);
+
+            RegionUtil.setBorderBottom(1, region, hssfSheet3, wb);
+            RegionUtil.setBorderTop(1, region, hssfSheet3, wb);
+            RegionUtil.setBorderLeft(1, region, hssfSheet3, wb);
+            RegionUtil.setBorderRight(1, region, hssfSheet3, wb);
+
+            region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 17, 3 + days + 17);
             hssfSheet3.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet3, wb);
@@ -9382,12 +9444,16 @@ public class MKExcelUtil {
             cell.setCellStyle(cellStyle);
 
             cell = row.createCell(3);
+            cell.setCellValue("工号");
+            cell.setCellStyle(cellStyle);
+
+            cell = row.createCell(4);
             cell.setCellValue("星期");
             cell.setCellStyle(cellStyle);
 
             row2 = hssfSheet.createRow(2);
             row2.setHeight((short) 400);
-            cell = row2.createCell(3);
+            cell = row2.createCell(4);
             cell.setCellValue("日期");
             cell.setCellStyle(cellStyle);
 
@@ -9395,11 +9461,12 @@ public class MKExcelUtil {
             hssfSheet.setColumnWidth(1, 8 * 256);
             hssfSheet.setColumnWidth(2, 6 * 256);
             hssfSheet.setColumnWidth(3, 6 * 256);
+            hssfSheet.setColumnWidth(4, 8 * 256);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             days = DateUtil.getDaysByYearMonth(sdf.parse(yearMonth + "-01"));
 
             for (int i = 1; i <= days; i++) {
-                cell = row.createCell(3 + i);
+                cell = row.createCell(4 + i);
                 if (i < 10) {
                     day = "0" + i;
                 } else {
@@ -9409,7 +9476,7 @@ public class MKExcelUtil {
                 isWeekEnd = DateUtil.checkIsWeekEnd(wd, i + "");
                 isFaDing = DateUtil.checkIsFaDing(fd, i + "");
 
-                hssfSheet.setColumnWidth(3 + i, 4 * 270);
+                hssfSheet.setColumnWidth(4 + i, 4 * 270);
                 cell.setCellValue(DateUtil.getWeekStr(yearMonth + "-" + day));
                 if (isWeekEnd) {
                     if (isFaDing) {
@@ -9424,7 +9491,7 @@ public class MKExcelUtil {
                         cell.setCellStyle(cellStyle);
                     }
                 }
-                cell = row2.createCell(3 + i);
+                cell = row2.createCell(4 + i);
                 cell.setCellValue(i);
                 if (isWeekEnd) {
                     if (isFaDing) {
@@ -9441,105 +9508,129 @@ public class MKExcelUtil {
                 }
             }
 
-            cell = row.createCell(3 + days + 1);
+            cell = row.createCell(4 + days + 1);
             cell.setCellValue("正班出勤工时");
-            hssfSheet.setColumnWidth(3 + days + 1, 5 * 256);
+            hssfSheet.setColumnWidth(4 + days + 1, 5 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 2);
-            hssfSheet.setColumnWidth(3 + days + 2, 5 * 256);
+            cell = row.createCell(4 + days + 2);
+            hssfSheet.setColumnWidth(4 + days + 2, 5 * 256);
             cell.setCellValue("平时加班(H)");
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 3);
-            hssfSheet.setColumnWidth(3 + days + 3, 5 * 256);
+            cell = row.createCell(4 + days + 3);
+            hssfSheet.setColumnWidth(4 + days + 3, 5 * 256);
             cell.setCellValue("周末加班(H)");
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 4);
+            cell = row.createCell(4 + days + 4);
             cell.setCellValue("国家有薪假(H)");
-            hssfSheet.setColumnWidth(3 + days + 4, 4 * 256);
+            hssfSheet.setColumnWidth(4 + days + 4, 4 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 5);
+            cell = row.createCell(4 + days + 5);
             cell.setCellValue("其它有薪假(H)");
-            hssfSheet.setColumnWidth(3 + days + 5, 4 * 256);
+            hssfSheet.setColumnWidth(4 + days + 5, 4 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 6);
+            cell = row.createCell(4 + days + 6);
             cell.setCellValue("事假(H)");
-            hssfSheet.setColumnWidth(3 + days + 6, 4 * 256);
+            hssfSheet.setColumnWidth(4 + days + 6, 4 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 7);
+            cell = row.createCell(4 + days + 7);
             cell.setCellValue("病假(H)");
-            hssfSheet.setColumnWidth(3 + days + 7, 4 * 256);
+            hssfSheet.setColumnWidth(4 + days + 7, 4 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 8);
+            cell = row.createCell(4 + days + 8);
             cell.setCellValue("其它补贴(出差/夜班)");
-            hssfSheet.setColumnWidth(3 + days + 8, 4 * 256);
+            hssfSheet.setColumnWidth(4 + days + 8, 4 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 9);
+            cell = row.createCell(4 + days + 9);
             cell.setCellValue("全勤奖");
-            hssfSheet.setColumnWidth(3 + days + 9, 5 * 256);
+            hssfSheet.setColumnWidth(4 + days + 9, 5 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 10);
+            cell = row.createCell(4 + days + 10);
             cell.setCellValue("伙食费");
-            hssfSheet.setColumnWidth(3 + days + 10, 5 * 256);
+            hssfSheet.setColumnWidth(4 + days + 10, 5 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 11);
+            cell = row.createCell(4 + days + 11);
             cell.setCellValue("房租/水电费");
-            hssfSheet.setColumnWidth(3 + days + 11, 5 * 256);
+            hssfSheet.setColumnWidth(4 + days + 11, 5 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 12);
+            cell = row.createCell(4 + days + 12);
             cell.setCellValue("扣代付养老险");
-            hssfSheet.setColumnWidth(3 + days + 12, 6 * 256);
+            hssfSheet.setColumnWidth(4 + days + 12, 6 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 13);
+            cell = row.createCell(4 + days + 13);
             cell.setCellValue("扣代付医疗险");
-            hssfSheet.setColumnWidth(3 + days + 13, 6 * 256);
+            hssfSheet.setColumnWidth(4 + days + 13, 6 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 14);
+            cell = row.createCell(4 + days + 14);
             cell.setCellValue("扣代付失业险");
-            hssfSheet.setColumnWidth(3 + days + 14, 6 * 256);
+            hssfSheet.setColumnWidth(4 + days + 14, 6 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 15);
+            cell = row.createCell(4 + days + 15);
             cell.setCellValue("扣代付公积金");
-            hssfSheet.setColumnWidth(3 + days + 15, 6 * 256);
+            hssfSheet.setColumnWidth(4 + days + 15, 6 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 16);
+            cell = row.createCell(4 + days + 16);
             cell.setCellValue("代扣家属旅游费");
-            hssfSheet.setColumnWidth(3 + days + 16, 5 * 256);
+            hssfSheet.setColumnWidth(4 + days + 16, 5 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 17);
+            cell = row.createCell(4 + days + 17);
             cell.setCellValue("工作失误");
-            hssfSheet.setColumnWidth(3 + days + 17, 5 * 256);
+            hssfSheet.setColumnWidth(4 + days + 17, 5 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 18);
+            cell = row.createCell(4 + days + 18);
             cell.setCellValue("绩效分");
-            hssfSheet.setColumnWidth(3 + days + 18, 5 * 256);
+            hssfSheet.setColumnWidth(4 + days + 18, 5 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 19);
+            cell = row.createCell(4 + days + 19);
             cell.setCellValue("备注");
-            hssfSheet.setColumnWidth(3 + days + 19, 5 * 256);
+            hssfSheet.setColumnWidth(4 + days + 19, 5 * 256);
             cell.setCellStyle(cellStyle);
 
-            cell = row.createCell(3 + days + 20);
+            cell = row.createCell(4 + days + 20);
             cell.setCellValue("请确定无误后签字");
-            hssfSheet.setColumnWidth(3 + days + 20, 5 * 256);
+            hssfSheet.setColumnWidth(4 + days + 20, 5 * 256);
             cell.setCellStyle(cellStyle);
+
+
+            cell = row.createCell(4 + days + 21);
+            cell.setCellValue("总正班工时");
+            hssfSheet.setColumnWidth(4 + days + 21, 5 * 256);
+            cell.setCellStyle(cellStyle);
+
+            cell = row.createCell(4 + days + 22);
+            cell.setCellValue("正班工时核对");
+            hssfSheet.setColumnWidth(4 + days + 22, 5 * 256);
+            cell.setCellStyle(cellStyle);
+
+
+            cell = row.createCell(4 + days + 23);
+            cell.setCellValue("迟到分钟");
+            hssfSheet.setColumnWidth(4 + days + 23, 5 * 256);
+            cell.setCellStyle(cellStyle);
+
+
+            cell = row.createCell(4 + days + 24);
+            cell.setCellValue("迟到次数");
+            hssfSheet.setColumnWidth(4 + days + 24, 5 * 256);
+            cell.setCellStyle(cellStyle);
+
 
             region = new CellRangeAddress(1, 2, 0, 0);
             hssfSheet.addMergedRegion(region);
@@ -9565,7 +9656,16 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 1, 3 + days + 1);
+            region = new CellRangeAddress(1, 2, 3, 3);
+            hssfSheet.addMergedRegion(region);
+
+
+            RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+            RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+            RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+            RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+            region = new CellRangeAddress(1, 2, 4 + days + 1, 4 + days + 1);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9573,7 +9673,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 2, 3 + days + 2);
+            region = new CellRangeAddress(1, 2, 4 + days + 2, 4 + days + 2);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9581,7 +9681,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 3, 3 + days + 3);
+            region = new CellRangeAddress(1, 2, 4 + days + 3, 4 + days + 3);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9589,7 +9689,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 4, 3 + days + 4);
+            region = new CellRangeAddress(1, 2, 4 + days + 4, 4 + days + 4);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9597,7 +9697,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 5, 3 + days + 5);
+            region = new CellRangeAddress(1, 2, 4 + days + 5, 4 + days + 5);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9605,7 +9705,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 6, 3 + days + 6);
+            region = new CellRangeAddress(1, 2, 4 + days + 6, 4 + days + 6);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9613,7 +9713,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 7, 3 + days + 7);
+            region = new CellRangeAddress(1, 2, 4 + days + 7, 4 + days + 7);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9621,7 +9721,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 8, 3 + days + 8);
+            region = new CellRangeAddress(1, 2, 4 + days + 8, 4 + days + 8);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9629,7 +9729,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 9, 3 + days + 9);
+            region = new CellRangeAddress(1, 2, 4 + days + 9, 4 + days + 9);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9637,7 +9737,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 10, 3 + days + 10);
+            region = new CellRangeAddress(1, 2, 4 + days + 10, 4 + days + 10);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9645,7 +9745,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 11, 3 + days + 11);
+            region = new CellRangeAddress(1, 2, 4 + days + 11, 4 + days + 11);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9653,7 +9753,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 12, 3 + days + 12);
+            region = new CellRangeAddress(1, 2, 4 + days + 12, 4 + days + 12);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9661,7 +9761,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 13, 3 + days + 13);
+            region = new CellRangeAddress(1, 2, 4 + days + 13, 4 + days + 13);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9669,7 +9769,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 14, 3 + days + 14);
+            region = new CellRangeAddress(1, 2, 4 + days + 14, 4 + days + 14);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9677,7 +9777,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 15, 3 + days + 15);
+            region = new CellRangeAddress(1, 2, 4 + days + 15, 4 + days + 15);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9685,7 +9785,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 16, 3 + days + 16);
+            region = new CellRangeAddress(1, 2, 4 + days + 16, 4 + days + 16);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9693,7 +9793,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 17, 3 + days + 17);
+            region = new CellRangeAddress(1, 2, 4 + days + 17, 4 + days + 17);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9701,7 +9801,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 18, 3 + days + 18);
+            region = new CellRangeAddress(1, 2, 4 + days + 18, 4 + days + 18);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9709,7 +9809,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 19, 3 + days + 19);
+            region = new CellRangeAddress(1, 2, 4 + days + 19, 4 + days + 19);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9717,7 +9817,7 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(1, 2, 3 + days + 20, 3 + days + 20);
+            region = new CellRangeAddress(1, 2, 4 + days + 20, 4 + days + 20);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9725,7 +9825,42 @@ public class MKExcelUtil {
             RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
             RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-            region = new CellRangeAddress(0, 0, 0, 3 + days);
+
+            region = new CellRangeAddress(1, 2, 4 + days + 21, 4 + days + 21);
+            hssfSheet.addMergedRegion(region);
+
+            RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+            RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+            RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+            RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+            region = new CellRangeAddress(1, 2, 4 + days + 22, 4 + days + 22);
+            hssfSheet.addMergedRegion(region);
+
+            RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+            RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+            RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+            RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+
+            region = new CellRangeAddress(1, 2, 4 + days + 23, 4 + days + 23);
+            hssfSheet.addMergedRegion(region);
+
+            RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+            RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+            RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+            RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+            region = new CellRangeAddress(1, 2, 4 + days + 24, 4 + days + 24);
+            hssfSheet.addMergedRegion(region);
+
+            RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+            RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+            RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+            RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+
+            region = new CellRangeAddress(0, 0, 0, 4 + days);
             hssfSheet.addMergedRegion(region);
 
             RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -9755,18 +9890,23 @@ public class MKExcelUtil {
                 cell.setCellStyle(cellStyleA);
 
                 cell = row.createCell(3);
+                cell.setCellValue(oh.getEmpNo());
+                cell.setCellStyle(cellStyleA);
+
+
+                cell = row.createCell(4);
                 cell.setCellValue("上午");
                 cell.setCellStyle(cellStyleA);
 
                 row2 = hssfSheet.createRow(beginRow++);
                 row2.setHeight((short) 400);
-                cell = row2.createCell(3);
+                cell = row2.createCell(4);
                 cell.setCellValue("下午");
                 cell.setCellStyle(cellStyleA);
 
                 row3 = hssfSheet.createRow(beginRow++);
                 row3.setHeight((short) 400);
-                cell = row3.createCell(3);
+                cell = row3.createCell(4);
                 cell.setCellValue("加班");
                 cell.setCellStyle(cellStyleA);
 
@@ -9793,7 +9933,7 @@ public class MKExcelUtil {
 
                     if (oh != null && oh.getDay30AM() != null) {
                         if (oh.getDay30AM() == 1) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9809,7 +9949,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 2) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9825,11 +9965,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 4) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("休");
                             cell.setCellStyle(cellStyleBR);
                         } else if (oh.getDay30AM() == 6) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("△");
                             cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -9846,7 +9986,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                         } else if (oh.getDay30AM() == 11) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("▲");
                             cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -9863,7 +10003,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                         } else if (oh.getDay30AM() == 12) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9879,7 +10019,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 13) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("夜");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9895,11 +10035,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 15) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("休");
                             cell.setCellStyle(cellStyleBR);
                         } else if (oh.getDay30AM() == 18) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9915,7 +10055,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 7) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9932,7 +10072,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 8) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("✖");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9948,7 +10088,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 17) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9964,7 +10104,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 67) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9980,7 +10120,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 77) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -9996,7 +10136,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 61) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10012,7 +10152,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 16) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue(oh.getDay30AMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10028,7 +10168,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 19) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue(oh.getDay30AMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10044,7 +10184,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 20) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("婚");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10060,7 +10200,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 21) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("丧");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10076,7 +10216,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 22) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("产");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10092,7 +10232,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 23) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("陪");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10108,7 +10248,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 108) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10124,7 +10264,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30AM() == 107) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10141,7 +10281,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (oh.getDay30AM() == 106) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10157,7 +10297,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 301) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10173,7 +10313,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 302) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10189,7 +10329,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 312) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10205,7 +10345,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 313) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("夜");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10221,7 +10361,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 318) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10237,7 +10377,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 367) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10253,7 +10393,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 377) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10269,7 +10409,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 361) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10285,7 +10425,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 316) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue(dayJI.getDayJiAMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10301,7 +10441,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 319) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue(dayJI.getDayJiAMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10317,7 +10457,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 3108) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10333,7 +10473,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 3107) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10350,7 +10490,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (dayJI.getDayJiAM() == 3106) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10366,11 +10506,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 325) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             cell.setCellStyle(cellStyle4BOPY);
                         } else if (dayJI.getDayJiAM() == 601) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10386,7 +10526,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 602) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10402,7 +10542,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 612) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10418,7 +10558,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 613) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("夜");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10434,7 +10574,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 618) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10450,7 +10590,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 667) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10466,7 +10606,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 677) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10482,7 +10622,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 661) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10498,7 +10638,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 616) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue(dayJI.getDayJiAMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10514,7 +10654,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 619) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue(dayJI.getDayJiAMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10530,7 +10670,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 6108) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10546,7 +10686,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 6107) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10563,7 +10703,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (dayJI.getDayJiAM() == 6106) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10579,11 +10719,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 625) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             cell.setCellStyle(cellStyle4BOPYG);
                         } else {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10609,7 +10749,7 @@ public class MKExcelUtil {
                         }
 
                     } else {
-                        cell = row.createCell(4 + 29);
+                        cell = row.createCell(5 + 29);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -10627,7 +10767,7 @@ public class MKExcelUtil {
                     }
                     if (oh != null && oh.getDay30PM() != null) {
                         if (oh.getDay30PM() == 1) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10643,7 +10783,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 2) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10659,11 +10799,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 4) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("休");
                             cell.setCellStyle(cellStyleBR);
                         } else if (oh.getDay30AM() == 6) {
-                            cell = row.createCell(4 + 29);
+                            cell = row.createCell(5 + 29);
                             cell.setCellValue("△");
                             cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -10680,7 +10820,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                         } else if (oh.getDay30PM() == 11) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("▲");
                             cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -10697,7 +10837,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                         } else if (oh.getDay30PM() == 12) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10713,7 +10853,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 13) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("班");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10729,11 +10869,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 15) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("假");
                             cell.setCellStyle(cellStyleBR);
                         } else if (oh.getDay30PM() == 18) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10749,7 +10889,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 7) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10766,7 +10906,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 8) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("✖");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10782,7 +10922,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 17) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10798,7 +10938,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 67) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10814,7 +10954,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 77) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10830,7 +10970,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 61) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10846,7 +10986,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 16) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue(oh.getDay30PMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10862,7 +11002,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 19) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue(oh.getDay30PMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10878,7 +11018,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 20) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("假");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10894,7 +11034,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 21) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("丧");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10910,7 +11050,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 22) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("假");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10926,7 +11066,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 23) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("产");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10942,7 +11082,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 108) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10958,7 +11098,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay30PM() == 107) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10975,7 +11115,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (oh.getDay30PM() == 106) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -10991,7 +11131,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 601) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11007,7 +11147,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 602) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11023,7 +11163,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 612) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11039,7 +11179,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 613) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("班");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11055,7 +11195,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 618) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11071,7 +11211,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 667) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11087,7 +11227,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 677) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11103,7 +11243,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 661) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11119,7 +11259,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 616) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue(dayJI.getDayJiPMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11135,7 +11275,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 619) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue(dayJI.getDayJiPMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11151,7 +11291,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 6108) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11167,7 +11307,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 6107) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11184,7 +11324,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (dayJI.getDayJiPM() == 6106) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11200,11 +11340,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 625) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             cell.setCellStyle(cellStyle4BOPYG);
                         } else if (dayJI.getDayJiPM() == 301) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11220,7 +11360,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 302) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11236,7 +11376,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 312) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11252,7 +11392,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 313) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("班");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11268,7 +11408,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 318) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11284,7 +11424,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 367) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11300,7 +11440,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 377) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11316,7 +11456,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 361) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11332,7 +11472,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 316) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue(dayJI.getDayJiPMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11348,7 +11488,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 319) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue(dayJI.getDayJiPMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11364,7 +11504,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 3108) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11380,7 +11520,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 3107) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11397,7 +11537,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (dayJI.getDayJiPM() == 3106) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11413,11 +11553,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 325) {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             cell.setCellStyle(cellStyle4BOPY);
                         } else {
-                            cell = row2.createCell(4 + 29);
+                            cell = row2.createCell(5 + 29);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11434,7 +11574,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else {
-                        cell = row2.createCell(4 + 29);
+                        cell = row2.createCell(5 + 29);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -11452,7 +11592,7 @@ public class MKExcelUtil {
                     }
 
                     if (oh != null && oh.getDay30ExHours() != null) {
-                        cell = row3.createCell(4 + 29);
+                        cell = row3.createCell(5 + 29);
                         cell.setCellValue(oh.getDay30ExHours() == 0.0 ? "" : oh.getDay30ExHours().toString());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -11485,7 +11625,7 @@ public class MKExcelUtil {
                         }
 
                     } else {
-                        cell = row3.createCell(4 + 29);
+                        cell = row3.createCell(5 + 29);
                         cell.setCellValue(oh.getDay30ExHours() == null ? "" : oh.getDay30ExHours().toString());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -11536,7 +11676,7 @@ public class MKExcelUtil {
                     }
                     if (oh != null && oh.getDay31AM() != null) {
                         if (oh.getDay31AM() == 1) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11552,7 +11692,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 2) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11568,11 +11708,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 4) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("休");
                             cell.setCellStyle(cellStyleBR);
                         } else if (oh.getDay31AM() == 6) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("△");
                             cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -11589,7 +11729,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                         } else if (oh.getDay31AM() == 11) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("▲");
                             cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -11606,7 +11746,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                         } else if (oh.getDay31AM() == 12) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11622,7 +11762,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 13) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("夜");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11638,11 +11778,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 15) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("休");
                             cell.setCellStyle(cellStyleBR);
                         } else if (oh.getDay31AM() == 18) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11658,7 +11798,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 7) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11675,7 +11815,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 8) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("✖");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11691,7 +11831,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 17) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11707,7 +11847,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 67) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11723,7 +11863,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 77) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11739,7 +11879,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 61) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11755,7 +11895,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 16) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue(oh.getDay31AMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11771,7 +11911,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 19) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue(oh.getDay31AMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11787,7 +11927,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 20) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("婚");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11803,7 +11943,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 21) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("丧");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11819,7 +11959,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 22) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("产");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11835,7 +11975,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 23) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("陪");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11851,7 +11991,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 108) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11867,7 +12007,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31AM() == 107) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11884,7 +12024,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (oh.getDay31AM() == 106) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11900,7 +12040,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 301) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11916,7 +12056,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 302) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11932,7 +12072,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 312) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11948,7 +12088,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 313) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("夜");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11964,7 +12104,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 318) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11980,7 +12120,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 367) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -11996,7 +12136,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 377) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12012,7 +12152,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 361) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12028,7 +12168,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 316) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue(dayJI.getDayJiAMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12044,7 +12184,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 319) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue(dayJI.getDayJiAMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12060,7 +12200,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 3108) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12076,7 +12216,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 3107) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12093,7 +12233,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (dayJI.getDayJiAM() == 3106) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12109,11 +12249,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 325) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             cell.setCellStyle(cellStyle4BOPY);
                         } else if (dayJI.getDayJiAM() == 601) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12129,7 +12269,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 602) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12145,7 +12285,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 612) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12161,7 +12301,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 613) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("夜");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12177,7 +12317,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 618) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12193,7 +12333,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 667) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12209,7 +12349,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 677) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12225,7 +12365,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 661) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12241,7 +12381,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 616) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue(dayJI.getDayJiAMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12257,7 +12397,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 619) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue(dayJI.getDayJiAMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12273,7 +12413,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 6108) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12289,7 +12429,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 6107) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12306,7 +12446,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (dayJI.getDayJiAM() == 6106) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12322,11 +12462,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiAM() == 625) {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             cell.setCellStyle(cellStyle4BOPYG);
                         } else {
-                            cell = row.createCell(4 + 30);
+                            cell = row.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12350,7 +12490,7 @@ public class MKExcelUtil {
                             cell.setCellComment(comment);
                         }
                     } else {
-                        cell = row.createCell(4 + 30);
+                        cell = row.createCell(5 + 30);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -12369,7 +12509,7 @@ public class MKExcelUtil {
 
                     if (oh != null && oh.getDay31PM() != null) {
                         if (oh.getDay31PM() == 1) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12385,7 +12525,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 2) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12401,11 +12541,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 4) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("假");
                             cell.setCellStyle(cellStyleBR);
                         } else if (oh.getDay31PM() == 6) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("△");
                             cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -12422,7 +12562,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                         } else if (oh.getDay31PM() == 11) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("▲");
                             cell.setCellStyle(cellStyleBG);
 //                            if (week == 6 || week == 7 || isWeekEnd) {
@@ -12439,7 +12579,7 @@ public class MKExcelUtil {
 //                                }
 //                            }
                         } else if (oh.getDay31PM() == 12) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12455,7 +12595,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 13) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("班");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12471,11 +12611,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 15) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("假");
                             cell.setCellStyle(cellStyleBR);
                         } else if (oh.getDay31PM() == 18) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12491,7 +12631,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 7) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12508,7 +12648,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 8) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("✖");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12524,7 +12664,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 17) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12540,7 +12680,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 67) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12556,7 +12696,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 77) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12572,7 +12712,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 61) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12588,7 +12728,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 16) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue(oh.getDay31PMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12604,7 +12744,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 19) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue(oh.getDay31PMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12620,7 +12760,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 20) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("假");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12636,7 +12776,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 21) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("假");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12652,7 +12792,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 22) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("假");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12668,7 +12808,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 23) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("产");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12684,7 +12824,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 108) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12700,7 +12840,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (oh.getDay31PM() == 107) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12717,7 +12857,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (oh.getDay31PM() == 106) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12733,7 +12873,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 601) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12749,7 +12889,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 602) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12765,7 +12905,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 612) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12781,7 +12921,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 613) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("班");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12797,7 +12937,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 618) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12813,7 +12953,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 667) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12829,7 +12969,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 677) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12845,7 +12985,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 661) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12861,7 +13001,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 616) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue(dayJI.getDayJiPMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12877,7 +13017,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 619) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue(dayJI.getDayJiPMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12893,7 +13033,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 6108) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12909,7 +13049,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 6107) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12926,7 +13066,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (dayJI.getDayJiPM() == 6106) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12942,11 +13082,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 625) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             cell.setCellStyle(cellStyle4BOPYG);
                         } else if (dayJI.getDayJiPM() == 301) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("√");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12962,7 +13102,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 302) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12978,7 +13118,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 312) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("●");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -12994,7 +13134,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 313) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("班");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13010,7 +13150,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 318) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13026,7 +13166,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 367) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13042,7 +13182,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 377) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13058,7 +13198,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 361) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13074,7 +13214,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 316) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue(dayJI.getDayJiPMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13090,7 +13230,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 319) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue(dayJI.getDayJiPMRemark());
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13106,7 +13246,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 3108) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13122,7 +13262,7 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 3107) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13139,7 +13279,7 @@ public class MKExcelUtil {
                             }
 
                         } else if (dayJI.getDayJiPM() == 3106) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("О");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13155,11 +13295,11 @@ public class MKExcelUtil {
                                 }
                             }
                         } else if (dayJI.getDayJiPM() == 325) {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             cell.setCellStyle(cellStyle4BOPY);
                         } else {
-                            cell = row2.createCell(4 + 30);
+                            cell = row2.createCell(5 + 30);
                             cell.setCellValue("");
                             if (week == 6 || week == 7 || isWeekEnd) {
                                 if (inComStr.equals(ymdStr)) {
@@ -13176,7 +13316,7 @@ public class MKExcelUtil {
                             }
                         }
                     } else {
-                        cell = row2.createCell(4 + 30);
+                        cell = row2.createCell(5 + 30);
                         cell.setCellValue("");
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -13193,7 +13333,7 @@ public class MKExcelUtil {
                         }
                     }
                     if (oh != null && oh.getDay31ExHours() != null) {
-                        cell = row3.createCell(4 + 30);
+                        cell = row3.createCell(5 + 30);
                         cell.setCellValue(oh.getDay31ExHours() == 0.0 ? "" : oh.getDay31ExHours().toString());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -13226,7 +13366,7 @@ public class MKExcelUtil {
                         }
 
                     } else {
-                        cell = row3.createCell(4 + 30);
+                        cell = row3.createCell(5 + 30);
                         cell.setCellValue(oh.getDay31ExHours() == null ? "" : oh.getDay31ExHours().toString());
                         if (week == 6 || week == 7 || isWeekEnd) {
                             if (inComStr.equals(ymdStr)) {
@@ -13263,164 +13403,179 @@ public class MKExcelUtil {
                 }
 
 
-                cell = row.createCell(3 + days + 1);
+                cell = row.createCell(4 + days + 1);
                 cell.setCellValue(oh.getZhengbanHours());
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 2);
+                cell = row.createCell(4 + days + 2);
                 cell.setCellValue(oh.getUsualExtHours());
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 3);
+                cell = row.createCell(4 + days + 3);
                 cell.setCellValue(oh.getWorkendHours());
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 4);
+                cell = row.createCell(4 + days + 4);
                 cell.setCellValue((oh.getChinaPaidLeave() == 0.0 ? "" : oh.getChinaPaidLeave()) + "");
                 cell.setCellStyle(cellStyleRR);
 
-                cell = row.createCell(3 + days + 5);
+                cell = row.createCell(4 + days + 5);
                 cell.setCellValue((oh.getOtherPaidLeave() == 0.0 ? "" : oh.getOtherPaidLeave()) + "");
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 6);
+                cell = row.createCell(4 + days + 6);
                 cell.setCellValue((oh.getLeaveOfAbsense() == 0.0 ? "" : oh.getLeaveOfAbsense()) + "");
                 cell.setCellStyle(cellStylePP);
 
-                cell = row.createCell(3 + days + 7);
+                cell = row.createCell(4 + days + 7);
                 cell.setCellValue((oh.getSickLeave() == 0.0 ? "" : oh.getSickLeave()) + "");
                 cell.setCellStyle(cellStyleBB);
 
 
-                cell = row.createCell(3 + days + 8);
+                cell = row.createCell(4 + days + 8);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 9);
-                cell.setCellValue(((oh.getFullWorkReword() == null || oh.getFullWorkReword() == 0.0) ? "" : oh.getFullWorkReword()) + "");
+                cell = row.createCell(4 + days + 9);
+                cell.setCellValue(((oh.getFullWorkReword() == null || oh.getFullWorkReword() == 0.0) ? "0" : oh.getFullWorkReword()) + "");
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 10);
+                cell = row.createCell(4 + days + 10);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 11);
+                cell = row.createCell(4 + days + 11);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
 
-                cell = row.createCell(3 + days + 12);
+                cell = row.createCell(4 + days + 12);
                 cell.setCellValue(((is == null || is.getEndowInsur() == null || is.getEndowInsur() == 0) ? "" : is.getEndowInsur()) + "");
                 cell.setCellStyle(cellStyleABC);
 
-                cell = row.createCell(3 + days + 13);
+                cell = row.createCell(4 + days + 13);
                 cell.setCellValue(((is == null || is.getMedicalInsur() == null || is.getMedicalInsur() == 0) ? "" : is.getMedicalInsur()).toString());
                 cell.setCellStyle(cellStyleABC);
 
-                cell = row.createCell(3 + days + 14);
+                cell = row.createCell(4 + days + 14);
                 cell.setCellValue(((is == null || is.getUnWorkInsur() == null || is.getUnWorkInsur() == 0) ? "" : is.getUnWorkInsur()).toString());
                 cell.setCellStyle(cellStyleABC);
 
-                cell = row.createCell(3 + days + 15);
+                cell = row.createCell(4 + days + 15);
                 cell.setCellValue(((af == null || af.getAccuFundFee() == null || af.getAccuFundFee() == 0) ? "" : af.getAccuFundFee()).toString());
                 cell.setCellStyle(cellStyleABC);
 
 
-                cell = row2.createCell(3 + days + 8);
+                cell = row2.createCell(4 + days + 8);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row2.createCell(3 + days + 9);
+                cell = row2.createCell(4 + days + 9);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row2.createCell(3 + days + 10);
+                cell = row2.createCell(4 + days + 10);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row2.createCell(3 + days + 11);
+                cell = row2.createCell(4 + days + 11);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row2.createCell(3 + days + 12);
+                cell = row2.createCell(4 + days + 12);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row2.createCell(3 + days + 13);
+                cell = row2.createCell(4 + days + 13);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row2.createCell(3 + days + 14);
+                cell = row2.createCell(4 + days + 14);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row2.createCell(3 + days + 15);
-                cell.setCellValue("");
-                cell.setCellStyle(cellStyle);
-
-
-                cell = row3.createCell(3 + days + 8);
-                cell.setCellValue("");
-                cell.setCellStyle(cellStyle);
-
-                cell = row3.createCell(3 + days + 9);
-                cell.setCellValue("");
-                cell.setCellStyle(cellStyle);
-
-                cell = row3.createCell(3 + days + 10);
-                cell.setCellValue("");
-                cell.setCellStyle(cellStyle);
-
-                cell = row3.createCell(3 + days + 11);
-                cell.setCellValue("");
-                cell.setCellStyle(cellStyle);
-
-                cell = row3.createCell(3 + days + 12);
-                cell.setCellValue("");
-                cell.setCellStyle(cellStyle);
-
-                cell = row3.createCell(3 + days + 13);
-                cell.setCellValue("");
-                cell.setCellStyle(cellStyle);
-
-                cell = row3.createCell(3 + days + 14);
-                cell.setCellValue("");
-                cell.setCellStyle(cellStyle);
-
-                cell = row3.createCell(3 + days + 15);
+                cell = row2.createCell(4 + days + 15);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
 
-                cell = row.createCell(3 + days + 16);
+                cell = row3.createCell(4 + days + 8);
+                cell.setCellValue("");
+                cell.setCellStyle(cellStyle);
+
+                cell = row3.createCell(4 + days + 9);
+                cell.setCellValue("");
+                cell.setCellStyle(cellStyle);
+
+                cell = row3.createCell(4 + days + 10);
+                cell.setCellValue("");
+                cell.setCellStyle(cellStyle);
+
+                cell = row3.createCell(4 + days + 11);
+                cell.setCellValue("");
+                cell.setCellStyle(cellStyle);
+
+                cell = row3.createCell(4 + days + 12);
+                cell.setCellValue("");
+                cell.setCellStyle(cellStyle);
+
+                cell = row3.createCell(4 + days + 13);
+                cell.setCellValue("");
+                cell.setCellStyle(cellStyle);
+
+                cell = row3.createCell(4 + days + 14);
+                cell.setCellValue("");
+                cell.setCellStyle(cellStyle);
+
+                cell = row3.createCell(4 + days + 15);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
 
-                cell = row.createCell(3 + days + 17);
+                cell = row.createCell(4 + days + 16);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row2.createCell(3 + days + 17);
+
+                cell = row.createCell(4 + days + 17);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row3.createCell(3 + days + 17);
+                cell = row2.createCell(4 + days + 17);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 18);
+                cell = row3.createCell(4 + days + 17);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 19);
+                cell = row.createCell(4 + days + 18);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
-                cell = row.createCell(3 + days + 20);
+                cell = row.createCell(4 + days + 19);
                 cell.setCellValue("");
                 cell.setCellStyle(cellStyle);
 
+                cell = row.createCell(4 + days + 20);
+                cell.setCellValue("");
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(4 + days + 21);
+                cell.setCellValue(oh.getCheckHours());
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(4 + days + 22);
+                cell.setCellValue(oh.getCheckHours() - oh.getZhengbanHours() - oh.getLeaveOfAbsense() - oh.getSickLeave());
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(4 + days + 23);
+                cell.setCellValue(oh.getLateminites());
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(4 + days + 24);
+                cell.setCellValue(oh.getLatetimes());
+                cell.setCellStyle(cellStyle);
 
                 region = new CellRangeAddress(beginRow - 3, beginRow - 1, 0, 0);
                 hssfSheet.addMergedRegion(region);
@@ -13447,7 +13602,8 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 1, 3 + days + 1);
+
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3, 3);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13455,7 +13611,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 2, 3 + days + 2);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 1, 4 + days + 1);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13463,7 +13619,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 3, 3 + days + 3);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 2, 4 + days + 2);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13471,7 +13627,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 4, 3 + days + 4);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 3, 4 + days + 3);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13479,7 +13635,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 5, 3 + days + 5);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 4, 4 + days + 4);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13487,7 +13643,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 6, 3 + days + 6);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 5, 4 + days + 5);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13495,7 +13651,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 7, 3 + days + 7);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 6, 4 + days + 6);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13503,7 +13659,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 8, 3 + days + 8);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 7, 4 + days + 7);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13511,7 +13667,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 9, 3 + days + 9);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 8, 4 + days + 8);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13519,7 +13675,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 10, 3 + days + 10);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 9, 4 + days + 9);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13527,7 +13683,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 11, 3 + days + 11);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 10, 4 + days + 10);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13535,7 +13691,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 16, 3 + days + 16);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 11, 4 + days + 11);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13543,7 +13699,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 18, 3 + days + 18);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 16, 4 + days + 16);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13551,7 +13707,7 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 19, 3 + days + 19);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 18, 4 + days + 18);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
@@ -13559,7 +13715,48 @@ public class MKExcelUtil {
                 RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
                 RegionUtil.setBorderRight(1, region, hssfSheet, wb);
 
-                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 3 + days + 20, 3 + days + 20);
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 19, 4 + days + 19);
+                hssfSheet.addMergedRegion(region);
+
+                RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+                RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+                RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+                RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 20, 4 + days + 20);
+                hssfSheet.addMergedRegion(region);
+
+                RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+                RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+                RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+                RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 21, 4 + days + 21);
+                hssfSheet.addMergedRegion(region);
+
+                RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+                RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+                RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+                RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 22, 4 + days + 22);
+                hssfSheet.addMergedRegion(region);
+
+                RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+                RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+                RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+                RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 23, 4 + days + 23);
+                hssfSheet.addMergedRegion(region);
+
+                RegionUtil.setBorderBottom(1, region, hssfSheet, wb);
+                RegionUtil.setBorderTop(1, region, hssfSheet, wb);
+                RegionUtil.setBorderLeft(1, region, hssfSheet, wb);
+                RegionUtil.setBorderRight(1, region, hssfSheet, wb);
+
+
+                region = new CellRangeAddress(beginRow - 3, beginRow - 1, 4 + days + 24, 4 + days + 24);
                 hssfSheet.addMergedRegion(region);
 
                 RegionUtil.setBorderBottom(1, region, hssfSheet, wb);

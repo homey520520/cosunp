@@ -288,7 +288,7 @@ public interface PersonMapper {
     @Select("select empNo from employee where name = #{name} and isQuit = 0 limit 1 ")
     String getEmpNoByNameA(String name);
 
-    @Update("update qyweixinbd set empNo = #{empNo} where userid = #{userId} and isQuit = 0 ")
+    @Update("update qyweixinbd set empNo = #{empNo} where userid = #{userId} ")
     void saveEmpNoByUserId(String userId, String empNo);
 
     @Select("select ot.* from outdan ot left join employee ee on ot.empNo = ee.empNo  where ee.name = #{name} and ot.date = #{dateStr}")
@@ -1571,6 +1571,9 @@ public interface PersonMapper {
     @Update("update employee set isQuit = 0 where empNo = #{empNo} ")
     void updateEmployeeIsQuitExsit(String empNo);
 
+    @Update("delete from employee  where empNo = #{empNo} ")
+    void deleteEmployEEbYeMPnO(String empNo);
+
     @Insert("insert into position (positionName,positionLevel) values(#{positionName},#{positionLevel})")
     void addPositionByNameandPositionLevel(String positionName, String positionLevel);
 
@@ -1652,7 +1655,7 @@ public interface PersonMapper {
 
 
     @Select("SELECT\n" +
-            "\tmk.*, ee.`name` AS nameReal\n" +
+            "\tmk.*, ee.`name` AS nameReal,date_format(ee.incompdate, '%Y-%m') as imCYM,date_format(incompdate, '%d') as imCYMDay\n" +
             "FROM\n" +
             "\tmonthkqinfo mk\n" +
             "LEFT JOIN employee ee ON ee.empno = mk.empNo" +
@@ -1950,6 +1953,8 @@ public interface PersonMapper {
             "\tpOffTime,\n" +
             "\textWorkOnTime,\n" +
             "\textWorkOffTime,\n" +
+            "\tlateminitesa,\n" +
+            "\tlateminitesp,\n" +
             "\trensheCheck) values (" +
             "#{enrollNumber},\n" +
             "\t#{yearMonth},\n" +
@@ -1965,6 +1970,8 @@ public interface PersonMapper {
             "\t#{pOffTime},\n" +
             "\t#{extWorkOnTime},\n" +
             "\t#{extWorkOffTime},\n" +
+            "\t#{lateminitesa},\n" +
+            "\t#{lateminitesp},\n" +
             "\t#{rensheCheck})")
     void saveAllNewKQBeansToMysql(KQBean kqBean);
 
@@ -2792,6 +2799,20 @@ public interface PersonMapper {
     String getWorkDateByMonthC(String yearMonth);
 
 
+@Select("SELECT\n" +
+        "\twd.workdate as workdate\n" +
+        "FROM\n" +
+        "\temployee ee\n" +
+        "JOIN position n ON n.id = ee.positionId\n" +
+        "LEFT JOIN workdate wd ON wd.positionLevel = n.positionLevel\n" +
+        "WHERE\n" +
+        "\twd.type = 0\n" +
+        "AND wd.`month` = #{yearMonth} \n" +
+        "AND ee.empno = #{empNo} \n" +
+        "limit 1")
+    WorkDate getWorkDate22222ByEmpNo(String empNo,String yearMonth);
+
+
     @Select("SELECT\n" +
             "\tmax(workdate) as workdate\n" +
             "FROM\n" +
@@ -3020,6 +3041,43 @@ public interface PersonMapper {
     @Update("update position set positionName =  #{positionName},positionLevel=#{positionLevel} where id = #{id} ")
     void saveUpdateData(Integer id, String positionName, String positionLevel);
 
+
+    @Select("SELECT\n" +
+            "\tsum(kb.lateminitesa) + sum(kb.lateminitesp) AS sumlateminutes\n" +
+            "FROM\n" +
+            "\tkqbean kb\n" +
+            "LEFT JOIN qyweixinbd ee ON kb.enrollNumber = ee.userid\n" +
+            "WHERE\n" +
+            "\tee.empNo = #{empNo}\n" +
+            "AND kb.yearMonth = #{yearMon}")
+    int getLateMinutesByEmpNoAndYearMonth(String empNo,String yearMon);
+
+    @Select("SELECT\n" +
+            "\tsum(ab.sumlateminutes)\n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tcount(kb.lateminitesa) AS sumlateminutes\n" +
+            "\t\tFROM\n" +
+            "\t\t\tkqbean kb\n" +
+            "\t\tLEFT JOIN qyweixinbd ee ON kb.enrollNumber = ee.userid\n" +
+            "\t\tWHERE\n" +
+            "\t\t\tee.empNo = #{empNo}\n" +
+            "\t\tAND kb.yearMonth = #{yearMon}\n" +
+            "\t\tAND (lateminitesa > 0)\n" +
+            "\t\tUNION\n" +
+            "\t\t\tSELECT\n" +
+            "\t\t\t\tcount(kb.lateminitesp) AS sumlateminutes\n" +
+            "\t\t\tFROM\n" +
+            "\t\t\t\tkqbean kb\n" +
+            "\t\t\tLEFT JOIN qyweixinbd ee ON kb.enrollNumber = ee.userid\n" +
+            "\t\t\tWHERE\n" +
+            "\t\t\t\tee.empNo = #{empNo}\n" +
+            "\t\t\tAND kb.yearMonth = #{yearMon}\n" +
+            "\t\t\tAND (lateminitesp > 0)\n" +
+            "\t) AS ab")
+    int getLateTimesByEmpNoAndYearMonth(String empNo,String yearMon);
+
     @Update("update monthkqinfo " +
             "set zhengbanHours =  #{zhengbanHours}," +
             "usualExtHours = #{usualExtHours}, " +
@@ -3028,7 +3086,10 @@ public interface PersonMapper {
             "otherPaidLeave = #{otherPaidLeave}, " +
             "leaveOfAbsense = #{leaveOfAbsense}, " +
             "sickLeave = #{sickLeave}, " +
-            "fullWorkReword = #{fullWorkReword} " +
+            "lateminites = #{lateminites}, " +
+            "latetimes = #{latetimes}, " +
+            "fullWorkReword = #{fullWorkReword}, " +
+            "checkHours = #{checkHours} " +
             "where id = #{id} ")
     void updateMKById(MonthKQInfo mk);
 
@@ -5346,7 +5407,7 @@ public interface PersonMapper {
                     "LEFT JOIN position n ON n.id = ee.positionId where 1=1 \n");
             if (dateStr != null && dateStr.size() > 0) {
                 if (dateStr.size() == 1) {
-                    sb.append(" and zk.date in ('" + dateStr.get(0).getClockInDateStr() + "')");
+                    sb.append(" and  zk.date in ('" + dateStr.get(0).getClockInDateStr() + "')");
                 } else if (dateStr.size() >= 2) {
                     //zk.enrollNumber = 'LuLiaoLiao' and
                     sb.append(" and   zk.date in (");

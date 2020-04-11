@@ -28,9 +28,26 @@ public class KQBean implements Serializable {
     private String remark;
     private Integer clockResultByRenShi;
     private String havePinShi;
-
+    private int lateminitesa;
+    private int lateminitesp;
     private String positionLevel;
     private Integer workType;
+
+    public int getLateminitesa() {
+        return lateminitesa;
+    }
+
+    public void setLateminitesa(int lateminitesa) {
+        this.lateminitesa = lateminitesa;
+    }
+
+    public int getLateminitesp() {
+        return lateminitesp;
+    }
+
+    public void setLateminitesp(int lateminitesp) {
+        this.lateminitesp = lateminitesp;
+    }
 
     public Integer getMachineNum() {
         return machineNum;

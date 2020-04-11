@@ -1,10 +1,14 @@
 package com.cosun.cosunp.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cosun.cosunp.entity.*;
 import com.cosun.cosunp.mapper.PersonMapper;
 import com.cosun.cosunp.mapper.UserInfoMapper;
 import com.cosun.cosunp.service.IPersonServ;
 import com.cosun.cosunp.tool.*;
+import com.cosun.cosunp.weixin.NetWorkHelper;
+import com.cosun.cosunp.weixin.WeiXinUtil;
 import jxl.Cell;
 import jxl.CellType;
 import jxl.DateCell;
@@ -16,6 +20,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.sql.Time;
 import java.text.DateFormat;
@@ -34,6 +41,17 @@ import java.util.*;
 public class PersonServiceImpl implements IPersonServ {
 
     private static Logger logger = LogManager.getLogger(PersonServiceImpl.class);
+
+    private static String zkIP01 = "192.168.2.12";
+    private static String zkIP02 = "192.168.2.11";
+    private static String zkIP05 = "192.168.2.13";
+    private static String zkIP03 = "192.168.2.10";
+    private static String zkIP04 = "192.168.1.18";
+    private static Integer zkPort = 4370;
+
+
+    private static JedisPool pool;
+    private static Jedis jedis;
 
     @Autowired
     private UserInfoMapper userInfoMapper;
@@ -1012,19 +1030,6 @@ public class PersonServiceImpl implements IPersonServ {
 
     }
 
-    public void fillEmpNoWhenQYWXNull() throws Exception {
-        List<WeiXinUsrId> allWXUserId = personMapper.getAllWeiXinUserId();
-        String empNo;
-        for (WeiXinUsrId wxu : allWXUserId) {
-            if (wxu.getEmpNo() == null || wxu.getEmpNo().trim().length() == 0) {
-                empNo = personMapper.getEmpNoByNameA(wxu.getName());
-                if (empNo != null) {
-                    personMapper.saveEmpNoByUserId(wxu.getUserid(), empNo);
-                }
-            }
-        }
-    }
-
 
     public void updateEmployeeData(MultipartFile educationLeFile, MultipartFile sateListAndLeaCertiFile,
                                    MultipartFile otherCertiFile, Employee employee) throws Exception {
@@ -1275,7 +1280,7 @@ public class PersonServiceImpl implements IPersonServ {
             jxl.Sheet[] sheets = Workbook.getSheets();
             xlsfSheet = sheets[0];
             xlsfSheet2 = sheets[1];
-            xlsfSheet3 = sheets[3];
+            xlsfSheet3 = sheets[2];
         }
         List<Employee> employeeList = new ArrayList<Employee>();
         Employee em = null;
@@ -1724,295 +1729,295 @@ public class PersonServiceImpl implements IPersonServ {
                 if (emm.getEmpNo() != null && emm.getEmpNo().trim().length() > 0) {
                     mysqlEm = personMapper.getEmployeeByEmpNoo(emm.getEmpNo());
                     if (mysqlEm != null) {
-                        personMapper.updateEmployeeIsQuitExsit(mysqlEm.getEmpNo());
-                    } else {
-                        Dept dept = personMapper.getDeptByName(emm.getDeptName());
-                        Position position = personMapper.getPositionByName(emm.getPositionName());
-                        emm.setDeptId(dept.getId());
-                        emm.setPositionId(position.getId());
-                        emm.setSex("男".equals(emm.getSexStr()) ? 1 : 0);
-
-                        if ("已".equals(emm.getMarriagedStr())) {
-                            emm.setMarriaged(1);
-                        } else if ("未".equals(emm.getMarriagedStr()) || "否".equals(emm.getMarriagedStr())) {
-                            emm.setMarriaged(0);
-                        } else if ("离".equals(emm.getMarriagedStr())) {
-                            emm.setMarriaged(2);
-                        }
-
-                        if ("壮".equals(emm.getNationStr())) {
-                            emm.setNation(1);
-                        } else if ("藏".equals(emm.getNationStr())) {
-                            emm.setNation(2);
-                        } else if ("裕固".equals(emm.getNationStr())) {
-                            emm.setNation(3);
-                        } else if ("彝".equals(emm.getNationStr())) {
-                            emm.setNation(4);
-                        } else if ("瑶".equals(emm.getNationStr())) {
-                            emm.setNation(5);
-                        } else if ("锡伯".equals(emm.getNationStr())) {
-                            emm.setNation(6);
-                        } else if ("乌孜别克".equals(emm.getNationStr())) {
-                            emm.setNation(7);
-                        } else if ("维吾尔".equals(emm.getNationStr())) {
-                            emm.setNation(8);
-                        } else if ("佤".equals(emm.getNationStr())) {
-                            emm.setNation(9);
-                        } else if ("土家".equals(emm.getNationStr())) {
-                            emm.setNation(10);
-                        } else if ("土".equals(emm.getNationStr())) {
-                            emm.setNation(11);
-                        } else if ("塔塔尔".equals(emm.getNationStr())) {
-                            emm.setNation(12);
-                        } else if ("塔吉克".equals(emm.getNationStr())) {
-                            emm.setNation(13);
-                        } else if ("水".equals(emm.getNationStr())) {
-                            emm.setNation(14);
-                        } else if ("畲".equals(emm.getNationStr())) {
-                            emm.setNation(15);
-                        } else if ("撒拉".equals(emm.getNationStr())) {
-                            emm.setNation(16);
-                        } else if ("羌".equals(emm.getNationStr())) {
-                            emm.setNation(17);
-                        } else if ("普米".equals(emm.getNationStr())) {
-                            emm.setNation(18);
-                        } else if ("怒".equals(emm.getNationStr())) {
-                            emm.setNation(19);
-                        } else if ("纳西".equals(emm.getNationStr())) {
-                            emm.setNation(20);
-                        } else if ("仫佬".equals(emm.getNationStr())) {
-                            emm.setNation(21);
-                        } else if ("苗".equals(emm.getNationStr())) {
-                            emm.setNation(22);
-                        } else if ("蒙古".equals(emm.getNationStr())) {
-                            emm.setNation(23);
-                        } else if ("门巴".equals(emm.getNationStr())) {
-                            emm.setNation(24);
-                        } else if ("毛南".equals(emm.getNationStr())) {
-                            emm.setNation(25);
-                        } else if ("满".equals(emm.getNationStr())) {
-                            emm.setNation(26);
-                        } else if ("珞巴".equals(emm.getNationStr())) {
-                            emm.setNation(27);
-                        } else if ("僳僳".equals(emm.getNationStr())) {
-                            emm.setNation(28);
-                        } else if ("黎".equals(emm.getNationStr())) {
-                            emm.setNation(29);
-                        } else if ("拉祜".equals(emm.getNationStr())) {
-                            emm.setNation(30);
-                        } else if ("柯尔克孜".equals(emm.getNationStr())) {
-                            emm.setNation(31);
-                        } else if ("景颇".equals(emm.getNationStr())) {
-                            emm.setNation(32);
-                        } else if ("京".equals(emm.getNationStr())) {
-                            emm.setNation(33);
-                        } else if ("基诺".equals(emm.getNationStr())) {
-                            emm.setNation(34);
-                        } else if ("回".equals(emm.getNationStr())) {
-                            emm.setNation(35);
-                        } else if ("赫哲".equals(emm.getNationStr())) {
-                            emm.setNation(36);
-                        } else if ("哈萨克".equals(emm.getNationStr())) {
-                            emm.setNation(37);
-                        } else if ("哈尼".equals(emm.getNationStr())) {
-                            emm.setNation(38);
-                        } else if ("仡佬".equals(emm.getNationStr())) {
-                            emm.setNation(39);
-                        } else if ("高山".equals(emm.getNationStr())) {
-                            emm.setNation(40);
-                        } else if ("鄂温克".equals(emm.getNationStr())) {
-                            emm.setNation(41);
-                        } else if ("俄罗斯".equals(emm.getNationStr())) {
-                            emm.setNation(42);
-                        } else if ("鄂伦春".equals(emm.getNationStr())) {
-                            emm.setNation(43);
-                        } else if ("独龙".equals(emm.getNationStr())) {
-                            emm.setNation(44);
-                        } else if ("东乡".equals(emm.getNationStr())) {
-                            emm.setNation(45);
-                        } else if ("侗".equals(emm.getNationStr())) {
-                            emm.setNation(46);
-                        } else if ("德昂".equals(emm.getNationStr())) {
-                            emm.setNation(47);
-                        } else if ("傣".equals(emm.getNationStr())) {
-                            emm.setNation(48);
-                        } else if ("达斡尔".equals(emm.getNationStr())) {
-                            emm.setNation(49);
-                        } else if ("朝鲜".equals(emm.getNationStr())) {
-                            emm.setNation(50);
-                        } else if ("布依".equals(emm.getNationStr())) {
-                            emm.setNation(51);
-                        } else if ("布朗".equals(emm.getNationStr())) {
-                            emm.setNation(52);
-                        } else if ("保安".equals(emm.getNationStr())) {
-                            emm.setNation(53);
-                        } else if ("白".equals(emm.getNationStr())) {
-                            emm.setNation(54);
-                        } else if ("阿昌".equals(emm.getNationStr())) {
-                            emm.setNation(55);
-                        } else if ("汉".equals(emm.getNationStr())) {
-                            emm.setNation(56);
-                        }
-
-
-                        if ("北京".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(1);
-                        } else if ("上海".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(2);
-                        } else if ("广东".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(3);
-                        } else if ("河北".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(4);
-                        } else if ("山西".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(5);
-                        } else if ("辽宁".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(6);
-                        } else if ("吉林".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(7);
-                        } else if ("黑龙江".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(8);
-                        } else if ("江苏".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(9);
-                        } else if ("浙江".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(10);
-                        } else if ("安徽".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(11);
-                        } else if ("福建".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(12);
-                        } else if ("江西".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(13);
-                        } else if ("山东".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(14);
-                        } else if ("河南".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(15);
-                        } else if ("湖北".equals(emm.getNativePlaStr()) || "武汉".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(16);
-                        } else if ("湖南".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(17);
-                        } else if ("天津".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(18);
-                        } else if ("陕西".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(19);
-                        } else if ("四川".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(20);
-                        } else if ("台湾".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(21);
-                        } else if ("云南".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(22);
-                        } else if ("青海".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(23);
-                        } else if ("甘肃".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(24);
-                        } else if ("海南".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(25);
-                        } else if ("贵州".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(26);
-                        } else if ("重庆".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(27);
-                        } else if ("新疆".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(28);
-                        } else if ("广西".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(29);
-                        } else if ("宁夏".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(30);
-                        } else if ("内蒙古".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(31);
-                        } else if ("西藏".equals(emm.getNativePlaStr())) {
-                            emm.setNativePla(32);
-                        }
-
-                        if ("小学".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(1);
-                        } else if ("初中".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(2);
-                        } else if ("高中".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(3);
-                        } else if ("技校".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(4);
-                        } else if ("中技".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(5);
-                        } else if ("中专".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(6);
-                        } else if ("大专".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(7);
-                        } else if ("本科".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(8);
-                        } else if ("研究生".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(9);
-                        } else if ("硕士".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(10);
-                        } else if ("博士".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(11);
-                        } else if ("MBA".equals(emm.getEducationLeStr())) {
-                            emm.setEducationLe(12);
-                        }
-
-                        emm.setScreAgreement("有".equals(emm.getScreAgreementStr()) || "是".equals(emm.getScreAgreementStr()) ? 1 : 0);
-
-                        if ("离职和社保".equals(emm.getSateListAndLeaCertiStr()) || "是".equals(emm.getSateListAndLeaCertiStr())) {
-                            emm.setSateListAndLeaCerti(1);
-                        } else if ("无".equals(emm.getSateListAndLeaCertiStr())) {
-                            emm.setSateListAndLeaCerti(0);
-                        } else if ("社保".equals(emm.getSateListAndLeaCertiStr())) {
-                            emm.setSateListAndLeaCerti(2);
-                        } else if ("离职".equals(emm.getSateListAndLeaCertiStr())) {
-                            emm.setSateListAndLeaCerti(3);
-                        }
-
-                        if ("毕业证".equals(emm.getOtherCertiStr())) {
-                            emm.setOtherCerti(1);
-                        } else if ("电工证".equals(emm.getOtherCertiStr())) {
-                            emm.setOtherCerti(2);
-                        } else if ("焊工证".equals(emm.getOtherCertiStr())) {
-                            emm.setOtherCerti(3);
-                        } else if ("结婚证".equals(emm.getOtherCertiStr())) {
-                            emm.setOtherCerti(4);
-                        }
-
-
-                        if ("健康证".equals(emm.getHealthCertiStr()) || "有".equals(emm.getHealthCertiStr()) || "是".equals(emm.getHealthCertiStr())) {
-                            emm.setHealthCerti(1);
-                        } else if ("体检单".equals(emm.getHealthCertiStr())) {
-                            emm.setHealthCerti(2);
-                        } else if ("职业病体检".equals(emm.getHealthCertiStr())) {
-                            emm.setHealthCerti(3);
-                        } else if ("无".equals(emm.getHealthCertiStr())) {
-                            emm.setHealthCerti(0);
-                        } else if (emm.getSateListAndLeaCertiStr() == null) {
-                            emm.setHealthCerti(0);
-                        }
-
-                        if ("总监".equals(emm.getPositionAttrIdStr())) {
-                            emm.setPositionAttrId(1);
-                        } else if ("总经理".equals(emm.getPositionAttrIdStr())) {
-                            emm.setPositionAttrId(2);
-                        } else if ("副总经理".equals(emm.getPositionAttrIdStr())) {
-                            emm.setPositionAttrId(3);
-                        } else if ("经理".equals(emm.getPositionAttrIdStr())) {
-                            emm.setPositionAttrId(4);
-                        } else if ("主管".equals(emm.getPositionAttrIdStr())) {
-                            emm.setPositionAttrId(5);
-                        } else if ("组长".equals(emm.getPositionAttrIdStr())) {
-                            emm.setPositionAttrId(6);
-                        } else if ("职员".equals(emm.getPositionAttrIdStr())) {
-                            emm.setPositionAttrId(7);
-                        }
-                        UserInfo userInfo = personMapper.getUserInfoByEmpno(emm.getEmpNo());
-                        if (userInfo == null) {
-                            userInfo = new UserInfo();
-                            userInfo.setEmpNo(emm.getEmpNo());
-                            userInfo.setFullName(emm.getName());
-                            userInfo.setUserName(emm.getEmpNo());
-                            userInfo.setUserPwd("cosun888");
-                            userInfo.setState(0);
-                            userInfo.setUseruploadright(1);
-                            userInfo.setUserActor(emm.getPositionAttrId());
-                            userInfoMapper.saveUserInfoByBean(userInfo);
-                        }
-
-                        personMapper.saveEmployeeByBean(emm);
+                        personMapper.deleteEmployEEbYeMPnO(mysqlEm.getEmpNo());
                     }
+                    Dept dept = personMapper.getDeptByName(emm.getDeptName());
+                    Position position = personMapper.getPositionByName(emm.getPositionName());
+                    emm.setDeptId(dept.getId());
+                    emm.setPositionId(position.getId());
+                    emm.setSex("男".equals(emm.getSexStr()) ? 1 : 0);
+
+                    if ("已".equals(emm.getMarriagedStr())) {
+                        emm.setMarriaged(1);
+                    } else if ("未".equals(emm.getMarriagedStr()) || "否".equals(emm.getMarriagedStr())) {
+                        emm.setMarriaged(0);
+                    } else if ("离".equals(emm.getMarriagedStr())) {
+                        emm.setMarriaged(2);
+                    }
+
+                    if ("壮".equals(emm.getNationStr())) {
+                        emm.setNation(1);
+                    } else if ("藏".equals(emm.getNationStr())) {
+                        emm.setNation(2);
+                    } else if ("裕固".equals(emm.getNationStr())) {
+                        emm.setNation(3);
+                    } else if ("彝".equals(emm.getNationStr())) {
+                        emm.setNation(4);
+                    } else if ("瑶".equals(emm.getNationStr())) {
+                        emm.setNation(5);
+                    } else if ("锡伯".equals(emm.getNationStr())) {
+                        emm.setNation(6);
+                    } else if ("乌孜别克".equals(emm.getNationStr())) {
+                        emm.setNation(7);
+                    } else if ("维吾尔".equals(emm.getNationStr())) {
+                        emm.setNation(8);
+                    } else if ("佤".equals(emm.getNationStr())) {
+                        emm.setNation(9);
+                    } else if ("土家".equals(emm.getNationStr())) {
+                        emm.setNation(10);
+                    } else if ("土".equals(emm.getNationStr())) {
+                        emm.setNation(11);
+                    } else if ("塔塔尔".equals(emm.getNationStr())) {
+                        emm.setNation(12);
+                    } else if ("塔吉克".equals(emm.getNationStr())) {
+                        emm.setNation(13);
+                    } else if ("水".equals(emm.getNationStr())) {
+                        emm.setNation(14);
+                    } else if ("畲".equals(emm.getNationStr())) {
+                        emm.setNation(15);
+                    } else if ("撒拉".equals(emm.getNationStr())) {
+                        emm.setNation(16);
+                    } else if ("羌".equals(emm.getNationStr())) {
+                        emm.setNation(17);
+                    } else if ("普米".equals(emm.getNationStr())) {
+                        emm.setNation(18);
+                    } else if ("怒".equals(emm.getNationStr())) {
+                        emm.setNation(19);
+                    } else if ("纳西".equals(emm.getNationStr())) {
+                        emm.setNation(20);
+                    } else if ("仫佬".equals(emm.getNationStr())) {
+                        emm.setNation(21);
+                    } else if ("苗".equals(emm.getNationStr())) {
+                        emm.setNation(22);
+                    } else if ("蒙古".equals(emm.getNationStr())) {
+                        emm.setNation(23);
+                    } else if ("门巴".equals(emm.getNationStr())) {
+                        emm.setNation(24);
+                    } else if ("毛南".equals(emm.getNationStr())) {
+                        emm.setNation(25);
+                    } else if ("满".equals(emm.getNationStr())) {
+                        emm.setNation(26);
+                    } else if ("珞巴".equals(emm.getNationStr())) {
+                        emm.setNation(27);
+                    } else if ("僳僳".equals(emm.getNationStr())) {
+                        emm.setNation(28);
+                    } else if ("黎".equals(emm.getNationStr())) {
+                        emm.setNation(29);
+                    } else if ("拉祜".equals(emm.getNationStr())) {
+                        emm.setNation(30);
+                    } else if ("柯尔克孜".equals(emm.getNationStr())) {
+                        emm.setNation(31);
+                    } else if ("景颇".equals(emm.getNationStr())) {
+                        emm.setNation(32);
+                    } else if ("京".equals(emm.getNationStr())) {
+                        emm.setNation(33);
+                    } else if ("基诺".equals(emm.getNationStr())) {
+                        emm.setNation(34);
+                    } else if ("回".equals(emm.getNationStr())) {
+                        emm.setNation(35);
+                    } else if ("赫哲".equals(emm.getNationStr())) {
+                        emm.setNation(36);
+                    } else if ("哈萨克".equals(emm.getNationStr())) {
+                        emm.setNation(37);
+                    } else if ("哈尼".equals(emm.getNationStr())) {
+                        emm.setNation(38);
+                    } else if ("仡佬".equals(emm.getNationStr())) {
+                        emm.setNation(39);
+                    } else if ("高山".equals(emm.getNationStr())) {
+                        emm.setNation(40);
+                    } else if ("鄂温克".equals(emm.getNationStr())) {
+                        emm.setNation(41);
+                    } else if ("俄罗斯".equals(emm.getNationStr())) {
+                        emm.setNation(42);
+                    } else if ("鄂伦春".equals(emm.getNationStr())) {
+                        emm.setNation(43);
+                    } else if ("独龙".equals(emm.getNationStr())) {
+                        emm.setNation(44);
+                    } else if ("东乡".equals(emm.getNationStr())) {
+                        emm.setNation(45);
+                    } else if ("侗".equals(emm.getNationStr())) {
+                        emm.setNation(46);
+                    } else if ("德昂".equals(emm.getNationStr())) {
+                        emm.setNation(47);
+                    } else if ("傣".equals(emm.getNationStr())) {
+                        emm.setNation(48);
+                    } else if ("达斡尔".equals(emm.getNationStr())) {
+                        emm.setNation(49);
+                    } else if ("朝鲜".equals(emm.getNationStr())) {
+                        emm.setNation(50);
+                    } else if ("布依".equals(emm.getNationStr())) {
+                        emm.setNation(51);
+                    } else if ("布朗".equals(emm.getNationStr())) {
+                        emm.setNation(52);
+                    } else if ("保安".equals(emm.getNationStr())) {
+                        emm.setNation(53);
+                    } else if ("白".equals(emm.getNationStr())) {
+                        emm.setNation(54);
+                    } else if ("阿昌".equals(emm.getNationStr())) {
+                        emm.setNation(55);
+                    } else if ("汉".equals(emm.getNationStr())) {
+                        emm.setNation(56);
+                    }
+
+
+                    if ("北京".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(1);
+                    } else if ("上海".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(2);
+                    } else if ("广东".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(3);
+                    } else if ("河北".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(4);
+                    } else if ("山西".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(5);
+                    } else if ("辽宁".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(6);
+                    } else if ("吉林".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(7);
+                    } else if ("黑龙江".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(8);
+                    } else if ("江苏".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(9);
+                    } else if ("浙江".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(10);
+                    } else if ("安徽".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(11);
+                    } else if ("福建".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(12);
+                    } else if ("江西".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(13);
+                    } else if ("山东".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(14);
+                    } else if ("河南".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(15);
+                    } else if ("湖北".equals(emm.getNativePlaStr()) || "武汉".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(16);
+                    } else if ("湖南".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(17);
+                    } else if ("天津".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(18);
+                    } else if ("陕西".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(19);
+                    } else if ("四川".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(20);
+                    } else if ("台湾".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(21);
+                    } else if ("云南".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(22);
+                    } else if ("青海".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(23);
+                    } else if ("甘肃".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(24);
+                    } else if ("海南".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(25);
+                    } else if ("贵州".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(26);
+                    } else if ("重庆".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(27);
+                    } else if ("新疆".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(28);
+                    } else if ("广西".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(29);
+                    } else if ("宁夏".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(30);
+                    } else if ("内蒙古".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(31);
+                    } else if ("西藏".equals(emm.getNativePlaStr())) {
+                        emm.setNativePla(32);
+                    }
+
+                    if ("小学".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(1);
+                    } else if ("初中".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(2);
+                    } else if ("高中".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(3);
+                    } else if ("技校".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(4);
+                    } else if ("中技".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(5);
+                    } else if ("中专".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(6);
+                    } else if ("大专".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(7);
+                    } else if ("本科".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(8);
+                    } else if ("研究生".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(9);
+                    } else if ("硕士".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(10);
+                    } else if ("博士".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(11);
+                    } else if ("MBA".equals(emm.getEducationLeStr())) {
+                        emm.setEducationLe(12);
+                    }
+
+                    emm.setScreAgreement("有".equals(emm.getScreAgreementStr()) || "是".equals(emm.getScreAgreementStr()) ? 1 : 0);
+
+                    if ("离职和社保".equals(emm.getSateListAndLeaCertiStr()) || "是".equals(emm.getSateListAndLeaCertiStr())) {
+                        emm.setSateListAndLeaCerti(1);
+                    } else if ("无".equals(emm.getSateListAndLeaCertiStr())) {
+                        emm.setSateListAndLeaCerti(0);
+                    } else if ("社保".equals(emm.getSateListAndLeaCertiStr())) {
+                        emm.setSateListAndLeaCerti(2);
+                    } else if ("离职".equals(emm.getSateListAndLeaCertiStr())) {
+                        emm.setSateListAndLeaCerti(3);
+                    }
+
+                    if ("毕业证".equals(emm.getOtherCertiStr())) {
+                        emm.setOtherCerti(1);
+                    } else if ("电工证".equals(emm.getOtherCertiStr())) {
+                        emm.setOtherCerti(2);
+                    } else if ("焊工证".equals(emm.getOtherCertiStr())) {
+                        emm.setOtherCerti(3);
+                    } else if ("结婚证".equals(emm.getOtherCertiStr())) {
+                        emm.setOtherCerti(4);
+                    }
+
+
+                    if ("健康证".equals(emm.getHealthCertiStr()) || "有".equals(emm.getHealthCertiStr()) || "是".equals(emm.getHealthCertiStr())) {
+                        emm.setHealthCerti(1);
+                    } else if ("体检单".equals(emm.getHealthCertiStr())) {
+                        emm.setHealthCerti(2);
+                    } else if ("职业病体检".equals(emm.getHealthCertiStr())) {
+                        emm.setHealthCerti(3);
+                    } else if ("无".equals(emm.getHealthCertiStr())) {
+                        emm.setHealthCerti(0);
+                    } else if (emm.getSateListAndLeaCertiStr() == null) {
+                        emm.setHealthCerti(0);
+                    }
+
+                    if ("总监".equals(emm.getPositionAttrIdStr())) {
+                        emm.setPositionAttrId(1);
+                    } else if ("总经理".equals(emm.getPositionAttrIdStr())) {
+                        emm.setPositionAttrId(2);
+                    } else if ("副总经理".equals(emm.getPositionAttrIdStr())) {
+                        emm.setPositionAttrId(3);
+                    } else if ("经理".equals(emm.getPositionAttrIdStr())) {
+                        emm.setPositionAttrId(4);
+                    } else if ("主管".equals(emm.getPositionAttrIdStr())) {
+                        emm.setPositionAttrId(5);
+                    } else if ("组长".equals(emm.getPositionAttrIdStr())) {
+                        emm.setPositionAttrId(6);
+                    } else if ("职员".equals(emm.getPositionAttrIdStr())) {
+                        emm.setPositionAttrId(7);
+                    }
+                    UserInfo userInfo = personMapper.getUserInfoByEmpno(emm.getEmpNo());
+                    if (userInfo == null) {
+                        userInfo = new UserInfo();
+                        userInfo.setEmpNo(emm.getEmpNo());
+                        userInfo.setFullName(emm.getName());
+                        userInfo.setUserName(emm.getEmpNo());
+                        userInfo.setUserPwd("cosun888");
+                        userInfo.setState(0);
+                        userInfo.setUseruploadright(1);
+                        userInfo.setUserActor(emm.getPositionAttrId());
+                        userInfoMapper.saveUserInfoByBean(userInfo);
+                    }
+
+                    personMapper.saveEmployeeByBean(emm);
                 }
+
             }
 
             LinShiEmp lse = null;
@@ -3865,6 +3870,8 @@ public class PersonServiceImpl implements IPersonServ {
         Double aHours = 0.0;
         Double pHours = 0.0;
         Integer clockRes = 17;
+        int lateminites = 0;
+        int lateminitesp = 0;
         Double linchenJiaBan = 0.0;
 
         DaKaPianCha dkpc = personMapper.getDaKaPianCha();
@@ -3889,6 +3896,8 @@ public class PersonServiceImpl implements IPersonServ {
                             pHours = 0.0;
                             clockRes = 17;
                             linchenJiaBan = 0.0;
+                            lateminites = 0;
+                            lateminitesp = 0;
                             co = kqBeans.get(k);
                             String[] coDay = co.getDateStr().split("-");
                             if (em.getName() != null && co.getName() != null && em.getName().equals(co.getName()) && date.equals(Integer.valueOf(coDay[2]))) {
@@ -4291,6 +4300,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                             if (tii.after(afterWS.getMorningOn()) && !tii.after(afterWS.getMorningOff())) {
                                                                 if (pon) {
                                                                     aHours = DateUtil.calcuHours(tii, workSet.getMorningOff());
+                                                                    lateminites = DateUtil.calcuLateMinutes(tii, workSet.getMorningOn());
                                                                     Leave le = personMapper.getLeaveByEmpIdAndDateStrLinShi(yearMonth + "-" + date + " " + workSet.getMorningOn(), yearMonth + "-" + date + " " + tii, em.getName());
                                                                     if (le != null) {
                                                                         clockRes = 16;
@@ -4299,6 +4309,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                 } else {
                                                                     if (pon || poff) {
                                                                         aHours = DateUtil.calcuHours(tii, workSet.getMorningOff());
+                                                                        lateminites = DateUtil.calcuLateMinutes(tii, workSet.getMorningOn());
                                                                         Leave le = personMapper.getLeaveByEmpIdAndDateStrLinShi(yearMonth + "-" + date + " " + workSet.getMorningOn(), yearMonth + "-" + date + " " + tii, em.getName());
                                                                         if (le != null) {
                                                                             clockRes = 16;
@@ -4308,6 +4319,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                         for (int tiii = timeList.size() - 1; tiii < timeList.size(); tiii--) {
                                                                             if (timeList.get(tiii).after(afterWS.getMorningOn()) && !timeList.get(tiii).after(afterWS.getMorningOff())) {
                                                                                 aHours = DateUtil.calcuHours(tii, timeList.get(tiii));
+                                                                                lateminites = DateUtil.calcuLateMinutes(tii, workSet.getMorningOn());
                                                                                 isAOnH = true;
                                                                                 Leave le = personMapper.getLeaveByEmpIdAndDateStrLinShi(yearMonth + "-" + date + " " + workSet.getMorningOn(), yearMonth + "-" + date + " " + tii, em.getName());
                                                                                 if (le != null) {
@@ -4321,6 +4333,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                             for (Time tiii : timeList) {
                                                                                 if (tiii.after(afterWS.getMorningOn())) {
                                                                                     aHours = DateUtil.calcuHours(tiii, workSet.getMorningOff());
+                                                                                    lateminites = DateUtil.calcuLateMinutes(tii, workSet.getMorningOn());
                                                                                     Leave le = personMapper.getLeaveByEmpIdAndDateStrLinShi(yearMonth + "-" + date + " " + workSet.getMorningOn(), yearMonth + "-" + date + " " + tiii, em.getName());
                                                                                     if (le != null) {
                                                                                         clockRes = 16;
@@ -4338,6 +4351,8 @@ public class PersonServiceImpl implements IPersonServ {
                                                             if (em.getWorkType() == 1) {
                                                                 aHours += 0.5;
                                                             }
+                                                            if (lateminites <= 3)
+                                                                otw.setLateminitesa(lateminites);
                                                             otw.setaOnRemark(aHours.toString());
                                                             otw.setRemark(aHours.toString() + "," + pHours.toString());
                                                             otw.setClockResult(clockRes);
@@ -4467,6 +4482,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                             if (tii.after(afterWS.getNoonOn()) && !tii.after(afterWS.getNoonOff())) {
                                                                 if (poff) {
                                                                     pHours = DateUtil.calcuHours(tii, workSet.getNoonOff());
+                                                                    lateminitesp = DateUtil.calcuLateMinutes(tii, workSet.getNoonOn());
                                                                     Leave le = personMapper.getLeaveByEmpIdAndDateStrLinShi(yearMonth + "-" + date + " " + workSet.getNoonOn(), yearMonth + "-" + date + " " + tii, em.getName());
                                                                     if (le != null) {
                                                                         clockRes = 16;
@@ -4509,6 +4525,8 @@ public class PersonServiceImpl implements IPersonServ {
                                                                 }
                                                             }
                                                         }
+                                                        if(lateminitesp <=3)
+                                                            otw.setLateminitesp(lateminitesp);
                                                         if (pHours != 0.0) {
                                                             otw.setaOnRemark(pHours.toString());
                                                             otw.setRemark(aHours + "," + pHours.toString());
@@ -4846,6 +4864,8 @@ public class PersonServiceImpl implements IPersonServ {
         String intNum = "";
         String deciNum = "";
         Double aHours = 0.0;
+        int lateminites = 0;
+        int lateminitesp = 0;
         Double pHours = 0.0;
         Integer clockRes = 17;
         Double linchenJiaBan = 0.0;
@@ -4875,6 +4895,8 @@ public class PersonServiceImpl implements IPersonServ {
                             aHours = 0.0;
                             pHours = 0.0;
                             clockRes = 17;
+                            lateminites = 0;
+                            lateminitesp = 0;
                             linchenJiaBan = 0.0;
                             co = kqBeans.get(k);
                             String[] coDay = co.getDateStr().split("-");
@@ -5321,6 +5343,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                             if (tii.after(afterWS.getMorningOn()) && !tii.after(afterWS.getMorningOff())) {
                                                                 if (pon) {
                                                                     aHours = DateUtil.calcuHours(tii, workSet.getMorningOff());
+                                                                    lateminites = DateUtil.calcuLateMinutes(tii, workSet.getMorningOn());
                                                                     Leave le = personMapper.getLeaveByEmpIdAndDateStr(yearMonth + "-" + date + " " + workSet.getMorningOn(), yearMonth + "-" + date + " " + tii, em.getId());
                                                                     if (le != null) {
                                                                         clockRes = 16;
@@ -5329,6 +5352,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                 } else {
                                                                     if (pon || poff) {
                                                                         aHours = DateUtil.calcuHours(tii, workSet.getMorningOff());
+                                                                        lateminites = DateUtil.calcuLateMinutes(tii, workSet.getMorningOn());
                                                                         Leave le = personMapper.getLeaveByEmpIdAndDateStr(yearMonth + "-" + date + " " + workSet.getMorningOn(), yearMonth + "-" + date + " " + tii, em.getId());
                                                                         if (le != null) {
                                                                             clockRes = 16;
@@ -5338,6 +5362,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                         for (int tiii = timeList.size() - 1; tiii < timeList.size(); tiii--) {
                                                                             if (timeList.get(tiii).after(afterWS.getMorningOn()) && !timeList.get(tiii).after(afterWS.getMorningOff())) {
                                                                                 aHours = DateUtil.calcuHours(tii, timeList.get(tiii));
+                                                                                lateminites = DateUtil.calcuLateMinutes(tii, workSet.getMorningOn());
                                                                                 isAOnH = true;
                                                                                 Leave le = personMapper.getLeaveByEmpIdAndDateStr(yearMonth + "-" + date + " " + workSet.getMorningOn(), yearMonth + "-" + date + " " + tii, em.getId());
                                                                                 if (le != null) {
@@ -5351,6 +5376,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                             for (Time tiii : timeList) {
                                                                                 if (tiii.after(afterWS.getMorningOn())) {
                                                                                     aHours = DateUtil.calcuHours(tiii, workSet.getMorningOff());
+                                                                                    lateminites = DateUtil.calcuLateMinutes(tii, workSet.getMorningOn());
                                                                                     Leave le = personMapper.getLeaveByEmpIdAndDateStr(yearMonth + "-" + date + " " + workSet.getMorningOn(), yearMonth + "-" + date + " " + tiii, em.getId());
                                                                                     if (le != null) {
                                                                                         clockRes = 16;
@@ -5369,6 +5395,8 @@ public class PersonServiceImpl implements IPersonServ {
                                                                 aHours += 0.5;
                                                             }
                                                             otw.setaOnRemark(aHours.toString());
+                                                            if (lateminites <= 3)
+                                                                otw.setLateminitesa(lateminites);
                                                             otw.setRemark(aHours.toString() + "," + pHours.toString());
                                                             otw.setClockResult(clockRes);
                                                         } else {
@@ -5533,7 +5561,8 @@ public class PersonServiceImpl implements IPersonServ {
                                                         for (Time tii : timeList) {
                                                             if (tii.after(afterWS.getNoonOn()) && !tii.after(afterWS.getNoonOff())) {
                                                                 if (poff) {
-                                                                    pHours = DateUtil.calcuHours(tii, workSet.getNoonOff());
+                                                                    pHours = DateUtil.calcuHours(tii, workSet.getNoonOn());
+                                                                    lateminitesp = DateUtil.calcuLateMinutes(tii, workSet.getNoonOn());
                                                                     Leave le = personMapper.getLeaveByEmpIdAndDateStr(yearMonth + "-" + date + " " + workSet.getNoonOn(), yearMonth + "-" + date + " " + tii, em.getId());
                                                                     if (le != null) {
                                                                         clockRes = 16;
@@ -5541,7 +5570,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                     break a;
                                                                 } else {
                                                                     if (aon || aoff) {
-                                                                        pHours = DateUtil.calcuHours(tii, workSet.getNoonOff());
+                                                                        pHours = DateUtil.calcuHours(tii, workSet.getNoonOn());
                                                                         Leave le = personMapper.getLeaveByEmpIdAndDateStr(yearMonth + "-" + date + " " + workSet.getNoonOn(), yearMonth + "-" + date + " " + tii, em.getId());
                                                                         if (le != null) {
                                                                             clockRes = 16;
@@ -5575,6 +5604,9 @@ public class PersonServiceImpl implements IPersonServ {
                                                                     }
                                                                 }
                                                             }
+                                                        }
+                                                        if (lateminitesp <= 3) {
+                                                            otw.setLateminitesp(lateminitesp);
                                                         }
                                                         if (pHours != 0.0) {
                                                             if (aon || aoff) {
@@ -6500,7 +6532,7 @@ public class PersonServiceImpl implements IPersonServ {
                     dayNum = "206,206," + lsh.getHours();
                 } else {
                     if (kqb.getClockResult() == 1) {
-                        dayNum = "208,208," + (8.0 + kqb.getExtWorkHours());
+                        dayNum = "208,208," + (8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours()));
                     } else if (kqb.getClockResult() == 7) {
                         if (kqb.getaOnTime() != null && kqb.getaOffTime() != null) {
                             totalOneDayHours += 4;
@@ -6922,7 +6954,7 @@ public class PersonServiceImpl implements IPersonServ {
                             oci = personMapper.getOutClockInByEmpNoAndDateA(kqb.getEmpNo(), kqb.getDateStr());
                             if (oci != null) {
                                 cishu = StringUtil.calTimesByOutClockIn(oci);
-                                if (csu!=null && cishu >= csu.getDayClockInTimes()) {
+                                if (csu != null && cishu >= csu.getDayClockInTimes()) {
                                     if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
                                         dayNum = beFStr.concat("1080,").concat(beFStr.concat("1080,"));
                                         if (!kqb.getHavePinShi().equals("1")) {
@@ -8613,6 +8645,9 @@ public class PersonServiceImpl implements IPersonServ {
         DayJI dj;
         List<DayJI> dayJIList = null;
         List<MonthKQInfo> monthKQInfoList = personMapper.getMonthKqInfoListByEmpNoandYearMonth(yearMonth);
+        WorkDate wd2 = null;
+        int lateTimes = 0;
+        int lateMinutes = 0;
         for (MonthKQInfo mk : monthKQInfoList) {
             zhengbanHours = 0.0;
             usualExtHours = 0.0;
@@ -8621,7 +8656,24 @@ public class PersonServiceImpl implements IPersonServ {
             otherPaidLeave = 0.0;
             leaveOfAbsense = 0.0;
             sickLeave = 0.0;
+            lateTimes = 0;
+            lateMinutes = 0;
+            Double totalZhengBanHours = null;
             dayJIList = MKExcelUtil.getDayJIListByMKList(mk);
+            if (mk.getEmpNo().contains("CS")) {
+                lateMinutes = personMapper.getLateMinutesByEmpNoAndYearMonth(mk.getEmpNo(), yearMonth);
+                lateTimes = personMapper.getLateTimesByEmpNoAndYearMonth(mk.getEmpNo(), yearMonth);
+                wd2 = personMapper.getWorkDate22222ByEmpNo(mk.getEmpNo(), yearMonth);
+                totalZhengBanHours = wd2.getWorkDatess().length * 8.0;
+                if (mk.getImCYM().equals(yearMonth)) {
+                    for (int i = 0; i < wd2.getWorkDatess().length; i++) {
+                        if (Integer.valueOf(wd2.getWorkDatess()[i]) == mk.getImCYMDay()) {
+                            totalZhengBanHours = (wd2.getWorkDatess().length - i) * 8.0;
+                        }
+                    }
+                }
+            }
+
             for (int i = 0; i < dayJIList.size(); i++) {
                 isWeekEnd = DateUtil.checkIsWeekEnd(wd, (i + 1) + "");
                 dj = dayJIList.get(i);
@@ -8679,6 +8731,8 @@ public class PersonServiceImpl implements IPersonServ {
                 }
             }
 
+            mk.setLateminites(lateMinutes);
+            mk.setLatetimes(lateTimes);
             mk.setZhengbanHours(zhengbanHours == null ? 0.0 : zhengbanHours);
             mk.setUsualExtHours(usualExtHours == null ? 0.0 : usualExtHours);
             mk.setWorkendHours(workendHours == null ? 0.0 : workendHours);
@@ -8686,11 +8740,8 @@ public class PersonServiceImpl implements IPersonServ {
             mk.setOtherPaidLeave(otherPaidLeave == null ? 0.0 : otherPaidLeave);
             mk.setLeaveOfAbsense(leaveOfAbsense == null ? 0.0 : leaveOfAbsense);
             mk.setSickLeave(sickLeave == null ? 0.0 : sickLeave);
-            if (((otherPaidLeave + leaveOfAbsense + sickLeave) <= 0) && (fullWorkHours <= zhengbanHours)) {
-                mk.setFullWorkReword(100D);
-            } else {
-                mk.setFullWorkReword(0D);
-            }
+            mk.setCheckHours(totalZhengBanHours == null ? 0.0 : totalZhengBanHours);
+            mk.setFullWorkReword(zhengbanHours == totalZhengBanHours ? 100.0 : 0.0);
             personMapper.updateMKById(mk);
         }
         return true;
@@ -8889,6 +8940,553 @@ public class PersonServiceImpl implements IPersonServ {
     public int findAllLinShiDanCount() throws Exception {
         return personMapper.findAllLinShiDanCount();
     }
+
+    @Override
+    @Transactional
+    public void getKQ(String beforDay) throws Exception {
+        this.getAllWeiXinUser();
+        this.fillEmpNoWhenQYWXNull();
+        this.getBeforeDayZhongKongData(beforDay);
+        this.getBeforeDayQYWCData(beforDay);
+        this.getBeforeDayQYWCDataAAA(beforDay);
+        this.getBeforeDayQYWXSPData(beforDay);
+
+    }
+
+    public void fillEmpNoWhenQYWXNull() throws Exception {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        jedis = pool.getResource();
+        List<WeiXinUsrId> allWXUserId = personMapper.getAllWeiXinUserId();
+        String empNo;
+        for (WeiXinUsrId wxu : allWXUserId) {
+            if (wxu.getEmpNo() == null || wxu.getEmpNo().trim().length() == 0) {
+                empNo = personMapper.getEmpNoByNameA(wxu.getName());
+                if (empNo != null) {
+                    personMapper.saveEmpNoByUserId(wxu.getUserid(), empNo);
+                }
+            }
+        }
+    }
+
+    public void getAllWeiXinUser() throws Exception {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        jedis = pool.getResource();
+        List<WeiXinUsrId> userList = WeiXinUtil.getAddressBook(jedis.get(Constants.accessToken));
+        WeiXinUsrId oldWX = null;
+        List<String> haves = new ArrayList<String>();
+        haves.clear();
+        List<WeiXinUsrId> newUserList = new ArrayList<WeiXinUsrId>();
+        for (WeiXinUsrId ww : userList) {
+            if (!haves.contains(ww.getUserid()) && (!ww.getUserid().equals("XiangMuZhongXinHuangFuYong"))) {
+                newUserList.add(ww);
+                haves.add(ww.getUserid());
+            }
+        }
+        for (WeiXinUsrId wx : newUserList) {
+            oldWX = personMapper.getUserIdByUSerId(wx.getUserid());
+            if (oldWX == null) {
+                personMapper.saveWeiXinUserIdByBean(wx);
+            }
+        }
+
+
+    }
+
+    public void getBeforeDayQYWXSPData(String beforDay) throws Exception {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<QYWXSPFROM> fromList = new ArrayList<QYWXSPFROM>();
+        jedis = pool.getResource();
+        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/corp/getapprovaldata?access_token=%s", jedis.get(Constants.accessTokensp));
+        Date dateStart = sdf.parse(beforDay + " 00:00:00");
+        Date dateEnd = sdf.parse(beforDay + " 23:59:59");
+        QYWXSPTO text = new QYWXSPTO();
+        text.setStarttime(dateStart.getTime() / 1000);
+        text.setEndtime(dateEnd.getTime() / 1000);
+        text.setNext_spnum(null);
+        NetWorkHelper netHelper = new NetWorkHelper();
+        String result = netHelper.getHttpsResponse3(Url, text, "POST");
+        JSONObject json = JSON.parseObject(result);
+        com.alibaba.fastjson.JSONArray jsonArrayData = json.getJSONArray("data");
+        com.alibaba.fastjson.JSONArray jsonArrayData2 = null;
+        com.alibaba.fastjson.JSONArray jsonArrayData3 = null;
+        JSONObject data = null;
+        JSONObject data2 = null;
+        JSONObject data3 = null;
+        JSONObject data4 = null;
+        QYWXSPFROM from = null;
+        String title;
+        String spname;
+        for (int i = 0; i < jsonArrayData.size(); i++) {
+            data = jsonArrayData.getJSONObject(i);
+            spname = (String) data.get("spname");
+            if ("补卡申请".equals(spname)) {
+                from = new QYWXSPFROM();
+                from.setSpname(spname);
+                from.setApply_name((String) data.get("apply_name"));
+                from.setApply_org((String) data.get("apply_org"));
+                from.setSp_status((Integer) data.get("sp_status"));
+                from.setSp_num((Long) data.get("sp_num"));
+                from.setApply_time((Integer) data.get("apply_time"));
+                from.setApply_user_id((String) data.get("apply_user_id"));
+                data2 = data.getJSONObject("comm");
+                jsonArrayData2 = data2.getJSONArray("apply_data");
+                for (int j = 0; j < jsonArrayData2.size(); j++) {
+                    data3 = jsonArrayData2.getJSONObject(j);
+                    title = (String) data3.get("title");
+                    if (title.equals("补卡时间")) {
+                        from.setBukaTimeLong((Long) data3.get("value"));
+                        Date date = new Date(from.getBukaTimeLong());
+                        from.setBukaTime(sdf.format(date).split(" ")[1]);
+                        from.setBukaYearM(sdf.format(date).split(" ")[0]);
+                    }
+                    if (title.equals("补卡事由")) {
+                        from.setBukaReason((String) data3.get("value"));
+                    }
+                }
+                if (2 == (Integer) data.get("sp_status")) {
+                    fromList.add(from);
+                }
+            }
+
+            if (spname.contains("请假")) {
+                from = new QYWXSPFROM();
+                from.setSpname("请假");
+                from.setApply_name((String) data.get("apply_name"));
+                from.setApply_org((String) data.get("apply_org"));
+                from.setSp_status((Integer) data.get("sp_status"));
+                from.setSp_num((Long) data.get("sp_num"));
+                from.setApply_time((Integer) data.get("apply_time"));
+                from.setApply_user_id((String) data.get("apply_user_id"));
+                data2 = data.getJSONObject("comm");
+                jsonArrayData2 = data2.getJSONArray("apply_data");
+
+                for (int j = 0; j < jsonArrayData2.size(); j++) {
+                    data3 = jsonArrayData2.getJSONObject(j);
+                    title = (String) data3.get("title");
+                    if (title.equals("请假类型")) {
+                        from.setLeave_type(StringUtil.LeaveTypeTransf((String) data3.get("value")));
+                    }
+                    if (title.equals("请假事由")) {
+                        from.setBukaReason((String) data3.get("value"));
+                    }
+
+                    if (title.equals("请假")) {
+                        jsonArrayData3 = data3.getJSONArray("value");
+                        for (int a = 0; a < jsonArrayData3.size(); a++) {
+                            data4 = jsonArrayData3.getJSONObject(a);
+                            title = (String) data4.get("title");
+                            if (title.equals("开始时间")) {
+                                from.setStart_time((Long) data4.get("value"));
+                                Date date = new Date(from.getStart_time());
+                                from.setStart_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("结束时间")) {
+                                from.setEnd_time((Long) data4.get("value"));
+                                Date date = new Date(from.getEnd_time());
+                                from.setEnd_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("请假时长")) {
+                                from.setDuration((Integer) data4.get("value"));
+                            }
+
+                        }
+                    }
+                }
+
+                if (2 == (Integer) data.get("sp_status")) {
+                    fromList.add(from);
+                }
+            }
+
+            if (spname.contains("外出申请")) {
+                from = new QYWXSPFROM();
+                from.setSpname("外出申请");
+                from.setApply_name((String) data.get("apply_name"));
+                from.setApply_org((String) data.get("apply_org"));
+                from.setSp_status((Integer) data.get("sp_status"));
+                from.setSp_num((Long) data.get("sp_num"));
+                from.setApply_time((Integer) data.get("apply_time"));
+                Date date = new Date(from.getApply_time());
+                from.setApply_timeStr(sdf.format((date)));
+                from.setApply_user_id((String) data.get("apply_user_id"));
+                data2 = data.getJSONObject("comm");
+                jsonArrayData2 = data2.getJSONArray("apply_data");
+
+                for (int j = 0; j < jsonArrayData2.size(); j++) {
+                    data3 = jsonArrayData2.getJSONObject(j);
+                    title = (String) data3.get("title");
+                    if (title.equals("外出地点")) {
+                        from.setOutAddr((String) data3.get("value"));
+                    }
+                    if (title.equals("外出事由")) {
+                        from.setBukaReason((String) data3.get("value"));
+                    }
+
+                    if (title.equals("外出")) {
+                        jsonArrayData3 = data3.getJSONArray("value");
+                        for (int a = 0; a < jsonArrayData3.size(); a++) {
+                            data4 = jsonArrayData3.getJSONObject(a);
+                            title = (String) data4.get("title");
+                            if (title.equals("开始时间")) {
+                                from.setStart_time((Long) data4.get("value"));
+                                date = new Date(from.getStart_time());
+                                from.setStart_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("结束时间")) {
+                                from.setEnd_time((Long) data4.get("value"));
+                                date = new Date(from.getEnd_time());
+                                from.setEnd_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("外出时长")) {
+                                from.setDuration((Integer) data4.get("value"));
+                            }
+
+                        }
+                    }
+                }
+
+                if (2 == (Integer) data.get("sp_status")) {
+                    fromList.add(from);
+                }
+            }
+
+
+            if (spname.contains("出差")) {
+                from = new QYWXSPFROM();
+                from.setSpname("出差");
+                from.setApply_name((String) data.get("apply_name"));
+                from.setApply_org((String) data.get("apply_org"));
+                from.setSp_status((Integer) data.get("sp_status"));
+                from.setSp_num((Long) data.get("sp_num"));
+                from.setApply_time((Integer) data.get("apply_time"));
+                Date date = new Date(from.getApply_time());
+                from.setApply_timeStr(sdf.format((date)));
+                from.setApply_user_id((String) data.get("apply_user_id"));
+                data2 = data.getJSONObject("comm");
+                jsonArrayData2 = data2.getJSONArray("apply_data");
+
+                for (int j = 0; j < jsonArrayData2.size(); j++) {
+                    data3 = jsonArrayData2.getJSONObject(j);
+                    title = (String) data3.get("title");
+                    if (title.equals("出差地点")) {
+                        from.setOutAddr((String) data3.get("value"));
+                    }
+                    if (title.equals("出差事由")) {
+                        from.setBukaReason((String) data3.get("value"));
+                    }
+
+                    if (title.equals("出差")) {
+                        jsonArrayData3 = data3.getJSONArray("value");
+                        for (int a = 0; a < jsonArrayData3.size(); a++) {
+                            data4 = jsonArrayData3.getJSONObject(a);
+                            title = (String) data4.get("title");
+                            if (title.equals("开始时间")) {
+                                from.setStart_time((Long) data4.get("value"));
+                                date = new Date(from.getStart_time());
+                                from.setStart_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("结束时间")) {
+                                from.setEnd_time((Long) data4.get("value"));
+                                date = new Date(from.getEnd_time());
+                                from.setEnd_timeStr(sdf.format((date)));
+                            }
+                            if (title.equals("出差时长")) {
+                                from.setDuration((Integer) data4.get("value"));
+                            }
+
+                        }
+                    }
+                }
+
+                if (2 == (Integer) data.get("sp_status")) {
+                    fromList.add(from);
+                }
+            }
+
+
+        }
+        this.saveQKData(fromList);
+    }
+
+    public void getBeforeDayQYWCDataAAA(String beforDay) throws Exception {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        jedis = pool.getResource();
+        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/checkin/getcheckindata?access_token=%s", jedis.get(Constants.accessToken));
+        List<String> userList = personMapper.getAllUserName();
+        List<ZhongKongBeanQY> outClockInList = new ArrayList<ZhongKongBeanQY>();
+        List<String> haveUserId = new ArrayList<String>();
+        List<String> afterUserList1 = userList.subList(0, 99);
+        List<String> afterUserList2 = userList.subList(99, 199);
+        List<String> afterUserList3 = userList.subList(199, 299);
+        List<String> afterUserList4 = userList.subList(299, userList.size());
+
+        List<List<String>> all = new ArrayList<List<String>>();
+        all.add(afterUserList1);
+        all.add(afterUserList2);
+        all.add(afterUserList3);
+        all.add(afterUserList4);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dateStart = sdf.parse(beforDay + " 00:00:00");
+        Date dateEnd = sdf.parse(beforDay + " 23:59:59");
+        QYweixinSend text = new QYweixinSend();
+        text.setOpencheckindatatype(1);
+        text.setStarttime(dateStart.getTime() / 1000);
+        text.setEndtime(dateEnd.getTime() / 1000);
+        NetWorkHelper netHelper = new NetWorkHelper();
+        for (int aa = 0; aa < all.size(); aa++) {
+            text.setUseridlist(all.get(aa));
+            String result = netHelper.getHttpsResponse2(Url, text, "POST");
+            JSONObject json = JSON.parseObject(result);
+            String checkindata = String.valueOf(json.get("checkindata"));
+            com.alibaba.fastjson.JSONArray checkindataStr = JSON.parseArray(checkindata);
+            List<OutPunch> outPunchList = JSONUtils.toList(checkindataStr, OutPunch.class);
+            ZhongKongBeanQY oc = null;
+            String hourStr = null;
+            Integer hour = null;
+            String userId = null;
+            for (int a = 0; a < outPunchList.size(); a++) {
+                userId = outPunchList.get(a).getUserid();
+                if (haveUserId.contains(userId))
+                    continue;
+                oc = new ZhongKongBeanQY();
+                oc.setUserId(userId);
+                oc.setDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
+                oc.setYearMonth(beforDay.split("-")[0] + "-" + beforDay.split("-")[1]);
+                for (OutPunch op : outPunchList) {
+                    if (op.getUserid().equals(userId)) {
+                        if (op != null && (op.getException_type() == null || "".equals(op.getException_type()) || "时间异常".equals(op.getException_type()))) {
+                            oc.setTimeStr((oc.getTimeStr() == null ? "" : oc.getTimeStr()) + op.getCheckin_timeStr().split(" ")[1] + " ");
+                            oc.setRemark((oc.getRemark() == null ? "" : oc.getRemark()) + op.getNotes());
+                        }
+                    }
+                }
+                outClockInList.add(oc);
+                haveUserId.add(userId);
+            }
+        }
+        this.saveZKQYList(outClockInList);
+    }
+
+    public void getBeforeDayQYWCData(String beforDay) throws Exception {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        jedis = pool.getResource();
+        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/checkin/getcheckindata?access_token=%s", jedis.get(Constants.accessToken));
+        List<String> userList = personMapper.getAllUserName();
+        List<OutClockIn> outClockInList = new ArrayList<OutClockIn>();
+        List<String> haveUserId = new ArrayList<String>();
+        List<String> afterUserList1 = userList.subList(0, 99);
+        List<String> afterUserList2 = userList.subList(99, 199);
+        List<String> afterUserList3 = userList.subList(199, 299);
+        List<String> afterUserList4 = userList.subList(299, userList.size());
+
+        List<List<String>> all = new ArrayList<List<String>>();
+        all.add(afterUserList1);
+        all.add(afterUserList2);
+        all.add(afterUserList3);
+        all.add(afterUserList4);
+        String day = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dateStart = sdf.parse(beforDay + " 00:00:00");
+        Date dateEnd = sdf.parse(beforDay + " 23:59:59");
+        QYweixinSend text = new QYweixinSend();
+        text.setOpencheckindatatype(2);
+        text.setStarttime(dateStart.getTime() / 1000);
+        text.setEndtime(dateEnd.getTime() / 1000);
+        NetWorkHelper netHelper = new NetWorkHelper();
+        List<OutClockAll> ocAll = new ArrayList<OutClockAll>();
+        String yearM = beforDay.split("-")[0] + "-" + beforDay.split("-")[1];
+        OutClockAll oca = null;
+        for (int aa = 0; aa < all.size(); aa++) {
+            text.setUseridlist(all.get(aa));
+            String result = netHelper.getHttpsResponse2(Url, text, "POST");
+            JSONObject json = JSON.parseObject(result);
+            String checkindata = String.valueOf(json.get("checkindata"));
+            com.alibaba.fastjson.JSONArray checkindataStr = JSON.parseArray(checkindata);
+            List<OutPunch> outPunchList = JSONUtils.toList(checkindataStr, OutPunch.class);
+            OutClockIn oc = null;
+            String hourStr = null;
+            Integer hour = null;
+            String userId = null;
+            for (int a = 0; a < outPunchList.size(); a++) {
+                userId = outPunchList.get(a).getUserid();
+                if (haveUserId.contains(userId))
+                    continue;
+                oc = new OutClockIn();
+                oc.setUserid(userId);
+                oc.setClockInDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
+                oca = new OutClockAll();
+                oca.setEnrollNumber(userId);
+                oca.setDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
+                oca.setYearMonth(yearM);
+                for (OutPunch op : outPunchList) {
+                    if (op.getUserid().equals(userId)) {
+                        oca.setTimeStr((oca.getTimeStr() == null ? "" : oca.getTimeStr()) + " " + op.getCheckin_timeStr().split(" ")[1]);
+                        hourStr = op.getCheckin_timeStr().split(" ")[1];
+                        hour = Integer.valueOf(hourStr.split(":")[0]);
+                        if (hour < 12 && hour >= 0) {
+                            oc.setClockInDateAMOnStr(op.getCheckin_timeStr());
+                            oc.setClockInAddrAMOn(op.getLocation_detail());
+                            oc.setAmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
+                            oc.setCheckin_typeA(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
+                            oc.setException_typeA(op == null || op.getException_type() == null ? "" : op.getException_type());
+                            oc.setNotesA(op == null || op.getNotes() == null ? "" : op.getNotes());
+                        } else if (hour >= 12 && hour <= 18) {
+                            oc.setClockInDatePMOnStr(op.getCheckin_timeStr());
+                            oc.setClockInAddrPMOn(op.getLocation_detail());
+                            oc.setPmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
+                            oc.setCheckin_typeP(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
+                            oc.setException_typeP(op == null || op.getException_type() == null ? "" : op.getException_type());
+                            oc.setNotesP(op == null || op.getNotes() == null ? "" : op.getNotes());
+                        } else if (hour > 18 && hour <= 24) {
+                            oc.setClockInDateNMOnStr(op.getCheckin_timeStr());
+                            oc.setClockInAddNMOn(op.getLocation_detail());
+                            oc.setNmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
+                            oc.setCheckin_typeN(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
+                            oc.setException_typeN(op == null || op.getException_type() == null ? "" : op.getException_type());
+                            oc.setNotesN(op == null || op.getNotes() == null ? "" : op.getNotes());
+                        }
+                    }
+                }
+                outClockInList.add(oc);
+                haveUserId.add(userId);
+                ocAll.add(oca);
+            }
+        }
+        this.saveOutClockInList(outClockInList, ocAll);
+    }
+
+    public void getBeforeDayZhongKongData(String beforDay) throws Exception {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        jedis = pool.getResource();
+        String[] afterDay = beforDay.split("-");
+        List<ZhongKongBean> strList = new ArrayList<ZhongKongBean>();
+        boolean connFlag = ZkemSDKUtils.connect("192.168.2.12", 4370);
+        if (connFlag) {
+            boolean flag = ZkemSDKUtils.readGeneralLogData();
+            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 4));
+        }
+
+        boolean connFlag1 = ZkemSDKUtils.connect("192.168.2.10", 4370);
+        if (connFlag1) {
+            boolean flag = ZkemSDKUtils.readGeneralLogData();
+            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 2));
+        }
+
+        boolean connFlag2 = ZkemSDKUtils.connect("192.168.2.11", 4370);
+        if (connFlag2) {
+            boolean flag = ZkemSDKUtils.readGeneralLogData();
+            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 3));
+        }
+
+        boolean connFlag3 = ZkemSDKUtils.connect("192.168.1.18", 4370);
+        if (connFlag3) {
+            boolean flag = ZkemSDKUtils.readGeneralLogData();
+            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 1));
+        }
+
+
+        boolean connFlag4 = ZkemSDKUtils.connect("192.168.2.13", 4370);
+        if (connFlag4) {
+            boolean flag = ZkemSDKUtils.readGeneralLogData();
+            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 5));
+        }
+
+        List<ZhongKongBean> newZkbList = new ArrayList<ZhongKongBean>();
+        List<ZhongKongBean> secZkbList = new ArrayList<ZhongKongBean>();
+        String encroNum1 = null;
+        String encroNum2 = null;
+        List<String> alreadyHaveNum = new ArrayList<String>();
+        for (int a = 0; a < strList.size(); a++) {
+            encroNum1 = strList.get(a).getEnrollNumber();
+            if (!alreadyHaveNum.contains(encroNum1)) {
+                for (int b = 0; b < strList.size(); b++) {
+                    encroNum2 = strList.get(b).getEnrollNumber();
+                    if (encroNum1.equals(encroNum2)) {
+                        secZkbList.add(strList.get(b));
+                    }
+                }
+
+                for (int i = 0; i < secZkbList.size() - 1; i++) {
+                    for (int j = 0; j < secZkbList.size() - 1 - i; j++) {
+                        if (secZkbList.get(j).getTimeTime().after(secZkbList.get(j + 1).getTimeTime())) {
+                            ZhongKongBean temp = secZkbList.get(j + 1);
+                            secZkbList.set(j + 1, secZkbList.get(j));
+                            secZkbList.set(j, temp);
+                        }
+                    }
+                }
+                alreadyHaveNum.add(encroNum1);
+                newZkbList.addAll(secZkbList);
+                secZkbList.clear();
+            }
+            secZkbList.clear();
+        }
+
+        ZhongKongBean zkb01 = null;
+        ZhongKongBean zkb02 = null;
+        ZhongKongBean zkb = null;
+        List<ZhongKongBean> toDataBaseList = new ArrayList<ZhongKongBean>();
+        boolean isHave;
+        for (int a = 0; a < newZkbList.size(); a++) {
+            zkb01 = newZkbList.get(a);
+            isHave = false;
+            for (int b = 0; b < toDataBaseList.size(); b++) {
+                zkb02 = toDataBaseList.get(b);
+                if (zkb01.getEnrollNumber().equals(zkb02.getEnrollNumber()) && zkb01.getDateStr().equals(zkb02.getDateStr())) {
+                    isHave = true;
+                    zkb02.setTimeStr(zkb02.getTimeStr() + " " + zkb01.getTimeStr());
+                }
+            }
+            if (!isHave) {
+                zkb = new ZhongKongBean();
+                zkb.setEnrollNumber(zkb01.getEnrollNumber());
+                zkb.setMachineNum(zkb01.getMachineNum());
+                zkb.setDateStr(zkb01.getDateStr());
+                zkb.setTimeStr(zkb01.getTimeStr());
+                zkb.setYearMonth(zkb01.getYearMonth());
+                toDataBaseList.add(zkb);
+            }
+        }
+
+        List<Employee> employeeList = personMapper.findAllEmployeeNotIsQuitandhaveEnrollNum();
+        boolean isComin = false;
+        Integer nu = null;
+        ZhongKongBean zkbb = null;
+        for (Employee ee : employeeList) {
+            isComin = false;
+            for (ZhongKongBean zk : toDataBaseList) {
+                if (ee.getEnrollNumber().equals(zk.getEnrollNumber())) {
+                    nu = zk.getMachineNum();
+                    isComin = true;
+                    break;
+                }
+            }
+            if (!isComin) {
+                zkbb = new ZhongKongBean();
+                zkbb.setEnrollNumber(ee.getEnrollNumber().toString());
+                zkbb.setYearMonth(afterDay[0] + "-" + afterDay[1]);
+                zkbb.setDateStr(beforDay);
+                zkbb.setTimeStr("");
+                zkbb.setMachineNum(nu);
+                toDataBaseList.add(zkbb);
+            }
+        }
+
+        this.saveBeforeDayZhongKongData(toDataBaseList);
+
+        List<OutClockIn> ociList = new ArrayList<OutClockIn>();
+        OutClockIn oc = new OutClockIn();
+        oc.setClockInDateStr(toDataBaseList.get(0).getDateStr());
+        ociList.add(oc);
+        List<KQBean> kqBeanList = new ArrayList<KQBean>();
+        KQBean kq = null;
+        List<KQBean> kqBeans = this.getAllKQDataByYearMonthDay(toDataBaseList.get(0).getDateStr());
+        List<KQBean> newKQBeans = this.getAfterOperatorDataByOriginData(ociList, kqBeans);
+        this.saveAllNewKQBeansToMysql(newKQBeans);
+        ociList.clear();
+    }
+
 
 }
 
