@@ -25,11 +25,11 @@ public class ZhongKongDATAToSQLTask {
 
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(cron = "0 0 05 * * ?")
-    @Scheduled(cron = "0 55 08 ? * *")
+    @Scheduled(cron = "0 43 08 ? * *")
     private void configureTasks() {
         try {
             //String beforDay B = "2020-03-";
-            String beforeDay = "2020-04-10";
+            String beforeDay = "2020-04-29";
 //            String beforeDay;
 //            for (int a = 1; a <= 17; a++) {
 //                if (a < 10) {

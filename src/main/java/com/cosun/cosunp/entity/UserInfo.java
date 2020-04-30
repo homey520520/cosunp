@@ -10,6 +10,7 @@ public class UserInfo implements Serializable {
     private static final long serialVersionUID = -2934846573147845117L;
     private Integer uId;
     private String userName;
+    private String userid;
     private String userPwd;
     private Integer userActor;
     private Integer type;
@@ -52,6 +53,15 @@ public class UserInfo implements Serializable {
     private int recordCount;
     private int pageSize = 10;
     private int currentPageTotalNum;
+
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
     public String getEngName() {
         return engName;

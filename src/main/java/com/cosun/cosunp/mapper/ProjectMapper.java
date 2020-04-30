@@ -10,9 +10,127 @@ import java.util.List;
 @Mapper
 public interface ProjectMapper {
 
+//
+//    @Select(" SELECT\n" +
+//            "\tph.*\n" +
+//            "FROM\n" +
+//            "\tproject_head ph\n" +
+//            " JOIN qyweixinbd bd ON ph.salor = bd.userid\n" +
+//            "WHERE\n" +
+//            "\tbd.userid = #{empNo} ")
+//    List<ProjectHead> totalProjectNumByEmpNo(String empNo);
 
-    @Select(" select * from project_head  where salor = #{empNo} ")
+
+    @Select({
+            "<script>",
+            "select e.name ",
+            "FROM employee e left join dept t on e.deptId = t.id left join position n on n.id = e.positionId",
+            " where e.empNo in",
+            "<foreach collection='ids' item='id' open='(' separator=',' close=')'>",
+            "#{id}",
+            "</foreach>",
+            "</script>"
+    })
+    List<String> getNamesByEmpNos(@Param("ids") List<String> ids);
+
+
+    @Select("SELECT\n" +
+            "\tee.`name`,\n" +
+            "  ee.empno,\n" +
+            "\tdate_format(ld.beginleave, '%Y-%m-%d') as beginleaveStr,\n" +
+            "\tdate_format(ld.endleave, '%Y-%m-%d') as endleaveStr \n" +
+            "FROM\n" +
+            "\tleavedata ld\n" +
+            "LEFT JOIN employee ee ON ld.empNo = ee.empNo\n" +
+            " where date_format(ld.beginleave, '%Y-%m-%d') = #{day}")
+    List<Leave> getAllLeaveDataByBeBoreDayApply(String day);
+
+
+    @Select("SELECT\n" +
+            "  phoi.id,\n" +
+            "\tph.projectName,\n" +
+            "\tpho.ordeNo,\n" +
+            "\tphoi.product_Name,\n" +
+            "\tpho.newOrOld,\n" +
+            "\tphoi.version,\n" +
+            "\tpho.customer_Name,\n" +
+            "\tph.salor,\n" +
+            "\tphoi.getOrder_Date_Plan AS getOrder_Date_PlanStr,\n" +
+            "\tphoi.getOrder_Date_Accu AS getOrder_Date_AccuStr,\n" +
+            "\tphoi.zhanCha_Date_Plan AS zhanCha_Date_PlanStr,\n" +
+            "\tphoi.zhanCha_Date_Accu AS zhanCha_Date_AccuStr,\n" +
+            "\tphoi.outDraw_Date_Plan AS outDraw_Date_PlanStr,\n" +
+            "\tphoi.outDraw_Date_Accu AS outDraw_Date_AccuStr,\n" +
+            "\tphoi.program_confir_Date_Plan AS program_confir_Date_PlanStr,\n" +
+            "\tphoi.program_confir_Date_Accu AS program_confir_Date_AccuStr,\n" +
+            "\tphoi.giveOrder_Date_Plan AS giveOrder_Date_PlanStr,\n" +
+            "\tphoi.giveOrder_Date_Accu AS giveOrder_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.install_Date_Plan AS install_Date_PlanStr,\n" +
+            "\tphoi.install_Date_Accu AS install_Date_AccuStr,\n" +
+            "\tphoi.yanShou_Date_Plan AS yanShou_Date_PlanStr,\n" +
+            "\tphoi.yanShou_Date_Accu AS yanShou_Date_AccuStr,\n" +
+            "\tphoi.jieSuan_Date_Plan AS jieSuan_Date_PlanStr,\n" +
+            "\tphoi.jieSuan_Date_Accu AS jieSuan_Date_AccuStr,\n" +
+            "\tphoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp\n" +
+            "FROM\n" +
+            "\tproject_head_order_item phoi\n" +
+            "LEFT JOIN project_head_order pho ON pho.id = phoi.order_id\n" +
+            "LEFT JOIN project_head ph ON ph.id = pho.head_id\n" +
+            "WHERE\n" +
+            "\tphoi.`status` = 0\n" +
+            "AND phoi.checked = 2\n" +
+            "AND (\n" +
+            "\tphoi.zhanCha_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\tOR phoi.outDraw_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\tOR phoi.program_confir_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\tOR phoi.giveOrder_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\tOR phoi.delivery_Goods_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\tOR phoi.install_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\tOR phoi.yanShou_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            ")")
+    List<ProjectHeadOrderItem> getItemListByOrderStatusAndCheckAndEmpnoIn(String empNo);
+
+
+    @Select({
+            "<script>",
+            "select t.userid as userId ",
+            "FROM employee e left join qyweixinbd t on e.empNo = t.empNo " +
+                    "left join position n on n.id = e.positionId",
+            " where e.empNo in",
+            "<foreach collection='ids' item='id' open='(' separator=',' close=')'>",
+            "#{id}",
+            "</foreach>",
+            "</script>"
+    })
+    List<String> getUserIdByEmpNos(@Param("ids") List<String> ids);
+
+
+    @Select(" SELECT\n" +
+            "\tph.*\n" +
+            "FROM\n" +
+            "\tproject_head ph  where ph.salor = #{empNo}  ")
     List<ProjectHead> totalProjectNumByEmpNo(String empNo);
+
+
+    @Select(" SELECT\n" +
+            "\tph.*\n" +
+            "FROM\n" +
+            "\tproject_head ph")
+    List<ProjectHead> totalProjectNumBy();
+
+
+    @Select("select empNo from qyweixinbd where userid = #{userId} limit 1")
+    String getEmpNoByUserId(String userId);
 
 
     @Select(" select * from project_head  where projectName like CONCAT('%',#{projectName},'%')  ")
@@ -24,17 +142,40 @@ public interface ProjectMapper {
             "\ta.`Name` AS provinceStr,\n" +
             "\tpho.ordeNo AS orderNo,\n" +
             "\tpho.newOrOld AS newOrOld,\n" +
-            "\tifnull(sum(phoi.hetongMoney),0.0) AS hetongMoney,\n" +
-            "  ifnull(sum(phoi.weiHuiMoney),0.0) as weiHuiMoney\n" +
+            "\tifnull(sum(phoi.hetongMoney), 0.0) AS hetongMoney,\n" +
+            "\tifnull(sum(phoi.hetongMoney), 0.0) - ifnull(\n" +
+            "\t\tsum(\n" +
+            "\t\t\t(\n" +
+            "\t\t\t\tSELECT\n" +
+            "\t\t\t\t\tsum(hereMoney)\n" +
+            "\t\t\t\tFROM\n" +
+            "\t\t\t\t\tproject_oi_moneyrecord\n" +
+            "\t\t\t\tWHERE\n" +
+            "\t\t\t\t\titem_id = phoi.id\n" +
+            "\t\t\t)\n" +
+            "\t\t),\n" +
+            "\t\t0.0\n" +
+            "\t) AS weiHuiMoney\n" +
             "FROM\n" +
-            "\tproject_head_order pho\n" +
-            "left JOIN project_head ph ON ph.id = pho.head_id\n" +
-            "left JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
-            "LEFT JOIN china a ON a.id = pho.province\n" +
+            "\tproject_head ph\n" +
+            "JOIN project_head_order pho ON ph.id = pho.head_id\n" +
+            "LEFT JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
+            "JOIN china a ON a.id = pho.province\n" +
             "WHERE\n" +
-            "\tph.salor = #{empNo} \n" +
-            "AND ph.projectName = #{projectName}\n" +
-            "group by pho.ordeNo  ")
+            "\tph.projectName = #{projectName} \n" +
+            "AND (\n" +
+            "\tphoi.id IN (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tmax(item2.id)\n" +
+            "\t\tFROM\n" +
+            "\t\t\tproject_head_order_item item2\n" +
+            "\t\tGROUP BY\n" +
+            "\t\t\titem2.order_id,item2.product_Name\n" +
+            "\t)\n" +
+            "\tOR phoi.id IS NULL\n" +
+            ")\n" +
+            "GROUP BY\n" +
+            "\tpho.ordeNo,pho.customer_Name ")
     List<ProjectHeadOrder> getTotalProjectOrderByName(String empNo, String projectName);
 
 
@@ -46,25 +187,50 @@ public interface ProjectMapper {
             "\tphoi.delivery_Date AS delivery_DateStr,\n" +
             "\tphoi.totalBao AS totalBao,\n" +
             "\tphoi.product_Name AS product_Name,\n" +
-            "\tIFNULL(phoi.weiHuiMoney, 0.0) AS weiHuiMoney,\n" +
+            "\tifnull((phoi.hetongMoney), 0.0) - ifnull((select sum(hereMoney) from project_oi_moneyrecord where item_id = phoi.id), 0.0) AS weiHuiMoney, " +
             "\tIFNULL(phoi.hetongMoney, 0.0) AS hetongMoney,\n" +
             "\tpho.ordeNo AS orderNo,\n" +
             "\tphoi.id AS id,\n" +
+            "\tphoi.zhanCha_Date_Plan AS zhanCha_Date_PlanStr,\n" +
+            "\tphoi.zhanCha_Date_Accu AS zhanCha_Date_AccuStr,\n" +
+            "\tphoi.outDraw_Date_Plan AS outDraw_Date_PlanStr,\n" +
+            "\tphoi.outDraw_Date_Accu AS outDraw_Date_AccuStr,\n" +
+            "\tphoi.program_confir_Date_Plan AS program_confir_Date_PlanStr,\n" +
+            "\tphoi.program_confir_Date_Accu AS program_confir_Date_AccuStr,\n" +
+            "\tphoi.giveOrder_Date_Plan AS giveOrder_Date_PlanStr,\n" +
+            "\tphoi.giveOrder_Date_Accu AS giveOrder_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.install_Date_Plan AS install_Date_PlanStr,\n" +
+            "\tphoi.install_Date_Accu AS install_Date_AccuStr,\n" +
+            "\tphoi.yanShou_Date_Plan AS yanShou_Date_PlanStr,\n" +
+            "\tphoi.yanShou_Date_Accu AS yanShou_Date_AccuStr,\n" +
+            "\tphoi.jieSuan_Date_Plan AS jieSuan_Date_PlanStr,\n" +
+            "\tphoi.jieSuan_Date_Accu AS jieSuan_Date_AccuStr,\n" +
+            "\tphoi.getOrder_Date_Plan AS getOrder_Date_PlanStr,\n" +
             "\tphoi.checked AS checked,\n" +
             "\tphoi.status AS status,\n" +
             "\tIFNULL(phoi.gendan,'') AS gendan,\n" +
             "\tph.projectName AS projectName,\n" +
             "\tphoi.order_id AS order_Id,\n" +
             "\tIFNULL(phoi.saleManager,'') AS saleManager," +
-            "\tphoi.remark AS remark," +
+            "\tifnull(phoi.remark,'') AS remark," +
+            "phoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp,\n" +
+            "\tphoi.jieSuan_Emp," +
+            "\tpho.newOrOld as newOrOld," +
             "(cast(phoi.version as decimal(11,2))-1)*10 as historyGe\n" +
             "FROM\n" +
             "\tproject_head_order pho\n" +
             "JOIN project_head ph ON ph.id = pho.head_id\n" +
             "JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
             "WHERE\n" +
-            "\tph.salor = #{empNo}\n" +
-            "AND pho.ordeNo = #{projectName}\n" +
+            "pho.ordeNo = #{projectName} and pho.customer_Name = #{customer_Name} \n" +
             "and\n" +
             "\tphoi.id IN (\n" +
             "\t\tSELECT\n" +
@@ -72,20 +238,295 @@ public interface ProjectMapper {
             "\t\tFROM\n" +
             "\t\t\tproject_head_order_item item2\n" +
             "\t\tGROUP BY\n" +
-            "\t\t\titem2.product_Name\n" +
+            "\t\t\titem2.order_id,item2.product_Name\n" +
             "\t)")
-    List<ProjectHeadOrderItem> getTotalProjectOrderITEMByOrderS(String empNo, String projectName);
+    List<ProjectHeadOrderItem> getTotalProjectOrderITEMByOrderS(String customer_Name,String empNo, String projectName);
+
+
+    @Select("SELECT\n" +
+            "\tphoi.id AS id,\n" +
+            "\tpho.ordeNo AS ordeNo,\n" +
+            "\tpho.customer_Name,\n" +
+            "\tpho.newOrOld AS newOrOld,\n" +
+            "\tphoi.zhanCha_Date_Plan AS zhanCha_Date_PlanStr,\n" +
+            "\tphoi.zhanCha_Date_Accu AS zhanCha_Date_AccuStr,\n" +
+            "\tphoi.outDraw_Date_Plan AS outDraw_Date_PlanStr,\n" +
+            "\tphoi.outDraw_Date_Accu AS outDraw_Date_AccuStr,\n" +
+            "\tphoi.program_confir_Date_Plan AS program_confir_Date_PlanStr,\n" +
+            "\tphoi.program_confir_Date_Accu AS program_confir_Date_AccuStr,\n" +
+            "\tphoi.giveOrder_Date_Plan AS giveOrder_Date_PlanStr,\n" +
+            "\tphoi.giveOrder_Date_Accu AS giveOrder_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.install_Date_Plan AS install_Date_PlanStr,\n" +
+            "\tphoi.install_Date_Accu AS install_Date_AccuStr,\n" +
+            "\tphoi.yanShou_Date_Plan AS yanShou_Date_PlanStr,\n" +
+            "\tphoi.yanShou_Date_Accu AS yanShou_Date_AccuStr,\n" +
+            "\tphoi.jieSuan_Date_Plan AS jieSuan_Date_PlanStr,\n" +
+            "phoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp,\n" +
+            "\tphoi.jieSuan_Emp," +
+            "\tphoi.jieSuan_Date_Accu AS jieSuan_Date_AccuStr\n" +
+            "FROM\n" +
+            "\tproject_head_order pho\n" +
+            "JOIN project_head ph ON ph.id = pho.head_id\n" +
+            "JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
+            "WHERE\n" +
+            "\tphoi.`status` = 0\n" +
+            "AND phoi.checked = 2\n" +
+            "AND phoi.id IN (\n" +
+            "\tSELECT\n" +
+            "\t\tmax(item2.id)\n" +
+            "\tFROM\n" +
+            "\t\tproject_head_order_item item2\n" +
+            "\tGROUP BY\n" +
+            "\t\titem2.order_id,item2.product_Name\n" +
+            ")\n" +
+            "AND (\n" +
+            "\t(\n" +
+            "\t\tphoi.zhanCha_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\t\tAND phoi.zhanCha_Date_Accu IS NULL\n" +
+            "\t)\n" +
+            "\tOR (\n" +
+            "\t\tphoi.outDraw_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\t\tAND phoi.outDraw_Date_Accu IS NULL\n" +
+            "\t)\n" +
+            "\tOR (\n" +
+            "\t\tphoi.program_confir_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\t\tAND phoi.program_confir_Date_Accu IS NULL\n" +
+            "\t)\n" +
+            "\tOR (\n" +
+            "\t\tphoi.giveOrder_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\t\tAND phoi.giveOrder_Date_Accu IS NULL\n" +
+            "\t)\n" +
+            "\tOR (\n" +
+            "\t\tphoi.delivery_Goods_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\t\tAND phoi.delivery_Goods_Date_Accu IS NULL\n" +
+            "\t)\n" +
+            "\tOR (\n" +
+            "\t\tphoi.install_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\t\tAND phoi.install_Date_Accu IS NULL\n" +
+            "\t)\n" +
+            "\tOR (\n" +
+            "\t\tphoi.yanShou_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\t\tAND phoi.yanShou_Date_Accu IS NULL\n" +
+            "\t)\n" +
+            "\tOR (\n" +
+            "\t\tphoi.jieSuan_Emp LIKE CONCAT('%',#{empNo},'%')\n" +
+            "\t\tAND phoi.jieSuan_Date_Accu IS NULL\n" +
+            "\t)\n" +
+            ")")
+    List<ProjectHeadOrderItem> getAllItemByUserIdAndNoFinish(String empNo);
+
+
+
+    @Select("SELECT\n" +
+            "\tphoi.id AS id,\n" +
+            "\tpho.ordeNo AS ordeNo,\n" +
+            "\tpho.customer_Name,\n" +
+            "\tpho.newOrOld AS newOrOld,\n" +
+            "\tphoi.zhanCha_Date_Plan AS zhanCha_Date_PlanStr,\n" +
+            "\tphoi.zhanCha_Date_Accu AS zhanCha_Date_AccuStr,\n" +
+            "\tphoi.outDraw_Date_Plan AS outDraw_Date_PlanStr,\n" +
+            "\tphoi.outDraw_Date_Accu AS outDraw_Date_AccuStr,\n" +
+            "\tphoi.program_confir_Date_Plan AS program_confir_Date_PlanStr,\n" +
+            "\tphoi.program_confir_Date_Accu AS program_confir_Date_AccuStr,\n" +
+            "\tphoi.giveOrder_Date_Plan AS giveOrder_Date_PlanStr,\n" +
+            "\tphoi.giveOrder_Date_Accu AS giveOrder_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.install_Date_Plan AS install_Date_PlanStr,\n" +
+            "\tphoi.install_Date_Accu AS install_Date_AccuStr,\n" +
+            "\tphoi.yanShou_Date_Plan AS yanShou_Date_PlanStr,\n" +
+            "\tphoi.yanShou_Date_Accu AS yanShou_Date_AccuStr,\n" +
+            "\tphoi.jieSuan_Date_Plan AS jieSuan_Date_PlanStr,\n" +
+            "phoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp,\n" +
+            "\tphoi.jieSuan_Emp," +
+            "\tphoi.jieSuan_Date_Accu AS jieSuan_Date_AccuStr\n" +
+            "FROM\n" +
+            "\tproject_head_order pho\n" +
+            "JOIN project_head ph ON ph.id = pho.head_id\n" +
+            "JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
+            "WHERE\n" +
+            "\tphoi.`status` = 0\n" +
+            "AND phoi.checked = 0\n" +
+            "AND phoi.id IN (\n" +
+            "\tSELECT\n" +
+            "\t\tmax(item2.id)\n" +
+            "\tFROM\n" +
+            "\t\tproject_head_order_item item2\n" +
+            "\tGROUP BY\n" +
+            "\t\titem2.order_id,item2.product_Name\n" +
+            ")" )
+    List<ProjectHeadOrderItem> getAllItemByUserIdAndNoFinish2(String empNo);
+
+
+    @Select("SELECT\n" +
+            "\tphoi.id,\n" +
+            "\tifnull(pho.ordeNo,'') as ordeNo,\n" +
+            "\tifnull(ph.projectName,'') as projectName,\n" +
+            "\tifnull(phoi.product_Name,'') as product_Name,\n" +
+            "\tifnull(pho.customer_Name,'') as customer_Name,\n" +
+            "\tph.salor,\n" +
+            "\tpho.newOrOld,\n" +
+            "\tphoi.delivery_Date AS delivery_DateStr,\n" +
+            "\tphoi.getOrder_Date_Plan AS getOrder_Date_PlanStr,\n" +
+            "\tphoi.getOrder_Date_Accu AS getOrder_Date_AccuStr,\n" +
+            "\tphoi.zhanCha_Date_Plan AS zhanCha_Date_PlanStr,\n" +
+            "\tphoi.zhanCha_Date_Accu AS zhanCha_Date_AccuStr,\n" +
+            "\tphoi.outDraw_Date_Plan AS outDraw_Date_PlanStr,\n" +
+            "\tphoi.outDraw_Date_Accu AS outDraw_Date_AccuStr,\n" +
+            "\tphoi.program_confir_Date_Plan AS program_confir_Date_PlanStr,\n" +
+            "\tphoi.program_confir_Date_Accu AS program_confir_Date_AccuStr,\n" +
+            "\tphoi.giveOrder_Date_Plan AS giveOrder_Date_PlanStr,\n" +
+            "\tphoi.giveOrder_Date_Accu AS giveOrder_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.install_Date_Plan AS install_Date_PlanStr,\n" +
+            "\tphoi.install_Date_Accu AS install_Date_AccuStr,\n" +
+            "\tphoi.yanShou_Date_Plan AS yanShou_Date_PlanStr,\n" +
+            "\tphoi.yanShou_Date_Accu AS yanShou_Date_AccuStr,\n" +
+            "\tphoi.jieSuan_Date_Plan AS jieSuan_Date_PlanStr,\n" +
+            "\tphoi.jieSuan_Date_Accu AS jieSuan_Date_AccuStr,\n" +
+            "\tphoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp\n" +
+            "FROM\n" +
+            "\tproject_head_order_item phoi\n" +
+            "LEFT JOIN project_head_order pho ON pho.id = phoi.order_id\n" +
+            "LEFT JOIN project_head ph ON ph.id = pho.head_id\n" +
+            "WHERE\n" +
+            "\tphoi.`status` = 0\n" +
+            "AND phoi.checked = 2\n" +
+            "AND phoi.install_Date_Accu IS NULL\n" +
+            "AND phoi.id IN (\n" +
+            "\tSELECT\n" +
+            "\t\tmax(item2.id)\n" +
+            "\tFROM\n" +
+            "\t\tproject_head_order_item item2\n" +
+            "\tGROUP BY\n" +
+            "\t\titem2.order_id,item2.product_Name\n" +
+            ")")
+    List<ProjectHeadOrderItem> getProjectItemAllByCondi();
+
+
+    @Select("SELECT\n" +
+            "\tphoi.id,\n" +
+            "\tifnull(pho.ordeNo,'') as orderNo,\n" +
+            "\tifnull(ph.projectName,'') as projectName,\n" +
+            "\tifnull(phoi.product_Name,'') as product_Name,\n" +
+            "\tifnull(pho.customer_Name,'') as customer_Name,\n" +
+            "\tph.salor,\n" +
+            "\tpho.newOrOld,\n" +
+            "\tphoi.delivery_Date AS delivery_DateStr,\n" +
+            "\tphoi.getOrder_Date_Plan AS getOrder_Date_PlanStr,\n" +
+            "\tphoi.getOrder_Date_Accu AS getOrder_Date_AccuStr,\n" +
+            "\tphoi.zhanCha_Date_Plan AS zhanCha_Date_PlanStr,\n" +
+            "\tphoi.zhanCha_Date_Accu AS zhanCha_Date_AccuStr,\n" +
+            "\tphoi.outDraw_Date_Plan AS outDraw_Date_PlanStr,\n" +
+            "\tphoi.outDraw_Date_Accu AS outDraw_Date_AccuStr,\n" +
+            "\tphoi.program_confir_Date_Plan AS program_confir_Date_PlanStr,\n" +
+            "\tphoi.program_confir_Date_Accu AS program_confir_Date_AccuStr,\n" +
+            "\tphoi.giveOrder_Date_Plan AS giveOrder_Date_PlanStr,\n" +
+            "\tphoi.giveOrder_Date_Accu AS giveOrder_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.install_Date_Plan AS install_Date_PlanStr,\n" +
+            "\tphoi.install_Date_Accu AS install_Date_AccuStr,\n" +
+            "\tphoi.yanShou_Date_Plan AS yanShou_Date_PlanStr,\n" +
+            "\tphoi.yanShou_Date_Accu AS yanShou_Date_AccuStr,\n" +
+            "\tphoi.jieSuan_Date_Plan AS jieSuan_Date_PlanStr,\n" +
+            "\tphoi.jieSuan_Date_Accu AS jieSuan_Date_AccuStr,\n" +
+            "\tphoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp\n" +
+            "FROM\n" +
+            "\tproject_head_order_item phoi\n" +
+            "LEFT JOIN project_head_order pho ON pho.id = phoi.order_id\n" +
+            "LEFT JOIN project_head ph ON ph.id = pho.head_id\n" +
+            "WHERE\n" +
+            "\tphoi.`status` = 0\n" +
+            "AND phoi.checked = 2\n" +
+            "AND (\n" +
+            "\tphoi.zhanCha_Date_Accu IS NULL\n" +
+            "\tOR phoi.outDraw_Date_Accu IS NULL\n" +
+            "\tOR phoi.program_confir_Date_Accu IS NULL\n" +
+            "\tOR phoi.giveOrder_Date_Accu IS NULL\n" +
+            "\tOR phoi.delivery_Goods_Date_Accu IS NULL\n" +
+            "\tOR phoi.install_Date_Accu IS NULL\n" +
+            "\tOR phoi.yanShou_Date_Accu IS NULL\n" +
+            "\tOR phoi.jieSuan_Date_Accu IS NULL\n" +
+            ")\n" +
+            "AND phoi.id IN (\n" +
+            "\tSELECT\n" +
+            "\t\tmax(item2.id)\n" +
+            "\tFROM\n" +
+            "\t\tproject_head_order_item item2\n" +
+            "\tGROUP BY\n" +
+            "\t\titem2.order_id,item2.product_Name\n" +
+            ")")
+    List<ProjectHeadOrderItem> getProjectItemAllByCondi2();
 
 
     @Select("SELECT\n" +
             "\tphoi.delivery_Date AS delivery_DateStr,\n" +
+            "\tpho.newOrOld AS newOrOld,\n" +
             "\tphoi.totalBao AS totalBao,\n" +
             "\tphoi.product_Name AS product_Name,\n" +
             "\tIFNULL(phoi.weiHuiMoney, 0.0) AS weiHuiMoney,\n" +
             "\tpho.ordeNo AS orderNo,\n" +
+            "\tpho.customer_Name AS customer_Name,\n" +
+            "\tphoi.zhanCha_Date_Plan AS zhanCha_Date_PlanStr,\n" +
+            "\tphoi.zhanCha_Date_Accu AS zhanCha_Date_AccuStr,\n" +
+            "\tphoi.outDraw_Date_Plan AS outDraw_Date_PlanStr,\n" +
+            "\tphoi.outDraw_Date_Accu AS outDraw_Date_AccuStr,\n" +
+            "\tphoi.program_confir_Date_Plan AS program_confir_Date_PlanStr,\n" +
+            "\tphoi.program_confir_Date_Accu AS program_confir_Date_AccuStr,\n" +
+            "\tphoi.giveOrder_Date_Plan AS giveOrder_Date_PlanStr,\n" +
+            "\tphoi.giveOrder_Date_Accu AS giveOrder_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.install_Date_Plan AS install_Date_PlanStr,\n" +
+            "\tphoi.install_Date_Accu AS install_Date_AccuStr,\n" +
+            "\tphoi.yanShou_Date_Plan AS yanShou_Date_PlanStr,\n" +
+            "\tphoi.yanShou_Date_Accu AS yanShou_Date_AccuStr,\n" +
+            "\tphoi.jieSuan_Date_Plan AS jieSuan_Date_PlanStr,\n" +
+            "\tphoi.jieSuan_Date_Accu AS jieSuan_Date_AccuStr,\n" +
+            "\tphoi.getOrder_Date_Plan AS getOrder_Date_PlanStr,\n" +
+            "phoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp,\n" +
+            "\tphoi.jieSuan_Emp," +
             "\tphoi.id AS id,\n" +
             "\tphoi.status AS status,\n" +
-            "\tphoi.remark AS remark," +
+            "\tifnull(phoi.remark,'') AS remark," +
             "\tph.projectName AS projectName,\n" +
             "\tphoi.gendan AS gendan,\n" +
             "\tphoi.checked AS checked,\n" +
@@ -102,7 +543,7 @@ public interface ProjectMapper {
             "\t\tFROM\n" +
             "\t\t\tproject_head_order_item item2\n" +
             "\t\tGROUP BY\n" +
-            "\t\t\titem2.product_Name\n" +
+            "\t\t\titem2.order_id,item2.product_Name\n" +
             "\t) order by checked asc ")
     List<ProjectHeadOrderItem> getTotalProjectOrderITEMByOrderSAll();
 
@@ -137,16 +578,76 @@ public interface ProjectMapper {
             "\tIFNULL(phoi.jindu_remark,'') as jindu_remark,\n" +
             "\tIFNULL(phoi.remark,'') as remark,\n" +
             "\tphoi.id as id,\n" +
+            "phoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp,\n" +
+            "\tphoi.jieSuan_Emp," +
+            "\tpho.newOrOld as newOrOld," +
+            "\tifnull(phoi.note,'') as note," +
+            "\tphoi.order_id as order_id," +
             "\tpho.ordeNo as orderNo \n" +
             " FROM\n" +
             "\tproject_head ph\n" +
             "LEFT JOIN project_head_order pho ON ph.id = pho.head_id\n" +
             "LEFT JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
             "WHERE " +
-            "\tph.salor = #{empNo}\n" +
-            "AND pho.ordeNo = #{orderNo} \n" +
-            "and phoi.product_Name = #{projectName} order by phoi.version desc limit 1")
-    ProjectHeadOrderItem getTotalProjectOrderITEMMoreByOrderS(String empNo, String projectName, String orderNo);
+            " pho.customer_Name = #{customerName} \n" +
+            "and phoi.product_Name = #{productName} " +
+            "and ph.projectName = #{projectName} " +
+            "order by phoi.version desc limit 1")
+    ProjectHeadOrderItem getTotalProjectOrderITEMMoreByOrderS(String empNo, String projectName, String customerName,String productName);
+
+
+    @Select("SELECT\n" +
+            "\tphoi.getOrder_Date_Plan as getOrder_Date_PlanStr,\n" +
+            "\tphoi.getOrder_Date_Accu as getOrder_Date_AccuStr,\n" +
+            "\tphoi.zhanCha_Date_Plan as zhanCha_Date_PlanStr,\n" +
+            "\tphoi.zhanCha_Date_Accu as zhanCha_Date_AccuStr,\n" +
+            "\tphoi.outDraw_Date_Plan as outDraw_Date_PlanStr,\n" +
+            "\tphoi.outDraw_Date_Accu as outDraw_Date_AccuStr,\n" +
+            "\tphoi.program_confir_Date_Plan as program_confir_Date_PlanStr,\n" +
+            "\tphoi.program_confir_Date_Accu as program_confir_Date_AccuStr,\n" +
+            "\tphoi.giveOrder_Date_Plan as giveOrder_Date_PlanStr,\n" +
+            "\tphoi.giveOrder_Date_Accu as giveOrder_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan as delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu as delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan as delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu as delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.install_Date_Plan as install_Date_PlanStr,\n" +
+            "\tphoi.install_Date_Accu as install_Date_AccuStr,\n" +
+            "\tphoi.yanShou_Date_Plan as yanShou_Date_PlanStr,\n" +
+            "\tphoi.yanShou_Date_Accu as yanShou_Date_AccuStr,\n" +
+            "\tphoi.jieSuan_Date_Plan as jieSuan_Date_PlanStr,\n" +
+            "\tphoi.jieSuan_Date_Accu as jieSuan_Date_AccuStr,\n" +
+            "\tIFNULL(phoi.hetongMoney,0.0) as hetongMoney,\n" +
+            "\tIFNULL(phoi.hereMoney,0.0) as hereMoney,\n" +
+            "\tIFNULL(phoi.weiHuiMoney,0.0) as weiHuiMoney,\n" +
+            "\tIFNULL(phoi.jindu_remark,'') as jindu_remark,\n" +
+            "\tIFNULL(phoi.remark,'') as remark,\n" +
+            "\tphoi.id as id,\n" +
+            "phoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp,\n" +
+            "\tphoi.jieSuan_Emp," +
+            "\tifnull(phoi.note,'') as note," +
+            "\tphoi.order_id as order_id," +
+            "\tpho.newOrOld as newOrOld," +
+            "\tpho.ordeNo as orderNo \n" +
+            " FROM\n" +
+            "\tproject_head ph\n" +
+            " JOIN project_head_order pho ON ph.id = pho.head_id\n" +
+            " JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
+            "WHERE " +
+            " phoi.id = #{id}")
+    ProjectHeadOrderItem getTotalProjectOrderITEMMoreById(Integer id);
 
 
     @Select("SELECT\n" +
@@ -249,22 +750,110 @@ public interface ProjectMapper {
             "\tphoi.order_id as order_Id," +
             "\tphoi.delivery_Date as delivery_DateStr,\n" +
             "\tphoi.totalBao as totalBao ,\n" +
-            "\tphoi.product_Name as product_Name,\n" +
+            "\tifnull(phoi.product_Name,'') as product_Name,\n" +
             "\tphoi.version as version,\n" +
             "\tphoi.checked as checked,\n" +
             "\tphoi.saleManager as saleManager,\n" +
             "\tphoi.gendan as gendan,\n" +
+            "\tphoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp,\n" +
+            "\tphoi.jieSuan_Emp," +
+            "\tifnull(phoi.note,'') as note," +
             "\tIFNULL(phoi.hetongMoney,0.0) as hetongMoney,\n" +
             "\tIFNULL(phoi.hereMoney,0.0) as hereMoney,\n" +
             "\tIFNULL(phoi.weiHuiMoney,0.0) as weiHuiMoney,\n" +
             "\tIFNULL(phoi.jindu_remark,'') as jindu_remark,\n" +
             "\tIFNULL(phoi.remark,'') as remark,\n" +
-            "\tphoi.id as id\n" +
+            "\tphoi.id as id," +
+            "\tph.projectName,\n" +
+            "\tifnull(pho.ordeNo,'') as ordeNo,\n" +
+            "\tifnull(phoi.product_Name,'') as product_Name \n" +
             " FROM\n" +
             "\t  project_head_order_item phoi " +
-            "WHERE " +
+            " LEFT JOIN project_head_order pho ON phoi.order_id = pho.id\n" +
+            "LEFT JOIN project_head ph ON ph.id = pho.head_id" +
+            " WHERE " +
             "phoi.id = #{id}")
     ProjectHeadOrderItem getOldHeadOrderItemByPhoi(ProjectHeadOrderItem item);
+
+
+    @Insert("insert into project_head_order_item" +
+            " (" +
+            "getOrder_Date_Plan," +
+            "getOrder_Date_Accu," +
+            "program_confir_Date_Plan," +
+            "program_confir_Date_Accu," +
+            "giveOrder_Date_Plan," +
+            "giveOrder_Date_Accu," +
+            "delivery_Goods_Date_Plan," +
+            "delivery_Goods_Date_Accu," +
+            "install_Date_Plan," +
+            "install_Date_Accu," +
+            "yanShou_Date_Plan," +
+            "yanShou_Date_Accu," +
+            "jieSuan_Date_Plan," +
+            "jieSuan_Date_Accu," +
+            "order_Id," +
+            "delivery_Date," +
+            "totalBao," +
+            "product_Name," +
+            "version," +
+            "checked," +
+            "saleManager," +
+            "gendan," +
+            "hetongMoney," +
+            "hereMoney," +
+            "weiHuiMoney," +
+            "jindu_remark," +
+            "\tprogram_confir_Emp,\n" +
+            "\tgiveOrder_Emp,\n" +
+            "\tdelivery_Goods_Emp,\n" +
+            "\tinstall_Emp,\n" +
+            "\tyanShou_Emp,\n" +
+            "\tjieSuan_Emp," +
+            "\tnote," +
+            "remark)" +
+            " values(" +
+            "#{getOrder_Date_PlanStr}," +
+            "#{getOrder_Date_AccuStr}," +
+            "#{program_confir_Date_PlanStr}," +
+            "#{program_confir_Date_AccuStr}," +
+            "#{giveOrder_Date_PlanStr}," +
+            "#{giveOrder_Date_AccuStr}," +
+            "#{delivery_Goods_Date_PlanStr}," +
+            "#{delivery_Goods_Date_AccuStr}," +
+            "#{install_Date_PlanStr}," +
+            "#{install_Date_AccuStr}," +
+            "#{yanShou_Date_PlanStr}," +
+            "#{yanShou_Date_AccuStr}," +
+            "#{jieSuan_Date_PlanStr}," +
+            "#{jieSuan_Date_AccuStr}," +
+            "#{order_Id}," +
+            "#{delivery_DateStr}," +
+            "#{totalBao}," +
+            "#{product_Name}," +
+            "#{version}," +
+            "#{checked}," +
+            "#{saleManager}," +
+            "#{gendan}," +
+            "#{hetongMoney}," +
+            "#{hereMoney}," +
+            "#{weiHuiMoney}," +
+            "#{jindu_remark}," +
+            "\t#{program_confir_Emp},\n" +
+            "\t#{giveOrder_Emp},\n" +
+            "\t#{delivery_Goods_Emp},\n" +
+            "\t#{install_Emp},\n" +
+            "\t#{yanShou_Emp},\n" +
+            "\t#{jieSuan_Emp}," +
+            "\t#{note}," +
+            "#{remark})")
+    void saveOrderItemMorOld(ProjectHeadOrderItem item);
 
 
     @Insert("insert into project_head_order_item" +
@@ -299,6 +888,18 @@ public interface ProjectMapper {
             "hereMoney," +
             "weiHuiMoney," +
             "jindu_remark," +
+            "\tzhanCha_Emp,\n" +
+            "\toutDraw_Emp,\n" +
+            "\tprogram_confir_Emp,\n" +
+            "\tgiveOrder_Emp,\n" +
+            "\tdelivery_Goods_Emp,\n" +
+            "\tinstall_Emp,\n" +
+            "\tyanShou_Emp,\n" +
+            "\tjieSuan_Emp," +
+            "\tnote," +
+            "\tstatus," +
+            "\tupdateUserId," +
+            "\tupdateDate," +
             "remark)" +
             " values(" +
             "#{getOrder_Date_PlanStr}," +
@@ -331,8 +932,25 @@ public interface ProjectMapper {
             "#{hereMoney}," +
             "#{weiHuiMoney}," +
             "#{jindu_remark}," +
+            "\t#{zhanCha_Emp},\n" +
+            "\t#{outDraw_Emp},\n" +
+            "\t#{program_confir_Emp},\n" +
+            "\t#{giveOrder_Emp},\n" +
+            "\t#{delivery_Goods_Emp},\n" +
+            "\t#{install_Emp},\n" +
+            "\t#{yanShou_Emp},\n" +
+            "\t#{jieSuan_Emp}," +
+            "\t#{note}," +
+            "\t#{status}," +
+            "\t#{updateUserId}," +
+            "\t#{updateDateStr}," +
             "#{remark})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     void saveOrderItemMor(ProjectHeadOrderItem item);
+
+
+    @Update("UPDATE project_oi_moneyrecord set item_id = #{newId} where item_id = #{oldId}")
+    void updateProjectImage(Integer oldId, Integer newId);
 
     @Select("select count(*) from project_head where projectName = #{projectName} and salor = #{userid} ")
     int findNameRepeatOrNot(String userid, String projectName);
@@ -347,8 +965,23 @@ public interface ProjectMapper {
     @Insert("insert into project_head (projectName,salor,remark) values(#{projectName},#{userId},#{remark})")
     void saveProjectByNameAndRemark(String userId, String projectName, String remark);
 
+
+    @Insert("insert into project_head (projectName,salor,remark) values(#{projectName},#{salor},#{remark})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    void saveProjectHeadByBeanA(ProjectHead ph);
+
+
+
+
+
+    @Select("  select id from project_head where projectName = #{projectName} and salor = #{salor} ")
+    ProjectHead getProjectByNameAndSalor(String projectName,String salor);
+
     @Select("select id,`Name` from china where pid = 0 and id <>0")
     List<China> getAllMainProvince();
+
+    @Select("select id from china where name like CONCAT('%',#{name},'%') limit 1")
+    Integer getProvinceIdByName(String name);
 
     @Select("SELECT\n" +
             "\tph.id as id,pho.ordeNo\n" +
@@ -356,9 +989,10 @@ public interface ProjectMapper {
             "\tproject_head_order pho\n" +
             "LEFT JOIN project_head ph ON ph.id = pho.head_id\n" +
             "WHERE\n" +
-            "\tpho.ordeNo = #{orderNo}\n" +
+            "\tpho.customer_Name = #{customerName}\n" +
+            "\t and ph.projectName = #{projectName}\n" +
             "AND ph.salor = #{userId}")
-    ProjectHeadOrder checkOrderNoRepeat(String userId, String orderNo);
+    ProjectHeadOrder checkOrderNoRepeat(String userId, String orderNo,String projectName,String customerName);
 
     @Select("SELECT\n" +
             "count(*) " +
@@ -396,7 +1030,7 @@ public interface ProjectMapper {
             "  alertTimes,\n" +
             "\talertMode,\n" +
             "\talertToPositions,\n" +
-            "\tremark\n" +
+            "\tifnull(remark,'') as remark \n" +
             "FROM\n" +
             "\talertset")
     AlertSet getAlertSet();
@@ -443,6 +1077,11 @@ public interface ProjectMapper {
     void saveProjectHeadByBean(Integer provinceId, String userId, String orderNo, String customerName,
                                String projectName, Integer id, Integer newOrOld);
 
+    @Insert(" insert into project_head_order (head_id,province,customer_Name,ordeNo,newOrOld,remark) values" +
+            " (#{head_Id},#{province},#{customerName},#{orderNo},#{newOrOld},#{remark}) ")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    void savePHOByBean(ProjectHeadOrder pho);
+
 
     @Select("SELECT\n" +
             "\t*\n" +
@@ -465,17 +1104,45 @@ public interface ProjectMapper {
 
 
     @Select("SELECT\n" +
+            "\tpho.id,\n" +
+            "\tpho.province AS province,\n" +
+            "\tpho.customer_Name AS customerName,\n" +
+            "\tpho.newOrOld AS newOrOld,\n" +
+            "\tpho.ordeNo AS orderNo,\n" +
+            "\tifnull(pho.remark,'') as remark \n" +
+            "FROM\n" +
+            "\tproject_head_order pho\n" +
+            "left join project_head ph on pho.head_id = ph.id\n" +
+            "WHERE\n" +
+            "\tpho.customer_Name = #{customerName} and ph.projectName = #{projectName} ")
+    ProjectHeadOrder getProjectOrderByOrderNo(String projectName,String customerName,String orderNo);
+
+    @Select("SELECT\n" +
             " \tid,\n" +
             "\tprovince as province,\n" +
             "\tcustomer_Name as customerName,\n" +
             "\tnewOrOld as newOrOld,\n" +
             "\tordeNo as orderNo,\n" +
-            "\tremark " +
+            "\tifnull(remark,'') as remark " +
             "FROM \n" +
             "\tproject_head_order pho \n" +
             "WHERE\n" +
-            "\tpho.ordeNo = #{orderNo}\n")
-    ProjectHeadOrder getProjectOrderByOrderNo(String orderNo);
+            "\tpho.ordeNo = #{orderNo} and pho.head_id = #{headId} and pho.customer_Name = #{custormerName} \n")
+    ProjectHeadOrder getPHOByHeadIdAndOrderNoAndCstomerName(Integer headId,String custormerName,String orderNo);
+
+
+    @Select("SELECT\n" +
+            "\tui.useractor\n" +
+            "FROM\n" +
+            "\temployee ee\n" +
+            " JOIN position n ON ee.positionId = n.id\n" +
+            " JOIN dept t ON t.id = ee.deptId\n" +
+            " join userinfo ui on ui.empno = ee.empno\n" +
+            " join qyweixinbd bd on bd.empNo = ee.empno\n" +
+            "WHERE\n" +
+            "\tt.deptname LIKE \"%项目中心%\"\n" +
+            "AND ee.isQuit = 0 and bd.userid = #{id}")
+    Integer getUserActorByUserId(String id);
 
 
     @Select("SELECT\n" +
@@ -484,7 +1151,7 @@ public interface ProjectMapper {
             "\tpom.fapiaoNo,\n" +
             "\tpom.hereMoney,\n" +
             "\tpom.imageUrl,\n" +
-            "\tpom.remark,\n" +
+            "\tifnull(pom.remark,'') as remark,\n" +
             "\titem.hetongMoney,\n" +
             "\titem.weiHuiMoney\n" +
             "FROM\n" +
@@ -501,7 +1168,7 @@ public interface ProjectMapper {
             "\tpom.fapiaoNo,\n" +
             "\tpom.hereMoney,\n" +
             "\tpom.imageUrl,\n" +
-            "\tpom.remark,\n" +
+            "\tifnull(pom.remark,'') as remark,\n" +
             "\tpom.item_id,\n" +
             "\titem.hetongMoney,\n" +
             "\titem.weiHuiMoney\n" +
@@ -515,9 +1182,133 @@ public interface ProjectMapper {
 
     @Select("SELECT\n" +
             " \tid,\n" +
+            "\tprovince as province,\n" +
+            "\tcustomer_Name as customerName,\n" +
+            "\tnewOrOld as newOrOld,\n" +
+            "\tordeNo as orderNo,\n" +
+            "\tifnull(remark,'') as remark " +
+            "FROM \n" +
+            "\tproject_head_order pho \n" +
+            "WHERE\n" +
+            "\tpho.id = #{id}\n")
+    ProjectHeadOrder getProjectOrderById(Integer id);
+
+
+    @Select("select * from daysset where type = #{type}")
+    DaysSet getDaysSetByType(int type);
+
+
+    @Select("select faday from fading order by faday asc")
+    List<String> getFaDingList();
+
+    @Select(" select e.* from employee e LEFT JOIN  dept d on e.deptId = d.id\n" +
+            " where d.deptname in (\"销售中心\") ")
+    List<Employee> findAllProjectSalorByDeptName();
+
+    @Select("select `name` from qyweixinbd where userid = #{userId}")
+    String getUserNameByUserId(String userId);
+
+
+    @Select("SELECT\n" +
+            "\tphoi.delivery_Date AS delivery_DateStr,\n" +
+            "\tphoi.totalBao AS totalBao,\n" +
+            "\tpho.customer_Name AS customer_Name,\n" +
+            "\tphoi.product_Name AS product_Name,\n" +
+            "\tifnull((phoi.hetongMoney), 0.0) - ifnull(\n" +
+            "\t\t(\n" +
+            "\t\t\tSELECT\n" +
+            "\t\t\t\tsum(hereMoney)\n" +
+            "\t\t\tFROM\n" +
+            "\t\t\t\tproject_oi_moneyrecord\n" +
+            "\t\t\tWHERE\n" +
+            "\t\t\t\titem_id = phoi.id\n" +
+            "\t\t),\n" +
+            "\t\t0.0\n" +
+            "\t) AS weiHuiMoney,\n" +
+            "\tIFNULL(phoi.hetongMoney, 0.0) AS hetongMoney,\n" +
+            "\tpho.ordeNo AS orderNo,\n" +
+            "\tphoi.id AS id,\n" +
+            "\tphoi.zhanCha_Date_Plan AS zhanCha_Date_PlanStr,\n" +
+            "\tphoi.zhanCha_Date_Accu AS zhanCha_Date_AccuStr,\n" +
+            "\tphoi.outDraw_Date_Plan AS outDraw_Date_PlanStr,\n" +
+            "\tphoi.outDraw_Date_Accu AS outDraw_Date_AccuStr,\n" +
+            "\tphoi.program_confir_Date_Plan AS program_confir_Date_PlanStr,\n" +
+            "\tphoi.program_confir_Date_Accu AS program_confir_Date_AccuStr,\n" +
+            "\tphoi.giveOrder_Date_Plan AS giveOrder_Date_PlanStr,\n" +
+            "\tphoi.giveOrder_Date_Accu AS giveOrder_Date_AccuStr,\n" +
+            "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+            "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+            "\tphoi.install_Date_Plan AS install_Date_PlanStr,\n" +
+            "\tphoi.install_Date_Accu AS install_Date_AccuStr,\n" +
+            "\tphoi.yanShou_Date_Plan AS yanShou_Date_PlanStr,\n" +
+            "\tphoi.yanShou_Date_Accu AS yanShou_Date_AccuStr,\n" +
+            "\tphoi.jieSuan_Date_Plan AS jieSuan_Date_PlanStr,\n" +
+            "\tphoi.jieSuan_Date_Accu AS jieSuan_Date_AccuStr,\n" +
+            "\tphoi.getOrder_Date_Plan AS getOrder_Date_PlanStr,\n" +
+            "\tphoi.checked AS checked,\n" +
+            "\tphoi. STATUS AS STATUS,\n" +
+            "\tIFNULL(phoi.delivery_Goods_Emp, '') AS gendan,\n" +
+            "\tph.projectName AS projectName,\n" +
+            "\tphoi.order_id AS order_Id,\n" +
+            "\tIFNULL(phoi.zhanCha_Emp, '') AS saleManager,\n" +
+            "\tifnull(phoi.remark,'') AS remark,\n" +
+            "\tphoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp,\n" +
+            "\tphoi.jieSuan_Emp,\n" +
+            "\tifnull(phoi.jindu_remark,'') as jindu_remark,\n" +
+            "\tph.salor,\n" +
+            "\tcha. NAME AS provinceStr,\n" +
+            "\tph.projectName,\n" +
+            "\tpho.newOrOld AS newOrOld,\n" +
+            "\t(\n" +
+            "\t\tcast(\n" +
+            "\t\t\tphoi.version AS DECIMAL (11, 2)\n" +
+            "\t\t) - 1\n" +
+            "\t) * 10 AS historyGe\n" +
+            "FROM\n" +
+            "\tproject_head_order pho\n" +
+            "JOIN project_head ph ON ph.id = pho.head_id\n" +
+            "JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
+            "LEFT JOIN china cha ON pho.province = cha.id\n" +
+            "WHERE\n" +
+            "\tphoi.id IN (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tmax(item2.id)\n" +
+            "\t\tFROM\n" +
+            "\t\t\tproject_head_order_item item2\n" +
+            "\t\tGROUP BY\n" +
+            "\t\t\titem2.order_id,item2.product_Name\n" +
+            "\t) limit #{currentPageTotalNum},#{pageSize}")
+    List<ProjectHeadOrderItem> findAllProjecHOI(ProjectHeadOrderItem item);
+
+    @Select("SELECT  " +
+            " count(*) " +
+            "FROM\n" +
+            "\tproject_head_order pho\n" +
+            "JOIN project_head ph ON ph.id = pho.head_id\n" +
+            "JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
+            "LEFT JOIN china cha ON pho.province = cha.id\n" +
+            "WHERE\n" +
+            "\tphoi.id IN (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tmax(item2.id)\n" +
+            "\t\tFROM\n" +
+            "\t\t\tproject_head_order_item item2\n" +
+            "\t\tGROUP BY\n" +
+            "\t\t\titem2.order_id,item2.product_Name\n" +
+            "\t)")
+    int findAllProjecHOICount();
+
+    @Select("SELECT\n" +
+            " \tid,\n" +
             "\tprojectName,\n" +
             "\tsalor,\n" +
-            "\tremark \n" +
+            "\tifnull(remark,'') as remark \n" +
             "FROM \n" +
             "\tproject_head pho \n" +
             "WHERE\n" +
@@ -563,6 +1354,54 @@ public interface ProjectMapper {
             ",fapiaoNo = #{fapiaoNo},remark = #{remark}  where id = #{id}")
     void updateProjectRecordByBean(ProjectItemMoneyRecord record);
 
+
+    @Update("update project_head_order_item  set " +
+            "getOrder_Date_Plan = #{getOrder_Date_PlanStr}," +
+            "getOrder_Date_Accu = #{getOrder_Date_AccuStr}," +
+            "program_confir_Date_Plan = #{program_confir_Date_PlanStr}," +
+            "program_confir_Date_Accu = #{program_confir_Date_AccuStr}," +
+            "giveOrder_Date_Plan = #{giveOrder_Date_PlanStr}," +
+            "giveOrder_Date_Accu = #{giveOrder_Date_AccuStr}," +
+            "delivery_Goods_Date_Plan = #{delivery_Goods_Date_PlanStr}," +
+            "delivery_Goods_Date_Accu = #{delivery_Goods_Date_AccuStr}," +
+            "install_Date_Plan = #{install_Date_PlanStr}," +
+            "install_Date_Accu = #{install_Date_AccuStr}," +
+            "yanShou_Date_Plan = #{yanShou_Date_PlanStr}," +
+            "yanShou_Date_Accu = #{yanShou_Date_AccuStr}," +
+            "jieSuan_Date_Plan = #{jieSuan_Date_PlanStr}," +
+            "version = #{version}," +
+            "\tprogram_confir_Emp  = #{program_confir_Emp},\n" +
+            "\tgiveOrder_Emp  = #{giveOrder_Emp},\n" +
+            "\tdelivery_Goods_Emp  = #{delivery_Goods_Emp},\n" +
+            "\tinstall_Emp  = #{install_Emp},\n" +
+            "\tyanShou_Emp  = #{yanShou_Emp},\n" +
+            "\tjieSuan_Emp  = #{jieSuan_Emp}," +
+            "jieSuan_Date_Accu = #{jieSuan_Date_AccuStr}" +
+            "  where id = #{id}")
+    void updateOrderItemMorOld(ProjectHeadOrderItem phoi);
+
+    @Update("update project_head_order_item  set " +
+            "getOrder_Date_Plan = #{getOrder_Date_PlanStr}," +
+            "getOrder_Date_Accu = #{getOrder_Date_AccuStr}," +
+            "zhanCha_Date_Plan = #{zhanCha_Date_PlanStr}," +
+            "zhanCha_Date_Accu = #{zhanCha_Date_AccuStr}," +
+            "outDraw_Date_Plan = #{outDraw_Date_PlanStr}," +
+            "outDraw_Date_Accu = #{outDraw_Date_AccuStr}," +
+            "program_confir_Date_Plan = #{program_confir_Date_PlanStr}," +
+            "program_confir_Date_Accu = #{program_confir_Date_AccuStr}," +
+            "giveOrder_Date_Plan = #{giveOrder_Date_PlanStr}," +
+            "giveOrder_Date_Accu = #{giveOrder_Date_AccuStr}," +
+            "delivery_Goods_Date_Plan = #{delivery_Goods_Date_PlanStr}," +
+            "delivery_Goods_Date_Accu = #{delivery_Goods_Date_AccuStr}," +
+            "install_Date_Plan = #{install_Date_PlanStr}," +
+            "install_Date_Accu = #{install_Date_AccuStr}," +
+            "yanShou_Date_Plan = #{yanShou_Date_PlanStr}," +
+            "yanShou_Date_Accu = #{yanShou_Date_AccuStr}," +
+            "jieSuan_Date_Plan = #{jieSuan_Date_PlanStr}," +
+            "jieSuan_Date_Accu = #{jieSuan_Date_AccuStr}," +
+            "version = #{version}  where id = #{id}")
+    void updateProjectItemByBeanOnlyDateAndNote(ProjectHeadOrderItem phoi);
+
     @Update("update project_head_order_item  set " +
             "getOrder_Date_Plan = #{getOrder_Date_PlanStr}," +
             "getOrder_Date_Accu = #{getOrder_Date_AccuStr}," +
@@ -582,6 +1421,16 @@ public interface ProjectMapper {
             "yanShou_Date_Accu = #{yanShou_Date_AccuStr}," +
             "jieSuan_Date_Plan = #{jieSuan_Date_PlanStr}," +
             "version = #{version}," +
+            "\tzhanCha_Emp = #{zhanCha_Emp},\n" +
+            "\toutDraw_Emp  = #{outDraw_Emp},\n" +
+            "\tprogram_confir_Emp  = #{program_confir_Emp},\n" +
+            "\tgiveOrder_Emp  = #{giveOrder_Emp},\n" +
+            "\tdelivery_Goods_Emp  = #{delivery_Goods_Emp},\n" +
+            "\tinstall_Emp  = #{install_Emp},\n" +
+            "\tyanShou_Emp  = #{yanShou_Emp},\n" +
+            "\tupdateUserId  = #{updateUserId}," +
+            "\tupdateDate  = #{updateDateStr}," +
+            "\tjieSuan_Emp  = #{jieSuan_Emp}," +
             "jieSuan_Date_Accu = #{jieSuan_Date_AccuStr}" +
             "  where id = #{id}")
     void updateOrderItemMor(ProjectHeadOrderItem phoi);
@@ -626,14 +1475,37 @@ public interface ProjectMapper {
             "phoi.saleManager as salorsStr,\n" +
             "phoi.gendan as gendansStr,\n" +
             "phoi.status as status,\n" +
+            "phoi.zhanCha_Emp,\n" +
+            "\tphoi.outDraw_Emp,\n" +
+            "\tphoi.program_confir_Emp,\n" +
+            "\tphoi.giveOrder_Emp,\n" +
+            "\tphoi.delivery_Goods_Emp,\n" +
+            "\tphoi.install_Emp,\n" +
+            "\tphoi.yanShou_Emp,\n" +
+            "\tphoi.jieSuan_Emp," +
             "phoi.id as id \n" +
             "FROM\n" +
             "\tproject_head_order_item phoi\n" +
             "JOIN project_head_order pho ON phoi.order_id = pho.id\n" +
             "WHERE\n" +
-            "\tpho.ordeNo = #{orderNo}\n" +
-            "AND phoi.product_Name = #{productName} order by phoi.version desc limit 1 ")
+            " phoi.id = #{id} ")
     ProjectHeadOrderItem getProjectOrderItemByOrderNoAndProductName(ProjectHeadOrderItem item);
+
+
+    @Select("SELECT\n" +
+            "\tph.projectName,\n" +
+            "\tpho.ordeNo,\n" +
+            "\tphoi.product_Name,\n" +
+            "\tbd.`name`,\n" +
+            "\tbd.userid,\n" +
+            "\tphoi.checked\n" +
+            "FROM\n" +
+            "\tproject_head_order_item phoi\n" +
+            "LEFT JOIN project_head_order pho ON phoi.order_id = pho.id\n" +
+            "LEFT JOIN project_head ph ON ph.id = pho.head_id\n" +
+            "LEFT JOIN qyweixinbd bd ON bd.userid = ph.salor" +
+            " where phoi.id = #{id}")
+    ProjectHeadOrderItem getProjectOrderItemById(Integer id);
 
     @Select("SELECT\n" +
             "\tphoi.delivery_Date AS delivery_DateStr,\n" +
@@ -645,24 +1517,25 @@ public interface ProjectMapper {
             "\tphoi.gendan AS gendan,\n" +
             "\tphoi.saleManager AS saleManager,\n" +
             " FORMAT(phoi.version,1) as versionStr,\n" +
-            "  phoi.remark\n" +
+            "  ifnull(phoi.remark,'') as remark \n" +
             "FROM\n" +
             "\tproject_head_order pho\n" +
             "JOIN project_head ph ON ph.id = pho.head_id\n" +
             "JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
             "WHERE\n" +
-            "\t pho.ordeNo = #{orderNo}\n" +
+            "\t pho.customer_Name = #{customerName}\n" +
             "and phoi.product_Name = #{productName}\n" +
+            "and ph.projectName = #{projectName}\n" +
             "and\n" +
             "\tphoi.id not IN (\n" +
             "\t\tSELECT\n" +
-            "\t\t\tmax(item2.id)\n" +
+            "\t\t\tmin(item2.id)\n" +
             "\t\tFROM\n" +
             "\t\t\tproject_head_order_item item2\n" +
             "\t\tGROUP BY\n" +
-            "\t\t\titem2.product_Name\n" +
+            "\t\t\titem2.order_id,item2.product_Name\n" +
             "\t)")
-    List<ProjectHeadOrderItem> getHistoryItemByProduct_NameAndOrderNo(String productName, String orderNo);
+    List<ProjectHeadOrderItem> getHistoryItemByProduct_NameAndOrderNo(String productName, String orderNo,String projectName,String customerName);
 
 
     @Delete("delete from project_head_order_item where id = #{id}")
@@ -693,6 +1566,44 @@ public interface ProjectMapper {
     List<Employee> getGenDanItems();
 
 
+    @Select("SELECT\n" +
+            "\tee.`name`,\n" +
+            "ee.empno\n" +
+            "FROM\n" +
+            "\temployee ee\n" +
+            "JOIN dept t ON ee.deptId = t.id\n" +
+            "JOIN position n ON n.id = ee.positionId\n" +
+            "WHERE\n" +
+            "\tt.deptname = '项目中心'\n" +
+            "AND n.positionName like '%设计%' and ee.isQuit = 0")
+    List<Employee> getSheJiItems();
+
+
+    @Select("SELECT\n" +
+            "\tee.`name`,\n" +
+            "ee.empno\n" +
+            "FROM\n" +
+            "\temployee ee\n" +
+            "JOIN dept t ON ee.deptId = t.id\n" +
+            "JOIN position n ON n.id = ee.positionId\n" +
+            "WHERE\n" +
+            "\tt.deptname = '项目中心'\n" +
+            "AND n.positionName like '%安装%' and ee.isQuit = 0")
+    List<Employee> getAnzhuangList();
+
+    @Select("SELECT\n" +
+            "\tee.`name`,\n" +
+            "ee.empno\n" +
+            "FROM\n" +
+            "\temployee ee\n" +
+            "JOIN dept t ON ee.deptId = t.id\n" +
+            "JOIN position n ON n.id = ee.positionId\n" +
+            "WHERE\n" +
+            "\tt.deptname = '项目中心'\n" +
+            "AND n.positionName like '%业务%' or n.positionName like '%大客户%' and ee.isQuit = 0")
+    List<Employee> getYeWuList();
+
+
     @Select("call splitString(#{empNos},\",\");")
     void returnNameByEmpNoStrBefore(String empNos);
 
@@ -701,4 +1612,6 @@ public interface ProjectMapper {
 
 
 }
+
+
 

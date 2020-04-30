@@ -157,7 +157,7 @@ public interface PersonMapper {
 
 
     @Select("SELECT * FROM outdan where empNo = #{empNo} and  DATE_FORMAT(outtime,'%Y-%m-%d') <= #{dateStr} and " +
-            " DATE_FORMAT(realcomtime,'%Y-%m-%d') >= #{dateStr} ")
+            " DATE_FORMAT(realcomtime,'%Y-%m-%d') >= #{dateStr} limit 1 ")
     Out getOutDanByEmpNoandDateOnly(String empNo, String dateStr);
 
 
@@ -531,7 +531,7 @@ public interface PersonMapper {
     int checkEmployLSIsExsit(String name);
 
     @Select("select count(*) from yeban where empNo = #{empNo} and date = #{dateStr} ")
-    int checkIfExsitYeBan(String empNo,String dateStr);
+    int checkIfExsitYeBan(String empNo, String dateStr);
 
     @Select("select * from linshiemp where name = #{name} ")
     LinShiEmp getLinShiEmpByName(String name);
@@ -1219,6 +1219,17 @@ public interface PersonMapper {
 
 
     @Select("SELECT\n" +
+            "\tcount(*)\n" +
+            "FROM\n" +
+            "\tleavedata\n" +
+            "WHERE\n" +
+            "\tempNo = #{empNo}\n" +
+            "AND #{dayStr} BETWEEN date_format(beginleave, '%Y-%m-%d') \n" +
+            "AND date_format(endleave, '%Y-%m-%d')")
+    int getLeaveByEmpNOAndDateStr(String dayStr, String empNo);
+
+
+    @Select("SELECT\n" +
             "\te.id AS id,\n" +
             "\tname AS name,\n" +
             "\tsex as sex,\n" +
@@ -1624,7 +1635,8 @@ public interface PersonMapper {
     WorkSet getWorkSetByMonthAndPositionLevel2(String month, String positionLevel);
 
     @Select("SELECT\n" +
-            "\t*\n" +
+            "outtime,\n" +
+            "\trealcomtime " +
             "FROM\n" +
             "\toutdan\n" +
             "WHERE\n" +
@@ -1634,7 +1646,19 @@ public interface PersonMapper {
             "\t'%Y-%m-%d %H:%i'\n" +
             ") BETWEEN outtime\n" +
             "AND realcomtime limit 1")
-    Out getOutDanByEmpNoAndDateStr(String empNo,String dateStr,String time);
+    Out getOutDanByEmpNoAndDateStr(String empNo, String dateStr, String time);
+
+
+    @Select("SELECT\n" +
+            "\too.date AS dateStr,\n" +
+            "\too.timeStr\n" +
+            "FROM\n" +
+            "\toutclockall oo\n" +
+            " JOIN qyweixinbd bb ON bb.userid = oo.enrollNumber\n" +
+            "WHERE\n" +
+            "\tbb.empNo = #{empNo}\n" +
+            "AND oo.date = #{day}")
+    OutClockAll getOutClockAllByEmpNoAndDate(String empNo, String day);
 
     @Select("select  employeeid as employeeId,date_format(beginleave, '%Y-%m-%d %H:%i:%s') as beginLeaveStr ,date_format(endleave, '%Y-%m-%d %H:%i:%s') as endLeaveStr,leavelong as leaveLong,leaveDescrip,remark,type  " +
             "from leavedata where employeeid = #{employeeId} and  beginleave<= date_format(#{dataStrStart},'%Y-%m-%d %H:%i') and endleave>= date_format(#{dataEnd},'%Y-%m-%d %H:%i') limit 1 ")
@@ -2550,7 +2574,7 @@ public interface PersonMapper {
 
 
     @Select("select count(*) from lianban where empNo = #{empNo} and date = #{dateStr} ")
-    int checkIfExsitLianBan(String empNo,String dateStr);
+    int checkIfExsitLianBan(String empNo, String dateStr);
 
 
     @Select("SELECT\n" +
@@ -2799,18 +2823,18 @@ public interface PersonMapper {
     String getWorkDateByMonthC(String yearMonth);
 
 
-@Select("SELECT\n" +
-        "\twd.workdate as workdate\n" +
-        "FROM\n" +
-        "\temployee ee\n" +
-        "JOIN position n ON n.id = ee.positionId\n" +
-        "LEFT JOIN workdate wd ON wd.positionLevel = n.positionLevel\n" +
-        "WHERE\n" +
-        "\twd.type = 0\n" +
-        "AND wd.`month` = #{yearMonth} \n" +
-        "AND ee.empno = #{empNo} \n" +
-        "limit 1")
-    WorkDate getWorkDate22222ByEmpNo(String empNo,String yearMonth);
+    @Select("SELECT\n" +
+            "\twd.workdate as workdate\n" +
+            "FROM\n" +
+            "\temployee ee\n" +
+            "JOIN position n ON n.id = ee.positionId\n" +
+            "LEFT JOIN workdate wd ON wd.positionLevel = n.positionLevel\n" +
+            "WHERE\n" +
+            "\twd.type = 0\n" +
+            "AND wd.`month` = #{yearMonth} \n" +
+            "AND ee.empno = #{empNo} \n" +
+            "limit 1")
+    WorkDate getWorkDate22222ByEmpNo(String empNo, String yearMonth);
 
 
     @Select("SELECT\n" +
@@ -3050,7 +3074,7 @@ public interface PersonMapper {
             "WHERE\n" +
             "\tee.empNo = #{empNo}\n" +
             "AND kb.yearMonth = #{yearMon}")
-    int getLateMinutesByEmpNoAndYearMonth(String empNo,String yearMon);
+    int getLateMinutesByEmpNoAndYearMonth(String empNo, String yearMon);
 
     @Select("SELECT\n" +
             "\tsum(ab.sumlateminutes)\n" +
@@ -3076,7 +3100,7 @@ public interface PersonMapper {
             "\t\t\tAND kb.yearMonth = #{yearMon}\n" +
             "\t\t\tAND (lateminitesp > 0)\n" +
             "\t) AS ab")
-    int getLateTimesByEmpNoAndYearMonth(String empNo,String yearMon);
+    int getLateTimesByEmpNoAndYearMonth(String empNo, String yearMon);
 
     @Update("update monthkqinfo " +
             "set zhengbanHours =  #{zhengbanHours}," +

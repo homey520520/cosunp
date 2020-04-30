@@ -23,6 +23,7 @@ public class AccessTokenServlet extends HttpServlet {
         TokenThread.appSecret = WeiXinConfig.secret;
         TokenThread.appSecretsp = WeiXinConfig.secretsp;
         TokenThread.appSecretQYWX = WeiXinConfig.secretqywx;
+        TokenThread.appSecretQYWXTX = WeiXinConfig.secretqywxtx;
         new Thread(new TokenThread()).start();
     }
 

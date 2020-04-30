@@ -1,6 +1,7 @@
 package com.cosun.cosunp.service;
 
 import com.cosun.cosunp.entity.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -8,15 +9,27 @@ public interface IProjectServ {
 
     List<ProjectHead> totalProjectNumByEmpNo(String empNo) throws Exception;
 
+    List<ProjectHead> totalProjectNumBy() throws Exception;
+
+    ProjectHeadOrderItem getProjectOrderItemById(Integer id) throws Exception;
+
     List<DaysSet> getDaysSetNew() throws Exception;
 
     List<ProjectHeadOrder> getTotalProjectOrderByName(String userid,String projectName) throws Exception;
 
-    List<ProjectHeadOrderItem> getTotalProjectOrderITEMByOrderS(String userid, String orderNo) throws Exception;
+    List<ProjectHeadOrderItem> getTotalProjectOrderITEMByOrderS(String c,String userid, String orderNo) throws Exception;
 
     String returnNameByEmpNoStr(String empNoStr) throws Exception;
 
-    ProjectHeadOrderItem getTotalProjectOrderITEMMoreByOrderS(String userid,String productName,String orderNo) throws Exception;
+    List<Employee> findAllProjectSalorByDeptName() throws Exception;
+
+    int findAllProjecHOICount() throws Exception;
+
+    List<ProjectHeadOrderItem> findAllProjecHOI(ProjectHeadOrderItem item) throws Exception;
+
+    ProjectHeadOrderItem getTotalProjectOrderITEMMoreByOrderS(String userid,String projectName, String customer_Name,String productName) throws Exception;
+
+    ProjectHeadOrderItem getTotalProjectOrderITEMMoreById(Integer id) throws Exception;
 
     int findNameRepeatOrNot(String userid, String projectName) throws Exception;
 
@@ -24,7 +37,9 @@ public interface IProjectServ {
 
     List<China> getAllMainProvince() throws Exception;
 
-    ProjectHeadOrder checkOrderNoRepeat(String userId,String orderNo) throws Exception;
+    void translateTabletoEmployeeBeanProject(MultipartFile file) throws Exception;
+
+    ProjectHeadOrder checkOrderNoRepeat(String projectName,String customerName,String userId,String orderNo) throws Exception;
 
     ProjectHead findPHbyName(String projectName,String userId) throws Exception;
 
@@ -37,9 +52,25 @@ public interface IProjectServ {
 
     void updateAlertSet(AlertSet as) throws Exception;
 
-    void saveOrderItemMor(Integer id,ProjectHeadOrderItem phoi) throws Exception;
+    ProjectHeadOrderItem saveOrderItemMor(Integer id,ProjectHeadOrderItem phoi) throws Exception;
 
-    ProjectHeadOrder getProjectOrderByOrderNo(String orderNo) throws Exception;
+    List<String> getNamesByEmpNos(List<String> nameStr) throws Exception;
+
+    List<Leave> getAllLeaveDataByBeBoreDayApply(String day) throws Exception;
+
+    List<ProjectHeadOrderItem> getProjectItemAllByCondi() throws Exception;
+
+    List<ProjectHeadOrderItem> getProjectItemAllByCondi2() throws Exception;
+
+    List<ProjectHeadOrderItem> getItemListByOrderStatusAndCheckAndEmpnoIn(String empNo) throws Exception;
+
+    void saveOrderItemMorOld(Integer id,ProjectHeadOrderItem phoi) throws Exception;
+
+    List<String> getUserIdByEmpNos(List<String> empNoList) throws Exception;
+
+    void updateProjectItemByBeanOnlyDateAndNote(ProjectHeadOrderItem item) throws Exception;
+
+    ProjectHeadOrder getProjectOrderByOrderNo(String projectName,String customerName,String orderNo) throws Exception;
 
     AlertSet getAlertSet() throws Exception;
 
@@ -58,6 +89,8 @@ public interface IProjectServ {
     void deleteProjectRecordById(Integer id) throws Exception;
 
     void updateProjectRecordByBean(ProjectItemMoneyRecord record)  throws Exception;
+
+    String getUserNameByUserId(String userId) throws Exception;
 
     ProjectItemMoneyRecord getProjectRecordById(Integer id) throws Exception;
 
@@ -85,7 +118,21 @@ public interface IProjectServ {
 
     List<Employee> getSalorMItems() throws Exception;
 
-    List<ProjectHeadOrderItem> getHistoryItemByProduct_NameAndOrderNo(String product_Name,String orderNo) throws Exception;
+    List<Employee> getSheJiItems() throws Exception;
+
+    List<Employee> getAnzhuangList() throws Exception;
+
+    List<ProjectHeadOrderItem> getAllItemByUserIdAndNoFinish(String userId) throws Exception;
+
+    List<ProjectHeadOrderItem> getAllItemByUserIdAndNoFinish2(String userId) throws Exception;
+
+    List<Employee> getYeWuList() throws Exception;
+
+    Integer getUserActorByUserId(String userId) throws Exception;
+
+    String getEmpNoByUserId(String userId) throws Exception;
+
+    List<ProjectHeadOrderItem> getHistoryItemByProduct_NameAndOrderNo(String product_Name,String orderNo,String projectName,String customerName) throws Exception;
 
     List<Employee> getGenDanItems() throws Exception;
 
@@ -100,4 +147,11 @@ public interface IProjectServ {
     void updateProjectItemCheckById(Integer id,int checked) throws Exception;
 
     ProjectHeadOrderItem getProjectOrderItemByOrderNoAndProductName(ProjectHeadOrderItem phoi) throws Exception;
+
+    ProjectHeadOrder getProjectOrderById(Integer id) throws Exception;
+
+    DaysSet getDaysSetByType(int type) throws Exception;
+
+    List<String> getFaDingList() throws Exception;
+
 }

@@ -182,4 +182,11 @@ public class WeiXinServlet extends HttpServlet {
         jedis.set(Constants.expiresinqywx, accessToken.getExpiresin() + "");
     }
 
+    public void setRedisValueQYWXTX(AccessToken accessToken) {
+        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+        jedis = pool.getResource();
+        jedis.set(Constants.accessTokenqywxtx, accessToken.getAccessToken());
+        jedis.set(Constants.expiresinqywxtx, accessToken.getExpiresin() + "");
+    }
+
 }

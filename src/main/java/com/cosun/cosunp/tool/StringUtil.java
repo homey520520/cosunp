@@ -3,12 +3,10 @@ package com.cosun.cosunp.tool;
 import com.cosun.cosunp.entity.*;
 import com.cosun.cosunp.entity.OutClockIn;
 
+import java.sql.Array;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +18,36 @@ import java.util.regex.Pattern;
  * @Modified-date:2018/12/22 0022 上午 11:27
  */
 public class StringUtil {
+
+
+    public static Map<String, List<String>> compareEmpNOs(String[] oldEmpNos, String[] newEmpNos) throws Exception {
+        List<String> newList = new ArrayList<String>();
+        List<String> oldList = new ArrayList<String>();
+        if (newEmpNos != null)
+            newList = Arrays.asList(newEmpNos);
+        if (oldEmpNos != null)
+            oldList = Arrays.asList(oldEmpNos);
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        List<String> deleteEmpNos = new ArrayList<String>();
+        List<String> addEmpNos = new ArrayList<String>();
+        for (int i = 0; i < oldList.size(); i++) {
+            if (!newList.contains(oldList.get(i))) {
+                addEmpNos.add(oldList.get(i));
+            }
+        }
+
+        for (int i = 0; i < newList.size(); i++) {
+            if (!oldList.contains(newList.get(i))) {
+                deleteEmpNos.add(newList.get(i));
+            }
+        }
+        if (addEmpNos.size() > 0)
+            map.put("addEmp", addEmpNos);
+        if (deleteEmpNos.size() > 0)
+            map.put("deleteEmp", deleteEmpNos);
+        return map;
+    }
+
 
     public static int getLeaveTypByStr(int line, String str) throws Exception {
         if (str != null) {
@@ -225,6 +253,27 @@ public class StringUtil {
     }
 
 
+    public static boolean isTimeIn(String timeStr, String day, Out out) throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (timeStr != null) {
+            String[] timeArr = timeStr.split(" ");
+            List<Time> timeArrr = new ArrayList<Time>();
+            for (String str : timeArr) {
+                if (str != null && str.trim().length() > 0) {
+                    Date d = format.parse(day + " " + str);
+                    timeArrr.add(new java.sql.Time(d.getTime()));
+                }
+            }
+            for (Time time : timeArrr) {
+                if ((time.after(out.getOuttime()) && time.before(out.getRealcomtime())) || time == out.getOuttime() || time == out.getRealcomtime()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static int checkIsIn(String time, WorkSet ws) throws Exception {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date d = format.parse(time);
@@ -323,13 +372,13 @@ public class StringUtil {
         List<String> allStr = new ArrayList<String>();
         String[] strs = zhTimesStr.split(" ");
         String[] strs2 = null;
-        if(qkTimeStr!=null && qkTimeStr.trim().length() >0) {
+        if (qkTimeStr != null && qkTimeStr.trim().length() > 0) {
             strs2 = qkTimeStr.split(" ");
         }
         for (String s : strs) {
             allStr.add(s);
         }
-        if(strs2!=null) {
+        if (strs2 != null) {
             for (String f : strs2) {
                 allStr.add(f);
             }
@@ -365,7 +414,7 @@ public class StringUtil {
         for (String str : times) {
             d = format.parse(str);
             time = new java.sql.Time(d.getTime());
-            if(!timeList.contains(time)) {
+            if (!timeList.contains(time)) {
                 timeList.add(time);
             }
         }

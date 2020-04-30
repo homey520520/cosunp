@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>项目中心订单</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
+    <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap-select.min.js"></script>
+    <script src="/lib/WdatePicker.js" type="text/javascript"></script>
+    <script src="/lib/defaults-zh_CN.js" type="text/javascript"></script>
+</head>
+<style type="text/css">
+    td, th {
+        white-space: nowrap;
+        font-size: 11px;
+    }
+
+    th {
+        font-size: 11px;
+        text-align: center; /** 设置水平方向居中 */
+        vertical-align: middle /** 设置垂直方向居中 */
+    }
+</style>
+<script>
+
+    $(function () {
+        window.parent.document.getElementById('content').style.display = "block";
+        window.parent.document.getElementById('contentnew').style.display = "none";
+        document.getElementById("coverbehidepage").style.display = "none";
+        var flag = $("#flag").val();
+        var aflag = eval(flag)
+        if (aflag == 1) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;添加成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 2) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;删除成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 3) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;更改成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 4) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+            errormessagediv.style.color = "green";
+        } else if (aflag == 5) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;订单状态更改成功!";
+            errormessagediv.style.color = "green";
+        }
+    });
+
+    function goPageone() {
+        $("#n_currentPage").val(1);
+        queryOrderHeadByCondition2();
+    }
+
+    function goPrePage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 - 1 * 1);
+        queryOrderHeadByCondition2();
+    }
+
+    function goAftPage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 + 1 * 1);
+        queryOrderHeadByCondition2();
+    }
+
+    function goMaxPage() {
+        $("#n_currentPage").val($("#maxPage").val());
+        queryOrderHeadByCondition2();
+    }
+
+    function goPriPageone() {
+        $("#n_currentPage").val(1);
+        queryOrderHeadByCondition2();
+    }
+
+    function isNull(arg1) {
+        if (arg1 == "null" || arg1 == null || arg1 == 0 || arg1 == "0") {
+            return "";
+        }
+        return arg1;
+    }
+
+    function goPage2() {
+        var tp = document.getElementById("_tp").value;//currentPage
+        var max = $("#maxPage").val(); //maxPage
+        tp = tp.trim();
+        var r = /^\+?[0-9][0-9]*$/;
+        if (!(r.test(tp))) {
+            alert("页数输入有误，请重新输入!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) == 0) {
+            alert("页数必须大于0!");
+            $("#_tp").val(max);
+            return false;
+        } else if (parseInt(tp) > parseInt(max)) {
+            alert("不能大于总页数!");
+            $("#_tp").val(max);
+            return false;
+        } else {
+            $("#n_currentPage").val(tp);
+            // document.forms["form0"].submit();
+            queryOrderHeadByCondition2();
+        }
+    }
+
+    function goPriAftPage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 + 1 * 1);
+        queryOrderHeadByCondition2();
+    }
+
+    function goPriMaxPage() {
+        $("#n_currentPage").val($("#maxPage").val());
+        queryOrderHeadByCondition2();
+    }
+
+    function goPriPrePage() {
+        var currentpage = $("#_tp").val();
+        $("#n_currentPage").val(currentpage * 1 - 1 * 1);
+        queryOrderHeadByCondition2();
+    }
+
+    var currentPage; //当前页
+    var totalPage; //总多少页
+    var totaldata; //总共多少记录
+    var pageSize;//当前每页多少条
+    var sortMethod;
+    var sortByName;
+
+    function queryOrderHeadByCondition() {
+        var currentpage = $("#n_currentPage").val();
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var formData = new FormData();
+        formData.append('nameIds', $("#name").val());
+        formData.append('orderNos', $("#orderNo").val());
+        formData.append('productTotalName', $("#prodName").val());
+        formData.append('singleOrProjects', $("#orderType").val());
+        formData.append('states', $("#state").val());
+        formData.append('orderTimeStr', $("#orderDate").val());
+        formData.append('itemDeliverTimeStr', $("#deleverDate").val());
+        formData.append('sortMethod', sortMethod);
+        formData.append('sortByName', sortByName);
+        formData.append('currentPage', 1);
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/order/queryOrderHeadByCondition",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
+                errormessagediv.style.color = "green";
+                var data = eval(msg);//将msg化为数;
+                var tr = "";
+                var image01 = $("#image01");
+                var image02 = $("#image02");
+                var image03 = $("#image03");
+                var image04 = $("#image04");
+                var maxpageid = $("#maxPage");
+                var n_currentPage = $("#n_currentPage");
+                var inputpage = $("#_tp");
+                image01.html("");
+                image02.html("");
+                image03.html("");
+                image04.html("");
+                var td = "";
+                var td2 = "";
+                var tbody = $("#tabletblody");
+                tbody.html("");
+                var userType;
+                if (data != null && data != "") {
+                    $("#nodatadiv").hide();
+                    $("#showdiv").show();
+                    currentPage = data[0].currentPage; //当前页
+                    totalPage = data[0].maxPage; //总多少页
+                    totaldata = data[0].recordCount; //总共多少记录
+                    pageSize = data[0].pageSize;
+                    userType = data[0].type;
+                    maxpageid.val(totalPage);
+                    n_currentPage.val(currentPage);
+                    inputpage.val(currentPage);
+                    var eduLe;
+                    var safeLe;
+                    var otherLe;
+                    $.each(data, function (num) {
+                        tr = $("<tr id='" + data[num].id + "'></tr>");
+                        tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].salor) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderTimeStr) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderSetNum) + "</td>");
+                        tr.append("<td>" + isNull(data[num].singleOrProjectStr) + "</td>");
+
+                        td2 = "<td><select id='" + 'stateStr' + data[num].orderNo + "'  class=\"selectpicker show-tick form-control\"\n" +
+                            " data-live-search=\"true\" data-actions-box=\"true\" >";
+                        if (data[num].state == 0) {
+                            td2 += "<option value=\"0\" selected=\"selected\">未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 1) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" selected=\"selected\">审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 2) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" selected=\"selected\">审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 3) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\"  selected=\"selected\">暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 4) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\"  selected=\"selected\">终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 5) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" selected=\"selected\">完成</option>"
+                        }
+                        td2 += "</select></td>";
+                        tr.append(td2);
+                        td = "<td>";
+                        td += " <a class=\"btn btn-xs btn-primary\" \n" +
+                            "onclick=\"updateOrderItemByheadId('" + data[num].id + "');\">编辑</a>\n" +
+                            "  <a class=\"btn btn-xs btn-primary\"\n" +
+                            " onclick=\"deleteOrderItemByheadId('" + data[num].id + "');\">删除</a> " +
+                            " <a class=\"btn btn-xs btn-primary\"\n" +
+                            " onclick=\"confirmOrderItemByheadId(this);\">订单状态保存</a>\n" +
+                            " <a class=\"btn btn-xs btn-primary\"\n" +
+                            " onclick=\"transferDataToPDFFile('" + data[num].id + "');\">PDF打印</a>" +
+                            "</td>";
+                        tr.append(td);
+                        tr.appendTo(tbody);
+                        $('#stateStr' + data[num].orderNo).selectpicker('refresh');
+                    });
+                    $("#currentpagespan").html(currentPage);
+                    $("#maxpagespan").html(totalPage);
+                    $("#recordcountspan").html(totaldata);
+                    if (currentPage > 1) {
+                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPriPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPriPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image01.html(imange01str);
+                    } else {
+                        image01.html("");
+                    }
+                    if (currentPage <= 1) {
+                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image02.html(image02str);
+                    } else {
+                        image02.html("");
+                    }
+                    if (currentPage < totalPage) {
+                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goPriAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goPriMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image03.html(imange03str);
+                    } else {
+                        image03.html("");
+                    }
+                    if (currentPage >= totalPage) {
+                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image04.html(image04str);
+                    } else {
+                        image04.html("");
+                    }
+                } else {
+                    $("#nodatadiv").show();
+                    $("#showdiv").hide();
+                }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+
+        });
+    }
+
+
+    function sortByAsc(titlename) {
+        sortMethod = 'asc';
+        sortByName = titlename;
+        queryEmployeeSalaryByCondition();
+    }
+
+    function sortByDesc(titlename) {
+        sortMethod = 'desc';
+        sortByName = titlename;
+        queryEmployeeSalaryByCondition();
+    }
+
+
+</script>
+<body>
+<div id="coverbehidepage"></div>
+<div id="coverbehidepagetwo"></div>
+<div id="coverbehidepagethree"></div>
+<div id='app'>
+    <form>
+        <input type="hidden" id="flag" th:value="${flag}">
+        <input type="hidden" id="maxPage" th:value="${orderHead.maxPage}">
+        <input type="hidden" id="n_currentPage" name="view.currentPage" th:value="${orderHead.currentPage}"/>
+        <div class="panel panel-primary">
+            <div class="panel-body form-inline">
+                <table width="100%">
+                    <tr>
+                        <td style="text-align: right">
+                            <label>业务员：</label>
+                        </td>
+                        <td>
+                            <label>
+                                <select id="name" multiple class="selectpicker show-tick form-control"
+                                        data-live-search="true" data-actions-box="true"
+                                        data-selected-text-format="count > 2">
+                                    <option th:each="c:${salorList}" th:value="${c.id}"
+                                            th:text="${c.name}"></option>
+                                </select>
+                            </label>
+                        </td>
+
+                        <td style="text-align: right">
+                            <label>订单编号：</label>
+                        </td>
+                        <td>
+                            <label>
+                                <select id="orderNo" multiple class="selectpicker show-tick form-control"
+                                        data-live-search="true" data-actions-box="true"
+                                        data-selected-text-format="count > 1">
+                                    　　
+                                    <option th:each="c:${orderNoList}" th:value="${c.id}"
+                                            th:text="${c.orderNo}"></option>
+                                </select>
+                            </label>
+                        </td>
+                        <td style="text-align: right">
+                            <label>品名：</label>
+                        </td>
+                        <td>
+                            <select id="prodName" class="selectpicker show-tick form-control"
+                                    data-live-search="true" data-actions-box="true">
+
+                                <option value="">请选择品名</option>
+                                <option th:each="c:${prodNameList}" th:value="${c}"
+                                        th:text="${c}"></option>
+                            </select>
+                        </td>
+
+                        <td style="text-align: right">
+                            <label>订单类别：</label>
+                        </td>
+                        <td>
+                            <select id="orderType" multiple class="selectpicker show-tick form-control"
+                                    data-live-search="true" data-actions-box="true"
+                                    data-selected-text-format="count > 1">
+                                <option value="0">单项订单</option>
+                                <option value="1">项目订单</option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <label>&nbsp;&nbsp;订单状态：</label>
+                        </td>
+                        <td>
+                            <select id="state" multiple class="selectpicker show-tick form-control"
+                                    data-live-search="true" data-actions-box="true"
+                                    data-selected-text-format="count > 2">
+                                　　
+                                <option th:value="0">未审核</option>
+                                <option th:value="1">审核通过/下发</option>
+                                <option th:value="2">审核未通过</option>
+                                <option th:value="3">暂停</option>
+                                <option th:value="4">终止</option>
+                                <option th:value="5">下发</option>
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>订单日期：</label>
+                        </td>
+                        <td>
+                            <input type="text" id="orderDate"
+                                   style="width:130px;height: 34px;text-align: center"
+                                   class="Wdate"
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+
+                        </td>
+                        <td>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交货时间：</label>
+                        </td>
+                        <td>
+                            <input type="text" id="deleverDate"
+                                   style="width:140px;height: 34px;text-align: center" class="Wdate"
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+
+                        </td>
+
+
+                        <td colspan="3" style="text-align: right">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-primary"
+                               href="javascript:void(0);" onclick="queryOrderHeadByCondition()">查找</a>
+                            <!--<input type="button" value="查找" class="btn btn-primary">-->
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-primary"
+                               href="/order/createsinglegoods">新增单项</a>
+                            &nbsp;&nbsp;
+                            <a class="btn btn-primary"
+                               href="/order/createprojectgoods">新增项目</a>
+                        </td>
+                        <td colspan="3">
+                            <div style="display: none" id="errormessage">
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+    <table class="table table-bordered table-hover table-striped text-center hongmei" id="showlistbody">
+        <thead style="background-color:lightsteelblue">
+        <tr>
+            <th style="text-align: center"> 序号</th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('provinceStr')" aria-hidden="true"></i>
+                省份
+                <i class="fa fa-sort-desc" onclick="sortByDesc('provinceStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('customer_Name')" aria-hidden="true"></i>
+                客户名称
+                <i class="fa fa-sort-desc" onclick="sortByDesc('customer_Name')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('orderNo')" aria-hidden="true"></i>
+                订单编号
+                <i class="fa fa-sort-desc" onclick="sortByDesc('orderNo')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('product_Name')" aria-hidden="true"></i>
+                产品名称
+                <i class="fa fa-sort-desc" onclick="sortByDesc('product_Name')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('delivery_DateStr')" aria-hidden="true"></i>
+                交店时间
+                <i class="fa fa-sort-desc" onclick="sortByDesc('delivery_DateStr')" aria-hidden="true"></i>
+            </th>
+            <th style="text-align: center">
+                名称
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('getOrder_Date_PlanStr')" aria-hidden="true"></i>
+                接单日期
+                <i class="fa fa-sort-desc" onclick="sortByDesc('getOrder_Date_PlanStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('zhanCha_Date_PlanStr')" aria-hidden="true"></i>
+                勘察日期
+                <i class="fa fa-sort-desc" onclick="sortByDesc('zhanCha_Date_PlanStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('outDraw_Date_PlanStr')" aria-hidden="true"></i>
+                出图日期
+                <i class="fa fa-sort-desc" onclick="sortByDesc('outDraw_Date_PlanStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('program_confir_Date_PlanStr')" aria-hidden="true"></i>
+                方案确认
+                <i class="fa fa-sort-desc" onclick="sortByDesc('program_confir_Date_PlanStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('giveOrder_Date_PlanStr')" aria-hidden="true"></i>
+                下单日期
+                <i class="fa fa-sort-desc" onclick="sortByDesc('giveOrder_Date_PlanStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('delivery_Goods_Date_PlanStr')" aria-hidden="true"></i>
+                交货日期
+                <i class="fa fa-sort-desc" onclick="sortByDesc('delivery_Goods_Date_PlanStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('install_Date_PlanStr')" aria-hidden="true"></i>
+                安装日期
+                <i class="fa fa-sort-desc" onclick="sortByDesc('install_Date_PlanStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('yanShou_Date_PlanStr')" aria-hidden="true"></i>
+                验收日期
+                <i class="fa fa-sort-desc" onclick="sortByDesc('yanShou_Date_PlanStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('isYanShou')" aria-hidden="true"></i>
+                是否验收
+                <i class="fa fa-sort-desc" onclick="sortByDesc('isYanShou')" aria-hidden="true"></i>
+            </th>
+
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('jindu_remark')" aria-hidden="true"></i>
+                进度说明
+                <i class="fa fa-sort-desc" onclick="sortByDesc('jindu_remark')" aria-hidden="true"></i>
+            </th>
+
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('totalBao')" aria-hidden="true"></i>
+                总包
+                <i class="fa fa-sort-desc" onclick="sortByDesc('totalBao')" aria-hidden="true"></i>
+            </th>
+
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('hetongMoney')" aria-hidden="true"></i>
+                合同金额
+                <i class="fa fa-sort-desc" onclick="sortByDesc('hetongMoney')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('hereMoney')" aria-hidden="true"></i>
+                到款金额
+                <i class="fa fa-sort-desc" onclick="sortByDesc('hereMoney')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('weiHuiMoney')" aria-hidden="true"></i>
+                未回款金额
+                <i class="fa fa-sort-desc" onclick="sortByDesc('weiHuiMoney')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('statusStr')" aria-hidden="true"></i>
+                订单状态
+                <i class="fa fa-sort-desc" onclick="sortByDesc('statusStr')" aria-hidden="true"></i>
+            </th>
+
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('checkedStr')" aria-hidden="true"></i>
+                审核状态
+                <i class="fa fa-sort-desc" onclick="sortByDesc('checkedStr')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">
+                <i class="fa fa-sort-asc" onclick="sortByAsc('remark')" aria-hidden="true"></i>
+                备注
+                <i class="fa fa-sort-desc" onclick="sortByDesc('remark')" aria-hidden="true"></i>
+            </th>
+
+            <th style="text-align: center">操作</th>
+        </tr>
+        </thead>
+        <tbody id="tabletblody">
+        <div th:unless="${#lists.isEmpty(orderList)}">
+            <div th:each="item ,iterStat: ${orderList}" align="center">
+                <tr>
+                    <td style="text-align: center;vertical-align: middle" rowspan="2"
+                        th:text="${(iterStat.index+1)}+${item.currentPage-1}*${item.pageSize}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.provinceStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.customer_Name}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.orderNo}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.product_Name}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.delivery_DateStr}"></td>
+                    <td align="center">计划日期</td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.getOrder_Date_PlanStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.zhanCha_Date_PlanStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.outDraw_Date_PlanStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.program_confir_Date_PlanStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.giveOrder_Date_PlanStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.delivery_Goods_Date_PlanStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.install_Date_PlanStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.yanShou_Date_PlanStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.isYanShouStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.jindu_remark}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.totalBao}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.hetongMoney}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.hereMoney}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.weiHuiMoney}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.statusStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.checkedStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2"
+                        th:text="${item.remark}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center" rowspan="2">
+                        <a class="btn btn-xs btn-primary"
+                           th:onclick="queryMoneyImageByid([[${item.id}]]);">交易记录</a>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td align="center">实际日期</td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.getOrder_Date_AccuStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.zhanCha_Date_AccuStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.outDraw_Date_AccuStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.program_confir_Date_AccuStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.giveOrder_Date_AccuStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.delivery_Goods_Date_AccuStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.install_Date_AccuStr}"></td>
+                    <td style="text-align: center;vertical-align: middle" align="center"
+                        th:text="${item.yanShou_Date_AccuStr}"></td>
+                </tr>
+            </div>
+        </div>
+        </tbody>
+
+        <tfoot id="s_tfoot">
+        <tr id="showdiv">
+
+            <td colspan="9" align="center">
+                <span>第</span>
+                <span th:text="${orderHead.currentPage}" id="currentpagespan"> </span>
+                <span>页|共</span>
+                <span th:text="${orderHead.maxPage}" id="maxpagespan"> </span>
+                <span>页|共</span>
+                <span th:text="${orderHead.recordCount}" id="recordcountspan"> </span>
+                <span>条记录 </span>
+                <span id="image01">
+                            <span th:if="${orderHead.currentPage gt 1}">
+                                    <img src="/images/page/sy-2.jpg" align="middle" border="0"
+                                         style="width: 20px; height: 20px; vertical-align: middle"
+                                         onClick="goPageone()"/>
+                                    <img src="/images/page/syy-2.jpg" align="middle" border="0" onClick="goPrePage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+
+                                </span>
+                                </span>
+                <span id="image02">
+                            <span th:if="${orderHead.currentPage le 1}">
+                                <img src='/images/page/l-sy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='images/images/page/l-syy-2.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;
+                            </span>
+                            </span>
+                <span id="image03">
+                            <span th:if="${orderHead.currentPage lt orderHead.maxPage}">
+                                    <img src="/images/page/xyy-2.jpg" align="middle" border="0" onClick="goAftPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                                    <img src="/images/page/my-2.jpg" align="middle" border="0" onClick="goMaxPage()"
+                                         style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                                </span>
+                <span id="image04">
+                            <span th:if="${orderHead.currentPage ge orderHead.maxPage}">
+                                <img src='/images/page/l-xyy-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                                <img src='/images/page/l-my-1.jpg' align='middle' border='0px'
+                                     style="width: 20px; height: 20px; vertical-align: middle"/>
+                            </span>
+                            </span>
+
+                |&nbsp;到第
+                <input onkeypress="if(event.keyCode==13) {gopage.click();return false;}"
+                       style="width: 50px"
+                       id="_tp" th:name="currentPage" type="text" th:value="${orderHead.currentPage}"/>
+                页&nbsp;
+                <img src="/images/page/cx-2.jpg" id="gopage" onClick="goPage2()"
+                     style="width:20px;height:20px;vertical-align:middle">
+            </td>
+
+        </tr>
+
+        </tfoot>
+    </table>
+</div>
+
+
+</body>
+</html>

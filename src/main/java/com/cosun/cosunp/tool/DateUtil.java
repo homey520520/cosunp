@@ -1,10 +1,13 @@
 package com.cosun.cosunp.tool;
 
 import com.cosun.cosunp.entity.DateSplit;
+import com.cosun.cosunp.entity.FaDing;
 import com.cosun.cosunp.entity.WorkDate;
 import com.cosun.cosunp.entity.WorkSet;
+import com.cosun.cosunp.service.IPersonServ;
 import org.apache.el.parser.ParseException;
 
+import java.math.BigInteger;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,6 +23,8 @@ import java.util.*;
  * @Modified-date:
  */
 public class DateUtil {
+
+    IPersonServ personServ = null;
 
 
     public static long startToEnd(Date startDate, Date endDate) {
@@ -60,6 +65,124 @@ public class DateUtil {
         return nextDay;
     }
 
+    public Map<String, String> getAfterDay2(String dateStr, int jiday, List<String> faDingList
+            , String[] empNoList) throws Exception {
+        personServ = SpringUtil.getBean(IPersonServ.class);
+        DateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String, String> map = new HashMap<String, String>();
+        int sundayge = 0;
+        int qingjiaday = 0;
+        int fadingday = 0;
+        StringBuilder qingJiaName = new StringBuilder("");
+        Date temp = null;
+        Calendar cal = null;
+        boolean isWeekend = false;
+        String nextDay = null;
+        try {
+            temp = dft.parse(dateStr);
+            cal = Calendar.getInstance();
+            cal.setTime(temp);
+            for (int i = 1; i <= jiday; i++) {
+                cal.add(Calendar.DATE, 1);
+                isWeekend = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+                if (isWeekend) {
+                    ++jiday;
+                    ++sundayge;
+                    continue;
+                } else {
+                    temp = cal.getTime();
+                    nextDay = dft.format(temp);
+                    if (faDingList.contains(nextDay)) {
+                        ++fadingday;
+                        ++jiday;
+                        continue;
+                    }
+
+                    a:
+                    if (empNoList != null) {
+                        for (int aa = 0; aa < empNoList.length; aa++) {
+                            if (personServ.getLeaveByEmpNOAndDateStr(nextDay, empNoList[aa]) > 0) {
+                                ++jiday;
+                                ++qingjiaday;
+                                qingJiaName.append(empNoList[aa]);
+                                break a;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        map.put("nextDay", nextDay + "");
+        map.put("sundayge", sundayge + "");
+        map.put("qingjiaday", qingjiaday + "");
+        map.put("fadingday", fadingday + "");
+        map.put("qingJiaName", qingJiaName.toString());
+        return map;
+    }
+
+
+
+    public Map<String, String> getAfterDay3(String dateStr, int jiday, List<String> faDingList
+            , String empNo) throws Exception {
+        personServ = SpringUtil.getBean(IPersonServ.class);
+        DateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String, String> map = new HashMap<String, String>();
+        int sundayge = 0;
+        int qingjiaday = 0;
+        int fadingday = 0;
+        StringBuilder qingJiaName = new StringBuilder("");
+        Date temp = null;
+        Calendar cal = null;
+        boolean isWeekend = false;
+        String nextDay = null;
+        try {
+            temp = dft.parse(dateStr);
+            cal = Calendar.getInstance();
+            cal.setTime(temp);
+            for (int i = 1; i <= jiday; i++) {
+                cal.add(Calendar.DATE, 1);
+                isWeekend = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+                if (isWeekend) {
+                    ++jiday;
+                    ++sundayge;
+                    continue;
+                } else {
+                    temp = cal.getTime();
+                    nextDay = dft.format(temp);
+                    if (faDingList.contains(nextDay)) {
+                        ++fadingday;
+                        ++jiday;
+                        continue;
+                    }
+
+                    a:
+                    if (empNo != null) {
+                            if (personServ.getLeaveByEmpNOAndDateStr(nextDay, empNo) > 0) {
+                                ++jiday;
+                                ++qingjiaday;
+                                qingJiaName.append(empNo);
+                                break a;
+
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        map.put("nextDay", nextDay + "");
+        map.put("sundayge", sundayge + "");
+        map.put("qingjiaday", qingjiaday + "");
+        map.put("fadingday", fadingday + "");
+        map.put("qingJiaName", qingJiaName.toString());
+        return map;
+    }
+
+
     public static boolean isWeekend(String dateStr) {
         boolean isWeekend = false;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -98,6 +221,29 @@ public class DateUtil {
         return result;
     }
 
+
+    public static Map<String, String> spareDates(String oldDateStr, String newDateStr) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if(newDateStr==null){
+            newDateStr = "1900-10-10";
+        }
+        Date newDate = sdf.parse(newDateStr);
+        Date oldDate = sdf.parse(oldDateStr);
+        Map<String, String> map = new HashMap<String, String>();
+        int days = (int) ((newDate.getTime() - oldDate.getTime()) / (1000 * 3600 * 24));
+        if (days < 0) {
+            map.put("isDelay", "延迟");
+            map.put("howdays", BigInteger.valueOf(days).abs() + "天,系统已自动重新排单.");
+        } else if(days > 0){
+            map.put("isDelay", "提前");
+            map.put("howdays", BigInteger.valueOf(days).abs() + "天,恭喜，系统已自动重新排单.");
+        }else {
+            map.put("isDelay", "准时");
+            map.put("howdays","完成,值得嘉奖.");
+        }
+        return map;
+    }
+
     public static void main(String[] arg) {
         try {
             System.out.println(getWeek("2019-10-01"));
@@ -130,7 +276,23 @@ public class DateUtil {
     public static double getDistanceOfTwoDate(Date before, Date after) {
         long beforeTime = before.getTime();
         long afterTime = after.getTime();
-        return (afterTime - beforeTime) / (1000 * 60 * 60 * 24);
+        double abc = (afterTime - beforeTime) / (1000 * 60 * 60 * 24);
+        return abc;
+    }
+
+
+    public static double getDistanceOfTwoDate2(String before1, String after1) throws Exception {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date before = sdf.parse(before1);
+            Date after = sdf.parse(after1);
+            long beforeTime = before.getTime();
+            long afterTime = after.getTime();
+            return (afterTime - beforeTime) / (1000 * 60 * 60 * 24);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public static String getJiaBanHoursByDateSplitAndTimeStr(DateSplit ds, String timeStr, WorkSet ws, Integer workType) {
@@ -196,10 +358,10 @@ public class DateUtil {
 
     }
 
-    public static int calcuLateMinutes(Time fromTi,Time morningOn) {
+    public static int calcuLateMinutes(Time fromTi, Time morningOn) {
         Long abc = fromTi.getTime() - morningOn.getTime();
         int extHours = ((abc.intValue()) / (1000 * 60));
-        return (extHours+1);
+        return (extHours + 1);
     }
 
 

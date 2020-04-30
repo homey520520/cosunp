@@ -16,6 +16,10 @@ public class ProjectHeadOrderItem implements Serializable {
     private static final long serialVersionUID = -4140054436131666981L;
 
     private Integer id;
+    private String name;
+    private String note;
+    private int newOrOld;
+    private String titleName;
     private Integer order_Id;
     private Date delivery_Date;
     private String totalBao;
@@ -24,6 +28,12 @@ public class ProjectHeadOrderItem implements Serializable {
     private String versionStr;
     private String projectName;
     private String customer_Name;
+    private String ordeNo;
+    private String userid;
+    private String userName;
+    private int progressCent;
+    private Integer province;
+    private String provinceStr;
 
     private Date getOrder_Date_Plan;
     private Date getOrder_Date_Accu;
@@ -44,6 +54,9 @@ public class ProjectHeadOrderItem implements Serializable {
     private Date jieSuan_Date_Plan;
     private Date jieSuan_Date_Accu;
 
+    private String updateUserId;
+    private String updateDate;
+    private String updateDateStr;
 
     private String jindu_remark;
     private Double hetong_money;
@@ -55,8 +68,9 @@ public class ProjectHeadOrderItem implements Serializable {
     private String project_Manager3;
     private Double version;
     private int checked;
-    private String salor;
 
+
+    private String salor;
     private String[] salors;
     private String[] gendans;
     private String[] salors2;
@@ -64,6 +78,640 @@ public class ProjectHeadOrderItem implements Serializable {
     private String salorsStr;
     private String gendansStr;
 
+
+    private String[] zhanCha_Emps;
+    private String[] outDraw_Emps;
+    private String[] program_confir_Emps;
+    private String[] giveOrder_Emps;
+    private String[] delivery_Goods_Emps;
+    private String[] install_Emps;
+    private String[] yanShou_Emps;
+    private String[] jieSuan_Emps;
+
+
+    private String[] zhanCha_Emps2;
+    private String[] outDraw_Emps2;
+    private String[] program_confir_Emps2;
+    private String[] giveOrder_Emps2;
+    private String[] delivery_Goods_Emps2;
+    private String[] install_Emps2;
+    private String[] yanShou_Emps2;
+    private String[] jieSuan_Emps2;
+
+    private String productName;
+    private String orderNo;
+    private String checkedStr;
+    private Double nowhereMoney;
+    private String fapiaoNo;
+    private int status;
+    private String statusStr;
+
+
+    private String saleManager;
+    private String gendan;
+    private String zhanCha_Emp;
+    private String outDraw_Emp;
+    private String program_confir_Emp;
+    private String giveOrder_Emp;
+    private String delivery_Goods_Emp;
+    private String install_Emp;
+    private String yanShou_Emp;
+    private String jieSuan_Emp;
+
+
+    private Double hetongMoney;
+    private Double hereMoney;
+    private Double weiHuiMoney;
+
+    private int isYanShou;
+
+
+    private String delivery_DateStr;
+    private String getOrder_Date_PlanStr;
+    private String getOrder_Date_AccuStr;
+    private String zhanCha_Date_PlanStr;
+    private String zhanCha_Date_AccuStr;
+    private String outDraw_Date_PlanStr;
+    private String outDraw_Date_AccuStr;
+    private String program_confir_Date_PlanStr;
+    private String program_confir_Date_AccuStr;
+    private String giveOrder_Date_PlanStr;
+    private String giveOrder_Date_AccuStr;
+    private String delivery_Goods_Date_PlanStr;
+    private String delivery_Goods_Date_AccuStr;
+    private String install_Date_PlanStr;
+    private String install_Date_AccuStr;
+    private String yanShou_Date_PlanStr;
+    private String yanShou_Date_AccuStr;
+    private String jieSuan_Date_PlanStr;
+    private String jieSuan_Date_AccuStr;
+
+
+    private int getOrder_Date_PlanStrChange;
+    private int zhanCha_Date_PlanStrChange;
+    private int zhanCha_Date_AccuStrChange;
+    private int outDraw_Date_PlanStrChange;
+    private int outDraw_Date_AccuStrChange;
+    private int program_confir_Date_PlanStrChange;
+    private int program_confir_Date_AccuStrChange;
+    private int giveOrder_Date_PlanStrChange;
+    private int giveOrder_Date_AccuStrChange;
+    private int delivery_Goods_Date_PlanStrChange;
+    private int delivery_Goods_Date_AccuStrChange;
+    private int install_Date_PlanStrChange;
+    private int install_Date_AccuStrChange;
+    private int yanShou_Date_PlanStrChange;
+    private int yanShou_Date_AccuStrChange;
+    private int jieSuan_Date_PlanStrChange;
+    private int jieSuan_Date_AccuStrChange;
+
+
+    private int currentPage = 1;
+    private int maxPage;
+    private int recordCount;
+    private int pageSize = 10;
+    private int currentPageTotalNum;
+    private String sortMethod;
+    private String sortByName;
+
+
+    private String isYanShouStr;
+
+
+    public String getIsYanShouStr() {
+        if (this.getYanShou_Date_AccuStr() != null) {
+            return "已验收";
+        }
+        return "未验收";
+    }
+
+    public void setIsYanShouStr(String isYanShouStr) {
+        this.isYanShouStr = isYanShouStr;
+    }
+
+    public int getIsYanShou() {
+        return isYanShou;
+    }
+
+    public void setIsYanShou(int isYanShou) {
+        this.isYanShou = isYanShou;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+
+    public Integer getProvince() {
+        return province;
+    }
+
+    public void setProvince(Integer province) {
+        this.province = province;
+    }
+
+    public String getProvinceStr() {
+        return provinceStr;
+    }
+
+    public void setProvinceStr(String provinceStr) {
+        this.provinceStr = provinceStr;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getMaxPage() {
+        return maxPage;
+    }
+
+    public void setMaxPage(int maxPage) {
+        this.maxPage = maxPage;
+    }
+
+    public int getRecordCount() {
+        return recordCount;
+    }
+
+    public void setRecordCount(int recordCount) {
+        this.recordCount = recordCount;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getCurrentPageTotalNum() {
+        if (this.currentPage != 0)
+            return (currentPage - 1) * pageSize;
+        return 0;
+    }
+
+    public void setCurrentPageTotalNum(int currentPageTotalNum) {
+        this.currentPageTotalNum = currentPageTotalNum;
+    }
+
+    public String getSortMethod() {
+        return sortMethod;
+    }
+
+    public void setSortMethod(String sortMethod) {
+        this.sortMethod = sortMethod;
+    }
+
+    public String getSortByName() {
+        return sortByName;
+    }
+
+    public void setSortByName(String sortByName) {
+        this.sortByName = sortByName;
+    }
+
+    public int getProgressCent() {
+        return progressCent;
+    }
+
+    public void setProgressCent(int progressCent) {
+        this.progressCent = progressCent;
+    }
+
+    public int getGetOrder_Date_PlanStrChange() {
+        return getOrder_Date_PlanStrChange;
+    }
+
+    public void setGetOrder_Date_PlanStrChange(int getOrder_Date_PlanStrChange) {
+        this.getOrder_Date_PlanStrChange = getOrder_Date_PlanStrChange;
+    }
+
+    public int getZhanCha_Date_PlanStrChange() {
+        return zhanCha_Date_PlanStrChange;
+    }
+
+    public void setZhanCha_Date_PlanStrChange(int zhanCha_Date_PlanStrChange) {
+        this.zhanCha_Date_PlanStrChange = zhanCha_Date_PlanStrChange;
+    }
+
+    public int getZhanCha_Date_AccuStrChange() {
+        return zhanCha_Date_AccuStrChange;
+    }
+
+    public void setZhanCha_Date_AccuStrChange(int zhanCha_Date_AccuStrChange) {
+        this.zhanCha_Date_AccuStrChange = zhanCha_Date_AccuStrChange;
+    }
+
+    public int getOutDraw_Date_PlanStrChange() {
+        return outDraw_Date_PlanStrChange;
+    }
+
+    public void setOutDraw_Date_PlanStrChange(int outDraw_Date_PlanStrChange) {
+        this.outDraw_Date_PlanStrChange = outDraw_Date_PlanStrChange;
+    }
+
+    public int getOutDraw_Date_AccuStrChange() {
+        return outDraw_Date_AccuStrChange;
+    }
+
+    public void setOutDraw_Date_AccuStrChange(int outDraw_Date_AccuStrChange) {
+        this.outDraw_Date_AccuStrChange = outDraw_Date_AccuStrChange;
+    }
+
+    public int getProgram_confir_Date_PlanStrChange() {
+        return program_confir_Date_PlanStrChange;
+    }
+
+    public void setProgram_confir_Date_PlanStrChange(int program_confir_Date_PlanStrChange) {
+        this.program_confir_Date_PlanStrChange = program_confir_Date_PlanStrChange;
+    }
+
+    public int getProgram_confir_Date_AccuStrChange() {
+        return program_confir_Date_AccuStrChange;
+    }
+
+    public void setProgram_confir_Date_AccuStrChange(int program_confir_Date_AccuStrChange) {
+        this.program_confir_Date_AccuStrChange = program_confir_Date_AccuStrChange;
+    }
+
+    public int getGiveOrder_Date_PlanStrChange() {
+        return giveOrder_Date_PlanStrChange;
+    }
+
+    public void setGiveOrder_Date_PlanStrChange(int giveOrder_Date_PlanStrChange) {
+        this.giveOrder_Date_PlanStrChange = giveOrder_Date_PlanStrChange;
+    }
+
+    public int getGiveOrder_Date_AccuStrChange() {
+        return giveOrder_Date_AccuStrChange;
+    }
+
+    public void setGiveOrder_Date_AccuStrChange(int giveOrder_Date_AccuStrChange) {
+        this.giveOrder_Date_AccuStrChange = giveOrder_Date_AccuStrChange;
+    }
+
+    public int getDelivery_Goods_Date_PlanStrChange() {
+        return delivery_Goods_Date_PlanStrChange;
+    }
+
+    public void setDelivery_Goods_Date_PlanStrChange(int delivery_Goods_Date_PlanStrChange) {
+        this.delivery_Goods_Date_PlanStrChange = delivery_Goods_Date_PlanStrChange;
+    }
+
+    public int getDelivery_Goods_Date_AccuStrChange() {
+        return delivery_Goods_Date_AccuStrChange;
+    }
+
+    public void setDelivery_Goods_Date_AccuStrChange(int delivery_Goods_Date_AccuStrChange) {
+        this.delivery_Goods_Date_AccuStrChange = delivery_Goods_Date_AccuStrChange;
+    }
+
+    public int getInstall_Date_PlanStrChange() {
+        return install_Date_PlanStrChange;
+    }
+
+    public void setInstall_Date_PlanStrChange(int install_Date_PlanStrChange) {
+        this.install_Date_PlanStrChange = install_Date_PlanStrChange;
+    }
+
+    public int getInstall_Date_AccuStrChange() {
+        return install_Date_AccuStrChange;
+    }
+
+    public void setInstall_Date_AccuStrChange(int install_Date_AccuStrChange) {
+        this.install_Date_AccuStrChange = install_Date_AccuStrChange;
+    }
+
+    public int getYanShou_Date_PlanStrChange() {
+        return yanShou_Date_PlanStrChange;
+    }
+
+    public void setYanShou_Date_PlanStrChange(int yanShou_Date_PlanStrChange) {
+        this.yanShou_Date_PlanStrChange = yanShou_Date_PlanStrChange;
+    }
+
+    public int getYanShou_Date_AccuStrChange() {
+        return yanShou_Date_AccuStrChange;
+    }
+
+    public void setYanShou_Date_AccuStrChange(int yanShou_Date_AccuStrChange) {
+        this.yanShou_Date_AccuStrChange = yanShou_Date_AccuStrChange;
+    }
+
+    public int getJieSuan_Date_PlanStrChange() {
+        return jieSuan_Date_PlanStrChange;
+    }
+
+    public void setJieSuan_Date_PlanStrChange(int jieSuan_Date_PlanStrChange) {
+        this.jieSuan_Date_PlanStrChange = jieSuan_Date_PlanStrChange;
+    }
+
+    public int getJieSuan_Date_AccuStrChange() {
+        return jieSuan_Date_AccuStrChange;
+    }
+
+    public void setJieSuan_Date_AccuStrChange(int jieSuan_Date_AccuStrChange) {
+        this.jieSuan_Date_AccuStrChange = jieSuan_Date_AccuStrChange;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getOrdeNo() {
+        return ordeNo;
+    }
+
+    public void setOrdeNo(String ordeNo) {
+        this.ordeNo = ordeNo;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public void setUpdateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+    }
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public String getUpdateDateStr() {
+        return updateDateStr;
+    }
+
+    public void setUpdateDateStr(String updateDateStr) {
+        this.updateDateStr = updateDateStr;
+    }
+
+    public int getNewOrOld() {
+        return newOrOld;
+    }
+
+    public void setNewOrOld(int newOrOld) {
+        this.newOrOld = newOrOld;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String[] getZhanCha_Emps() {
+        if (this.zhanCha_Emp != null) {
+            return zhanCha_Emp.split(",");
+        }
+        return zhanCha_Emps;
+
+    }
+
+    public String getTitleName() {
+        return titleName;
+    }
+
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
+    }
+
+    public void setZhanCha_Emps(String[] zhanCha_Emps) {
+        this.zhanCha_Emps = zhanCha_Emps;
+    }
+
+    public String[] getOutDraw_Emps() {
+        if (this.outDraw_Emp != null) {
+            return outDraw_Emp.split(",");
+        }
+        return outDraw_Emps;
+    }
+
+    public void setOutDraw_Emps(String[] outDraw_Emps) {
+        this.outDraw_Emps = outDraw_Emps;
+    }
+
+    public String[] getProgram_confir_Emps() {
+        if (this.program_confir_Emp != null) {
+            return program_confir_Emp.split(",");
+        }
+        return program_confir_Emps;
+    }
+
+    public void setProgram_confir_Emps(String[] program_confir_Emps) {
+        this.program_confir_Emps = program_confir_Emps;
+    }
+
+    public String[] getGiveOrder_Emps() {
+        if (this.giveOrder_Emp != null) {
+            return giveOrder_Emp.split(",");
+        }
+        return program_confir_Emps;
+    }
+
+    public void setGiveOrder_Emps(String[] giveOrder_Emps) {
+        this.giveOrder_Emps = giveOrder_Emps;
+    }
+
+    public String[] getDelivery_Goods_Emps() {
+        if (this.delivery_Goods_Emp != null) {
+            return delivery_Goods_Emp.split(",");
+        }
+        return delivery_Goods_Emps;
+    }
+
+    public void setDelivery_Goods_Emps(String[] delivery_Goods_Emps) {
+        this.delivery_Goods_Emps = delivery_Goods_Emps;
+    }
+
+    public String[] getInstall_Emps() {
+        if (this.install_Emp != null) {
+            return install_Emp.split(",");
+        }
+        return install_Emps;
+    }
+
+    public void setInstall_Emps(String[] install_Emps) {
+        this.install_Emps = install_Emps;
+    }
+
+    public String[] getYanShou_Emps() {
+        if (this.yanShou_Emp != null) {
+            return yanShou_Emp.split(",");
+        }
+        return yanShou_Emps;
+    }
+
+    public void setYanShou_Emps(String[] yanShou_Emps) {
+        this.yanShou_Emps = yanShou_Emps;
+    }
+
+    public String[] getJieSuan_Emps() {
+        if (this.jieSuan_Emp != null) {
+            return jieSuan_Emp.split(",");
+        }
+        return jieSuan_Emps;
+    }
+
+    public void setJieSuan_Emps(String[] jieSuan_Emps) {
+        this.jieSuan_Emps = jieSuan_Emps;
+    }
+
+    public String[] getZhanCha_Emps2() {
+        return zhanCha_Emps2;
+    }
+
+    public void setZhanCha_Emps2(String[] zhanCha_Emps2) {
+        this.zhanCha_Emps2 = zhanCha_Emps2;
+    }
+
+    public String[] getOutDraw_Emps2() {
+        return outDraw_Emps2;
+    }
+
+    public void setOutDraw_Emps2(String[] outDraw_Emps2) {
+        this.outDraw_Emps2 = outDraw_Emps2;
+    }
+
+    public String[] getProgram_confir_Emps2() {
+        return program_confir_Emps2;
+    }
+
+    public void setProgram_confir_Emps2(String[] program_confir_Emps2) {
+        this.program_confir_Emps2 = program_confir_Emps2;
+    }
+
+    public String[] getGiveOrder_Emps2() {
+        return giveOrder_Emps2;
+    }
+
+    public void setGiveOrder_Emps2(String[] giveOrder_Emps2) {
+        this.giveOrder_Emps2 = giveOrder_Emps2;
+    }
+
+    public String[] getDelivery_Goods_Emps2() {
+        return delivery_Goods_Emps2;
+    }
+
+    public void setDelivery_Goods_Emps2(String[] delivery_Goods_Emps2) {
+        this.delivery_Goods_Emps2 = delivery_Goods_Emps2;
+    }
+
+    public String[] getInstall_Emps2() {
+        return install_Emps2;
+    }
+
+    public void setInstall_Emps2(String[] install_Emps2) {
+        this.install_Emps2 = install_Emps2;
+    }
+
+    public String[] getYanShou_Emps2() {
+        return yanShou_Emps2;
+    }
+
+    public void setYanShou_Emps2(String[] yanShou_Emps2) {
+        this.yanShou_Emps2 = yanShou_Emps2;
+    }
+
+    public String[] getJieSuan_Emps2() {
+        return jieSuan_Emps2;
+    }
+
+    public void setJieSuan_Emps2(String[] jieSuan_Emps2) {
+        this.jieSuan_Emps2 = jieSuan_Emps2;
+    }
+
+    public String getZhanCha_Emp() {
+        return zhanCha_Emp;
+    }
+
+    public void setZhanCha_Emp(String zhanCha_Emp) {
+        this.zhanCha_Emp = zhanCha_Emp;
+    }
+
+    public String getOutDraw_Emp() {
+        return outDraw_Emp;
+    }
+
+    public void setOutDraw_Emp(String outDraw_Emp) {
+        this.outDraw_Emp = outDraw_Emp;
+    }
+
+    public String getProgram_confir_Emp() {
+        return program_confir_Emp;
+    }
+
+    public void setProgram_confir_Emp(String program_confir_Emp) {
+        this.program_confir_Emp = program_confir_Emp;
+    }
+
+    public String getGiveOrder_Emp() {
+        return giveOrder_Emp;
+    }
+
+    public void setGiveOrder_Emp(String giveOrder_Emp) {
+        this.giveOrder_Emp = giveOrder_Emp;
+    }
+
+    public String getDelivery_Goods_Emp() {
+        return delivery_Goods_Emp;
+    }
+
+    public void setDelivery_Goods_Emp(String delivery_Goods_Emp) {
+        this.delivery_Goods_Emp = delivery_Goods_Emp;
+    }
+
+    public String getInstall_Emp() {
+        return install_Emp;
+    }
+
+    public void setInstall_Emp(String install_Emp) {
+        this.install_Emp = install_Emp;
+    }
+
+    public String getYanShou_Emp() {
+        return yanShou_Emp;
+    }
+
+    public void setYanShou_Emp(String yanShou_Emp) {
+        this.yanShou_Emp = yanShou_Emp;
+    }
+
+    public String getJieSuan_Emp() {
+        return jieSuan_Emp;
+    }
+
+    public void setJieSuan_Emp(String jieSuan_Emp) {
+        this.jieSuan_Emp = jieSuan_Emp;
+    }
 
     public String getCustomer_Name() {
         return customer_Name;
@@ -97,42 +745,6 @@ public class ProjectHeadOrderItem implements Serializable {
         this.versionStr = versionStr;
     }
 
-    private String saleManager;
-    private String gendan;
-    private Double hetongMoney;
-    private Double hereMoney;
-    private Double weiHuiMoney;
-
-
-    private String delivery_DateStr;
-    private String getOrder_Date_PlanStr;
-    private String getOrder_Date_AccuStr;
-    private String zhanCha_Date_PlanStr;
-    private String zhanCha_Date_AccuStr;
-    private String outDraw_Date_PlanStr;
-    private String outDraw_Date_AccuStr;
-    private String program_confir_Date_PlanStr;
-    private String program_confir_Date_AccuStr;
-    private String giveOrder_Date_PlanStr;
-    private String giveOrder_Date_AccuStr;
-    private String delivery_Goods_Date_PlanStr;
-    private String delivery_Goods_Date_AccuStr;
-    private String install_Date_PlanStr;
-    private String install_Date_AccuStr;
-    private String yanShou_Date_PlanStr;
-    private String yanShou_Date_AccuStr;
-    private String jieSuan_Date_PlanStr;
-    private String jieSuan_Date_AccuStr;
-
-    private String productName;
-    private String orderNo;
-    private String checkedStr;
-    private Double nowhereMoney;
-    private String fapiaoNo;
-
-    private int status;
-    private String statusStr;
-
 
     public String getFapiaoNo() {
         return fapiaoNo;
@@ -163,7 +775,7 @@ public class ProjectHeadOrderItem implements Serializable {
             return "未审核";
         } else if (this.checked == 2) {
             return "审核通过";
-        } else if (this.checked == 3 ) {
+        } else if (this.checked == 3) {
             return "审核撤销";
         } else if (this.checked == 1) {
             return "审核未通过";
@@ -172,13 +784,13 @@ public class ProjectHeadOrderItem implements Serializable {
     }
 
     public String getStatusStr() {
-        if(this.status==0) {
+        if (this.status == 0) {
             return "进行中";
-        }else if(this.status==1) {
+        } else if (this.status == 1) {
             return "已完成";
-        }else if(this.status == 2) {
+        } else if (this.status == 2) {
             return "暂停";
-        }else if(this.status == 3) {
+        } else if (this.status == 3) {
             return "作废";
         }
         return "";
@@ -218,7 +830,7 @@ public class ProjectHeadOrderItem implements Serializable {
     }
 
     public String getSalorsStr() {
-        if(salorsStr==null)
+        if (salorsStr == null)
             return "";
         return salorsStr;
     }
@@ -244,7 +856,7 @@ public class ProjectHeadOrderItem implements Serializable {
     }
 
     public String getGendansStr() {
-        if(gendansStr==null)
+        if (gendansStr == null)
             return "";
         return gendansStr;
     }

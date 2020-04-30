@@ -87,13 +87,26 @@
                 class="fa fa-collapse"></i></a></li>
         <li>
             <ul class="premium-menuforsalor nav nav-list collapse">
-                <!--<li><a th:href="@{/order/createsinglegoods}" target="targetText"><span class="fa fa-caret-right"></span>-->
-                <!--单件商品</a></li>-->
-                <!--<li><a th:href="@{/order/createprojectgoods}" target="targetText"><span-->
-                <!--class="fa fa-caret-right"></span> 项目类</a></li>-->
-
                 <li><a th:href="@{/order/toOrderPage}" target="targetText"><span
                         class="fa fa-caret-right"></span>订单</a></li>
+            </ul>
+        </li>
+
+
+
+        <li data-popover="false"
+            data-content="Items in this group require a <strong><a href='http://portnine.com/bootstrap-themes/aircraft' target='blank'>premium license</a><strong>."
+            data-placement="right"><a href="#" data-target=".premium-menuforsalora" class="nav-header collapsed"
+                                      data-toggle="collapse"><i class="fa fa-fw fa-fighter-jet"></i> 项目中心<i
+                class="fa fa-collapse"></i></a></li>
+        <li>
+            <ul class="premium-menuforsalora nav nav-list collapse">
+                <li><a th:href="@{/project/toProjectOrderPage}" target="targetText"><span
+                        class="fa fa-caret-right"></span>项目订单</a></li>
+
+                <li>
+                    <a th:href="@{/project/tomainpage}" target="targetText"><span
+                            class="fa fa-caret-right"></span>数据导入</a></li>
             </ul>
         </li>
 

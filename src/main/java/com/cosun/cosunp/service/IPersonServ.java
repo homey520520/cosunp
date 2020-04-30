@@ -2,6 +2,7 @@ package com.cosun.cosunp.service;
 
 import com.cosun.cosunp.entity.*;
 import com.cosun.cosunp.entity.OutClockIn;
+import org.apache.poi.ss.extractor.ExcelExtractor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -9,6 +10,9 @@ import java.util.List;
 public interface IPersonServ {
 
     String getLinShiInComDateByName(String name) throws Exception;
+
+
+    int getLeaveByEmpNOAndDateStr(String dayStr,String empNo) throws Exception;
 
     int checkAndSavePosition(Position position) throws Exception;
 

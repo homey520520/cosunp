@@ -17,9 +17,11 @@ public class TokenThread implements Runnable {
     public static String appSecret = "";
     public static String appSecretsp = "";
     public static String appSecretQYWX = "";
+    public static String appSecretQYWXTX = "";
     public static AccessToken accessToken = null;
     public static AccessToken accessTokensp = null;
     public static AccessToken accessTokenQYWX = null;
+    public static AccessToken accessTokenQYWXTX = null;
     public static String jsapi_ticket = "";
 
     public void run() {
@@ -28,7 +30,8 @@ public class TokenThread implements Runnable {
                 accessToken = this.getAccessToken();
                 accessTokensp = this.getAccessTokenSP();
                 accessTokenQYWX = this.getAccessTokenQYWX();
-                if (null != accessToken || null != accessTokensp || null != accessTokenQYWX) {
+                accessTokenQYWXTX = this.getAccessTokenQYWXTX();
+                if (null != accessToken || null != accessTokensp || null != accessTokenQYWX || null != accessTokenQYWXTX) {
                     if (null != accessToken) {
                         new WeiXinServlet().setRedisValue(accessToken);
                     }
@@ -37,6 +40,10 @@ public class TokenThread implements Runnable {
                     }
                     if (null != accessTokenQYWX) {
                         new WeiXinServlet().setRedisValueQYWX(accessTokenQYWX);
+                    }
+
+                    if (null != accessTokenQYWXTX) {
+                        new WeiXinServlet().setRedisValueQYWXTX(accessTokenQYWXTX);
                     }
                     Thread.sleep(2 * 60 * 60 * 1000);
                 } else {
@@ -94,6 +101,18 @@ public class TokenThread implements Runnable {
         String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s", this.appId, this.appSecretQYWX);
         String result = netHelper.getHttpsResponse(Url, "");
         //response.getWriter().println(result);
+        JSONObject json = JSON.parseObject(result);
+        AccessToken token = new AccessToken();
+        token.setAccessToken(json.getString("access_token"));
+        token.setExpiresin(json.getInteger("expires_in"));
+        return token;
+    }
+
+
+    private AccessToken getAccessTokenQYWXTX() {
+        NetWorkHelper netHelper = new NetWorkHelper();
+        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s", this.appId, this.appSecretQYWXTX);
+        String result = netHelper.getHttpsResponse(Url, "");
         JSONObject json = JSON.parseObject(result);
         AccessToken token = new AccessToken();
         token.setAccessToken(json.getString("access_token"));

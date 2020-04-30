@@ -36,6 +36,7 @@ import java.util.*;
  * @Modified By:
  * @Modified-date:
  */
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class PersonServiceImpl implements IPersonServ {
@@ -117,6 +118,10 @@ public class PersonServiceImpl implements IPersonServ {
 
     public List<String> getAllKQDateListABC(String yearMonth) throws Exception {
         return personMapper.getAllKQDateListABC(yearMonth);
+    }
+
+    public int getLeaveByEmpNOAndDateStr(String dayStr, String empNo) throws Exception {
+        return personMapper.getLeaveByEmpNOAndDateStr(dayStr, empNo);
     }
 
     public void saveZKNumEmpNoBangDing(List<Employee> employeeList) throws Exception {
@@ -4019,7 +4024,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                         otw.setaOnRemark("正常");
                                                                         otw.setClockResult(1);
                                                                     }
-                                                                } else if (type == 1) {
+                                                                } else if (type == 1 || type == 2) {
                                                                     if (workDate.getEmpNostr() != null && workDate.getEmpNostr().contains(em.getEmpNo())) {
                                                                         otw.setaOnRemark("周末加班");
                                                                         otw.setClockResult(1);
@@ -4050,7 +4055,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                         otw.setaOffRemark("正常");
                                                                         otw.setClockResult(1);
                                                                     }
-                                                                } else if (type == 1) {
+                                                                } else if (type == 1 || type == 2) {
                                                                     if (workDate.getEmpNostr() != null && workDate.getEmpNostr().contains(em.getEmpNo())) {
                                                                         otw.setaOffRemark("周末加班");
                                                                         otw.setClockResult(1);
@@ -4079,7 +4084,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                         otw.setpOnRemark("正常");
                                                                         otw.setClockResult(1);
                                                                     }
-                                                                } else if (type == 1) {
+                                                                } else if (type == 1 || type == 2) {
                                                                     if (workDate.getEmpNostr() != null && workDate.getEmpNostr().contains(em.getEmpNo())) {
                                                                         otw.setpOnRemark("周末加班");
                                                                         otw.setClockResult(1);
@@ -4108,7 +4113,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                         otw.setpOffRemark("正常");
                                                                         otw.setClockResult(1);
                                                                     }
-                                                                } else if (type == 1) {
+                                                                } else if (type == 1 || type == 2) {
                                                                     if (workDate.getEmpNostr() != null && workDate.getEmpNostr().contains(em.getEmpNo())) {
                                                                         otw.setpOffRemark("周末加班");
                                                                         otw.setClockResult(1);
@@ -4525,7 +4530,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                 }
                                                             }
                                                         }
-                                                        if(lateminitesp <=3)
+                                                        if (lateminitesp <= 3)
                                                             otw.setLateminitesp(lateminitesp);
                                                         if (pHours != 0.0) {
                                                             otw.setaOnRemark(pHours.toString());
@@ -4691,7 +4696,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                     if (type == 0) {
                                                         otw.setRemark("不上班");
                                                         otw.setClockResult(5);
-                                                    } else if (type == 1) {
+                                                    } else if (type == 1 || type == 2) {
                                                         otw.setRemark("周末不上班");
                                                         otw.setClockResult(5);
                                                     }
@@ -4717,7 +4722,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                         otw.setaOnRemark("不上班");
                                                         otw.setRemark("不上班");
                                                         otw.setClockResult(5);
-                                                    } else if (type == 1) {
+                                                    } else if (type == 1 || type == 2) {
                                                         otw.setaOnRemark("周末不上班");
                                                         otw.setRemark("周末不上班");
                                                         otw.setClockResult(5);
@@ -4745,7 +4750,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                             otw.setaOffRemark("不上班");
                                                             otw.setRemark("不上班");
                                                             otw.setClockResult(5);
-                                                        } else if (type == 1) {
+                                                        } else if (type == 1 || type == 2) {
                                                             otw.setaOffRemark("周末不上班");
                                                             otw.setRemark("周末不上班");
                                                             otw.setClockResult(5);
@@ -4774,7 +4779,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                             otw.setpOnRemark("不上班");
                                                             otw.setRemark("不上班");
                                                             otw.setClockResult(5);
-                                                        } else if (type == 1) {
+                                                        } else if (type == 1 || type == 2) {
                                                             otw.setpOnRemark("周末不上班");
                                                             otw.setRemark("周末不上班");
                                                             otw.setClockResult(5);
@@ -4802,7 +4807,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                         otw.setpOffRemark("不上班");
                                                         otw.setRemark("不上班");
                                                         otw.setClockResult(5);
-                                                    } else if (type == 1) {
+                                                    } else if (type == 1 || type == 2) {
                                                         otw.setpOffRemark("周末不上班");
                                                         otw.setRemark("周末不上班");
                                                         otw.setClockResult(5);
@@ -5561,7 +5566,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                         for (Time tii : timeList) {
                                                             if (tii.after(afterWS.getNoonOn()) && !tii.after(afterWS.getNoonOff())) {
                                                                 if (poff) {
-                                                                    pHours = DateUtil.calcuHours(tii, workSet.getNoonOn());
+                                                                    pHours = DateUtil.calcuHours(tii, workSet.getNoonOff());
                                                                     lateminitesp = DateUtil.calcuLateMinutes(tii, workSet.getNoonOn());
                                                                     Leave le = personMapper.getLeaveByEmpIdAndDateStr(yearMonth + "-" + date + " " + workSet.getNoonOn(), yearMonth + "-" + date + " " + tii, em.getId());
                                                                     if (le != null) {
@@ -5570,7 +5575,7 @@ public class PersonServiceImpl implements IPersonServ {
                                                                     break a;
                                                                 } else {
                                                                     if (aon || aoff) {
-                                                                        pHours = DateUtil.calcuHours(tii, workSet.getNoonOn());
+                                                                        pHours = DateUtil.calcuHours(tii, workSet.getNoonOff());
                                                                         Leave le = personMapper.getLeaveByEmpIdAndDateStr(yearMonth + "-" + date + " " + workSet.getNoonOn(), yearMonth + "-" + date + " " + tii, em.getId());
                                                                         if (le != null) {
                                                                             clockRes = 16;
@@ -6368,6 +6373,7 @@ public class PersonServiceImpl implements IPersonServ {
         Double jiaHours = 0.0;
         DateSplit nowDate = null;
         QianKa qkk = null;
+        OutClockAll outClockAll = null;
         WorkSet wsw = null;
         List<JiaBanList> jiaBanLists = new ArrayList<>();
         List<String> sqlTitleList = null;
@@ -6747,7 +6753,10 @@ public class PersonServiceImpl implements IPersonServ {
                             } else {
                                 od = personMapper.getOutDanByEmpNoAndDateStr(kqb.getEmpNo(), kqb.getDateStr(), kqb.getDateStr() + " " + ws.getMorningOn());
                                 if (od != null) {
-                                    aOnStr = "61";
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                        aOnStr = "61,";
+                                    }
                                 }
                             }
                         } else {
@@ -6771,10 +6780,13 @@ public class PersonServiceImpl implements IPersonServ {
                             } else {
                                 od = personMapper.getOutDanByEmpNoAndDateStr(kqb.getEmpNo(), kqb.getDateStr(), kqb.getDateStr() + " " + ws.getMorningOff());
                                 if (od != null) {
-                                    if (aOnStr.equals("77,")) {
-                                        aOffStr = "77,";
-                                    } else {
-                                        aOffStr = "61,";
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                        if (aOnStr.equals("77,")) {
+                                            aOffStr = "77,";
+                                        } else {
+                                            aOffStr = "61,";
+                                        }
                                     }
                                 }
                             }
@@ -6793,7 +6805,10 @@ public class PersonServiceImpl implements IPersonServ {
                             } else {
                                 od = personMapper.getOutDanByEmpNoAndDateStr(kqb.getEmpNo(), kqb.getDateStr(), kqb.getDateStr() + " " + ws.getNoonOn());
                                 if (od != null) {
-                                    pOnStr = "61";
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                        pOnStr = "61,";
+                                    }
                                 }
                             }
                         } else {
@@ -6815,10 +6830,13 @@ public class PersonServiceImpl implements IPersonServ {
                             } else {
                                 od = personMapper.getOutDanByEmpNoAndDateStr(kqb.getEmpNo(), kqb.getDateStr(), kqb.getDateStr() + " " + ws.getNoonOff());
                                 if (od != null) {
-                                    if (pOnStr == "77,") {
-                                        pOffStr = "77,";
-                                    } else {
-                                        pOffStr = "61,";
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                        if (pOnStr == "77,") {
+                                            pOffStr = "77,";
+                                        } else {
+                                            pOffStr = "61,";
+                                        }
                                     }
                                 }
                             }
@@ -6858,10 +6876,8 @@ public class PersonServiceImpl implements IPersonServ {
                         ClockInSetUp csu = null;
                         Integer cishu = null;
                         if (out != null) {
-                            csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                            oci = personMapper.getOutClockInByEmpNoAndDateA(kqb.getEmpNo(), kqb.getDateStr());
-                            cishu = StringUtil.calTimesByOutClockIn(oci);
-                            if (cishu >= csu.getDayClockInTimes()) {
+                            outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                            if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                 dayNum = "1080,1080,";
                                 if (!kqb.getHavePinShi().equals("1")) {
                                     dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
@@ -6876,32 +6892,8 @@ public class PersonServiceImpl implements IPersonServ {
                                     dayNum = dayNum.concat("8.0");
                                 }
                             }
-                            if (oci != null) {
-                                cishu = StringUtil.calTimesByOutClockIn(oci);
-                                if (cishu >= csu.getDayClockInTimes()) {
-                                    dayNum = "1080,1080,";
-                                    if (!kqb.getHavePinShi().equals("1")) {
-                                        dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-                                    } else {
-                                        dayNum = dayNum.concat("8.0");
-                                    }
-                                } else {
-                                    dayNum = "1070,1070,";
-                                    if (!kqb.getHavePinShi().equals("1")) {
-                                        dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-                                    } else {
-                                        dayNum = dayNum.concat("8.0");
-                                    }
-                                }
-                            } else {
-                                dayNum = "1060,1060,";
-                                if (!kqb.getHavePinShi().equals("1")) {
-                                    dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-                                } else {
-                                    dayNum = dayNum.concat("8.0");
-                                }
-                            }
                         } else {
+
                             Double aaa = 0.0;
                             if (kqb.getaOnTime() != null && kqb.getaOffTime() != null) {
                                 aaa = 4.0;
@@ -6950,43 +6942,23 @@ public class PersonServiceImpl implements IPersonServ {
                         ClockInSetUp csu = null;
                         Integer cishu = null;
                         if (out != null) {
-                            csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                            oci = personMapper.getOutClockInByEmpNoAndDateA(kqb.getEmpNo(), kqb.getDateStr());
-                            if (oci != null) {
-                                cishu = StringUtil.calTimesByOutClockIn(oci);
-                                if (csu != null && cishu >= csu.getDayClockInTimes()) {
-                                    if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                                        dayNum = beFStr.concat("1080,").concat(beFStr.concat("1080,"));
-                                        if (!kqb.getHavePinShi().equals("1")) {
-                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-                                        } else {
-                                            dayNum = dayNum.concat((8.0 + totalTiaoXiuByDay) + "");
-                                        }
+
+                            outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                            if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
+                                if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
+                                    dayNum = beFStr.concat("1080,").concat(beFStr.concat("1080,"));
+                                    if (!kqb.getHavePinShi().equals("1")) {
+                                        dayNum = dayNum.concat((lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
                                     } else {
-                                        dayNum = "1080,1080,";
-                                        if (!kqb.getHavePinShi().equals("1")) {
-                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-                                        } else {
-                                            dayNum = dayNum.concat("8.0");
-                                        }
+                                        dayNum = dayNum.concat((8.0 + totalTiaoXiuByDay) + "");
                                     }
                                 } else {
-                                    if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
-                                        dayNum = beFStr.concat("1070,").concat(beFStr.concat("1070,"));
-                                        if (!kqb.getHavePinShi().equals("1")) {
-                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + totalTiaoXiuByDay + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-                                        } else {
-                                            dayNum = dayNum.concat((8.0 + totalTiaoXiuByDay) + "");
-                                        }
+                                    dayNum = "1080,1080,";
+                                    if (!kqb.getHavePinShi().equals("1")) {
+                                        dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
                                     } else {
-                                        dayNum = "1070,1070,";
-                                        if (!kqb.getHavePinShi().equals("1")) {
-                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-                                        } else {
-                                            dayNum = dayNum.concat("8.0");
-                                        }
+                                        dayNum = dayNum.concat("8.0");
                                     }
-
                                 }
                             } else {
                                 if (tiaoXiuList != null && tiaoXiuList.size() > 0) {
@@ -7022,7 +6994,6 @@ public class PersonServiceImpl implements IPersonServ {
                                 }
                             }
                         }
-
                     } else if (kqb.getClockResult() == 17) {
                         String[] plusValue = kqb.getRemark().split(",");
                         Double ona = 0.0;
@@ -7594,7 +7565,10 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        aOnStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            aOnStr = "2,";
+                                        }
                                     }
                                 }
                             } else {
@@ -7617,10 +7591,13 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        if (aOnStr.equals("7,")) {
-                                            aOffStr = "7,";
-                                        } else {
-                                            aOffStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            if (aOnStr.equals("7,")) {
+                                                aOffStr = "7,";
+                                            } else {
+                                                aOffStr = "2,";
+                                            }
                                         }
                                     }
                                 }
@@ -7640,7 +7617,10 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        pOnStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            pOnStr = "2,";
+                                        }
                                     }
                                 }
                             } else {
@@ -7662,10 +7642,13 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        if (pOnStr == "7,") {
-                                            pOffStr = "7,";
-                                        } else {
-                                            pOffStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            if (pOnStr == "7,") {
+                                                pOffStr = "7,";
+                                            } else {
+                                                pOffStr = "2,";
+                                            }
                                         }
                                     } else {
                                         pOffStr = "7,";
@@ -7719,9 +7702,8 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDateAM(kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                         aOnStr = "108,";
                                     } else {
                                         aOnStr = "106,";
@@ -7739,9 +7721,8 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDateAM(kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                         aOffStr = "108,";
                                     } else {
                                         aOffStr = "106,";
@@ -7758,9 +7739,8 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDatePM(kqb.getEmpNo() == null ? "" : kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                         pOnStr = "108,";
                                     } else {
                                         pOnStr = "106,";
@@ -7778,9 +7758,8 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDatePM(kqb.getEmpNo() == null ? "" : kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                         pOffStr = "108,";
                                     } else {
                                         pOffStr = "106,";
@@ -7815,7 +7794,10 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        aOnStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            aOnStr = "2,";
+                                        }
                                     }
                                 }
                             } else {
@@ -7838,10 +7820,13 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        if (aOnStr.equals("8,")) {
-                                            aOffStr = "8,";
-                                        } else {
-                                            aOffStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            if (aOnStr.equals("8,")) {
+                                                aOffStr = "8,";
+                                            } else {
+                                                aOffStr = "2,";
+                                            }
                                         }
                                     }
                                 }
@@ -7863,13 +7848,15 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        pOnStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            pOnStr = "2,";
+                                        }
                                     }
                                 }
                             } else {
                                 pOnStr = "1,";
                             }
-
                             pOffStr = pOnStr;
                             if (kqb.getpOffTime() == null) {
                                 od = personMapper.getOutDanByEmpNoAndDateStr(kqb.getEmpNo(), kqb.getDateStr(), kqb.getDateStr() + " " + ws.getNoonOff());
@@ -7885,10 +7872,13 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        if (pOnStr == "8,") {
-                                            pOffStr = "8,";
-                                        } else {
-                                            pOffStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            if (pOnStr == "8,") {
+                                                pOffStr = "8,";
+                                            } else {
+                                                pOffStr = "2,";
+                                            }
                                         }
                                     } else {
                                         pOffStr = "8,";
@@ -7910,17 +7900,12 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDateA(kqb.getEmpNo() == null ? "" : kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
-                                        cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        if (cishu >= csu.getDayClockInTimes()) {
-                                            aOffStr = "108,";
-                                        } else {
-                                            aOffStr = "107,";
-                                        }
+
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
+                                        aOffStr = "108,";
                                     } else {
-                                        aOffStr = "106,";
+                                        aOffStr = "107,";
                                     }
                                 } else {
                                     aOffStr = "8,";
@@ -7935,18 +7920,13 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDateA(kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
-                                        cishu = StringUtil.calTimesByOutClockIn(oci);
-                                        if (cishu >= csu.getDayClockInTimes()) {
-                                            pOffStr = "108,";
-                                        } else {
-                                            pOffStr = "107,";
-                                        }
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
+                                        pOffStr = "108,";
                                     } else {
-                                        pOffStr = "106,";
+                                        pOffStr = "107,";
                                     }
+
                                 } else {
                                     pOffStr = "8,";
                                 }
@@ -8038,7 +8018,10 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        aOnStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            aOnStr = "2,";
+                                        }
                                     }
                                 }
                             } else {
@@ -8061,10 +8044,13 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        if (aOnStr.equals("77,")) {
-                                            aOffStr = "77,";
-                                        } else {
-                                            aOffStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            if (aOnStr.equals("77,")) {
+                                                aOffStr = "77,";
+                                            } else {
+                                                aOffStr = "2,";
+                                            }
                                         }
                                     }
                                 }
@@ -8083,7 +8069,10 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        pOnStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            pOnStr = "2,";
+                                        }
                                     }
                                 }
                             } else {
@@ -8105,10 +8094,13 @@ public class PersonServiceImpl implements IPersonServ {
                                     }
                                 } else {
                                     if (od != null) {
-                                        if (pOnStr == "77,") {
-                                            pOffStr = "77,";
-                                        } else {
-                                            pOffStr = "2,";
+                                        outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                        if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), od)) {
+                                            if (pOnStr == "77,") {
+                                                pOffStr = "77,";
+                                            } else {
+                                                pOffStr = "2,";
+                                            }
                                         }
                                     }
                                 }
@@ -8121,9 +8113,8 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDateAM(kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                         aOnStr = "1080,";
                                     } else {
                                         aOnStr = "1060,";
@@ -8141,9 +8132,8 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDateAM(kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                         aOffStr = "1080,";
                                     } else {
                                         aOffStr = "1060,";
@@ -8161,9 +8151,8 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDatePM(kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                         pOnStr = "1080,";
                                     } else {
                                         pOnStr = "1060,";
@@ -8181,9 +8170,8 @@ public class PersonServiceImpl implements IPersonServ {
                                 ClockInSetUp csu = null;
                                 Integer cishu = null;
                                 if (out != null) {
-                                    csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                    oci = personMapper.getOutClockInByEmpNoAndDatePM(kqb.getEmpNo(), kqb.getDateStr());
-                                    if (oci != null) {
+                                    outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                    if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                         pOffStr = "1080,";
                                     } else {
                                         pOffStr = "1060,";
@@ -8201,32 +8189,14 @@ public class PersonServiceImpl implements IPersonServ {
                             ClockInSetUp csu = null;
                             Integer cishu = null;
                             if (out != null) {
-
-                                csu = personMapper.getClockSetUpByDays(out.getInterDays());
-                                oci = personMapper.getOutClockInByEmpNoAndDateA(kqb.getEmpNo(), kqb.getDateStr());
-                                if (oci != null) {
+                                outClockAll = personMapper.getOutClockAllByEmpNoAndDate(kqb.getEmpNo(), kqb.getDateStr());
+                                if (outClockAll != null && StringUtil.isTimeIn(outClockAll.getTimeStr(), kqb.getDateStr(), out)) {
                                     dayNum = "1080,1080,";
                                     if (!kqb.getHavePinShi().equals("1")) {
                                         dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
                                     } else {
                                         dayNum = dayNum.concat("8.0");
                                     }
-                                    cishu = StringUtil.calTimesByOutClockIn(oci);
-//                                    if (cishu >= csu.getDayClockInTimes()) {
-//                                        dayNum = "1080,1080,";
-//                                        if (!kqb.getHavePinShi().equals("1")) {
-//                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-//                                        } else {
-//                                            dayNum = dayNum.concat("8.0");
-//                                        }
-//                                    } else {
-//                                        dayNum = "1070,1070,";
-//                                        if (!kqb.getHavePinShi().equals("1")) {
-//                                            dayNum = dayNum.concat((lianBanTotalH + 8.0 + (kqb.getExtWorkHours() == null ? 0.0 : kqb.getExtWorkHours())) + "");
-//                                        } else {
-//                                            dayNum = dayNum.concat("8.0");
-//                                        }
-//                                    }
                                 } else {
                                     dayNum = "1060,1060,";
                                     if (!kqb.getHavePinShi().equals("1")) {
@@ -8255,7 +8225,6 @@ public class PersonServiceImpl implements IPersonServ {
                                     dayNum = dayNum.concat("0.0");
                                 }
                             }
-
                         }
 
 
@@ -9219,13 +9188,22 @@ public class PersonServiceImpl implements IPersonServ {
         List<String> afterUserList1 = userList.subList(0, 99);
         List<String> afterUserList2 = userList.subList(99, 199);
         List<String> afterUserList3 = userList.subList(199, 299);
-        List<String> afterUserList4 = userList.subList(299, userList.size());
+        List<String> afterUserList4 = null;
+        List<String> afterUserList5 = null;
+        if (userList.size() > 398) {
+            afterUserList4 = userList.subList(299, 399);
+            afterUserList5 = userList.subList(399, userList.size());
+        } else {
+            afterUserList4 = userList.subList(299, userList.size());
+        }
 
         List<List<String>> all = new ArrayList<List<String>>();
         all.add(afterUserList1);
         all.add(afterUserList2);
         all.add(afterUserList3);
         all.add(afterUserList4);
+        if (afterUserList5 != null)
+            all.add(afterUserList5);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateStart = sdf.parse(beforDay + " 00:00:00");
         Date dateEnd = sdf.parse(beforDay + " 23:59:59");
@@ -9278,13 +9256,22 @@ public class PersonServiceImpl implements IPersonServ {
         List<String> afterUserList1 = userList.subList(0, 99);
         List<String> afterUserList2 = userList.subList(99, 199);
         List<String> afterUserList3 = userList.subList(199, 299);
-        List<String> afterUserList4 = userList.subList(299, userList.size());
+        List<String> afterUserList4 = null;
+        List<String> afterUserList5 = null;
+        if (userList.size() > 398) {
+            afterUserList4 = userList.subList(299, 399);
+            afterUserList5 = userList.subList(399, userList.size());
+        } else {
+            afterUserList4 = userList.subList(299, userList.size());
+        }
 
         List<List<String>> all = new ArrayList<List<String>>();
         all.add(afterUserList1);
         all.add(afterUserList2);
         all.add(afterUserList3);
         all.add(afterUserList4);
+        if (afterUserList5 != null)
+            all.add(afterUserList5);
         String day = null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateStart = sdf.parse(beforDay + " 00:00:00");

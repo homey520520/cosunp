@@ -64,7 +64,7 @@ public class AlertSet implements Serializable {
     }
 
     public String[] getAlertToPositionsArr() {
-        if (alertToPositions != null && alertToPositions.contains(",")) {
+        if (alertToPositions != null ) {
             return alertToPositions.split(",");
         }
         return alertToPositionsArr;
