@@ -34,7 +34,7 @@
         window.parent.document.getElementById('contentnew').style.display = "none";
         document.getElementById("coverbehidepage").style.display = "none";
         var flag = $("#flag").val();
-        var aflag = eval(flag)
+        var aflag = eval(flag);
         if (aflag == 1) {
             $("#errormessage").show();
             var errormessagediv = document.getElementById("errormessage");
@@ -65,29 +65,29 @@
 
     function goPageone() {
         $("#n_currentPage").val(1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goPrePage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 - 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goAftPage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 + 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goMaxPage() {
         $("#n_currentPage").val($("#maxPage").val());
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goPriPageone() {
         $("#n_currentPage").val(1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function isNull(arg1) {
@@ -117,25 +117,25 @@
         } else {
             $("#n_currentPage").val(tp);
             // document.forms["form0"].submit();
-            queryOrderHeadByCondition2();
+            queryOrderHeadByCondition();
         }
     }
 
     function goPriAftPage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 + 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goPriMaxPage() {
         $("#n_currentPage").val($("#maxPage").val());
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goPriPrePage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 - 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     var currentPage; //当前页
@@ -145,198 +145,97 @@
     var sortMethod;
     var sortByName;
 
+
+    function exportPHOIByCondition() {
+        var currentpage = $("#n_currentPage").val();
+        var formData = new FormData();
+        formData.append('nameIds', $("#name").val());
+        formData.append('orderNos', $("#orderNo").val());
+        formData.append('projectNames', $("#projectName").val());
+        formData.append('customerNames', $("#customerName").val());
+        formData.append('checkeds', $("#checked").val());
+        formData.append('statuss', $("#state").val());
+        formData.append('getOrder_Date_PlanStr', $("#getOrderDate").val());
+        formData.append('delivery_DateStr', $("#deliveryDate").val());
+        formData.append('sortMethod', sortMethod);
+        formData.append('sortByName', sortByName);
+        formData.append('currentPage', currentpage);
+        delCookie("downloadstatus");
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        window.location.href = "/project/exportPHOIByCondition?nameIds=" + $("#name").val()+"&orderNos="+$("#orderNo").val()
+            +"&projectNames="+ $("#projectName").val()+"&customerNames="+ $("#customerName").val()+"&checkeds="+$("#checked").val()
+            +"&statuss="+$("#state").val()+"&currentPage="+currentpage+"&sortMethod="+sortMethod+"&sortByName="+sortByName;
+        listenEnd();
+    }
+
+    function delCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = getCookie(name);
+        if (cval != null)
+            document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString() + ";path=/";
+    }
+
+    function listenEnd() {//定时监听
+        var loop = setInterval(function () {
+            var cookievalue = getCookie("downloadstatus");
+            if (cookievalue.trim().length > 0) {
+                clearInterval(loop);//停止定时任务
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+            }
+        }, 1000);//单位毫秒  注意：如果导出页面很慢时，建议循环时间段稍长一点
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
     function queryOrderHeadByCondition() {
         var currentpage = $("#n_currentPage").val();
         window.parent.document.getElementById('coverbehidepage').style.display = "block";
         var formData = new FormData();
         formData.append('nameIds', $("#name").val());
         formData.append('orderNos', $("#orderNo").val());
-        formData.append('productTotalName', $("#prodName").val());
-        formData.append('singleOrProjects', $("#orderType").val());
-        formData.append('states', $("#state").val());
-        formData.append('orderTimeStr', $("#orderDate").val());
-        formData.append('itemDeliverTimeStr', $("#deleverDate").val());
+        formData.append('projectNames', $("#projectName").val());
+        formData.append('customerNames', $("#customerName").val());
+        formData.append('checkeds', $("#checked").val());
+        formData.append('statuss', $("#state").val());
+        formData.append('getOrder_Date_PlanStr', $("#getOrderDate").val());
+        formData.append('delivery_DateStr', $("#deliveryDate").val());
         formData.append('sortMethod', sortMethod);
         formData.append('sortByName', sortByName);
-        formData.append('currentPage', 1);
-        $.ajax({
-            data: formData,
-            type: "POST",
-            url: "/order/queryOrderHeadByCondition",
-            async: true,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (msg) {
-                $("#errormessage").show();
-                var errormessagediv = document.getElementById("errormessage");
-                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;查询成功!";
-                errormessagediv.style.color = "green";
-                var data = eval(msg);//将msg化为数;
-                var tr = "";
-                var image01 = $("#image01");
-                var image02 = $("#image02");
-                var image03 = $("#image03");
-                var image04 = $("#image04");
-                var maxpageid = $("#maxPage");
-                var n_currentPage = $("#n_currentPage");
-                var inputpage = $("#_tp");
-                image01.html("");
-                image02.html("");
-                image03.html("");
-                image04.html("");
-                var td = "";
-                var td2 = "";
-                var tbody = $("#tabletblody");
-                tbody.html("");
-                var userType;
-                if (data != null && data != "") {
-                    $("#nodatadiv").hide();
-                    $("#showdiv").show();
-                    currentPage = data[0].currentPage; //当前页
-                    totalPage = data[0].maxPage; //总多少页
-                    totaldata = data[0].recordCount; //总共多少记录
-                    pageSize = data[0].pageSize;
-                    userType = data[0].type;
-                    maxpageid.val(totalPage);
-                    n_currentPage.val(currentPage);
-                    inputpage.val(currentPage);
-                    var eduLe;
-                    var safeLe;
-                    var otherLe;
-                    $.each(data, function (num) {
-                        tr = $("<tr id='" + data[num].id + "'></tr>");
-                        tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
-                        tr.append("<td>" + isNull(data[num].orderNo) + "</td>");
-                        tr.append("<td>" + isNull(data[num].salor) + "</td>");
-                        tr.append("<td>" + isNull(data[num].orderTimeStr) + "</td>");
-                        tr.append("<td>" + isNull(data[num].orderSetNum) + "</td>");
-                        tr.append("<td>" + isNull(data[num].singleOrProjectStr) + "</td>");
+        formData.append('currentPage', currentpage);
 
-                        td2 = "<td><select id='" + 'stateStr' + data[num].orderNo + "'  class=\"selectpicker show-tick form-control\"\n" +
-                            " data-live-search=\"true\" data-actions-box=\"true\" >";
-                        if (data[num].state == 0) {
-                            td2 += "<option value=\"0\" selected=\"selected\">未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 1) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" selected=\"selected\">审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 2) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" selected=\"selected\">审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 3) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\"  selected=\"selected\">暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 4) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\"  selected=\"selected\">终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 5) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" selected=\"selected\">完成</option>"
-                        }
-                        td2 += "</select></td>";
-                        tr.append(td2);
-                        td = "<td>";
-                        td += " <a class=\"btn btn-xs btn-primary\" \n" +
-                            "onclick=\"updateOrderItemByheadId('" + data[num].id + "');\">编辑</a>\n" +
-                            "  <a class=\"btn btn-xs btn-primary\"\n" +
-                            " onclick=\"deleteOrderItemByheadId('" + data[num].id + "');\">删除</a> " +
-                            " <a class=\"btn btn-xs btn-primary\"\n" +
-                            " onclick=\"confirmOrderItemByheadId(this);\">订单状态保存</a>\n" +
-                            " <a class=\"btn btn-xs btn-primary\"\n" +
-                            " onclick=\"transferDataToPDFFile('" + data[num].id + "');\">PDF打印</a>" +
-                            "</td>";
-                        tr.append(td);
-                        tr.appendTo(tbody);
-                        $('#stateStr' + data[num].orderNo).selectpicker('refresh');
-                    });
-                    $("#currentpagespan").html(currentPage);
-                    $("#maxpagespan").html(totalPage);
-                    $("#recordcountspan").html(totaldata);
-                    if (currentPage > 1) {
-                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPriPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
-                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPriPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
-                        image01.html(imange01str);
-                    } else {
-                        image01.html("");
-                    }
-                    if (currentPage <= 1) {
-                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
-                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
-                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
-                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
-                        image02.html(image02str);
-                    } else {
-                        image02.html("");
-                    }
-                    if (currentPage < totalPage) {
-                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goPriAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
-                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goPriMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
-                        image03.html(imange03str);
-                    } else {
-                        image03.html("");
-                    }
-                    if (currentPage >= totalPage) {
-                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
-                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
-                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
-                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
-                        image04.html(image04str);
-                    } else {
-                        image04.html("");
-                    }
-                } else {
-                    $("#nodatadiv").show();
-                    $("#showdiv").hide();
-                }
-                window.parent.document.getElementById('coverbehidepage').style.display = "none";
-            },
-            error: function (msg) {
-                window.parent.document.getElementById('coverbehidepage').style.display = "none";
-                $("#errormessage").show();
-                var errormessagediv = document.getElementById("errormessage");
-                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
-                errormessagediv.style.color = "red";
-            }
+        window.location.href = "/project/queryProjectOrderItemByCondition?nameIds=" + $("#name").val()+"&orderNos="+$("#orderNo").val()
+        +"&projectNames="+ $("#projectName").val()+"&customerNames="+ $("#customerName").val()+"&checkeds="+$("#checked").val()
+        +"&statuss="+$("#state").val()+"&currentPage="+currentpage+"&sortMethod="+sortMethod+"&sortByName="+sortByName;
 
-        });
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
     }
 
 
     function sortByAsc(titlename) {
         sortMethod = 'asc';
         sortByName = titlename;
-        queryEmployeeSalaryByCondition();
+        queryOrderHeadByCondition();
     }
 
     function sortByDesc(titlename) {
         sortMethod = 'desc';
         sortByName = titlename;
-        queryEmployeeSalaryByCondition();
+        queryOrderHeadByCondition();
     }
 
 
@@ -361,12 +260,30 @@
                             <label>
                                 <select id="name" multiple class="selectpicker show-tick form-control"
                                         data-live-search="true" data-actions-box="true"
-                                        data-selected-text-format="count > 2">
-                                    <option th:each="c:${salorList}" th:value="${c.id}"
+                                        data-selected-text-format="count > 1"
+                                >
+                                    <option th:each="c:${salorList}" th:value="${c.empNo}"
                                             th:text="${c.name}"></option>
                                 </select>
                             </label>
                         </td>
+
+                        <td style="text-align: right">
+                            <label>项目名称：</label>
+                        </td>
+                        <td>
+                            <label>
+                                <select id="projectName" multiple class="selectpicker show-tick form-control"
+                                        data-live-search="true" data-actions-box="true"
+                                        data-selected-text-format="count > 1"
+                                >
+                                    　　
+                                    <option th:each="c:${projectNameList}" th:value="${c}"
+                                            th:text="${c}"></option>
+                                </select>
+                            </label>
+                        </td>
+
 
                         <td style="text-align: right">
                             <label>订单编号：</label>
@@ -375,37 +292,45 @@
                             <label>
                                 <select id="orderNo" multiple class="selectpicker show-tick form-control"
                                         data-live-search="true" data-actions-box="true"
-                                        data-selected-text-format="count > 1">
+                                        data-selected-text-format="count > 1"
+                                >
                                     　　
-                                    <option th:each="c:${orderNoList}" th:value="${c.id}"
-                                            th:text="${c.orderNo}"></option>
+                                    <option th:each="c:${orderNoList}" th:value="${c}"
+                                            th:text="${c}"></option>
                                 </select>
                             </label>
                         </td>
                         <td style="text-align: right">
-                            <label>品名：</label>
+                            <label>门店：</label>
                         </td>
                         <td>
-                            <select id="prodName" class="selectpicker show-tick form-control"
-                                    data-live-search="true" data-actions-box="true">
+                            <select id="customerName" multiple class="selectpicker show-tick form-control"
+                                    data-live-search="true" data-actions-box="true"
+                                    data-selected-text-format="count > 1">
 
-                                <option value="">请选择品名</option>
-                                <option th:each="c:${prodNameList}" th:value="${c}"
+                                <option value="">请选择门店</option>
+                                <option th:each="c:${customerNameList}" th:value="${c}"
                                         th:text="${c}"></option>
                             </select>
                         </td>
 
-                        <td style="text-align: right">
-                            <label>订单类别：</label>
+                        <td>
+                            <label>&nbsp;&nbsp;审核状态：</label>
                         </td>
                         <td>
-                            <select id="orderType" multiple class="selectpicker show-tick form-control"
+                            <select id="checked" multiple class="selectpicker show-tick form-control"
                                     data-live-search="true" data-actions-box="true"
-                                    data-selected-text-format="count > 1">
-                                <option value="0">单项订单</option>
-                                <option value="1">项目订单</option>
+                                    data-selected-text-format="count > 2">
+                                　　
+                                <option th:value="0">未审核</option>
+                                <option th:value="1">审核通过</option>
+                                <option th:value="2">审核撤销</option>
+                                <option th:value="3">未通过</option>
+
                             </select>
                         </td>
+                    </tr>
+                    <tr>
 
                         <td>
                             <label>&nbsp;&nbsp;订单状态：</label>
@@ -415,22 +340,19 @@
                                     data-live-search="true" data-actions-box="true"
                                     data-selected-text-format="count > 2">
                                 　　
-                                <option th:value="0">未审核</option>
-                                <option th:value="1">审核通过/下发</option>
-                                <option th:value="2">审核未通过</option>
-                                <option th:value="3">暂停</option>
-                                <option th:value="4">终止</option>
-                                <option th:value="5">下发</option>
+                                <option th:value="0">进行中</option>
+                                <option th:value="1">已完成</option>
+                                <option th:value="2">暂停</option>
+                                <option th:value="3">作废</option>
 
                             </select>
                         </td>
-                    </tr>
-                    <tr>
+
                         <td>
-                            <label>订单日期：</label>
+                            <label>接单日期：</label>
                         </td>
                         <td>
-                            <input type="text" id="orderDate"
+                            <input type="text" id="getOrderDate"
                                    style="width:130px;height: 34px;text-align: center"
                                    class="Wdate"
                                    onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
@@ -440,7 +362,7 @@
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交货时间：</label>
                         </td>
                         <td>
-                            <input type="text" id="deleverDate"
+                            <input type="text" id="deliveryDate"
                                    style="width:140px;height: 34px;text-align: center" class="Wdate"
                                    onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
 
@@ -451,13 +373,9 @@
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <a class="btn btn-primary"
                                href="javascript:void(0);" onclick="queryOrderHeadByCondition()">查找</a>
-                            <!--<input type="button" value="查找" class="btn btn-primary">-->
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <a class="btn btn-primary"
-                               href="/order/createsinglegoods">新增单项</a>
                             &nbsp;&nbsp;
                             <a class="btn btn-primary"
-                               href="/order/createprojectgoods">新增项目</a>
+                               href="javascript:void(0);" onclick="exportPHOIByCondition()">导出</a>
                         </td>
                         <td colspan="3">
                             <div style="display: none" id="errormessage">

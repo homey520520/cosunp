@@ -27,6 +27,18 @@ public interface IProjectServ {
 
     List<ProjectHeadOrderItem> findAllProjecHOI(ProjectHeadOrderItem item) throws Exception;
 
+    List<ProjectHeadOrderItem> queryProjectOrderItemByCondition(ProjectHeadOrderItem item) throws Exception;
+
+    int queryProjectOrderItemByConditionCount(ProjectHeadOrderItem item) throws Exception;
+
+    List<String> getAllCustomerName() throws Exception;
+
+    List<String> getAllProjectName() throws Exception;
+
+    List<Employee> findAllProjectSalorByDeptName1() throws Exception;
+
+    List<String> getAllOrderNoList() throws Exception;
+
     ProjectHeadOrderItem getTotalProjectOrderITEMMoreByOrderS(String userid,String projectName, String customer_Name,String productName) throws Exception;
 
     ProjectHeadOrderItem getTotalProjectOrderITEMMoreById(Integer id) throws Exception;

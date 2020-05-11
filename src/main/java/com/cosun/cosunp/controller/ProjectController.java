@@ -29,13 +29,12 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,6 +52,8 @@ public class ProjectController extends BaseController {
 
     private static Logger logger = LogManager.getLogger(ProjectController.class);
 
+    // sudo chmod 777 /opt/spring-boot/
+    // https://www.cnblogs.com/ssrs-wanghao/articles/12703146.html
     @Autowired
     IProjectServ projectServ;
 
@@ -439,10 +440,10 @@ public class ProjectController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/getAllProvince1")
-    public void getAllProvince1(String userInfo,String iv, HttpServletResponse response,HttpServletRequest request) throws Exception {
+    public void getAllProvince1(String userInfo, String iv, HttpServletResponse response, HttpServletRequest request) throws Exception {
         try {
-            HttpSession session= request.getSession();
-            String session_key = (String)session.getAttribute("session_key");
+            HttpSession session = request.getSession();
+            String session_key = (String) session.getAttribute("session_key");
             UserInfo info = new UserInfo();
             String userInfoAll = JiaMi.getUserInfo(userInfo, session_key, iv);
             JSONObject json = JSON.parseObject(userInfoAll);
@@ -2562,9 +2563,9 @@ public class ProjectController extends BaseController {
             pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
             jedis = pool.getResource();
             NetWorkHelper netHelper = new NetWorkHelper();
-            HttpSession session= request.getSession();
+            HttpSession session = request.getSession();
             // String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/service/miniprogram/jscode2session?access_token=%s&js_code=%s&grant_type=authorization_code", jedis.get(Constants.accessTokenqywx), code);
-            String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/miniprogram/jscode2session?access_token=%s&js_code=%s&grant_type=authorization_code",jedis.get(Constants.accessTokenqywxtx), code);
+            String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/miniprogram/jscode2session?access_token=%s&js_code=%s&grant_type=authorization_code", jedis.get(Constants.accessTokenqywxtx), code);
             String result = netHelper.getHttpsResponse(Url, "");
             JSONObject json = JSON.parseObject(result);
             String session_key = json.getString("session_key");
@@ -3030,11 +3031,17 @@ public class ProjectController extends BaseController {
     @RequestMapping("/getTotalProjectOrderITEMByOrderSAll")
     public void getTotalProjectOrderITEMByOrderSAll(String userid, HttpServletResponse response) throws Exception {
         try {
+            logger.error("i love you  mat");
             List<ProjectHeadOrderItem> projectHeadOrderList = projectServ.getTotalProjectOrderITEMByOrderSAll();
             for (int i = 0; i < projectHeadOrderList.size(); i++) {
                 projectHeadOrderList.get(i).setGendansStr(projectServ.returnNameByEmpNoStr(projectHeadOrderList.get(i).getDelivery_Goods_Emp()));
+                logger.error(projectHeadOrderList.get(i).getDelivery_Goods_Emp() + " ****");
                 projectHeadOrderList.get(i).setSalorsStr(projectServ.returnNameByEmpNoStr(projectHeadOrderList.get(i).getZhanCha_Emp()));
+                logger.error(projectHeadOrderList.get(i).getZhanCha_Emp() + " ****");
+
             }
+            logger.error("end =====");
+
             ObjectMapper x = new ObjectMapper();
             String str1 = x.writeValueAsString(projectHeadOrderList);
             response.setCharacterEncoding("UTF-8");
@@ -3042,7 +3049,8 @@ public class ProjectController extends BaseController {
             response.getWriter().print(str1);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error(e.getMessage());
+            System.out.println(e.fillInStackTrace());
+            logger.error(e.fillInStackTrace());
             throw e;
         }
     }
@@ -3212,18 +3220,119 @@ public class ProjectController extends BaseController {
         }
     }
 
+
+    @ResponseBody
+    @RequestMapping(value = "/exportPHOIByCondition", method = RequestMethod.GET)
+    public void exportPHOIByCondition(ProjectHeadOrderItem kqBean, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws
+            Exception {
+        Cookie[] cookies = request.getCookies();
+        if (null == cookies) {
+        } else {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("downloadstatus")) {
+                    cookie.setValue(null);
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+        }
+
+        try {
+            String filename = new Date().getTime() + ".xls";
+            kqBean.setPageSize(10000);
+            List<ProjectHeadOrderItem> financeImportDataList = projectServ.queryProjectOrderItemByCondition(kqBean);
+            new PJExcelUtil().writePJdataTOExcel(financeImportDataList, this.finalDirPath + "linshi/", filename);
+            final File result = new File(this.finalDirPath + "linshi/" + filename);
+            BufferedInputStream bufferedInputStream = null;
+            OutputStream outputStream = null;
+            try {
+                response.setHeader("content-type", "application/octet-stream");
+                response.setContentType("application/octet-stream");
+                response.setCharacterEncoding("UTF-8");
+                response.setHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes(), "iso-8859-1"));
+                byte[] buff = new byte[1024];
+                outputStream = response.getOutputStream();
+                FileInputStream fis = new FileInputStream(result);
+                bufferedInputStream = new BufferedInputStream(fis);
+                int num = bufferedInputStream.read(buff);
+                Cookie cookie = new Cookie("downloadstatus", String.valueOf(new Date().getTime()));
+                cookie.setMaxAge(5 * 60);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                while (num != -1) {
+                    outputStream.write(buff, 0, num);
+                    outputStream.flush();
+                    num = bufferedInputStream.read(buff);
+                }
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+                e.printStackTrace();
+                throw e;
+            } finally {
+                if (bufferedInputStream != null) {
+                    bufferedInputStream.close();
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/queryProjectOrderItemByCondition", method = RequestMethod.GET)
+    public ModelAndView queryProjectOrderItemByCondition(ProjectHeadOrderItem kqBean, HttpServletResponse response, HttpSession session) throws
+            Exception {
+        try {
+            ModelAndView mav = new ModelAndView("projectcenterorder");
+            ProjectHeadOrderItem orderHead = new ProjectHeadOrderItem();
+            List<Employee> salorList = projectServ.findAllProjectSalorByDeptName1();
+            List<String> projectNameList = projectServ.getAllProjectName();
+            List<String> orderNoList = projectServ.getAllOrderNoList();
+            List<String> customerNameList = projectServ.getAllCustomerName();
+            List<ProjectHeadOrderItem> financeImportDataList = projectServ.queryProjectOrderItemByCondition(kqBean);
+            int recordCount = projectServ.queryProjectOrderItemByConditionCount(kqBean);
+            int maxPage = recordCount % kqBean.getPageSize() == 0 ? recordCount / kqBean.getPageSize() : recordCount / kqBean.getPageSize() + 1;
+            orderHead.setMaxPage(maxPage);
+            orderHead.setRecordCount(recordCount);
+            orderHead.setCurrentPage(kqBean.getCurrentPage());
+            mav.addObject("salorList", salorList);
+            mav.addObject("projectNameList", projectNameList);
+            mav.addObject("orderNoList", orderNoList);
+            mav.addObject("customerNameList", customerNameList);
+            mav.addObject("orderList", financeImportDataList);
+            mav.addObject("flag", 0);
+            mav.addObject("orderHead", orderHead);
+            return mav;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     @ResponseBody
     @RequestMapping(value = "/toProjectOrderPage")
     public ModelAndView toProjectOrderPage(HttpSession session) throws Exception {
         ModelAndView mav = new ModelAndView("projectcenterorder");
         ProjectHeadOrderItem orderHead = new ProjectHeadOrderItem();
-        List<Employee> salorList = projectServ.findAllProjectSalorByDeptName();
+        List<Employee> salorList = projectServ.findAllProjectSalorByDeptName1();
+        List<String> projectNameList = projectServ.getAllProjectName();
+        List<String> orderNoList = projectServ.getAllOrderNoList();
+        List<String> customerNameList = projectServ.getAllCustomerName();
+
         List<ProjectHeadOrderItem> allItem = projectServ.findAllProjecHOI(orderHead);
         int recordCount = projectServ.findAllProjecHOICount();
         int maxPage = recordCount % orderHead.getPageSize() == 0 ? recordCount / orderHead.getPageSize() : recordCount / orderHead.getPageSize() + 1;
         orderHead.setMaxPage(maxPage);
         orderHead.setRecordCount(recordCount);
         mav.addObject("salorList", salorList);
+        mav.addObject("projectNameList", projectNameList);
+        mav.addObject("orderNoList", orderNoList);
+        mav.addObject("customerNameList", customerNameList);
         mav.addObject("orderList", allItem);
         mav.addObject("flag", 0);
         mav.addObject("orderHead", orderHead);

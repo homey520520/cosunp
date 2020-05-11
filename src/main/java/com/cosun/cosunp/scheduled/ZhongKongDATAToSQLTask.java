@@ -25,11 +25,11 @@ public class ZhongKongDATAToSQLTask {
 
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(cron = "0 0 05 * * ?")
-    @Scheduled(cron = "0 43 08 ? * *")
+    @Scheduled(cron = "0 31 09 ? * *")
     private void configureTasks() {
         try {
             //String beforDay B = "2020-03-";
-            String beforeDay = "2020-04-29";
+            String beforeDay = "2020-05-10";
 //            String beforeDay;
 //            for (int a = 1; a <= 17; a++) {
 //                if (a < 10) {
@@ -66,5 +66,23 @@ public class ZhongKongDATAToSQLTask {
 
 }
 
-
+//      希望
+//
+//    是熬过黑夜
+//    守来的黎明
+//    是苦研多日
+//    盼来舒心笑颜
+//    还是那铁片
+//    那铜块
+//    叮叮当当
+//    咚咚叮叮
+//    火光石电
+//    鬼斧神工地
+//    发出了光的亮
+//    有了标致的身
+//    赋予高端的魂
+//    对
+//    是标识
+//    承载着柯赛人的汗水、精神、智慧
+//    指引着人们脚下的路
 

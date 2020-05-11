@@ -1,6 +1,7 @@
 package com.cosun.cosunp.mapper;
 
 import com.cosun.cosunp.entity.*;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -240,7 +241,7 @@ public interface ProjectMapper {
             "\t\tGROUP BY\n" +
             "\t\t\titem2.order_id,item2.product_Name\n" +
             "\t)")
-    List<ProjectHeadOrderItem> getTotalProjectOrderITEMByOrderS(String customer_Name,String empNo, String projectName);
+    List<ProjectHeadOrderItem> getTotalProjectOrderITEMByOrderS(String customer_Name, String empNo, String projectName);
 
 
     @Select("SELECT\n" +
@@ -324,7 +325,6 @@ public interface ProjectMapper {
     List<ProjectHeadOrderItem> getAllItemByUserIdAndNoFinish(String empNo);
 
 
-
     @Select("SELECT\n" +
             "\tphoi.id AS id,\n" +
             "\tpho.ordeNo AS ordeNo,\n" +
@@ -368,9 +368,39 @@ public interface ProjectMapper {
             "\t\tproject_head_order_item item2\n" +
             "\tGROUP BY\n" +
             "\t\titem2.order_id,item2.product_Name\n" +
-            ")" )
+            ")")
     List<ProjectHeadOrderItem> getAllItemByUserIdAndNoFinish2(String empNo);
 
+    @Select("SELECT\n" +
+            "\tcustomer_Name\n" +
+            "FROM\n" +
+            "\tproject_head_order\n" +
+            "GROUP BY\n" +
+            "\tcustomer_Name\n" +
+            "ORDER BY\n" +
+            "\tcustomer_Name ASC")
+    List<String> getAllCustomerName();
+
+    @Select("SELECT\n" +
+            "\tprojectName\n" +
+            "FROM\n" +
+            "\tproject_head\n" +
+            "GROUP BY\n" +
+            "\tprojectName\n" +
+            "ORDER BY\n" +
+            "\tprojectName ASC")
+    List<String> getAllProjectName();
+
+
+    @Select("SELECT\n" +
+            "\tordeNo\n" +
+            "FROM\n" +
+            "\tproject_head_order\n" +
+            "GROUP BY\n" +
+            "\tordeNo\n" +
+            "ORDER BY\n" +
+            "\tordeNo ASC")
+    List<String> getAllOrderNoList();
 
     @Select("SELECT\n" +
             "\tphoi.id,\n" +
@@ -599,7 +629,7 @@ public interface ProjectMapper {
             "and phoi.product_Name = #{productName} " +
             "and ph.projectName = #{projectName} " +
             "order by phoi.version desc limit 1")
-    ProjectHeadOrderItem getTotalProjectOrderITEMMoreByOrderS(String empNo, String projectName, String customerName,String productName);
+    ProjectHeadOrderItem getTotalProjectOrderITEMMoreByOrderS(String empNo, String projectName, String customerName, String productName);
 
 
     @Select("SELECT\n" +
@@ -971,11 +1001,8 @@ public interface ProjectMapper {
     void saveProjectHeadByBeanA(ProjectHead ph);
 
 
-
-
-
     @Select("  select id from project_head where projectName = #{projectName} and salor = #{salor} ")
-    ProjectHead getProjectByNameAndSalor(String projectName,String salor);
+    ProjectHead getProjectByNameAndSalor(String projectName, String salor);
 
     @Select("select id,`Name` from china where pid = 0 and id <>0")
     List<China> getAllMainProvince();
@@ -992,7 +1019,7 @@ public interface ProjectMapper {
             "\tpho.customer_Name = #{customerName}\n" +
             "\t and ph.projectName = #{projectName}\n" +
             "AND ph.salor = #{userId}")
-    ProjectHeadOrder checkOrderNoRepeat(String userId, String orderNo,String projectName,String customerName);
+    ProjectHeadOrder checkOrderNoRepeat(String userId, String orderNo, String projectName, String customerName);
 
     @Select("SELECT\n" +
             "count(*) " +
@@ -1115,7 +1142,7 @@ public interface ProjectMapper {
             "left join project_head ph on pho.head_id = ph.id\n" +
             "WHERE\n" +
             "\tpho.customer_Name = #{customerName} and ph.projectName = #{projectName} ")
-    ProjectHeadOrder getProjectOrderByOrderNo(String projectName,String customerName,String orderNo);
+    ProjectHeadOrder getProjectOrderByOrderNo(String projectName, String customerName, String orderNo);
 
     @Select("SELECT\n" +
             " \tid,\n" +
@@ -1128,7 +1155,7 @@ public interface ProjectMapper {
             "\tproject_head_order pho \n" +
             "WHERE\n" +
             "\tpho.ordeNo = #{orderNo} and pho.head_id = #{headId} and pho.customer_Name = #{custormerName} \n")
-    ProjectHeadOrder getPHOByHeadIdAndOrderNoAndCstomerName(Integer headId,String custormerName,String orderNo);
+    ProjectHeadOrder getPHOByHeadIdAndOrderNoAndCstomerName(Integer headId, String custormerName, String orderNo);
 
 
     @Select("SELECT\n" +
@@ -1204,6 +1231,17 @@ public interface ProjectMapper {
     @Select(" select e.* from employee e LEFT JOIN  dept d on e.deptId = d.id\n" +
             " where d.deptname in (\"销售中心\") ")
     List<Employee> findAllProjectSalorByDeptName();
+
+
+    @Select(" SELECT\n" +
+            "\te.*\n" +
+            "FROM\n" +
+            "\temployee e \n" +
+            "join userinfo info on info.empno = e.empno\n" +
+            "LEFT JOIN dept d ON e.deptId = d.id\n" +
+            "WHERE\n" +
+            "\td.deptname IN (\"项目中心\") and info.useractor = 2")
+    List<Employee> findAllProjectSalorByDeptName1();
 
     @Select("select `name` from qyweixinbd where userid = #{userId}")
     String getUserNameByUserId(String userId);
@@ -1285,6 +1323,13 @@ public interface ProjectMapper {
             "\t\t\titem2.order_id,item2.product_Name\n" +
             "\t) limit #{currentPageTotalNum},#{pageSize}")
     List<ProjectHeadOrderItem> findAllProjecHOI(ProjectHeadOrderItem item);
+
+
+    @SelectProvider(type = ProjectMapper.ProjectDaoProvider.class, method = "queryProjectOrderItemByCondition")
+    List<ProjectHeadOrderItem> queryProjectOrderItemByCondition(ProjectHeadOrderItem item);
+
+    @SelectProvider(type = ProjectMapper.ProjectDaoProvider.class, method = "queryProjectOrderItemByConditionCount")
+    int queryProjectOrderItemByConditionCount(ProjectHeadOrderItem item);
 
     @Select("SELECT  " +
             " count(*) " +
@@ -1535,7 +1580,7 @@ public interface ProjectMapper {
             "\t\tGROUP BY\n" +
             "\t\t\titem2.order_id,item2.product_Name\n" +
             "\t)")
-    List<ProjectHeadOrderItem> getHistoryItemByProduct_NameAndOrderNo(String productName, String orderNo,String projectName,String customerName);
+    List<ProjectHeadOrderItem> getHistoryItemByProduct_NameAndOrderNo(String productName, String orderNo, String projectName, String customerName);
 
 
     @Delete("delete from project_head_order_item where id = #{id}")
@@ -1607,10 +1652,468 @@ public interface ProjectMapper {
     @Select("call splitString(#{empNos},\",\");")
     void returnNameByEmpNoStrBefore(String empNos);
 
-    @Select(" select group_concat(name,'') from employee where empno in(select * from tmp_split);  ")
-    String returnNameByEmpNoStr(String empNos);
+    //    @Select(" select group_concat(name,'') from employee where empno in(select * from tmp_split);  ")
+    @SelectProvider(type = ProjectMapper.ProjectDaoProvider.class, method = "returnNameByEmpNoStr")
+    String returnNameByEmpNoStr(@Param("empNoList") List<String> empNoList);
+
+    class ProjectDaoProvider {
+
+        public String queryProjectOrderItemByCondition(ProjectHeadOrderItem item) {
+            StringBuilder sb = new StringBuilder("SELECT\n" +
+                    "\tphoi.delivery_Date AS delivery_DateStr,\n" +
+                    "\tphoi.totalBao AS totalBao,\n" +
+                    "\tpho.customer_Name AS customer_Name,\n" +
+                    "\tphoi.product_Name AS product_Name,\n" +
+                    "\tifnull((phoi.hetongMoney), 0.0) - ifnull(\n" +
+                    "\t\t(\n" +
+                    "\t\t\tSELECT\n" +
+                    "\t\t\t\tsum(hereMoney)\n" +
+                    "\t\t\tFROM\n" +
+                    "\t\t\t\tproject_oi_moneyrecord\n" +
+                    "\t\t\tWHERE\n" +
+                    "\t\t\t\titem_id = phoi.id\n" +
+                    "\t\t),\n" +
+                    "\t\t0.0\n" +
+                    "\t) AS weiHuiMoney,\n" +
+                    "\tIFNULL(phoi.hetongMoney, 0.0) AS hetongMoney,\n" +
+                    "\tpho.ordeNo AS orderNo,\n" +
+                    "\tphoi.id AS id,\n" +
+                    "\tphoi.zhanCha_Date_Plan AS zhanCha_Date_PlanStr,\n" +
+                    "\tphoi.zhanCha_Date_Accu AS zhanCha_Date_AccuStr,\n" +
+                    "\tphoi.outDraw_Date_Plan AS outDraw_Date_PlanStr,\n" +
+                    "\tphoi.outDraw_Date_Accu AS outDraw_Date_AccuStr,\n" +
+                    "\tphoi.program_confir_Date_Plan AS program_confir_Date_PlanStr,\n" +
+                    "\tphoi.program_confir_Date_Accu AS program_confir_Date_AccuStr,\n" +
+                    "\tphoi.giveOrder_Date_Plan AS giveOrder_Date_PlanStr,\n" +
+                    "\tphoi.giveOrder_Date_Accu AS giveOrder_Date_AccuStr,\n" +
+                    "\tphoi.delivery_Goods_Date_Plan AS delivery_Goods_Date_PlanStr,\n" +
+                    "\tphoi.delivery_Goods_Date_Accu AS delivery_Goods_Date_AccuStr,\n" +
+                    "\tphoi.install_Date_Plan AS install_Date_PlanStr,\n" +
+                    "\tphoi.install_Date_Accu AS install_Date_AccuStr,\n" +
+                    "\tphoi.yanShou_Date_Plan AS yanShou_Date_PlanStr,\n" +
+                    "\tphoi.yanShou_Date_Accu AS yanShou_Date_AccuStr,\n" +
+                    "\tphoi.jieSuan_Date_Plan AS jieSuan_Date_PlanStr,\n" +
+                    "\tphoi.jieSuan_Date_Accu AS jieSuan_Date_AccuStr,\n" +
+                    "\tphoi.getOrder_Date_Plan AS getOrder_Date_PlanStr,\n" +
+                    "\tphoi.checked AS checked,\n" +
+                    "\tphoi. STATUS AS STATUS,\n" +
+                    "\tIFNULL(phoi.delivery_Goods_Emp, '') AS gendan,\n" +
+                    "\tph.projectName AS projectName,\n" +
+                    "\tphoi.order_id AS order_Id,\n" +
+                    "\tIFNULL(phoi.zhanCha_Emp, '') AS saleManager,\n" +
+                    "\tifnull(phoi.remark, '') AS remark,\n" +
+                    "\tphoi.zhanCha_Emp,\n" +
+                    "\tphoi.outDraw_Emp,\n" +
+                    "\tphoi.program_confir_Emp,\n" +
+                    "\tphoi.giveOrder_Emp,\n" +
+                    "\tphoi.delivery_Goods_Emp,\n" +
+                    "\tphoi.install_Emp,\n" +
+                    "\tphoi.yanShou_Emp,\n" +
+                    "\tphoi.jieSuan_Emp,\n" +
+                    "\tifnull(phoi.jindu_remark, '') AS jindu_remark,\n" +
+                    "\tph.salor,\n" +
+                    "\tcha. NAME AS provinceStr,\n" +
+                    "\tph.projectName,\n" +
+                    "\tpho.newOrOld AS newOrOld,\n" +
+                    "\t(\n" +
+                    "\t\tcast(\n" +
+                    "\t\t\tphoi.version AS DECIMAL (11, 2)\n" +
+                    "\t\t) - 1\n" +
+                    "\t) * 10 AS historyGe\n" +
+                    "FROM\n" +
+                    "\tproject_head_order pho\n" +
+                    "JOIN project_head ph ON ph.id = pho.head_id\n" +
+                    "JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
+                    "LEFT JOIN china cha ON pho.province = cha.id\n" +
+                    "join qyweixinbd qy on qy.userid = ph.salor\n" +
+                    "WHERE\n" +
+                    "\tphoi.id IN (\n" +
+                    "\t\tSELECT\n" +
+                    "\t\t\tmax(item2.id)\n" +
+                    "\t\tFROM\n" +
+                    "\t\t\tproject_head_order_item item2\n" +
+                    "\t\tGROUP BY\n" +
+                    "\t\t\titem2.order_id,\n" +
+                    "\t\t\titem2.product_Name\n" +
+                    "\t)\n");
+
+            if (item.getNameIds() != null && item.getNameIds().size() > 0) {
+                if (item.getNameIds().size() == 1) {
+                    sb.append("  and qy.name in ('" + item.getNameIds().get(0) + "')");
+                } else if (item.getNameIds().size() >= 2) {
+                    sb.append("  and qy.name in (");
+                    for (int i = 0; i < item.getNameIds().size() - 1; i++) {
+                        sb.append("'" + item.getNameIds().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getNameIds().get(item.getNameIds().size() - 1) + "')");
+                }
+            }
 
 
+            if (item.getOrderNos() != null && item.getOrderNos().size() > 0) {
+                if (item.getOrderNos().size() == 1) {
+                    sb.append("  and pho.ordeNo in ('" + item.getOrderNos().get(0) + "')");
+                } else if (item.getOrderNos().size() >= 2) {
+                    sb.append("  and pho.ordeNo in (");
+                    for (int i = 0; i < item.getOrderNos().size() - 1; i++) {
+                        sb.append("'" + item.getOrderNos().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getOrderNos().get(item.getOrderNos().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getProjectNames() != null && item.getProjectNames().size() > 0) {
+                if (item.getProjectNames().size() == 1) {
+                    sb.append("  and ph.projectName in ('" + item.getProjectNames().get(0) + "')");
+                } else if (item.getProjectNames().size() >= 2) {
+                    sb.append("  and ph.projectName in (");
+                    for (int i = 0; i < item.getProjectNames().size() - 1; i++) {
+                        sb.append("'" + item.getProjectNames().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getProjectNames().get(item.getProjectNames().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getCustomerNames() != null && item.getCustomerNames().size() > 0) {
+                if (item.getCustomerNames().size() == 1) {
+                    sb.append("  and pho.customer_Name in ('" + item.getCustomerNames().get(0) + "')");
+                } else if (item.getCustomerNames().size() >= 2) {
+                    sb.append("  and pho.customer_Name in (");
+                    for (int i = 0; i < item.getCustomerNames().size() - 1; i++) {
+                        sb.append("'" + item.getCustomerNames().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getCustomerNames().get(item.getCustomerNames().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getCheckeds() != null && item.getCheckeds().size() > 0) {
+                if (item.getCheckeds().size() == 1) {
+                    sb.append("  and phoi.checked in ('" + item.getCheckeds().get(0) + "')");
+                } else if (item.getCheckeds().size() >= 2) {
+                    sb.append("  and phoi.checked in (");
+                    for (int i = 0; i < item.getCheckeds().size() - 1; i++) {
+                        sb.append("'" + item.getCheckeds().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getCheckeds().get(item.getCheckeds().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getStatuss() != null && item.getStatuss().size() > 0) {
+                if (item.getStatuss().size() == 1) {
+                    sb.append("  and phoi.status in ('" + item.getStatuss().get(0) + "')");
+                } else if (item.getStatuss().size() >= 2) {
+                    sb.append("  and phoi.status in (");
+                    for (int i = 0; i < item.getStatuss().size() - 1; i++) {
+                        sb.append("'" + item.getStatuss().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getStatuss().get(item.getStatuss().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getGetOrder_Date_PlanStr() != null && item.getGetOrder_Date_PlanStr().length() > 0) {
+                sb.append(" and phoi.getOrder_Date_Plan = #{getOrder_Date_PlanStr}");
+            }
+
+            if (item.getDelivery_DateStr() != null && item.getDelivery_DateStr().length() > 0) {
+                sb.append(" and phoi.delivery_Date = #{delivery_DateStr}");
+            }
+
+            // provinceStr customer_Name orderNo product_Name delivery_DateStr getOrder_Date_PlanStr zhanCha_Date_PlanStr
+            // outDraw_Date_PlanStr  program_confir_Date_PlanStr giveOrder_Date_PlanStr delivery_Goods_Date_PlanStr
+            // install_Date_PlanStr yanShou_Date_PlanStr isYanShou jindu_remark totalBao hetongMoney
+            // hereMoney weiHuiMoney statusStr checkedStr remark
+
+            if (item.getSortMethod() != null && !"undefined".equals(item.getSortMethod()) && !"undefined".equals(item.getSortByName()) && item.getSortByName() != null) {
+                if ("provinceStr".equals(item.getSortByName())) {
+                    sb.append(" order by pho.province ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("remark".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.remark ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("checkedStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.checkedStr ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("statusStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.statusStr ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("weiHuiMoney".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.weiHuiMoney ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("hereMoney".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.hereMoney ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("hetongMoney".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.hetongMoney ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("totalBao".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.totalBao ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("jindu_remark".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.jindu_remark ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("yanShou_Date_PlanStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.yanShou_Date_Plan ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("install_Date_PlanStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.install_Date_Plan ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("delivery_Goods_Date_PlanStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.delivery_Goods_Date_Plan ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("giveOrder_Date_PlanStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.giveOrder_Date_Plan ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("program_confir_Date_PlanStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.program_confir_Date_Plan ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("outDraw_Date_PlanStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.outDraw_Date_Plan ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("getOrder_Date_PlanStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.getOrder_Date_Plan ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("zhanCha_Date_PlanStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.zhanCha_Date_Plan ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("customer_Name".equals(item.getSortByName())) {
+                    sb.append(" order by pho.customer_Name ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("orderNo".equals(item.getSortByName())) {
+                    sb.append(" order by pho.ordeNo ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("product_Name".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.product_Name ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("delivery_DateStr".equals(item.getSortByName())) {
+                    sb.append(" order by phoi.delivery_Date ");
+                    if ("asc".equals(item.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(item.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                }
+            } else {
+                sb.append("order by ph.projectName,pho.customer_Name,phoi.product_Name ");
+            }
+
+            sb.append("  limit #{currentPageTotalNum},#{pageSize}");
+
+            return sb.toString();
+        }
+
+        public String queryProjectOrderItemByConditionCount(ProjectHeadOrderItem item) {
+            StringBuilder sb = new StringBuilder("SELECT" +
+                    " count(*) " +
+                    "FROM\n" +
+                    "\tproject_head_order pho\n" +
+                    "JOIN project_head ph ON ph.id = pho.head_id\n" +
+                    "JOIN project_head_order_item phoi ON phoi.order_id = pho.id\n" +
+                    "LEFT JOIN china cha ON pho.province = cha.id\n" +
+                    "join qyweixinbd qy on qy.userid = ph.salor\n" +
+                    "WHERE\n" +
+                    "\tphoi.id IN (\n" +
+                    "\t\tSELECT\n" +
+                    "\t\t\tmax(item2.id)\n" +
+                    "\t\tFROM\n" +
+                    "\t\t\tproject_head_order_item item2\n" +
+                    "\t\tGROUP BY\n" +
+                    "\t\t\titem2.order_id,\n" +
+                    "\t\t\titem2.product_Name\n" +
+                    "\t)\n");
+
+
+            if (item.getNameIds() != null && item.getNameIds().size() > 0) {
+                if (item.getNameIds().size() == 1) {
+                    sb.append("  and qy.name in ('" + item.getNameIds().get(0) + "')");
+                } else if (item.getNameIds().size() >= 2) {
+                    sb.append("  and qy.name in (");
+                    for (int i = 0; i < item.getNameIds().size() - 1; i++) {
+                        sb.append("'" + item.getNameIds().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getNameIds().get(item.getNameIds().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getOrderNos() != null && item.getOrderNos().size() > 0) {
+                if (item.getOrderNos().size() == 1) {
+                    sb.append("  and pho.ordeNo in ('" + item.getOrderNos().get(0) + "')");
+                } else if (item.getOrderNos().size() >= 2) {
+                    sb.append("  and pho.ordeNo in (");
+                    for (int i = 0; i < item.getOrderNos().size() - 1; i++) {
+                        sb.append("'" + item.getOrderNos().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getOrderNos().get(item.getOrderNos().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getProjectNames() != null && item.getProjectNames().size() > 0) {
+                if (item.getProjectNames().size() == 1) {
+                    sb.append("  and ph.projectName in ('" + item.getProjectNames().get(0) + "')");
+                } else if (item.getProjectNames().size() >= 2) {
+                    sb.append("  and ph.projectName in (");
+                    for (int i = 0; i < item.getProjectNames().size() - 1; i++) {
+                        sb.append("'" + item.getProjectNames().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getProjectNames().get(item.getProjectNames().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getCustomerNames() != null && item.getCustomerNames().size() > 0) {
+                if (item.getCustomerNames().size() == 1) {
+                    sb.append("  and pho.customer_Name in ('" + item.getCustomerNames().get(0) + "')");
+                } else if (item.getCustomerNames().size() >= 2) {
+                    sb.append("  and pho.customer_Name in (");
+                    for (int i = 0; i < item.getCustomerNames().size() - 1; i++) {
+                        sb.append("'" + item.getCustomerNames().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getCustomerNames().get(item.getCustomerNames().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getCheckeds() != null && item.getCheckeds().size() > 0) {
+                if (item.getCheckeds().size() == 1) {
+                    sb.append("  and phoi.checked in ('" + item.getCheckeds().get(0) + "')");
+                } else if (item.getCheckeds().size() >= 2) {
+                    sb.append("  and phoi.checked in (");
+                    for (int i = 0; i < item.getCheckeds().size() - 1; i++) {
+                        sb.append("'" + item.getCheckeds().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getCheckeds().get(item.getCheckeds().size() - 1) + "')");
+                }
+            }
+
+
+            if (item.getStatuss() != null && item.getStatuss().size() > 0) {
+                if (item.getStatuss().size() == 1) {
+                    sb.append("  and phoi.status in ('" + item.getStatuss().get(0) + "')");
+                } else if (item.getStatuss().size() >= 2) {
+                    sb.append("  and phoi.status in (");
+                    for (int i = 0; i < item.getStatuss().size() - 1; i++) {
+                        sb.append("'" + item.getStatuss().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + item.getStatuss().get(item.getStatuss().size() - 1) + "')");
+                }
+            }
+
+            if (item.getGetOrder_Date_PlanStr() != null && item.getGetOrder_Date_PlanStr().length() > 0) {
+                sb.append(" and phoi.getOrder_Date_Plan >= #{getOrder_Date_PlanStr}");
+            }
+
+            if (item.getDelivery_DateStr() != null && item.getDelivery_DateStr().length() > 0) {
+                sb.append(" and phoi.delivery_Date >= #{delivery_DateStr}");
+            }
+
+            return sb.toString();
+        }
+
+        public String returnNameByEmpNoStr(List<String> empNoList) {
+            //@Select(" select group_concat(name,'') from employee where empno in(select * from tmp_split)
+            StringBuilder sb = new StringBuilder("select group_concat(name,'') from employee where 1=1 ");
+            if (empNoList != null && empNoList.size() > 0) {
+                if (empNoList.size() == 1) {
+                    sb.append(" and empno in  ('" + empNoList.get(0) + "')");
+                    System.out.println(empNoList.get(0));
+                } else if (empNoList.size() >= 2) {
+                    sb.append("  and empno in (");
+                    for (int i = 0; i < empNoList.size() - 1; i++) {
+                        sb.append("'" + empNoList.get(i) + "'" + ",");
+                    }
+                    sb.append("'" + empNoList.get(empNoList.size() - 1) + "')");
+                }
+            }
+            return sb.toString();
+        }
+
+    }
 }
 
 

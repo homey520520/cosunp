@@ -51,50 +51,112 @@ public class CosunpApplication extends SpringBootServletInitializer {
                 // /usr/java/apache-tomcat-8.5.35
                 // /usr/java/jdk1.8.0_191
                 // spring-boot使用两个数据库mysql 和 sqlserver
-                //wx16c9442a4b26e6ea
+                // wx16c9442a4b26e6ea
                 //36e571b957c3705964b4398019482dde
             }
         };
     }
 
-
     // https://mp.weixin.qq.com/wxamp/wacodepage/getcodepage?token=2009826961&lang=zh_CN
     // /opt/mysrv/nginx/sbin/nginx -c /opt/mysrv/etc/nginx/nginx.conf
     // ./nginx -t
 
-//  /opt/mysrv/etc/redis/redis.conf
-//  /usr/java/redis-4.0.9/src/redis-cli
-//  /usr/java/redis-4.0.9/src/redis-server
+    //  redis-server /opt/mysrv/etc/redis/redis.conf
+    //  /usr/java/redis-4.0.9/src/redis-cli
+    //  /usr/java/redis-4.0.9/src/redis-server
+
+    // mysqldump -h 127.0.0.1 -u root -B -p ext_upload_files > /user/ofs_v2.bak
 
     //  cp /usr/java/redis-4.0.9/src/redis-server /usr/local/redis/
     // cp /usr/java/redis-4.0.9/src/redis-cli /usr/local/redis/
     // cp /opt/mysrv/etc /redis/redis.conf /usr/local/redis/
     // ln -s /usr/local/redis/redis-cli /usr/bin/redis
-//    redis-server /opt/mysrv/etc/redis/redis.conf
+    //
     //   ln -s /usr/java/redis-4.0.9/src/redis-server /usr/bin/redis-server
-// return 301 https://it.cosunsign.com;
-//    C:\Users\Administrator\Desktop\it.cosunsign.com\Nginx\1_it.cosunsign.com_bundle.crt
-//    C:\Users\Administrator\Desktop\it.cosunsign.com\Nginx\2_it.cosunsign.com.key
+    // return 301 https://it.cosunsign.com;
     // lsof -i:22
 
+    // https://www.cnblogs.com/ssrs-wanghao/articles/12703146.html
+
+//    log_error = /usr/local/mysql-5.7.21/log/mysql-error.log
+
+//     大地,我的母亲
 //
-//      希望
+//     小时候
+//     我喜欢在您身上打滚
+//     蹦跳
+//     是田野上舞刀弄剑的快活
+//     是青山绿水中游窜的撒欢
 //
-//    是熬过黑夜
-//    守来的黎明
-//    是苦研多日
-//    盼来舒心笑颜
-//    还是那铁片
-//    那铜块
-//    叮叮当当
-//    咚咚叮叮
-//    鬼斧神工地
-//    发出了光的亮
-//    有了标致的身
-//    赋予高端的魂
-//    对
-//    是标识
-//    承载着柯赛人的汗水、智慧
-//    指引着人们脚下的方向
+//     长大后
+//     是满怀希望
+//     是脚踏实地
+//     是为了目标而奔走四方的豪情
+//
+//    再后来啊
+//    我成了家
+//    背负重担
+//    我的每一步努力前行
+//    都有您肯定的回应
+//
+//    祖祖辈辈
+//    世世代代
+//    都曾在你怀里来了又去
+//
+//    花花叶叶
+//    草草木木
+//    在你身上荣了又枯
+//
+//    你送来了春
+//    那是清新泥土里钻出的嫩绿
+//    是一簇一簇的花开
+//
+//    你邀来了夏
+//    那是啃着瓜泡在溪流里的清凉
+//    是蝉鸣响破了天空的蓝
+//
+//    你请来了秋
+//    但见压弯了一树的硕果
+//    是丰收的黄
+//
+//    你迎来了冬
+//    是围炉里热滚滚的美味
+//    是二两浊酒后的开怀大笑
+//
+//    大地啊!我的母亲
+//    你看你
+//    美得像一幅画
+//    那青翠郁葱里跳跃的小鹿
+//    那草长 莺飞
+//    那碧波 微风
+//    那融化在泥里的细雨
+//    那一树一树的花开
+//
+//    大地啊!我的母亲
+//    那蒙了灰的青叶
+//    那刺鼻变了色的湖泊
+//    那过度依赖化肥而硬化的泥土
+//    那日渐绝迹的生灵植物
+//    可否让您
+//    皱了眉
+//    伤了心
+//
+//    罢了
+//    我是渺小的
+//    我唯有保护你
+//    才不可负你对我的养育
+//
+//    在这个节日里
+//    人们都在歌颂母爱伟大
+//    却冷落了你
+//    那就让我
+//    静悄悄的
+//    表达此刻我对你
+//    爱的无限的深情
+
 
 }
+
+//./mysqld --initialize --user=mysql --basedir=/usr/local/mysql-5.7.30/ --datadir=/usr/local/mysql-5.7.30/data/
+
+//  ln -s /usr/local/mysql/bin/mysql-5.7.30 /usr/bin

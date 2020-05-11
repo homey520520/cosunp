@@ -40,6 +40,7 @@ public class UserSecurityInterceptor extends WebMvcConfigurerAdapter {
         addInterceptor.addPathPatterns("/fileupdown/**");
         addInterceptor.addPathPatterns("/person/**");
         addInterceptor.addPathPatterns("/rules/**");
+        addInterceptor.addPathPatterns("/design/**");
     }
 
     private class SecurityInterceptor extends HandlerInterceptorAdapter {

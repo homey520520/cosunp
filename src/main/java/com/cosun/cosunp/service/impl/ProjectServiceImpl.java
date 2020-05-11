@@ -19,10 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author:homey Wong
@@ -308,6 +305,39 @@ public class ProjectServiceImpl implements IProjectServ {
         return projectMapper.getAllItemByUserIdAndNoFinish2(userId);
     }
 
+
+    @Override
+    public List<String> getAllCustomerName() throws Exception {
+        return projectMapper.getAllCustomerName();
+    }
+
+    @Override
+    public List<String> getAllProjectName() throws Exception {
+        return projectMapper.getAllProjectName();
+    }
+
+    @Override
+    public List<Employee> findAllProjectSalorByDeptName1() throws Exception {
+        return projectMapper.findAllProjectSalorByDeptName1();
+    }
+
+    @Override
+    public List<String> getAllOrderNoList() throws Exception {
+        return projectMapper.getAllOrderNoList();
+    }
+
+
+    @Override
+    public List<ProjectHeadOrderItem> queryProjectOrderItemByCondition(ProjectHeadOrderItem item) throws Exception {
+        return projectMapper.queryProjectOrderItemByCondition(item);
+    }
+
+    @Override
+    public int queryProjectOrderItemByConditionCount(ProjectHeadOrderItem item) throws Exception {
+        return projectMapper.queryProjectOrderItemByConditionCount(item);
+    }
+
+
     @Override
     public void saveOrderItemMorOld(Integer id, ProjectHeadOrderItem phoi) throws Exception {
         ProjectHeadOrderItem oldItem = projectMapper.getOldHeadOrderItemByPhoi(phoi);
@@ -461,8 +491,13 @@ public class ProjectServiceImpl implements IProjectServ {
 
     @Override
     public String returnNameByEmpNoStr(String empNoStr) throws Exception {
-        projectMapper.returnNameByEmpNoStrBefore(empNoStr);
-        return projectMapper.returnNameByEmpNoStr(empNoStr);
+        //projectMapper.returnNameByEmpNoStrBefore(empNoStr);
+        List<String> allEmpNlist = null;
+        if (empNoStr != null && empNoStr.trim().length() > 0) {
+            allEmpNlist = Arrays.asList(empNoStr.trim().split(","));
+            return projectMapper.returnNameByEmpNoStr(allEmpNlist);
+        }
+        return "";
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.cosun.cosunp.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author:homey Wong
@@ -14,6 +15,19 @@ public class ProjectHeadOrderItem implements Serializable {
 
 
     private static final long serialVersionUID = -4140054436131666981L;
+
+    private List<String> nameIds;
+    private List<String> orderNos;
+    private List<String> projectNames;
+    private List<String> customerNames;
+    private List<Integer> statuss;
+    private List<Integer> checkeds;
+
+    private String sortMethod;
+    private String sortByName;
+
+
+
 
     private Integer id;
     private String name;
@@ -67,7 +81,7 @@ public class ProjectHeadOrderItem implements Serializable {
     private String project_Manager2;
     private String project_Manager3;
     private Double version;
-    private int checked;
+
 
 
     private String salor;
@@ -104,7 +118,13 @@ public class ProjectHeadOrderItem implements Serializable {
     private Double nowhereMoney;
     private String fapiaoNo;
     private int status;
+    private int checked;
+
+    private Integer statusIn;
+    private Integer checkedIn;
+
     private String statusStr;
+
 
 
     private String saleManager;
@@ -171,18 +191,82 @@ public class ProjectHeadOrderItem implements Serializable {
     private int recordCount;
     private int pageSize = 10;
     private int currentPageTotalNum;
-    private String sortMethod;
-    private String sortByName;
 
 
     private String isYanShouStr;
 
+
+
+    public List<Integer> getStatuss() {
+        return statuss;
+    }
+
+    public void setStatuss(List<Integer> statuss) {
+        this.statuss = statuss;
+    }
+
+    public List<Integer> getCheckeds() {
+        return checkeds;
+    }
+
+    public void setCheckeds(List<Integer> checkeds) {
+        this.checkeds = checkeds;
+    }
 
     public String getIsYanShouStr() {
         if (this.getYanShou_Date_AccuStr() != null) {
             return "已验收";
         }
         return "未验收";
+    }
+
+    public Integer getStatusIn() {
+        return statusIn;
+    }
+
+    public void setStatusIn(Integer statusIn) {
+        this.statusIn = statusIn;
+    }
+
+    public Integer getCheckedIn() {
+        return checkedIn;
+    }
+
+    public void setCheckedIn(Integer checkedIn) {
+        this.checkedIn = checkedIn;
+    }
+
+
+    public List<String> getNameIds() {
+        return nameIds;
+    }
+
+    public void setNameIds(List<String> nameIds) {
+        this.nameIds = nameIds;
+    }
+
+    public List<String> getOrderNos() {
+        return orderNos;
+    }
+
+    public void setOrderNos(List<String> orderNos) {
+        this.orderNos = orderNos;
+    }
+
+    public List<String> getProjectNames() {
+        return projectNames;
+    }
+
+    public void setProjectNames(List<String> projectNames) {
+        this.projectNames = projectNames;
+    }
+
+    public List<String> getCustomerNames() {
+        return customerNames;
+    }
+
+    public void setCustomerNames(List<String> customerNames) {
+        this.customerNames = customerNames;
     }
 
     public void setIsYanShouStr(String isYanShouStr) {
