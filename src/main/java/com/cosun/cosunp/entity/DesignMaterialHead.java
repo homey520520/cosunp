@@ -2,6 +2,7 @@ package com.cosun.cosunp.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author:homey Wong
@@ -37,6 +38,43 @@ public class DesignMaterialHead implements Serializable {
     private int currentPageTotalNum;
     private String sortMethod;
     private String sortByName;
+
+    List<String> customerNoList;
+    List<String> orderAreaList;
+    List<String> salorEmpList;
+    List<String> makerList;
+
+    public List<String> getCustomerNoList() {
+        return customerNoList;
+    }
+
+    public void setCustomerNoList(List<String> customerNoList) {
+        this.customerNoList = customerNoList;
+    }
+
+    public List<String> getOrderAreaList() {
+        return orderAreaList;
+    }
+
+    public void setOrderAreaList(List<String> orderAreaList) {
+        this.orderAreaList = orderAreaList;
+    }
+
+    public List<String> getSalorEmpList() {
+        return salorEmpList;
+    }
+
+    public void setSalorEmpList(List<String> salorEmpList) {
+        this.salorEmpList = salorEmpList;
+    }
+
+    public List<String> getMakerList() {
+        return makerList;
+    }
+
+    public void setMakerList(List<String> makerList) {
+        this.makerList = makerList;
+    }
 
     public String getSalorEmpStr() {
         return salorEmpStr;

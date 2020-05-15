@@ -15,7 +15,7 @@ import javax.sql.DataSource;
  * @Modified By:
  * @Modified-date:
  */
-@Configuration
+//@Configuration
 public class DataSourceConfig {
     @ConfigurationProperties(prefix = "c3p0.datasource")
     @Primary

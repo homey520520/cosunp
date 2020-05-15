@@ -52,8 +52,6 @@ public class ProjectController extends BaseController {
 
     private static Logger logger = LogManager.getLogger(ProjectController.class);
 
-    // sudo chmod 777 /opt/spring-boot/
-    // https://www.cnblogs.com/ssrs-wanghao/articles/12703146.html
     @Autowired
     IProjectServ projectServ;
 

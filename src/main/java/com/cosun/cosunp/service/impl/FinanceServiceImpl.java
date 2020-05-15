@@ -29,7 +29,7 @@ import java.util.List;
  */
 
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(value="test1TransactionManager",rollbackFor = Exception.class)
 public class FinanceServiceImpl implements IFinanceServ {
 
     @Autowired

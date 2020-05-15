@@ -29,7 +29,7 @@ import java.util.*;
  * @Modified-date:
  */
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(value="test1TransactionManager",rollbackFor = Exception.class)
 public class ProjectServiceImpl implements IProjectServ {
 
     private static Logger logger = LogManager.getLogger(ProjectServiceImpl.class);

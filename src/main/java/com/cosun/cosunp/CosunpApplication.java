@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@MapperScan("com.cosun.cosunp.mapper")
+@MapperScan({"com.cosun.cosunp.mapper", "com.cosun.cosunp.mapper2"})
 @EnableCaching
 @ServletComponentScan
 public class CosunpApplication extends SpringBootServletInitializer {
@@ -44,119 +44,73 @@ public class CosunpApplication extends SpringBootServletInitializer {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                fileUploadAndDownServ.deleteAll();
-                fileUploadAndDownServ.init();
-                new AccessTokenServlet().init();
+//                fileUploadAndDownServ.deleteAll();
+//                fileUploadAndDownServ.init();
+                //new AccessTokenServlet().init();
 
-                // /usr/java/apache-tomcat-8.5.35
-                // /usr/java/jdk1.8.0_191
-                // spring-boot使用两个数据库mysql 和 sqlserver
                 // wx16c9442a4b26e6ea
                 //36e571b957c3705964b4398019482dde
             }
         };
     }
 
-    // https://mp.weixin.qq.com/wxamp/wacodepage/getcodepage?token=2009826961&lang=zh_CN
+
     // /opt/mysrv/nginx/sbin/nginx -c /opt/mysrv/etc/nginx/nginx.conf
     // ./nginx -t
-
     //  redis-server /opt/mysrv/etc/redis/redis.conf
-    //  /usr/java/redis-4.0.9/src/redis-cli
-    //  /usr/java/redis-4.0.9/src/redis-server
-
-    // mysqldump -h 127.0.0.1 -u root -B -p ext_upload_files > /user/ofs_v2.bak
-
-    //  cp /usr/java/redis-4.0.9/src/redis-server /usr/local/redis/
-    // cp /usr/java/redis-4.0.9/src/redis-cli /usr/local/redis/
-    // cp /opt/mysrv/etc /redis/redis.conf /usr/local/redis/
-    // ln -s /usr/local/redis/redis-cli /usr/bin/redis
-    //
-    //   ln -s /usr/java/redis-4.0.9/src/redis-server /usr/bin/redis-server
-    // return 301 https://it.cosunsign.com;
-    // lsof -i:22
-
-    // https://www.cnblogs.com/ssrs-wanghao/articles/12703146.html
-
-//    log_error = /usr/local/mysql-5.7.21/log/mysql-error.log
-
-//     大地,我的母亲
-//
-//     小时候
-//     我喜欢在您身上打滚
-//     蹦跳
-//     是田野上舞刀弄剑的快活
-//     是青山绿水中游窜的撒欢
-//
-//     长大后
-//     是满怀希望
-//     是脚踏实地
-//     是为了目标而奔走四方的豪情
-//
-//    再后来啊
-//    我成了家
-//    背负重担
-//    我的每一步努力前行
-//    都有您肯定的回应
-//
-//    祖祖辈辈
-//    世世代代
-//    都曾在你怀里来了又去
-//
-//    花花叶叶
-//    草草木木
-//    在你身上荣了又枯
-//
-//    你送来了春
-//    那是清新泥土里钻出的嫩绿
-//    是一簇一簇的花开
-//
-//    你邀来了夏
-//    那是啃着瓜泡在溪流里的清凉
-//    是蝉鸣响破了天空的蓝
-//
-//    你请来了秋
-//    但见压弯了一树的硕果
-//    是丰收的黄
-//
-//    你迎来了冬
-//    是围炉里热滚滚的美味
-//    是二两浊酒后的开怀大笑
-//
-//    大地啊!我的母亲
-//    你看你
-//    美得像一幅画
-//    那青翠郁葱里跳跃的小鹿
-//    那草长 莺飞
-//    那碧波 微风
-//    那融化在泥里的细雨
-//    那一树一树的花开
-//
-//    大地啊!我的母亲
-//    那蒙了灰的青叶
-//    那刺鼻变了色的湖泊
-//    那过度依赖化肥而硬化的泥土
-//    那日渐绝迹的生灵植物
-//    可否让您
-//    皱了眉
-//    伤了心
-//
-//    罢了
-//    我是渺小的
-//    我唯有保护你
-//    才不可负你对我的养育
-//
-//    在这个节日里
-//    人们都在歌颂母爱伟大
-//    却冷落了你
-//    那就让我
-//    静悄悄的
-//    表达此刻我对你
-//    爱的无限的深情
+    //./mysqld --initialize --user=mysql --basedir=/usr/local/mysql-5.7.30/ --datadir=/usr/local/mysql-5.7.30/data/
+    //  ln -s /usr/local/mysql/bin/mysql-5.7.30 /usr/bin
 
 
 }
 
-//./mysqld --initialize --user=mysql --basedir=/usr/local/mysql-5.7.30/ --datadir=/usr/local/mysql-5.7.30/data/
 
-//  ln -s /usr/local/mysql/bin/mysql-5.7.30 /usr/bin
+//
+//   被管理者感想
+//
+//
+//     这么多年，我一直是被管理者，首先，对于我一直是名被管理的身份，略感羞意，毕竟，成为领导是各方面能力优秀的体现，我好像
+// 差了点什么。不过正因为这么多年专职于被管理者，我觉得，我能代表诸多被管理者发言。
+//     算下来，柯赛应该是我从业的第五家公司，我初来柯赛时，不知是多年没工作原因，还是其它，我初次对柯赛的感觉是严谨，
+// 而这严谨，步步为营的态度，首先来自于我们的钟总。钟总确实是在我这么多年的打工生涯中，所见到过的最严厉，用心，用力的
+// 老板，我个人觉得这对于企业的生存是极好的。
+//     我见过柯赛的众多领导。
+//     或是神定气闲冷静自若，这方面的代表比如品质黄经理，又或是气势汹汹风急火热，这方面的代表就不说了。又或是一视同仁体恤手下
+// ，这方面的代表比如亚克力钟主管，或者是区别对待只顾自己的利益，这方面的代表我也就不说了。
+//     我个人比较欣赏亚克力钟主管。
+//     我虽不是钟主管的属下，但是看到他对属下那细致关怀，加上平时对他的稍观察，他确认就是我心目中领导的样子。
+//
+//
+//
+//
+//
+//
+// https://i.zhaopin.com/resume
+//
+//文件管理平台
+//
+//项目框架搭建采用：springboot+springMVC+ibaties+redis+maven+tomcat+FTP+js+json+ajax+css+html5+jquery+bootstrap等
+//数据库：mysql
+//线上系统：linux
+//项目中配置了log4j日志方便线上BUG排错。事物,数据连接池等
+//采用了控件webuploader等，修改部分源码迎合项目需要等.
+//
+//人事考勤系统
+//项目框架搭建采用:springboot+springMVC+ibaties+redis+maven+tomcat+js+json+ajax+css+jquery+bootstrap等
+//数据库:mysql
+//线上系统：linux
+//根据人事习惯量身订做的系统，集排单，数据管理，月考勤报表等等所有功能。
+//
+//微信小程序
+//后端采用JAVA语言
+//数据库:mysql
+//后端线上系统：linux
+//给项目中心全体人员量身订做的一款项目订单监控小程序+后台数据管理。集数据管理，数据更改或延期或报警消息通知，系统自动排单
+//等数据智能化系统。
+//
+// 金蝶星空云二次开发
+// 使用已有的系统金蝶去数据库
+// 根据部门需要做二次开发
+//
+// 其它一些帮助部门节约时间的桌面程序开发等。
+//

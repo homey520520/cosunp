@@ -1,6 +1,7 @@
 package com.cosun.cosunp.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author:homey Wong
@@ -21,10 +22,12 @@ public class DesignMaterialHeadProduct implements Serializable {
     private String productRoute;
     private String remark;
     private Integer head_id;
-
     private String customerNo;
 
-
+    List<String> productNameList;
+    List<String> productNoList;
+    List<String> drawingNoList;
+    List<String> customerNoList;
 
     private int currentPage = 1;
     private int maxPage;
@@ -34,6 +37,38 @@ public class DesignMaterialHeadProduct implements Serializable {
     private String sortMethod;
     private String sortByName;
 
+
+    public List<String> getProductNameList() {
+        return productNameList;
+    }
+
+    public void setProductNameList(List<String> productNameList) {
+        this.productNameList = productNameList;
+    }
+
+    public List<String> getProductNoList() {
+        return productNoList;
+    }
+
+    public void setProductNoList(List<String> productNoList) {
+        this.productNoList = productNoList;
+    }
+
+    public List<String> getDrawingNoList() {
+        return drawingNoList;
+    }
+
+    public void setDrawingNoList(List<String> drawingNoList) {
+        this.drawingNoList = drawingNoList;
+    }
+
+    public List<String> getCustomerNoList() {
+        return customerNoList;
+    }
+
+    public void setCustomerNoList(List<String> customerNoList) {
+        this.customerNoList = customerNoList;
+    }
 
     public String getCustomerNo() {
         return customerNo;

@@ -41,7 +41,7 @@ import java.util.List;
  */
 
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(value="test1TransactionManager",rollbackFor = Exception.class)
 public class OrderServiceImpl implements IOrderServ {
 
     private static Logger logger = LogManager.getLogger(OrderServiceImpl.class);
@@ -100,7 +100,6 @@ public class OrderServiceImpl implements IOrderServ {
         }
     }
 
-    @Transactional
     public void addOrderHeadAndItemByBean(OrderHead orderHead, MultipartFile[] files) throws Exception {
         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateStr = sDateFormat.format(new Date());

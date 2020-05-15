@@ -19,7 +19,7 @@ import javax.sql.DataSource;
  * @Modified By:
  * @Modified-date:
  */
-@Configuration
+//@Configuration
 @MapperScan(basePackages = {"com.cosun.cosunp.mapper"})
 public class MybatisConfig {
 
@@ -31,11 +31,11 @@ public class MybatisConfig {
     public SqlSessionFactoryBean sqlSessionFactory(ApplicationContext applicationContext) throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         try {
-        sessionFactory.setDataSource(dataSource);
-        sessionFactory.setTypeAliasesPackage("com.cosun.cosunp.entity");
-        Resource[] resources = new PathMatchingResourcePatternResolver().getResources("classpath*:com/cosun/cosunp/mapper/*.java");
-        sessionFactory.setMapperLocations(resources);
-        }catch (Exception e) {
+            sessionFactory.setDataSource(dataSource);
+            sessionFactory.setTypeAliasesPackage("com.cosun.cosunp.entity");
+            Resource[] resources = new PathMatchingResourcePatternResolver().getResources("classpath*:com/cosun/cosunp/mapper/*.java");
+            sessionFactory.setMapperLocations(resources);
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }

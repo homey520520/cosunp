@@ -1,6 +1,7 @@
 package com.cosun.cosunp.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author:homey Wong
@@ -13,6 +14,9 @@ public class DesignMaterialHeadProductItem implements Serializable {
 
     private static final long serialVersionUID = 7567720000349307877L;
 
+    private String customerNo;
+    private String productNo;
+
     private Integer id;
     private String mateiralNo;
     private String materialName;
@@ -20,11 +24,18 @@ public class DesignMaterialHeadProductItem implements Serializable {
     private String unit;
     private Double num;
     private Integer useDeptId;
+    private String productName;
     private String useDeptName;
     private Double mateiralStock;
     private String remark;
     private Integer head_product_id;
+    private Integer isCanUse;
+    private String isCanUse2;
+    private String isCanUseStr;
+    private boolean isCanPurchase;
 
+    private List<String> materialNameList;
+    private List<String> materialSpeciList;
 
     private int currentPage = 1;
     private int maxPage;
@@ -33,6 +44,85 @@ public class DesignMaterialHeadProductItem implements Serializable {
     private int currentPageTotalNum;
     private String sortMethod;
     private String sortByName;
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getIsCanUse2() {
+        return isCanUse2;
+    }
+
+    public void setIsCanUse2(String isCanUse2) {
+        this.isCanUse2 = isCanUse2;
+    }
+
+    public String getCustomerNo() {
+        return customerNo;
+    }
+
+    public void setCustomerNo(String customerNo) {
+        this.customerNo = customerNo;
+    }
+
+    public String getProductNo() {
+        return productNo;
+    }
+
+    public void setProductNo(String productNo) {
+        this.productNo = productNo;
+    }
+
+    public boolean isCanPurchase() {
+        return isCanPurchase;
+    }
+
+    public void setCanPurchase(boolean canPurchase) {
+        isCanPurchase = canPurchase;
+    }
+
+    public List<String> getMaterialNameList() {
+        return materialNameList;
+    }
+
+    public void setMaterialNameList(List<String> materialNameList) {
+        this.materialNameList = materialNameList;
+    }
+
+    public List<String> getMaterialSpeciList() {
+        return materialSpeciList;
+    }
+
+    public void setMaterialSpeciList(List<String> materialSpeciList) {
+        this.materialSpeciList = materialSpeciList;
+    }
+
+    public String getIsCanUseStr() {
+        if (this.mateiralStock == 0.0 && this.isCanPurchase) {
+            return "不可用";
+        }
+        return "可用";
+    }
+
+    public void setIsCanUseStr(String isCanUseStr) {
+        this.isCanUseStr = isCanUseStr;
+    }
+
+    public Integer getIsCanUse() {
+        if (this.mateiralStock != null)
+            if (this.mateiralStock == 0.0 && this.isCanPurchase) {
+                return 0;
+            }
+        return 1;
+    }
+
+    public void setIsCanUse(Integer isCanUse) {
+        this.isCanUse = isCanUse;
+    }
 
     public Integer getHead_product_id() {
         return head_product_id;

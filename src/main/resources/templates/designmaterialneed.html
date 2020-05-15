@@ -62,29 +62,29 @@
 
     function goPageone() {
         $("#n_currentPage").val(1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goPrePage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 - 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goAftPage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 + 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goMaxPage() {
         $("#n_currentPage").val($("#maxPage").val());
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goPriPageone() {
         $("#n_currentPage").val(1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function isNull(arg1) {
@@ -115,25 +115,25 @@
         } else {
             $("#n_currentPage").val(tp);
             // document.forms["form0"].submit();
-            queryOrderHeadByCondition2();
+            queryOrderHeadByCondition();
         }
     }
 
     function goPriAftPage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 + 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goPriMaxPage() {
         $("#n_currentPage").val($("#maxPage").val());
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     function goPriPrePage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 - 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadByCondition();
     }
 
     var currentPage; //当前页
@@ -143,24 +143,24 @@
     var sortMethod;
     var sortByName;
 
+
     function queryOrderHeadByCondition() {
         var currentpage = $("#n_currentPage").val();
         window.parent.document.getElementById('coverbehidepage').style.display = "block";
         var formData = new FormData();
-        formData.append('nameIds', $("#name").val());
-        formData.append('orderNos', $("#orderNo").val());
-        formData.append('productTotalName', $("#prodName").val());
-        formData.append('singleOrProjects', $("#orderType").val());
-        formData.append('states', $("#state").val());
-        formData.append('orderTimeStr', $("#orderDate").val());
-        formData.append('itemDeliverTimeStr', $("#deleverDate").val());
+        formData.append('customerNoList', $("#customerNo").val());
+        formData.append('getOrderDateStr', $("#getOrderDate").val());
+        formData.append('orderAreaList', $("#orderArea").val());
+        formData.append('salorEmpList', $("#salorEmp").val());
+        formData.append('makerList', $("#maker").val());
+        formData.append('deliveryOrderDateStr', $("#deliveryOrderDate").val());
         formData.append('sortMethod', sortMethod);
         formData.append('sortByName', sortByName);
-        formData.append('currentPage', 1);
+        formData.append('currentPage', currentpage);
         $.ajax({
             data: formData,
             type: "POST",
-            url: "/order/queryOrderHeadByCondition",
+            url: "/design/queryOrderHeadByCondition",
             async: true,
             cache: false,
             contentType: false,
@@ -187,7 +187,6 @@
                 var td2 = "";
                 var tbody = $("#tabletblody");
                 tbody.html("");
-                var userType;
                 if (data != null && data != "") {
                     $("#nodatadiv").hide();
                     $("#showdiv").show();
@@ -195,82 +194,29 @@
                     totalPage = data[0].maxPage; //总多少页
                     totaldata = data[0].recordCount; //总共多少记录
                     pageSize = data[0].pageSize;
-                    userType = data[0].type;
                     maxpageid.val(totalPage);
                     n_currentPage.val(currentPage);
                     inputpage.val(currentPage);
-                    var eduLe;
-                    var safeLe;
-                    var otherLe;
                     $.each(data, function (num) {
-                        tr = $("<tr id='" + data[num].id + "'></tr>");
+                        tr = $("<tr id='" + data[num].id + "' ondblclick=\"showOrderItemByOrderNo('"+data[num].customerNo+"')\"></tr>");
                         tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
-                        tr.append("<td>" + isNull(data[num].orderNo) + "</td>");
-                        tr.append("<td>" + isNull(data[num].salor) + "</td>");
-                        tr.append("<td>" + isNull(data[num].orderTimeStr) + "</td>");
-                        tr.append("<td>" + isNull(data[num].orderSetNum) + "</td>");
-                        tr.append("<td>" + isNull(data[num].singleOrProjectStr) + "</td>");
-
-                        td2 = "<td><select id='" + 'stateStr' + data[num].orderNo + "'  class=\"selectpicker show-tick form-control\"\n" +
-                            " data-live-search=\"true\" data-actions-box=\"true\" >";
-                        if (data[num].state == 0) {
-                            td2 += "<option value=\"0\" selected=\"selected\">未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 1) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" selected=\"selected\">审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 2) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" selected=\"selected\">审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 3) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\"  selected=\"selected\">暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 4) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\"  selected=\"selected\">终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 5) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" selected=\"selected\">完成</option>"
-                        }
-                        td2 += "</select></td>";
-                        tr.append(td2);
-                        td = "<td>";
+                        tr.append("<td>" + isNull(data[num].orderMaker) + "</td>");
+                        tr.append("<td>" + isNull(data[num].customerNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].getOrderDateStr) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderArea) + "</td>");
+                        tr.append("<td>" + isNull(data[num].salorEmpStr) + "</td>");
+                        tr.append("<td>" + isNull(data[num].deliveryOrderDateStr) + "</td>");
+                        tr.append("<td>" + isNull(data[num].remark) + "</td>");
+                        var td = "<td>";
                         td += " <a class=\"btn btn-xs btn-primary\" \n" +
-                            "onclick=\"updateOrderItemByheadId('" + data[num].id + "');\">编辑</a>\n" +
+                            "onclick=\"updateOrderItemByheadId(this,'" + data[num].id + "');\">编辑</a>\n" +
                             "  <a class=\"btn btn-xs btn-primary\"\n" +
                             " onclick=\"deleteOrderItemByheadId('" + data[num].id + "');\">删除</a> " +
-                            " <a class=\"btn btn-xs btn-primary\"\n" +
-                            " onclick=\"confirmOrderItemByheadId(this);\">订单状态保存</a>\n" +
                             " <a class=\"btn btn-xs btn-primary\"\n" +
                             " onclick=\"transferDataToPDFFile('" + data[num].id + "');\">PDF打印</a>" +
                             "</td>";
                         tr.append(td);
                         tr.appendTo(tbody);
-                        $('#stateStr' + data[num].orderNo).selectpicker('refresh');
                     });
                     $("#currentpagespan").html(currentPage);
                     $("#maxpagespan").html(totalPage);
@@ -336,7 +282,6 @@
         queryEmployeeSalaryByCondition();
     }
 
-
     var len;
     var data;
 
@@ -360,6 +305,51 @@
                 return false;
             }
         }
+    }
+
+    function updateOrderItemByheadId(obj, id) {
+        var empList = $("#salorList").val();
+        data = eval("(" + empList + ")");
+        var customerNo = $(obj).parent().parent().find("td").eq(2).text();
+        var getOrderDate = $(obj).parent().parent().find("td").eq(3).text();
+        var area = $(obj).parent().parent().find("td").eq(4).text();
+        var salor = $(obj).parent().parent().find("td").eq(5).text();
+        var deliverDate = $(obj).parent().parent().find("td").eq(6).text();
+        var remark = $(obj).parent().parent().find("td").eq(7).text();
+
+        $(obj).parent().parent().find("td").eq(2).html("<input type=\"text\" id=\"orderno\" name=\"orderNo\" value='" + customerNo + "' onblur=\"checkOrderNo(this)\" class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(3).html("<input type=\"text\" " +
+            "               style=\"width:160px;height: 34px;text-align: center\" class=\"Wdate\" " +
+            "  id=\'getOrderDate\'" +
+            " value='" + getOrderDate + "'" +
+            "  onClick=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"/>")
+        $(obj).parent().parent().find("td").eq(4).html("<input type=\"text\" value='" + area + "' class=\"form-control\">")
+        var td = "<select id=\"name\"  class=\"selectpicker show-tick form-control\"\n" +
+            "   data-live-search=\"true\" data-actions-box=\"true\"\n" +
+            "   data-selected-text-format=\"count > 1\">\n";
+        for (var a = 0; a < data.length; a++) {
+            if (data[a].name == salor) {
+                td += "  <option selected='selected' value=\"" + data[a].empNo + "\">" + data[a].name + "</option>\n";
+            } else {
+                td += "  <option value=\"" + data[a].empNo + "\">" + data[a].name + "</option>\n";
+            }
+        }
+        td += "  </select> ";
+        $(obj).parent().parent().find("td").eq(5).html(td);
+        $(obj).parent().parent().find("td").eq(6).html("<input type=\"text\" " +
+            "               style=\"width:160px;height: 34px;text-align: center\" class=\"Wdate\" " +
+            " value='" + deliverDate + "'" +
+            "  onClick=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"/>")
+
+        $(obj).parent().parent().find("td").eq(7).html("<input type=\"text\"  value='" + remark + "' class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(8).html("<a id=\"savebutton\"\n" +
+            "    href=\"javascript:void(0);\" onclick=\"saveSJHeadDateToMysql(this," + id + ")\">保存</a>" +
+            " <a href=\"javascript:void(0);\"\n" +
+            "    onclick=\"deleteTRA(this," + len + "," + id + ");\">删除</a>");
+
+
+        $('.selectpicker').selectpicker('refresh');
+
     }
 
     function addSJHead() {
@@ -396,14 +386,26 @@
 
         tr.append("<td><input type='text' placeholder='备注选填'></td>")
         tr.append("<td><a id=\"savebutton\"\n" +
-            "    href=\"javascript:void(0);\" onclick=\"saveSJHeadDateToMysql(this)\">保存</a>" +
+            "    href=\"javascript:void(0);\" onclick=\"saveSJHeadDateToMysql(this,0)\">保存</a>" +
             " <a href=\"javascript:void(0);\"\n" +
-            "    onclick=\"deleteTRA(this," + len + ");\">删除</a></td>");
+            "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
         tr.appendTo(tbody);
         $('.selectpicker').selectpicker('refresh');
     }
 
-    function saveSJHeadDateToMysql(obj) {
+    function deleteTRA(obj, len, id) {
+        obj.parentElement.parentElement.remove();
+        len--;
+        if (id > 0) {
+            deleteOrderItemByheadId(id);
+        }
+    }
+
+    function deleteOrderItemByheadId(id) {
+        window.location.href = "/design/deleteOrderItemByheadId?id=" + id;
+    }
+
+    function saveSJHeadDateToMysql(obj, id) {
         $("#errormessage").hide();
         var customerNo = $(obj).parent().parent().find("td").eq(2).find("input").eq(0).val();
         var getOrderDateStr = $(obj).parent().parent().find("td").eq(3).find("input").eq(0).val();
@@ -421,9 +423,17 @@
         }
         window.location.href = "/design/saveSJHeadDateToMysql?customerNo=" + customerNo + "&getOrderDateStr="
             + getOrderDateStr + "&orderArea=" + orderArea + "&salorEmp=" + salorEmp + "&deliveryOrderDateStr=" + deliveryOrderDate
-            + "&remark=" + remark;
+            + "&remark=" + remark + "&id=" + id;
 
 
+    }
+
+    function importSJHead() {
+    }
+
+    function showOrderItemByOrderNo(customerNo) {
+        console.log(customerNo)
+        window.location.href = "/design/toHeadProduct?customerNo="+customerNo;
     }
 
 </script>
@@ -440,7 +450,7 @@
             <a th:href="@{/design/toHeadProduct}">商品品号</a>
         </li>
         <li>
-            <a th:href="@{/desgin/toHeadProductItem}">材料品号</a>
+            <a th:href="@{/design/toHeadProductItem}">材料品号</a>
         </li>
 
     </ul>
@@ -466,7 +476,8 @@
                                 </td>
                                 <td>
                                     <label>
-                                        <select id="customerNo" multiple class="selectpicker show-tick form-control"
+                                        <select id="customerNo" multiple
+                                                class="selectpicker show-tick form-control"
                                                 data-live-search="true" data-actions-box="true"
                                                 data-selected-text-format="count > 1">
                                             　　
@@ -522,7 +533,7 @@
                                 </td>
                                 <td>
                                     <label>
-                                        <select id="" multiple class="selectpicker show-tick form-control"
+                                        <select id="maker" multiple class="selectpicker show-tick form-control"
                                                 data-live-search="true" data-actions-box="true"
                                                 data-selected-text-format="count > 2">
                                             <option th:each="c:${orderMakerList}" th:value="${c.id}"
@@ -549,6 +560,9 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-primary"
                                        href="javascript:void(0);" onclick="addSJHead()">新增</a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a class="btn btn-primary"
+                                       href="javascript:void(0);" onclick="importSJHead()">导出</a>
                                 </td>
                                 <td colspan="3">
                                     <div style="display: none" id="errormessage">
@@ -585,6 +599,7 @@
                         客户国家/地区
                         <i class="fa fa-sort-desc" onclick="sortByDesc('orderArea')" aria-hidden="true"></i>
                     </th>
+
                     <th style="text-align: center">
                         <i class="fa fa-sort-asc" onclick="sortByAsc('salorEmp')" aria-hidden="true"></i>
                         业务员
@@ -610,7 +625,7 @@
                 <!--v-for中的数据不再是直接从data中获取，而是通过search方法对data中的数据进行过滤再显示-->
                 <div th:unless="${#lists.isEmpty(orderList)}">
                     <div th:each="order,iterStat: ${orderList}" align="center">
-                        <tr th:ondblclick="showOrderItemByOrderNo([[${order.id}]])">
+                        <tr th:ondblclick="showOrderItemByOrderNo([[${order.customerNo}]])">
                             <td align="center"
                                 th:text="${(iterStat.index+1)}+${orderHead.currentPage-1}*${orderHead.pageSize}"></td>
                             <td align="center" th:text="${order.orderMaker}"></td>
@@ -622,7 +637,7 @@
                             <td align="center" th:text="${order.remark}"></td>
                             <td align="center">
                                 <a class="btn btn-xs btn-primary"
-                                   th:onclick="updateOrderItemByheadId([[${order.id}]]);">编辑</a>
+                                   th:onclick="updateOrderItemByheadId(this,[[${order.id}]]);">编辑</a>
                                 <a class="btn btn-xs btn-primary"
                                    th:onclick="deleteOrderItemByheadId([[${order.id}]]);">删除</a>
                                 <a class="btn btn-xs btn-primary"
@@ -710,4 +725,5 @@
 
 
     </body>
+</div>
 </html>

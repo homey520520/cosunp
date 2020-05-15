@@ -24,7 +24,7 @@ import java.util.List;
  * @Modified-date:
  */
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(value="test1TransactionManager",rollbackFor = Exception.class)
 public class RulesServiceImpl implements IrulesServ {
 
     private static Logger logger = LogManager.getLogger(RulesServiceImpl.class);

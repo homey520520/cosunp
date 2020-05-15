@@ -1,7 +1,6 @@
 package com.cosun.cosunp.mapper;
 
 import com.cosun.cosunp.entity.*;
-import com.mysql.cj.xdevapi.JsonArray;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

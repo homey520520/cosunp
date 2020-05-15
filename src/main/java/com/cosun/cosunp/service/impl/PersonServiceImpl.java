@@ -38,7 +38,7 @@ import java.util.*;
  */
 
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(value="test1TransactionManager",rollbackFor = Exception.class)
 public class PersonServiceImpl implements IPersonServ {
 
     private static Logger logger = LogManager.getLogger(PersonServiceImpl.class);
@@ -392,7 +392,6 @@ public class PersonServiceImpl implements IPersonServ {
     }
 
 
-    @Transactional
     public void translateAllTable(MultipartFile file) throws Exception {
         try {
             Map<String, List<?>> mapList = ExcelUtil.translateAllTable(file);
@@ -2264,7 +2263,6 @@ public class PersonServiceImpl implements IPersonServ {
         return personMapper.findAllEmployeeByPositionLevel(positionLevel);
     }
 
-    @Transactional
     public void saveOutClockInList(List<OutClockIn> outClockInList, List<OutClockAll> outClockAllList) throws Exception {
         for (OutClockIn oc : outClockInList) {
             OutClockIn orginal = personMapper.getOutClockInByDateAndWeiXinId(oc);
@@ -2278,7 +2276,6 @@ public class PersonServiceImpl implements IPersonServ {
         }
     }
 
-    @Transactional
     public void saveZKQYList(List<ZhongKongBeanQY> qyList) throws Exception {
         ZhongKongBean zkb;
         ZhongKongBeanQY zkbq;
@@ -2875,7 +2872,6 @@ public class PersonServiceImpl implements IPersonServ {
     }
 
 
-    @Transactional
     public List<KQBean> getgetAfterOperatorDataByOriginDataZhongDian(List<OutClockIn> clockDates, List<KQBean> kqBeans) throws Exception {
         List<KQBean> kqBeanList = new ArrayList<KQBean>();
         KQBean aaa = new KQBean();
@@ -3843,7 +3839,6 @@ public class PersonServiceImpl implements IPersonServ {
         return kqBeanList;
     }
 
-    @Transactional
     public List<KQBean> getgetAfterOperatorDataByOriginDataLinShi(List<OutClockIn> clockDates, List<KQBean> kqBeans) throws Exception {
         List<KQBean> kqBeanList = new ArrayList<KQBean>();
         KQBean aaa = new KQBean();
@@ -4840,7 +4835,6 @@ public class PersonServiceImpl implements IPersonServ {
         return kqBeanList;
     }
 
-    @Transactional
     public List<KQBean> getAfterOperatorDataByOriginData(List<OutClockIn> clockDates, List<KQBean> kqBeans) throws Exception {
         List<KQBean> kqBeanList = new ArrayList<KQBean>();
         KQBean aaa = new KQBean();
@@ -6062,7 +6056,6 @@ public class PersonServiceImpl implements IPersonServ {
         return kqBeanList;
     }
 
-    @Transactional
     public void saveAllNewKQBeansToMysql(List<KQBean> kqBeanList) throws Exception {
         for (KQBean kqBean : kqBeanList) {
             personMapper.saveAllNewKQBeansToMysql(kqBean);
@@ -6086,14 +6079,12 @@ public class PersonServiceImpl implements IPersonServ {
         return personMapper.getAllKQDateListAAA();
     }
 
-    @Transactional
     public void saveCheckKQBeanListByDates(List<OutClockIn> outClockIns) throws Exception {
         //personMapper.saveCheckKQBeanListByDates(outClockIns);
         saveMonthKQInfoByCheckKQBean(outClockIns);
     }
 
 
-    @Transactional
     public List<String> getAllUserName() throws Exception {
         return personMapper.getAllUserName();
     }
@@ -8911,7 +8902,6 @@ public class PersonServiceImpl implements IPersonServ {
     }
 
     @Override
-    @Transactional
     public void getKQ(String beforDay) throws Exception {
         this.getAllWeiXinUser();
         this.fillEmpNoWhenQYWXNull();

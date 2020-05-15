@@ -11,13 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(value="test1TransactionManager",rollbackFor = Exception.class)
 public class UserInfoServiceImpl implements IUserInfoServ {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
 
-    @Transactional(rollbackFor = Exception.class)
     public UserInfo findUserByUserNameandPassword(String userName, String userPwd) throws Exception {
         return userInfoMapper.findUserByUserNameandPassword(userName, userPwd);
     }

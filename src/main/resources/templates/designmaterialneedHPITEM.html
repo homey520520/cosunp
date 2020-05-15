@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>商品明细</title>
+    <title>品号明细</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -32,12 +32,6 @@
         document.getElementById("coverbehidepage").style.display = "none";
         var flag = $("#flag").val();
         var aflag = eval(flag)
-        var customerNo2 = $("#customerNo2").val();
-        if(customerNo2.length > 0) {
-            $("#customerNo").val(customerNo2);
-            $('.selectpicker').selectpicker('refresh');
-            console.log(customerNo2)
-        }
         if (aflag == 1) {
             $("#errormessage").show();
             var errormessagediv = document.getElementById("errormessage");
@@ -68,29 +62,29 @@
 
     function goPageone() {
         $("#n_currentPage").val(1);
-        queryOrderHeadProductByCondition();
+        queryOrderHeadByCondition2();
     }
 
     function goPrePage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 - 1 * 1);
-        queryOrderHeadProductByCondition();
+        queryOrderHeadByCondition2();
     }
 
     function goAftPage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 + 1 * 1);
-        queryOrderHeadProductByCondition();
+        queryOrderHeadByCondition2();
     }
 
     function goMaxPage() {
         $("#n_currentPage").val($("#maxPage").val());
-        queryOrderHeadProductByCondition();
+        queryOrderHeadByCondition2();
     }
 
     function goPriPageone() {
         $("#n_currentPage").val(1);
-        queryOrderHeadProductByCondition();
+        queryOrderHeadByCondition2();
     }
 
     function isNull(arg1) {
@@ -121,25 +115,25 @@
         } else {
             $("#n_currentPage").val(tp);
             // document.forms["form0"].submit();
-            queryOrderHeadProductByCondition();
+            queryOrderHeadByCondition2();
         }
     }
 
     function goPriAftPage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 + 1 * 1);
-        queryOrderHeadProductByCondition();
+        queryOrderHeadByCondition2();
     }
 
     function goPriMaxPage() {
         $("#n_currentPage").val($("#maxPage").val());
-        queryOrderHeadProductByCondition();
+        queryOrderHeadByCondition2();
     }
 
     function goPriPrePage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 - 1 * 1);
-        queryOrderHeadProductByCondition();
+        queryOrderHeadByCondition2();
     }
 
     var currentPage; //当前页
@@ -149,21 +143,24 @@
     var sortMethod;
     var sortByName;
 
-    function queryOrderHeadProductByCondition() {
+    function queryOrderHeadByCondition() {
         var currentpage = $("#n_currentPage").val();
         window.parent.document.getElementById('coverbehidepage').style.display = "block";
         var formData = new FormData();
-        formData.append('productNameList', $("#productName").val());
-        formData.append('productNoList', $("#productNo").val());
-        formData.append('drawingNoList', $("#drawingNo").val());
-        formData.append('customerNoList', $("#customerNo").val());
+        formData.append('nameIds', $("#name").val());
+        formData.append('orderNos', $("#orderNo").val());
+        formData.append('productTotalName', $("#prodName").val());
+        formData.append('singleOrProjects', $("#orderType").val());
+        formData.append('states', $("#state").val());
+        formData.append('orderTimeStr', $("#orderDate").val());
+        formData.append('itemDeliverTimeStr', $("#deleverDate").val());
         formData.append('sortMethod', sortMethod);
         formData.append('sortByName', sortByName);
-        formData.append('currentPage', currentpage);
+        formData.append('currentPage', 1);
         $.ajax({
             data: formData,
             type: "POST",
-            url: "/design/queryOrderHeadProductByCondition",
+            url: "/order/queryOrderHeadByCondition",
             async: true,
             cache: false,
             contentType: false,
@@ -190,6 +187,7 @@
                 var td2 = "";
                 var tbody = $("#tabletblody");
                 tbody.html("");
+                var userType;
                 if (data != null && data != "") {
                     $("#nodatadiv").hide();
                     $("#showdiv").show();
@@ -197,28 +195,82 @@
                     totalPage = data[0].maxPage; //总多少页
                     totaldata = data[0].recordCount; //总共多少记录
                     pageSize = data[0].pageSize;
+                    userType = data[0].type;
                     maxpageid.val(totalPage);
                     n_currentPage.val(currentPage);
                     inputpage.val(currentPage);
+                    var eduLe;
+                    var safeLe;
+                    var otherLe;
                     $.each(data, function (num) {
                         tr = $("<tr id='" + data[num].id + "'></tr>");
                         tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
-                        tr.append("<td>" + isNull(data[num].productName) + "</td>");
-                        tr.append("<td>" + isNull(data[num].productNo) + "</td>");
-                        tr.append("<td>" + isNull(data[num].drawingNo) + "</td>");
-                        tr.append("<td>" + isNull(data[num].needNum) + "</td>");
-                        tr.append("<td>" + isNull(data[num].productRoute) + "</td>");
-                        tr.append("<td>" + isNull(data[num].remark) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].salor) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderTimeStr) + "</td>");
+                        tr.append("<td>" + isNull(data[num].orderSetNum) + "</td>");
+                        tr.append("<td>" + isNull(data[num].singleOrProjectStr) + "</td>");
+
+                        td2 = "<td><select id='" + 'stateStr' + data[num].orderNo + "'  class=\"selectpicker show-tick form-control\"\n" +
+                            " data-live-search=\"true\" data-actions-box=\"true\" >";
+                        if (data[num].state == 0) {
+                            td2 += "<option value=\"0\" selected=\"selected\">未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 1) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" selected=\"selected\">审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 2) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" selected=\"selected\">审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 3) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\"  selected=\"selected\">暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 4) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\"  selected=\"selected\">终止</option>"
+                            td2 += "<option value=\"5\" >完成</option>"
+                        } else if (data[num].state == 5) {
+                            td2 += "<option value=\"0\" >未审核</option>"
+                            td2 += "<option value=\"1\" >审核通过/下发</option>"
+                            td2 += "<option value=\"2\" >审核未通过</option>"
+                            td2 += "<option value=\"3\" >暂停</option>"
+                            td2 += "<option value=\"4\" >终止</option>"
+                            td2 += "<option value=\"5\" selected=\"selected\">完成</option>"
+                        }
+                        td2 += "</select></td>";
+                        tr.append(td2);
                         td = "<td>";
                         td += " <a class=\"btn btn-xs btn-primary\" \n" +
-                            "onclick=\"updateOrderItemByheadId(this,'" + data[num].id + "');\">编辑</a>\n" +
+                            "onclick=\"updateOrderItemByheadId('" + data[num].id + "');\">编辑</a>\n" +
                             "  <a class=\"btn btn-xs btn-primary\"\n" +
-                            " onclick=\"deleteOrderItemByheadId('" + data[num].id + "');\">删除</a> " +
+                            " onclick=\"deleteOrderItemByheadId('" + data[num].id + "',1);\">删除</a> " +
+                            " <a class=\"btn btn-xs btn-primary\"\n" +
+                            " onclick=\"confirmOrderItemByheadId(this);\">订单状态保存</a>\n" +
                             " <a class=\"btn btn-xs btn-primary\"\n" +
                             " onclick=\"transferDataToPDFFile('" + data[num].id + "');\">PDF打印</a>" +
                             "</td>";
                         tr.append(td);
                         tr.appendTo(tbody);
+                        $('#stateStr' + data[num].orderNo).selectpicker('refresh');
                     });
                     $("#currentpagespan").html(currentPage);
                     $("#maxpagespan").html(totalPage);
@@ -272,6 +324,12 @@
         });
     }
 
+    function deleteOrderItemByheadId(id,isFlag) {
+        if(isFlag == 1) {
+            window.location.href = "/design/deleteOrderItemByheadIdItem?id=" + id;
+        }
+    }
+
     function sortByAsc(titlename) {
         sortMethod = 'asc';
         sortByName = titlename;
@@ -310,13 +368,13 @@
         }
     }
 
-    function addSJProdctHead() {
+    function addSJIProdctHead() {
         $("#errormessage").hide();
         var customerNo = $("#customerNo").val();
-        if(customerNo.length <=0) {
+        if (customerNo.length <= 0) {
             $("#errormessage").show();
             var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "新增前请选择客户单号!";
+            errormessagediv.innerHTML = "新增前请选择商品品号!";
             errormessagediv.style.color = "red";
             return false;
         }
@@ -327,92 +385,248 @@
         var tr = $("<tr id='tr" + len + "'></tr>");
 
         tr.append("<td id='tr" + len + "'>" + len + "</td>");
-        tr.append("<td><input type=\"text\" class=\"form-control\"    ></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\"></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\"></td>");
+        tr.append("<td><input type=\"text\" class=\"form-control\" readonly='readonly'></td>");
+        tr.append("<td><input  type=\"text\" class=\"form-control\" " +
+            " onkeypress=\"return onKeyPress1(event,this)\"></td>");
+        tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+        tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+        tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
         tr.append("<td><input type=\"text\"  class=\"form-control\" onblur=\"checkNum(this)\"></td>");
         tr.append("<td><input type=\"text\"  class=\"form-control\"></td>");
-        tr.append("<td><input type='text' placeholder='备注选填'  class=\"form-control\"></td>")
+        tr.append("<td><input type='text'  class=\"form-control\" placeholder='其它备注'></td>")
+        tr.append("<td><input type='text'   class=\"form-control\" readonly='readonly'></td>")
         tr.append("<td><a id=\"savebutton\"\n" +
-            "    href=\"javascript:void(0);\" onclick=\"saveSJHeadPDateToMysql(this,0)\">保存</a>" +
+            "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this)\">保存</a>" +
             " <a href=\"javascript:void(0);\"\n" +
-            "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
+            "    onclick=\"deleteTRA(this," + len + ");\">删除</a></td>");
         tr.appendTo(tbody);
-    }
-
-
-    function updateOrderItemByheadId(obj, id) {
-        var productName = $(obj).parent().parent().find("td").eq(1).text();
-        var productNo = $(obj).parent().parent().find("td").eq(2).text();
-        var drawingNo = $(obj).parent().parent().find("td").eq(3).text();
-        var num = $(obj).parent().parent().find("td").eq(4).text();
-        var proroute = $(obj).parent().parent().find("td").eq(5).text();
-        var remark = $(obj).parent().parent().find("td").eq(6).text();
-
-
-        $(obj).parent().parent().find("td").eq(1).html("<input type=\"text\"value='" + productName + "'  class=\"form-control\">")
-        $(obj).parent().parent().find("td").eq(2).html("<input type=\"text\" value='" + productNo + "' class=\"form-control\">")
-        $(obj).parent().parent().find("td").eq(3).html("<input type=\"text\"  value='" + drawingNo + "' class=\"form-control\">")
-        $(obj).parent().parent().find("td").eq(4).html("<input type=\"text\"  value='" + num + "' class=\"form-control\">")
-        $(obj).parent().parent().find("td").eq(5).html("<input type=\"text\"  value='" + proroute + "' class=\"form-control\">")
-        $(obj).parent().parent().find("td").eq(6).html("<input type=\"text\"  value='" + remark + "' class=\"form-control\">")
-        $(obj).parent().parent().find("td").eq(7).html("<a id=\"savebutton\"\n" +
-            "    href=\"javascript:void(0);\" onclick=\"saveSJHeadPDateToMysql(this," + id + ")\">保存</a>" +
-            " <a href=\"javascript:void(0);\"\n" +
-            "    onclick=\"deleteTRA(this," + len + "," + id + ");\">删除</a>");
-
-
         $('.selectpicker').selectpicker('refresh');
-
     }
 
-    function deleteTRA(obj, len, id) {
+    function deleteTRA(obj, len) {
         obj.parentElement.parentElement.remove();
         len--;
-        if (id > 0) {
-            deleteOrderItemHByheadId(id);
+    }
+
+
+    function trim(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+    function onKeyPress1(e, obj) {
+        var keyCode = null;
+        if (e.which) keyCode = e.which; else if (e.keyCode) keyCode = e.keyCode;
+        if (keyCode == 13) {
+            querySpeficByMaterialName(obj);
+            return false;
+        }
+        return true;
+    }
+
+    var datadata;
+
+    function querySpeficByMaterialName(obj) {
+        var materiName = $(obj).parent().parent().find("td").eq(2).find("input").eq(0).val();
+        var data = JSON.stringify(materiName);
+        var td;
+        if (trim(materiName).length > 0) {
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/design/queryMaterialSpecifiByCondition",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    var data = eval(msg);
+                    datadata = data;
+
+                    td = "<input type=\"text\" value='" + datadata[0].unit + "' disabled='disabled' class=\"form-control\">";
+                    $(obj).parent().parent().find("td").eq(4).html(td);
+
+                    td = "<input type=\"text\" value='" + datadata[0].mateiralStock + "' disabled='disabled' class=\"form-control\">";
+                    $(obj).parent().parent().find("td").eq(5).html(td);
+
+                    td = "<input type=\"text\" value='" + datadata[0].mateiralNo + "' disabled='disabled' class=\"form-control\">";
+                    $(obj).parent().parent().find("td").eq(1).html(td);
+
+                    td = "<input type=\"text\" value='" + datadata[0].isCanUseStr + "' disabled='disabled' class=\"form-control\">";
+                    $(obj).parent().parent().find("td").eq(9).html(td);
+
+                    td = "<select onchange='showBySelect(this)' class=\"selectpicker show-tick form-control\"\n" +
+                        "   data-live-search=\"true\" data-actions-box=\"true\"\n" +
+                        "   data-selected-text-format=\"count > 1\">\n";
+                    for (var aa = 0; aa < datadata.length; aa++) {
+                        td += "  <option value=\"" + aa + "\">" + datadata[aa].materialSpeci + "</option>\n";
+                    }
+                    td += "  </select>";
+                    $(obj).parent().parent().find("td").eq(3).html(td);
+
+
+                    td = "<select  onchange='showBySelect1(this)' class=\"selectpicker show-tick form-control\"\n" +
+                        "   data-live-search=\"true\" data-actions-box=\"true\"\n" +
+                        "   data-selected-text-format=\"count > 1\">\n";
+                    for (var aa = 0; aa < datadata.length; aa++) {
+                        td += "  <option value=\"" + aa + "\">" + datadata[aa].materialName + "</option>\n";
+                    }
+                    td += "  </select>";
+                    $(obj).parent().parent().find("td").eq(2).html(td);
+
+
+                    $('.selectpicker').selectpicker('refresh');
+                },
+                error: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+            });
         }
     }
 
-    function deleteOrderItemHByheadId(id) {
-        window.location.href = "/design/deleteOrderItemHByheadId?id=" + id;
+
+    function showBySelect(obj) {
+        var index = $(obj).parent().parent().find("td").eq(3).find("select").eq(0).val();
+        var td;
+
+        console.log(index + "===")
+        td = "<input type=\"text\" value='" + datadata[index].materialName + "'  onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(2).html(td);
+
+        td = "<input type=\"text\" value='" + datadata[index].unit + "' disabled='disabled' class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(4).html(td);
+
+        td = "<input type=\"text\" value='" + datadata[index].mateiralStock + "' disabled='disabled' class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(5).html(td);
+
+        td = "<input type=\"text\" value='" + datadata[index].mateiralNo + "' disabled='disabled' class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(1).html(td);
+
+        td = "<input type=\"text\" value='" + datadata[index].isCanUseStr + "' disabled='disabled' class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(9).html(td);
+
     }
 
-    function saveSJHeadPDateToMysql(obj,id) {
+
+    function showBySelect1(obj) {
+        var index = $(obj).parent().parent().find("td").eq(2).find("select").eq(0).val();
+        var td;
+
+
+        td = "<input type=\"text\" value='" + datadata[index].materialSpeci + "'  disabled='disabled' onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(3).html(td);
+
+        td = "<input type=\"text\" value='" + datadata[index].unit + "' disabled='disabled' class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(4).html(td);
+
+        td = "<input type=\"text\" value='" + datadata[index].mateiralStock + "' disabled='disabled' class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(5).html(td);
+
+        td = "<input type=\"text\" value='" + datadata[index].mateiralNo + "' disabled='disabled' class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(1).html(td);
+
+        td = "<input type=\"text\" value='" + datadata[index].isCanUseStr + "' disabled='disabled' class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(9).html(td);
+
+        $('.selectpicker').selectpicker('refresh');
+    }
+
+
+    function saveSJIHeadPDateToMysql(obj) {
         $("#errormessage").hide();
-        var productName = $(obj).parent().parent().find("td").eq(1).find("input").eq(0).val();
-        var productNo = $(obj).parent().parent().find("td").eq(2).find("input").eq(0).val();
-        var drawingNo = $(obj).parent().parent().find("td").eq(3).find("input").eq(0).val();
-        var needNum = $(obj).parent().parent().find("td").eq(4).find("input").eq(0).val();
-        var productRoute = $(obj).parent().parent().find("td").eq(5).find("input").eq(0).val();
-        var remark = $(obj).parent().parent().find("td").eq(6).find("input").eq(0).val();
+        var materialNo = $(obj).parent().parent().find("td").eq(1).find("input").eq(0).val();
+        var materialName = $(obj).parent().parent().find("td").eq(2).find("input").eq(0).val();
+        if(materialName.length == 0) {
+            materialName = $(obj).parent().parent().find("td").eq(2).find("option:selected").eq(0).text();
+        }
+        var materialSpeci = $(obj).parent().parent().find("td").eq(3).find("input").eq(0).val();
+        if(materialSpeci.length == 0) {
+            materialSpeci = $(obj).parent().parent().find("td").eq(3).find("option:selected").eq(0).text();
+        }
+
+        var unit = $(obj).parent().parent().find("td").eq(4).find("input").eq(0).val();
+        var stockNum = $(obj).parent().parent().find("td").eq(5).find("input").eq(0).val();
+        var num = $(obj).parent().parent().find("td").eq(6).find("input").eq(0).val();
+        var useDeptName = $(obj).parent().parent().find("td").eq(7).find("input").eq(0).val();
+        var remark = $(obj).parent().parent().find("td").eq(8).find("input").eq(0).val();
+        var isCanUse = $(obj).parent().parent().find("td").eq(9).find("input").eq(0).val();
+
+        if (materialName.length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "材料品名不能为空!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+
+        if (materialNo.length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "材料品号不能为空!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+
+        if (materialSpeci.length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "材料规格不能为空!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+
+        if (Trim(num).length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "数量不能为空!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+
+        if (Trim(useDeptName).length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "便用部门不能为空!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+
         var customerNo = $("#customerNo").val();
-
-        if (productName.trim().length <= 0) {
+        if(customerNo.length <= 0) {
             $("#errormessage").show();
             var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "品名不能为空!";
+            errormessagediv.innerHTML = "客户单号不能为空!";
             errormessagediv.style.color = "red";
             return false;
         }
 
-        if (productNo.trim().length <= 0) {
+        var productNo = $("#productNo").val();
+        if(productNo.length <= 0) {
             $("#errormessage").show();
             var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "品号不能为空!";
+            errormessagediv.innerHTML = "商品品号不能为空!";
             errormessagediv.style.color = "red";
             return false;
         }
 
-        window.location.href = "/design/saveSJHeadPDateToMysql?" +
-            "productName=" + productName +
+        window.location.href = "/design/saveSJIHeadPDateToMysql?" +
+            "customerNo=" + customerNo +
             "&productNo=" + productNo +
-            "&drawingNo=" + drawingNo +
-            "&needNum=" + needNum +
-            "&productRoute=" + productRoute +
-            "&customerNo=" + customerNo +
-            "&id=" + id +
-            "&remark=" + remark;
+            "&mateiralNo=" + materialNo +
+            "&materialName=" + materialName +
+            "&materialSpeci=" + materialSpeci +
+            "&unit=" + unit +
+            "&num=" + num +
+            "&useDeptName=" + useDeptName +
+            "&remark=" + remark +
+            "&isCanUse2=" + isCanUse +
+            "&mateiralStock=" + stockNum;
+
+
     }
 
 </script>
@@ -425,11 +639,11 @@
         <li>
             <a th:href="@{/design/toMaterialNeed}">客户单号</a>
         </li>
-        <li class="active">
-            <a href="#compreAttendRecord" data-toggle="tab">商品品号</a>
-        </li>
         <li>
-            <a th:href="@{/design/toHeadProductItem}">材料品号</a>
+            <a th:href="@{/design/toHeadProduct}">商品品号</a>
+        </li>
+        <li class="active">
+            <a href="#compreAttendRecord" data-toggle="tab">材料品号</a>
         </li>
 
     </ul>
@@ -440,10 +654,9 @@
         <div id='app'>
             <form>
                 <input type="hidden" id="flag" th:value="${flag}">
-                <input type="hidden" id="customerNo2" th:value="${customerNo}">
                 <input type="hidden" id="maxPage" th:value="${orderHead.maxPage}">
                 <input type="hidden" id="n_currentPage" name="view.currentPage" th:value="${orderHead.currentPage}"/>
-
+                <input type="hidden" id="salorEmpListA" th:value="${salorEmpListA}">
 
                 <div class="panel panel-primary">
                     <div class="panel-body form-inline">
@@ -452,21 +665,69 @@
 
 
                                 <td style="text-align: right">
-                                    <label>商品名称：</label>
+                                    <label>材料品名：</label>
                                 </td>
                                 <td>
                                     <label>
-                                        <select id="productName" multiple class="selectpicker show-tick form-control"
+                                        <select id="materialName" multiple class="selectpicker show-tick form-control"
                                                 data-live-search="true" data-actions-box="true"
                                                 data-selected-text-format="count > 1">
                                             　　
-                                            <option th:each="c:${productNameList}" th:value="${c}"
+                                            <option th:each="c:${pmaterialNameList}" th:value="${c}"
                                                     th:text="${c}"></option>
                                         </select>
                                     </label>
                                 </td>
 
                                 <td>
+                                    <label>材料品号：</label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <select id="mateiralNo" multiple class="selectpicker show-tick form-control"
+                                                data-live-search="true" data-actions-box="true"
+                                                data-selected-text-format="count > 1">
+                                            　　
+                                            <option th:each="c:${mateiralNoList}" th:value="${c}"
+                                                    th:text="${c}"></option>
+                                        </select>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <label>规格：</label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <select id="materialSpeci" multiple class="selectpicker show-tick form-control"
+                                                data-live-search="true" data-actions-box="true"
+                                                data-selected-text-format="count > 1">
+                                            　　
+                                            <option th:each="c:${materialSpeciList}" th:value="${c}"
+                                                    th:text="${c}"></option>
+                                        </select>
+                                    </label>
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td style="text-align: right">
+                                    <label>客户单号：</label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <select id="customerNo" multiple class="selectpicker show-tick form-control"
+                                                data-live-search="true" data-actions-box="true"
+                                                data-selected-text-format="count > 1">
+                                            　　
+                                            <option th:each="c:${customerNoList}" th:value="${c}"
+                                                    th:text="${c}"></option>
+                                        </select>
+                                    </label>
+                                </td>
+
+                                <td style="text-align: right">
                                     <label>商品品号：</label>
                                 </td>
                                 <td>
@@ -482,44 +743,12 @@
                                 </td>
 
                                 <td style="text-align: right">
-                                    <label>图纸编号：</label>
-                                </td>
-                                <td>
-                                    <label>
-                                        <select id="drawingNo" multiple class="selectpicker show-tick form-control"
-                                                data-live-search="true" data-actions-box="true"
-                                                data-selected-text-format="count > 1">
-                                            　　
-                                            <option th:each="c:${drawingNoList}" th:value="${c}"
-                                                    th:text="${c}"></option>
-                                        </select>
-                                    </label>
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td style="text-align: right">
-                                    <label>客户单号：</label>
-                                </td>
-                                <td>
-                                    <label>
-                                        <select id="customerNo" multiple class="selectpicker show-tick form-control"
-                                                data-live-search="true" data-actions-box="true"
-                                                data-selected-text-format="count > 1">
-                                            　　
-                                            <option th:each="c:${orderNoList}" th:value="${c}"
-                                                    th:text="${c}"></option>
-                                        </select>
-                                    </label>
-                                </td>
-
-                                <td style="text-align: left" colspan="2">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-primary"
                                        href="javascript:void(0);" onclick="queryOrderHeadProductByCondition()">查找</a>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-primary"
-                                       href="javascript:void(0);" onclick="addSJProdctHead()">新增</a>
+                                       href="javascript:void(0);" onclick="addSJIProdctHead()">新增</a>
                                 </td>
                                 <td colspan="3">
                                     <div style="display: none" id="errormessage">
@@ -536,36 +765,54 @@
                 <tr>
                     <th style="text-align: center"> 序号</th>
                     <th style="text-align: center">
-                        <i class="fa fa-sort-asc" onclick="sortByAsc('productName')" aria-hidden="true"></i>
-                        商品名称
-                        <i class="fa fa-sort-desc" onclick="sortByDesc('productName')" aria-hidden="true"></i>
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('mateiralNo')" aria-hidden="true"></i>
+                        材料品号
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('mateiralNo')" aria-hidden="true"></i>
                     </th>
 
                     <th style="text-align: center">
-                        <i class="fa fa-sort-asc" onclick="sortByAsc('productNo')" aria-hidden="true"></i>
-                        商品品号
-                        <i class="fa fa-sort-desc" onclick="sortByDesc('productNo')" aria-hidden="true"></i>
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('materialName')" aria-hidden="true"></i>
+                        材料品名
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('materialName')" aria-hidden="true"></i>
                     </th>
                     <th style="text-align: center">
-                        <i class="fa fa-sort-asc" onclick="sortByAsc('drawingNo')" aria-hidden="true"></i>
-                        图纸编号
-                        <i class="fa fa-sort-desc" onclick="sortByDesc('drawingNo')" aria-hidden="true"></i>
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('materialSpeci')" aria-hidden="true"></i>
+                        规格
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('materialSpeci')" aria-hidden="true"></i>
                     </th>
                     <th style="text-align: center">
-                        <i class="fa fa-sort-asc" onclick="sortByAsc('needNum')" aria-hidden="true"></i>
-                        需求数量
-                        <i class="fa fa-sort-desc" onclick="sortByDesc('needNum')" aria-hidden="true"></i>
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('unit')" aria-hidden="true"></i>
+                        单位
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('unit')" aria-hidden="true"></i>
                     </th>
                     <th style="text-align: center">
-                        <i class="fa fa-sort-asc" onclick="sortByAsc('productRoute')" aria-hidden="true"></i>
-                        工艺路线
-                        <i class="fa fa-sort-desc" onclick="sortByDesc('productRoute')" aria-hidden="true"></i>
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('mateiralStock')" aria-hidden="true"></i>
+                        库存数量
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('mateiralStock')" aria-hidden="true"></i>
+                    </th>
+
+                    <th style="text-align: center">
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('num')" aria-hidden="true"></i>
+                        数量
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('num')" aria-hidden="true"></i>
+                    </th>
+
+                    <th style="text-align: center">
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('useDeptName')" aria-hidden="true"></i>
+                        使用车间
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('useDeptName')" aria-hidden="true"></i>
                     </th>
 
                     <th style="text-align: center">
                         <i class="fa fa-sort-asc" onclick="sortByAsc('remark')" aria-hidden="true"></i>
-                        备注
+                        其它备注
                         <i class="fa fa-sort-desc" onclick="sortByDesc('remark')" aria-hidden="true"></i>
+                    </th>
+
+                    <th style="text-align: center">
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('isCanUse')" aria-hidden="true"></i>
+                        是否可用
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('isCanUse')" aria-hidden="true"></i>
                     </th>
 
                     <th style="text-align: center">操作</th>
@@ -578,17 +825,20 @@
                         <tr th:ondblclick="showOrderItemByOrderNo([[${order.id}]])">
                             <td align="center"
                                 th:text="${(iterStat.index+1)}+${orderHead.currentPage-1}*${orderHead.pageSize}"></td>
-                            <td align="center" th:text="${order.productName}"></td>
-                            <td align="center" th:text="${order.productNo}"></td>
-                            <td align="center" th:text="${order.drawingNo}"></td>
-                            <td align="center" th:text="${order.needNum}"></td>
-                            <td align="center" th:text="${order.productRoute}"></td>
+                            <td align="center" th:text="${order.mateiralNo}"></td>
+                            <td align="center" th:text="${order.materialName}"></td>
+                            <td align="center" th:text="${order.materialSpeci}"></td>
+                            <td align="center" th:text="${order.unit}"></td>
+                            <td align="center" th:text="${order.mateiralStock}"></td>
+                            <td align="center" th:text="${order.num}"></td>
+                            <td align="center" th:text="${order.useDeptName}"></td>
                             <td align="center" th:text="${order.remark}"></td>
+                            <td align="center" th:text="${order.isCanUse2}"></td>
                             <td align="center">
                                 <a class="btn btn-xs btn-primary"
-                                   th:onclick="updateOrderItemByheadId(this,[[${order.id}]]);">编辑</a>
+                                   th:onclick="updateOrderItemByheadId([[${order.id}]]);">编辑</a>
                                 <a class="btn btn-xs btn-primary"
-                                   th:onclick="deleteOrderItemHByheadId([[${order.id}]]);">删除</a>
+                                   th:onclick="deleteOrderItemByheadId([[${order.id}]],1);">删除</a>
                                 <a class="btn btn-xs btn-primary"
                                    th:onclick="transferDataToPDFFile([[${order.id}]]);">PDF打印</a>
                             </td>
@@ -597,7 +847,7 @@
                 </div>
                 <div th:if="${#lists.isEmpty(orderList)}">
                     <tr>
-                        <td colspan="8">
+                        <td colspan="11">
                             查无数据
                         </td>
                     </tr>
@@ -607,7 +857,7 @@
                 <tfoot id="s_tfoot">
                 <tr id="showdiv">
 
-                    <td colspan="8" align="center">
+                    <td colspan="11" align="center">
                         <span>第</span>
                         <span th:text="${orderHead.currentPage}" id="currentpagespan"> </span>
                         <span>页|共</span>
@@ -663,7 +913,7 @@
 
 
                 <tr style="display:none;" id="nodatadiv">
-                    <td colspan="8" align="center">
+                    <td colspan="11" align="center">
                         查无数据
                     </td>
                 </tr>

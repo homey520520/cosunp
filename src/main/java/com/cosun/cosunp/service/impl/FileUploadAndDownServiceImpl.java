@@ -5,7 +5,6 @@ import com.cosun.cosunp.mapper.FileUploadAndDownMapper;
 import com.cosun.cosunp.mapper.UserInfoMapper;
 import com.cosun.cosunp.service.IFileUploadAndDownServ;
 import com.cosun.cosunp.tool.*;
-import com.mysql.cj.xdevapi.JsonArray;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +32,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.cosun.cosunp.tool.StringUtil.*;
+import static com.cosun.cosunp.tool.StringUtil.formateString;
+import static com.cosun.cosunp.tool.StringUtil.subAfterString;
 
 /**
  * @author:homey Wong
@@ -151,19 +151,16 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
     @Override
-    @Transactional
     public List<UserInfo> findAllUserOnlyDesigner() throws Exception {
         return userInfoMapper.findAllUserOnlyDesigner();
     }
 
     @Override
-    @Transactional
     public List<UserInfo> findAllUser() throws Exception {
         return userInfoMapper.findAllUser();
     }
 
     @Override
-    @Transactional
     public List<DownloadView> findFileUrlDatabyOrderNoandSalorandUserName(DownloadView view) throws Exception {
         return fileUploadAndDownMapper.findFileUrlDatabyOrderNoandSalorandUserName(view.getUserName(), view.getSalor(), view.getOrderNo());
     }
@@ -177,12 +174,10 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @return:
      * @describtion
      */
-    @Transactional
     public List<DownloadView> findAllUrlByOrderNoAndUid1(String orderNo, Integer uId) throws Exception {
         return fileUploadAndDownMapper.findAllUrlByOrderNoAndUid1(orderNo, uId);
     }
 
-    @Transactional
     public void saveFileDownRecords(List<FilemanDownRecord> records) throws Exception {
         for (FilemanDownRecord record : records) {
             fileUploadAndDownMapper.saveFilemanDownRecord(record);
@@ -190,7 +185,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional
     @Override
     public String checkIsExistFilesforUpdate(String pathName, DownloadView view, UserInfo info) throws Exception {
         pathName = pathName.replace("*", ",");
@@ -250,7 +244,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @describtion
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public DownloadView findIsExistFilesforUpdate(List<MultipartFile> fileArray, DownloadView view, UserInfo userInfo) throws Exception {
         boolean isAllExistFile = true;
         String noExistFileNames = "";
@@ -301,7 +294,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @return:
      * @describtion
      */
-    @Transactional(rollbackFor = Exception.class)
     public boolean isFolderNameForEngDateOrderNoSalor(String filePathName) throws Exception {
         filePathName = filePathName.replace("*", ",");
         String[] pathName = null;
@@ -345,7 +337,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @return:
      * @describtion
      */
-    @Transactional(rollbackFor = Exception.class)
     public DownloadView findIsExistFilesFolder(List<MultipartFile> fileArray, DownloadView view, UserInfo userInfo) throws Exception {
         boolean isAllNewFile = true;
         List<FilemanUrl> oldFileUrls = new ArrayList<FilemanUrl>();
@@ -366,7 +357,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String checkIsExistFilesFolderforUpdate(String pathName, DownloadView view, UserInfo info) throws Exception {
         pathName = pathName.replace("*", ",");
         String returnMessage = "OK";
@@ -419,7 +409,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public DownloadView findIsExistFilesFolderforUpdate(List<MultipartFile> fileArray, DownloadView view, UserInfo userInfo) throws Exception {
         boolean isAllExistFile = true;
@@ -462,7 +451,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
         return view;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public String checkFileUpdateRight(String pathName, DownloadView view, UserInfo userInfo) throws Exception {
         pathName = pathName.replace("*", ",");
         String[] pathNames = null;
@@ -520,7 +508,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
     public void updateFilesDataFolder(List<FileManFileInfo> fileManFileInfo, DownloadView view, UserInfo userInfo) throws Exception {
         String[] splitPathNames = view.getFilePathNames().split(":");
         FileManFileInfo ffi = null;
@@ -554,7 +541,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public void addFilesDatabyFolder(DownloadView view, UserInfo userInfo) throws Exception {
         String splitPaths[] = view.getFilePathNames().split(":");
         List<FilemanUrl> filemanUrls = new ArrayList<FilemanUrl>();
@@ -609,7 +595,7 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
+
     public void addOldOrderNoNewFilesByFolder(DownloadView view, UserInfo userInfo, String oldPath, List<FileManFileInfo> fileManFileInfos) throws Exception {
         String[] splitPaths = view.getFilePathNames().split(":");
         Integer pointindex = StringUtils.ordinalIndexOf(oldPath, "/", 5);
@@ -657,7 +643,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void findIsExistFiles(List<MultipartFile> fileArray, DownloadView view, UserInfo userInfo) throws Exception {
         List<FilemanUrl> oldFileUrls = new ArrayList<FilemanUrl>();
         List<String> urlStr = new ArrayList<String>();
@@ -692,7 +677,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
     public void updateFilesData(List<FileManFileInfo> fileManFileInfo, DownloadView view, UserInfo userInfo) throws Exception {
         FileManFileInfo ffi = null;
         String[] splitNames = view.getFilePathNames().split(":");
@@ -727,12 +711,10 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int findAllFileUrlByConditionCount(Integer uId) throws Exception {
         return fileUploadAndDownMapper.findAllFileUrlByConditionCount(uId);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public void addOFilesByPointFile(DownloadView view, UserInfo userInfo, String pointpath,
                                      List<FileManFileInfo> fileManFileInfos) throws Exception {
         String[] splitNames = view.getFilePathNames().split(":");
@@ -776,7 +758,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public void addOldOrderNoNewFiles(DownloadView view, UserInfo userInfo, List<String> oldPaths,
                                       List<FileManFileInfo> fileManFileInfos) throws Exception {
         String[] splitNames = view.getFilePathNames().split(":");
@@ -829,7 +810,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public void addFilesData(DownloadView view, UserInfo userInfo) throws Exception {
         String[] splitNames = view.getFilePathNames().split(":");
@@ -896,14 +876,12 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @Date: 2018.12.21
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<DownloadView> findAllUploadFileByUserId(Integer uid) throws Exception {
         List<DownloadView> list = fileUploadAndDownMapper.findAllUploadFileByUserId(uid);
         return list;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public DownloadView findMessageByOrderNo(String orderNo) throws Exception {
         return fileUploadAndDownMapper.findMessageByOrderNo(orderNo);
     }
@@ -917,7 +895,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @describtion
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<DownloadView> findAllUrlByParamThreeNew2(DownloadView view) throws Exception {
         String linshiId = view.getLinshiId();
         if (linshiId == null || linshiId.trim().length() <= 0) {
@@ -933,7 +910,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @Date: 2018.12.21
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<DownloadView> findAllUploadFileByCondition(Integer uid, int currentPageTotalNum, int PageSize) throws
             Exception {
         return fileUploadAndDownMapper.findAllUploadFileByCondition(uid, currentPageTotalNum, PageSize);
@@ -949,7 +925,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @describtion
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int findAllUploadFileCountByUserId(Integer uId) throws Exception {
         return fileUploadAndDownMapper.findAllUploadFileCountByUserId(uId);
 
