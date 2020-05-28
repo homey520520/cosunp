@@ -17,7 +17,7 @@ public class DesignMaterialHeadProduct implements Serializable {
     private Integer id;
     private String productName;
     private String productNo;
-    private Integer needNum;
+    private String needNum;
     private String drawingNo;
     private String productRoute;
     private String remark;
@@ -37,6 +37,15 @@ public class DesignMaterialHeadProduct implements Serializable {
     private String sortMethod;
     private String sortByName;
 
+    private List<DesignMaterialHeadProductItem> itemList;
+
+    public List<DesignMaterialHeadProductItem> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<DesignMaterialHeadProductItem> itemList) {
+        this.itemList = itemList;
+    }
 
     public List<String> getProductNameList() {
         return productNameList;
@@ -168,11 +177,11 @@ public class DesignMaterialHeadProduct implements Serializable {
         this.productNo = productNo;
     }
 
-    public Integer getNeedNum() {
+    public String getNeedNum() {
         return needNum;
     }
 
-    public void setNeedNum(Integer needNum) {
+    public void setNeedNum(String needNum) {
         this.needNum = needNum;
     }
 

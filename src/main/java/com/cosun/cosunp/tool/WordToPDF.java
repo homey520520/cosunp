@@ -21,6 +21,13 @@ import java.io.*;
  */
 public class WordToPDF {
 
+//    cmd命令
+//
+//    cd C:\Program Files\OpenOffice.org 3\program
+//  soffice -headless -accept="socket,host=0.0.0.0,port=8100;urp;" -nofirststartwizard
+//    soffice -headless -accept="socket,host=127.0.0.1,port=8100;urp;" -nofirststartwizard
+
+
     public static void WordToPDF(MultipartFile mf, String pdfName, String descDir) throws IOException {
         File inputFile = new File(descDir + "linshi/" + mf.getOriginalFilename());
         FileUtils.copyInputStreamToFile(mf.getInputStream(), inputFile);
@@ -29,10 +36,10 @@ public class WordToPDF {
         if (!outputFile.getParentFile().exists()) {
             outputFile.getParentFile().exists();
         }
-
+//        soffice -headless -accept="socket,host=0.0.0.0,port=8100;urp;" -nofirststartwizard
 
         //String command = "/opt/openoffice4/program/soffice --headless --accept=\"socket,host=0.0.0.0,port=8100;urp;\" --nofirststartwizard &";
-        String command = "/opt/openoffice4/program/soffice --headless --accept=\"socket,host=0.0.0.0,port=8100;urp;\" --nofirststartwizard";
+        String command = "/opt/openoffice4/program/soffice -headless -accept=\"socket,host=0.0.0.0,port=8100;urp;\" -nofirststartwizard";
         //String command = "C:/Program Files (x86)/OpenOffice 4/program/soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\" -nofirststartwizard";
         Process p = Runtime.getRuntime().exec(command);
 
@@ -53,23 +60,24 @@ public class WordToPDF {
         if (!outputFile.getParentFile().exists()) {
             outputFile.getParentFile().mkdir();
         }
+//        nohup  /opt/openoffice4/program/soffice -headless -accept="socket,host=0.0.0.0,port=8100;urp;" -nofirststartwizard &
         //String command = "/opt/openoffice4/program/soffice --headless --accept=\"socket,host=0.0.0.0,port=8100;urp;\" --nofirststartwizard &";
-        // String command = "/opt/openoffice4/program/soffice --headless --accept=\"socket,host=0.0.0.0,port=8100;urp;\" --nofirststartwizard";
-        // String command = "C:/Program Files (x86)/OpenOffice 4/program/soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\" -nofirststartwizard";
-        // Process p = Runtime.getRuntime().exec(command);
-        //OpenOfficeConnection connection = new SocketOpenOfficeConnection("0.0.0.0", 8100);
-        OpenOfficeConnection connection = new SocketOpenOfficeConnection("127.0.0.1", 8100);
+        String command = "/opt/openoffice4/program/soffice -headless -accept=\"socket,host=0.0.0.0,port=8100;urp;\" -nofirststartwizard";
+        //String command = "C:/Program Files (x86)/OpenOffice 4/program/soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\" -nofirststartwizard";
+        Process p = Runtime.getRuntime().exec(command);
+        OpenOfficeConnection connection = new SocketOpenOfficeConnection("0.0.0.0", 8100);
+        //OpenOfficeConnection connection = new SocketOpenOfficeConnection("127.0.0.1", 8100);
         connection.connect();
         DocumentConverter converter = new OpenOfficeDocumentConverter(connection);
         converter.convert(inputFile, outputFile);
         connection.disconnect();
-        // p.destroy();
+        p.destroy();
     }
 
 
     public static InputStream getPdfStream(String fileType, InputStream fileInput) throws Exception {
-        String command = "/opt/openoffice4/program/soffice --headless --accept=\"socket,host=0.0.0.0,port=8100;urp;\" --nofirststartwizard";
-        //String command = "C:/Program Files (x86)/OpenOffice 4/program/soffice -headless -accept=\"socket,host=0.0.0.0,port=8100;urp;\" -nofirststartwizard";
+        String command = "/opt/openoffice4/program/soffice -headless -accept=\"socket,host=0.0.0.0,port=8100;urp;\" -nofirststartwizard";
+        // String command = "C:/Program Files (x86)/OpenOffice 4/program/soffice -headless -accept=\"socket,host=0.0.0.0,port=8100;urp;\" -nofirststartwizard";
         Process p = Runtime.getRuntime().exec(command);
         //OpenOfficeConnection connection = new SocketOpenOfficeConnection("127.0.0.1", 8100);
         OpenOfficeConnection connection = new SocketOpenOfficeConnection("0.0.0.0", 8100);

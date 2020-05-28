@@ -37,6 +37,32 @@ public interface DesignMapper {
     List<Employee> getSalor();
 
     @Select("SELECT\n" +
+            "\tdm.customerNo,\n" +
+            "\tdmh.productNo\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem item\n" +
+            "LEFT JOIN designmaterialheadproduct dmh ON dmh.id = item.head_product_id\n" +
+            "LEFT JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
+            "WHERE\n" +
+            "\tdmh.id = #{headId} limit 1")
+    DesignMaterialHeadProductItem getCustomerNameAndProductNoByHeadId(Integer headId);
+
+
+
+
+
+    @Select("SELECT\n" +
+            "\tdm.customerNo,\n" +
+            "\tdmh.productNo\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproduct dmh\n" +
+            "LEFT JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
+            "WHERE\n" +
+            "\tdmh.id = #{headId}\n" +
+            "LIMIT 1")
+    DesignMaterialHeadProductItem getCustomerNameAndProductNoByHeadId2(Integer headId);
+
+    @Select("SELECT\n" +
             "\tee.id,\n" +
             "\tee.`name`,\n" +
             "\tee.empno,\n" +
@@ -146,6 +172,22 @@ public interface DesignMapper {
             "\tid DESC limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHead> getAllDMH(DesignMaterialHead orderHead);
 
+
+    @Select("SELECT\n" +
+            "\tdmh.id,\n" +
+            "\tdmh.customerNo,\n" +
+            "\tdmh.getOrderDate AS getOrderDateStr,\n" +
+            "\tdmh.orderArea,\n" +
+            "\tee. NAME AS salorEmpStr,\n" +
+            "\tdmh.deliveryOrderDate AS deliveryOrderDateStr,\n" +
+            "\teee. NAME AS orderMakerStr,\n" +
+            "\tdmh.remark\n" +
+            "FROM\n" +
+            "\tdesignmaterialhead dmh\n" +
+            "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
+            "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker where dmh.id = #{id}")
+    DesignMaterialHead getHeadIdandInfoById(Integer id);
+
     @Select("SELECT\n" +
             "\tdmhp.head_id,\n" +
             "\tdmhp.id,\n" +
@@ -163,6 +205,22 @@ public interface DesignMapper {
             "limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHeadProduct> getAllDMHP2(DesignMaterialHeadProduct pmhp);
 
+
+    @Select("SELECT\n" +
+            "\tdmhp.head_id,\n" +
+            "\tdmhp.id,\n" +
+            "\tdmhp.productName,\n" +
+            "\tdmhp.productNo,\n" +
+            "\tdmhp.needNum,\n" +
+            "\tdmhp.drawingNo,\n" +
+            "\tdmhp.productRoute,\n" +
+            "\tdmhp.remark\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproduct dmhp\n" +
+            " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id\n" +
+            " where dmhp.head_id = #{headId} ")
+    List<DesignMaterialHeadProduct> getHeadIdProductById(Integer headId);
+
     @Select("SELECT\n" +
             "\tdmhp.head_id,\n" +
             "\tdmhp.id,\n" +
@@ -178,6 +236,9 @@ public interface DesignMapper {
             "order by dmh.customerNo desc,dmhp.productNo asc " +
             "limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHeadProduct> getAllDMHP(DesignMaterialHeadProduct pmhp);
+
+    @Delete("delete from designmaterialheadproductitem where id = #{id} ")
+    void deleteOrderItemByheadIdItem(Integer id);
 
 
     @Select("SELECT\n" +
@@ -203,6 +264,51 @@ public interface DesignMapper {
             "\tdmhi.mateiralNo ASC limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHeadProductItem> getAllDMHPI(DesignMaterialHeadProductItem pmhp);
 
+    @Select("SELECT\n" +
+            "\tdmhi.id,\n" +
+            "\tdmhi.head_product_id,\n" +
+            "\tdmhi.mateiralNo,\n" +
+            "\tdmhi.materialName,\n" +
+            "\tdmhi.materialSpeci,\n" +
+            "\tdmhi.unit,\n" +
+            "\tdmhi.num,\n" +
+            "\tdmhi.useDeptId,\n" +
+            "\tdmhi.useDeptName,\n" +
+            "\tdmhi.mateiralStock,\n" +
+            "\tdmhi.remark,\n" +
+            "\tdmhi.isCanUse as isCanUse2\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem dmhi\n" +
+            " JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            " JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
+            " where dm.id = #{dhp} ")
+    List<DesignMaterialHeadProductItem> getHeadIdProductItemById(Integer dhp);
+
+
+    @Select("SELECT\n" +
+            "\tdmhi.id,\n" +
+            "\tdmhi.head_product_id,\n" +
+            "\tdmhi.mateiralNo,\n" +
+            "\tdmhi.materialName,\n" +
+            "\tdmhi.materialSpeci,\n" +
+            "\tdmhi.unit,\n" +
+            "\tdmhi.num,\n" +
+            "\tdmhi.useDeptId,\n" +
+            "\tdmhi.useDeptName,\n" +
+            "\tdmhi.mateiralStock,\n" +
+            "\tdmhi.remark,\n" +
+            "\tdmhi.isCanUse as isCanUse2\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem dmhi\n" +
+            "LEFT JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            "LEFT JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
+            " where dmhi.head_product_id = #{head_product_id} " +
+            "ORDER BY\n" +
+            "\tdm.customerNo DESC,\n" +
+            "\tdmh.productNo ASC,\n" +
+            "\tdmhi.mateiralNo ASC limit #{currentPageTotalNum},#{pageSize}")
+    List<DesignMaterialHeadProductItem> getAllDMHPIButId(DesignMaterialHeadProductItem item);
+
 
     @Select("SELECT" +
             " count(*) " +
@@ -211,6 +317,15 @@ public interface DesignMapper {
             "LEFT JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
             "LEFT JOIN designmaterialhead dm ON dm.id = dmh.head_id")
     int getAllDMHPICount();
+
+    @Select("SELECT" +
+            " count(*) " +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem dmhi\n" +
+            "LEFT JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            "LEFT JOIN designmaterialhead dm ON dm.id = dmh.head_id" +
+            " where dmhi.head_product_id = #{headId} ")
+    int getAllDMHPIButIdCount(Integer headId);
 
     @Select("SELECT\n" +
             "\tdmhp.head_id,\n" +
@@ -275,6 +390,12 @@ public interface DesignMapper {
     @SelectProvider(type = DesignMapper.OrderDaoProvider.class, method = "queryOrderHeadProductByConditionCount")
     int queryOrderHeadProductByConditionCount(DesignMaterialHeadProduct orderHead);
 
+    @SelectProvider(type = DesignMapper.OrderDaoProvider.class, method = "queryOrderHeadProductItemByCondition")
+    List<DesignMaterialHeadProductItem> queryOrderHeadProductItemByCondition(DesignMaterialHeadProductItem orderHead);
+
+    @SelectProvider(type = DesignMapper.OrderDaoProvider.class, method = "queryOrderHeadProductItemByConditionCount")
+    int queryOrderHeadProductItemByConditionCount(DesignMaterialHeadProductItem orderHead);
+
     @Select("select count(*) from designmaterialhead where customerNo = #{customerNo} ")
     int getSJHeadByOrderNo(String customerNo);
 
@@ -293,6 +414,17 @@ public interface DesignMapper {
             "AND item.mateiralNo = #{mateiralNo} ")
     int getSJIHeadByOrderNo(String customerNo, String productNo, String mateiralNo);
 
+
+    @Select("SELECT\n" +
+            "\tcount(item.id)\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem item\n" +
+            "LEFT JOIN designmaterialheadproduct pro ON item.head_product_id = pro.id\n" +
+            "LEFT JOIN designmaterialhead head ON head.customerNo = pro.head_id\n" +
+            "WHERE\n" +
+            " item.mateiralNo = #{mateiralNo} and item.id <> #{id} and item.head_product_id = #{headId} ")
+    int getSJIHeadByOrderNoButId(String mateiralNo, Integer id, Integer headId);
+
     @Delete("delete from designmaterialhead where id = #{id}")
     void deleteOrderItemByheadId(Integer id);
 
@@ -308,7 +440,11 @@ public interface DesignMapper {
             "\tpro.productNo = #{productNo}\n" +
             "AND head.customerNo = #{customerNo}\n" +
             "LIMIT 1")
-    int getHeadIdByCustomerNoAndMaterialNo(String customerNo, String productNo);
+    Integer getHeadIdByCustomerNoAndMaterialNo(String customerNo, String productNo);
+
+
+    @Select("select head_product_id from designmaterialheadproductitem where id = #{itemId}")
+    int getHeadIdByMaterialNoAndId(Integer itemId);
 
     @Select("SELECT\n" +
             "\tcount(phh.id) \n" +
@@ -420,6 +556,14 @@ public interface DesignMapper {
             "\t#{remark},\n" +
             "\t#{isCanUse2}) ")
     void saveSJIHeadDateToMysql(DesignMaterialHeadProductItem item);
+
+
+    @Insert("update designmaterialheadproductitem set " +
+            "num = #{num}," +
+            "useDeptName = #{useDeptName}," +
+            "remark = #{remark}" +
+            " where id = #{id} ")
+    void updateSJIHeadDateToMysql(DesignMaterialHeadProductItem item);
 
 
     class OrderDaoProvider {
@@ -792,6 +936,226 @@ public interface DesignMapper {
                     sb.append("'" + orderHead.getCustomerNoList().get(orderHead.getCustomerNoList().size() - 1) + "')");
                 }
             }
+            return sb.toString();
+        }
+
+        public String queryOrderHeadProductItemByCondition(DesignMaterialHeadProductItem orderHead) {
+            StringBuilder sb = new StringBuilder("SELECT\n" +
+                    "\tdmhi.id,\n" +
+                    "\tdmhi.head_product_id,\n" +
+                    "\tdmhi.mateiralNo,\n" +
+                    "\tdmhi.materialName,\n" +
+                    "\tdmhi.materialSpeci,\n" +
+                    "\tdmhi.unit,\n" +
+                    "\tdmhi.num,\n" +
+                    "\tdmhi.useDeptId,\n" +
+                    "\tdmhi.useDeptName,\n" +
+                    "\tdmhi.mateiralStock,\n" +
+                    "\tdmhi.remark,\n" +
+                    "\tdmhi.isCanUse AS isCanUse2\n" +
+                    "FROM\n" +
+                    "\tdesignmaterialheadproductitem dmhi\n" +
+                    " left JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+                    " left JOIN designmaterialhead dm ON dm.id = dmh.head_id where 1=1 ");
+
+            if (orderHead.getMaterialNameList2() != null && orderHead.getMaterialNameList2().size() > 0) {
+                if (orderHead.getMaterialNameList2().size() == 1) {
+                    sb.append(" and dmhi.materialName in  ('" + orderHead.getMaterialNameList2().get(0) + "')");
+                } else if (orderHead.getMaterialNameList2().size() >= 2) {
+                    sb.append("  and dmhi.materialName in (");
+                    for (int i = 0; i < orderHead.getMaterialNameList2().size() - 1; i++) {
+                        sb.append("'" + orderHead.getMaterialNameList2().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getMaterialNameList2().get(orderHead.getMaterialNameList2().size() - 1) + "')");
+                }
+            }
+
+
+            if (orderHead.getMateiralNoList() != null && orderHead.getMateiralNoList().size() > 0) {
+                if (orderHead.getMateiralNoList().size() == 1) {
+                    sb.append(" and dmhi.mateiralNo in  ('" + orderHead.getMateiralNoList().get(0) + "')");
+                } else if (orderHead.getMateiralNoList().size() >= 2) {
+                    sb.append("  and dmhi.mateiralNo in (");
+                    for (int i = 0; i < orderHead.getMateiralNoList().size() - 1; i++) {
+                        sb.append("'" + orderHead.getMateiralNoList().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getMateiralNoList().get(orderHead.getMateiralNoList().size() - 1) + "')");
+                }
+            }
+
+            if (orderHead.getMaterialSpeciList2() != null && orderHead.getMaterialSpeciList2().size() > 0) {
+                if (orderHead.getMaterialSpeciList2().size() == 1) {
+                    sb.append(" and dmhi.materialSpeci in  ('" + orderHead.getMaterialSpeciList2().get(0) + "')");
+                } else if (orderHead.getMaterialSpeciList2().size() >= 2) {
+                    sb.append("  and dmhi.materialSpeci in (");
+                    for (int i = 0; i < orderHead.getMaterialSpeciList2().size() - 1; i++) {
+                        sb.append("'" + orderHead.getMaterialSpeciList2().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getMaterialSpeciList2().get(orderHead.getMaterialSpeciList2().size() - 1) + "')");
+                }
+            }
+
+            if (orderHead.getCustomerNoList() != null && orderHead.getCustomerNoList().size() > 0) {
+                if (orderHead.getCustomerNoList().size() == 1) {
+                    sb.append(" and dm.customerNo in  ('" + orderHead.getCustomerNoList().get(0) + "')");
+                } else if (orderHead.getCustomerNoList().size() >= 2) {
+                    sb.append("  and dm.customerNo in (");
+                    for (int i = 0; i < orderHead.getCustomerNoList().size() - 1; i++) {
+                        sb.append("'" + orderHead.getCustomerNoList().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getCustomerNoList().get(orderHead.getCustomerNoList().size() - 1) + "')");
+                }
+            }
+
+            if (orderHead.getProductNoList() != null && orderHead.getProductNoList().size() > 0) {
+                if (orderHead.getProductNoList().size() == 1) {
+                    sb.append(" and dmh.productNo in  ('" + orderHead.getProductNoList().get(0) + "')");
+                } else if (orderHead.getProductNoList().size() >= 2) {
+                    sb.append("  and dmh.productNo in (");
+                    for (int i = 0; i < orderHead.getProductNoList().size() - 1; i++) {
+                        sb.append("'" + orderHead.getProductNoList().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getProductNoList().get(orderHead.getProductNoList().size() - 1) + "')");
+                }
+            }
+
+            if (orderHead.getSortMethod() != null && !"undefined".equals(orderHead.getSortMethod()) && !"undefined".equals(orderHead.getSortByName()) && orderHead.getSortByName() != null) {
+                if ("mateiralNo".equals(orderHead.getSortByName())) {
+                    sb.append(" order  by dmhi.mateiralNo ");
+                    if ("asc".equals(orderHead.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(orderHead.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("materialName".equals(orderHead.getSortByName())) {
+                    sb.append(" order by dmhi.materialName ");
+                    if ("asc".equals(orderHead.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(orderHead.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("materialSpeci".equals(orderHead.getSortByName())) {
+                    sb.append(" order by dmhi.materialSpeci ");
+                    if ("asc".equals(orderHead.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(orderHead.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("unit".equals(orderHead.getSortByName())) {
+                    sb.append(" order by dmhi.unit ");
+                    if ("asc".equals(orderHead.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(orderHead.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("mateiralStock".equals(orderHead.getSortByName())) {
+                    sb.append(" order by dmhi.mateiralStock ");
+                    if ("asc".equals(orderHead.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(orderHead.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("num".equals(orderHead.getSortByName())) {
+                    sb.append(" order by dmhi.num ");
+                    if ("asc".equals(orderHead.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(orderHead.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("useDeptName".equals(orderHead.getSortByName())) {
+                    sb.append(" order by dmhi.useDeptName ");
+                    if ("asc".equals(orderHead.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(orderHead.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                } else if ("isCanUse".equals(orderHead.getSortByName())) {
+                    sb.append(" order by dmhi.isCanUse2 ");
+                    if ("asc".equals(orderHead.getSortMethod())) {
+                        sb.append(" asc ");
+                    } else if ("desc".equals(orderHead.getSortMethod())) {
+                        sb.append(" desc ");
+                    }
+                }
+            } else {
+                sb.append("  ORDER BY\n" +
+                        "\tdm.customerNo DESC,\n" +
+                        "\tdmh.productNo ASC,\n" +
+                        "\tdmhi.mateiralNo ASC\n");
+            }
+            sb.append("  limit #{currentPageTotalNum},#{pageSize}");
+            return sb.toString();
+        }
+
+        public String queryOrderHeadProductItemByConditionCount(DesignMaterialHeadProductItem orderHead) {
+            StringBuilder sb = new StringBuilder("SELECT" +
+                    " count(*) " +
+                    "FROM\n" +
+                    "\tdesignmaterialheadproductitem dmhi\n" +
+                    " left JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+                    " left JOIN designmaterialhead dm ON dm.id = dmh.head_id where 1=1 ");
+
+            if (orderHead.getMaterialNameList2() != null && orderHead.getMaterialNameList2().size() > 0) {
+                if (orderHead.getMaterialNameList2().size() == 1) {
+                    sb.append(" and dmhi.materialName in  ('" + orderHead.getMaterialNameList2().get(0) + "')");
+                } else if (orderHead.getMaterialNameList2().size() >= 2) {
+                    sb.append("  and dmhi.materialName in (");
+                    for (int i = 0; i < orderHead.getMaterialNameList2().size() - 1; i++) {
+                        sb.append("'" + orderHead.getMaterialNameList2().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getMaterialNameList2().get(orderHead.getMaterialNameList2().size() - 1) + "')");
+                }
+            }
+
+
+            if (orderHead.getMateiralNoList() != null && orderHead.getMateiralNoList().size() > 0) {
+                if (orderHead.getMateiralNoList().size() == 1) {
+                    sb.append(" and dmhi.mateiralNo in  ('" + orderHead.getMateiralNoList().get(0) + "')");
+                } else if (orderHead.getMateiralNoList().size() >= 2) {
+                    sb.append("  and dmhi.mateiralNo in (");
+                    for (int i = 0; i < orderHead.getMateiralNoList().size() - 1; i++) {
+                        sb.append("'" + orderHead.getMateiralNoList().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getMateiralNoList().get(orderHead.getMateiralNoList().size() - 1) + "')");
+                }
+            }
+
+            if (orderHead.getMaterialSpeciList2() != null && orderHead.getMaterialSpeciList2().size() > 0) {
+                if (orderHead.getMaterialSpeciList2().size() == 1) {
+                    sb.append(" and dmhi.materialSpeci in  ('" + orderHead.getMaterialSpeciList2().get(0) + "')");
+                } else if (orderHead.getMaterialSpeciList2().size() >= 2) {
+                    sb.append("  and dmhi.materialSpeci in (");
+                    for (int i = 0; i < orderHead.getMaterialSpeciList2().size() - 1; i++) {
+                        sb.append("'" + orderHead.getMaterialSpeciList2().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getMaterialSpeciList2().get(orderHead.getMaterialSpeciList2().size() - 1) + "')");
+                }
+            }
+
+            if (orderHead.getCustomerNoList() != null && orderHead.getCustomerNoList().size() > 0) {
+                if (orderHead.getCustomerNoList().size() == 1) {
+                    sb.append(" and dm.customerNo in  ('" + orderHead.getCustomerNoList().get(0) + "')");
+                } else if (orderHead.getCustomerNoList().size() >= 2) {
+                    sb.append("  and dm.customerNo in (");
+                    for (int i = 0; i < orderHead.getCustomerNoList().size() - 1; i++) {
+                        sb.append("'" + orderHead.getCustomerNoList().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getCustomerNoList().get(orderHead.getCustomerNoList().size() - 1) + "')");
+                }
+            }
+
+            if (orderHead.getProductNoList() != null && orderHead.getProductNoList().size() > 0) {
+                if (orderHead.getProductNoList().size() == 1) {
+                    sb.append(" and dmh.productNo in  ('" + orderHead.getProductNoList().get(0) + "')");
+                } else if (orderHead.getProductNoList().size() >= 2) {
+                    sb.append("  and dmh.productNo in (");
+                    for (int i = 0; i < orderHead.getProductNoList().size() - 1; i++) {
+                        sb.append("'" + orderHead.getProductNoList().get(i) + "'" + ",");
+                    }
+                    sb.append("'" + orderHead.getProductNoList().get(orderHead.getProductNoList().size() - 1) + "')");
+                }
+            }
+
             return sb.toString();
         }
     }

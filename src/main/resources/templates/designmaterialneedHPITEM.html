@@ -26,12 +26,61 @@
 </style>
 <script>
 
+    let deptNameArray
+
     $(function () {
         window.parent.document.getElementById('content').style.display = "block";
         window.parent.document.getElementById('contentnew').style.display = "none";
         document.getElementById("coverbehidepage").style.display = "none";
-        var flag = $("#flag").val();
-        var aflag = eval(flag)
+        v ar flag = $("#flag").val ();
+        var aflag = eval(flag);
+        var customerNo2 = $ ("#customerNo2").val();
+        deptNameArray = new Array("钣金", "精密", "精工", "喷涂", "图文", "亚克力", "装配", "包装");
+
+        var len = $("#tabletblody > tr").length;
+        var tbody = $("#tabletblody");
+        var tr;
+        var td;
+        for (var i = 0; i < 5; i++) {
+            tr = $("<tr id='tr" + (len + i) + "'></tr>");
+            tr.append("<td id='tr" + (len + i) + "'>" + (len + i + 1) + "</td>");
+            tr.append("<td style='width: 130px'><input type=\"text\" class=\"form-control\" readonly='readonly'></td>");
+            tr.append("<td  style='width: 200px'><input  type=\"text\" class=\"form-control\" " +
+                " onkeypress=\"return onKeyPress1(event,this)\"></td>");
+            tr.append("<td  style='width: 200px'><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+            tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+            tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+            tr.append("<td style='width: 80px'><input type=\"text\"  class=\"form-control\" ></td>");
+            td = "<td><select id=\"name\"  class=\"selectpicker show-tick form-control\"\n" +
+                "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+            for (var a = 0; a < deptNameArray.length; a++) {
+                td += "  <option  value=\"" + deptNameArray[a] + "\" >" + deptNameArray[a] + "</option>\n";
+            }
+            td += "  </select></td> ";
+
+            tr.append(td);
+            tr.append("<td><input type='text'  class=\"form-control\" placeholder='其它备注'></td>")
+            tr.append("<td><input type='text'   class=\"form-control\" readonly='readonly'></td>")
+            tr.append("<td><a id=\"savebutton\"\n" +
+                "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this,0)\">保存</a>" +
+                " <a href=\"javascript:void(0);\"\n" +
+                "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
+            tr.prependTo(tbody);
+            $('.selectpicker').selectpicker('refresh');
+
+        }
+
+        if (customerNo2.length > 0) {
+            $("#customerNo").val(customerNo2);
+            $('.selectpicker').selectpicker('refresh');
+        }
+        var productNo2 = $("#productNo2").val();
+        if (productNo2.length > 0) {
+            $("#productNo").val(productNo2);
+            $('.selectpicker').selectpicker('refresh');
+        }
+
+
         if (aflag == 1) {
             $("#errormessage").show();
             var errormessagediv = document.getElementById("errormessage");
@@ -57,34 +106,39 @@
             var errormessagediv = document.getElementById("errormessage");
             errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;客户单号已存在!";
             errormessagediv.style.color = "red";
+        }else if (aflag == 6) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;该客户单号下的商品品号不存在!";
+            errormessagediv.style.color = "red";
         }
     });
 
     function goPageone() {
         $("#n_currentPage").val(1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadProductItemByCondition();
     }
 
     function goPrePage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 - 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadProductItemByCondition();
     }
 
     function goAftPage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 + 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadProductItemByCondition();
     }
 
     function goMaxPage() {
         $("#n_currentPage").val($("#maxPage").val());
-        queryOrderHeadByCondition2();
+        queryOrderHeadProductItemByCondition();
     }
 
     function goPriPageone() {
         $("#n_currentPage").val(1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadProductItemByCondition();
     }
 
     function isNull(arg1) {
@@ -92,7 +146,6 @@
             return "";
         }
         return arg1;
-        //return !arg1 && arg1!==0 && typeof arg1!=="boolean"?true:false;
     }
 
     function goPage2() {
@@ -115,25 +168,25 @@
         } else {
             $("#n_currentPage").val(tp);
             // document.forms["form0"].submit();
-            queryOrderHeadByCondition2();
+            queryOrderHeadProductItemByCondition();
         }
     }
 
     function goPriAftPage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 + 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadProductItemByCondition();
     }
 
     function goPriMaxPage() {
         $("#n_currentPage").val($("#maxPage").val());
-        queryOrderHeadByCondition2();
+        queryOrderHeadProductItemByCondition();
     }
 
     function goPriPrePage() {
         var currentpage = $("#_tp").val();
         $("#n_currentPage").val(currentpage * 1 - 1 * 1);
-        queryOrderHeadByCondition2();
+        queryOrderHeadProductItemByCondition();
     }
 
     var currentPage; //当前页
@@ -143,24 +196,23 @@
     var sortMethod;
     var sortByName;
 
-    function queryOrderHeadByCondition() {
+
+    function queryOrderHeadProductItemByCondition() {
         var currentpage = $("#n_currentPage").val();
         window.parent.document.getElementById('coverbehidepage').style.display = "block";
         var formData = new FormData();
-        formData.append('nameIds', $("#name").val());
-        formData.append('orderNos', $("#orderNo").val());
-        formData.append('productTotalName', $("#prodName").val());
-        formData.append('singleOrProjects', $("#orderType").val());
-        formData.append('states', $("#state").val());
-        formData.append('orderTimeStr', $("#orderDate").val());
-        formData.append('itemDeliverTimeStr', $("#deleverDate").val());
+        formData.append('materialNameList2', $("#materialName").val());
+        formData.append('mateiralNoList', $("#mateiralNo").val());
+        formData.append('materialSpeciList2', $("#materialSpeci").val());
+        formData.append('customerNoList', $("#customerNo").val());
+        formData.append('productNoList', $("#productNo").val());
         formData.append('sortMethod', sortMethod);
         formData.append('sortByName', sortByName);
-        formData.append('currentPage', 1);
+        formData.append('currentPage', currentpage);
         $.ajax({
             data: formData,
             type: "POST",
-            url: "/order/queryOrderHeadByCondition",
+            url: "/design/queryOrderHeadProductItemByCondition",
             async: true,
             cache: false,
             contentType: false,
@@ -187,7 +239,6 @@
                 var td2 = "";
                 var tbody = $("#tabletblody");
                 tbody.html("");
-                var userType;
                 if (data != null && data != "") {
                     $("#nodatadiv").hide();
                     $("#showdiv").show();
@@ -195,82 +246,29 @@
                     totalPage = data[0].maxPage; //总多少页
                     totaldata = data[0].recordCount; //总共多少记录
                     pageSize = data[0].pageSize;
-                    userType = data[0].type;
                     maxpageid.val(totalPage);
                     n_currentPage.val(currentPage);
                     inputpage.val(currentPage);
-                    var eduLe;
-                    var safeLe;
-                    var otherLe;
                     $.each(data, function (num) {
                         tr = $("<tr id='" + data[num].id + "'></tr>");
                         tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
-                        tr.append("<td>" + isNull(data[num].orderNo) + "</td>");
-                        tr.append("<td>" + isNull(data[num].salor) + "</td>");
-                        tr.append("<td>" + isNull(data[num].orderTimeStr) + "</td>");
-                        tr.append("<td>" + isNull(data[num].orderSetNum) + "</td>");
-                        tr.append("<td>" + isNull(data[num].singleOrProjectStr) + "</td>");
-
-                        td2 = "<td><select id='" + 'stateStr' + data[num].orderNo + "'  class=\"selectpicker show-tick form-control\"\n" +
-                            " data-live-search=\"true\" data-actions-box=\"true\" >";
-                        if (data[num].state == 0) {
-                            td2 += "<option value=\"0\" selected=\"selected\">未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 1) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" selected=\"selected\">审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 2) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" selected=\"selected\">审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 3) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\"  selected=\"selected\">暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 4) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\"  selected=\"selected\">终止</option>"
-                            td2 += "<option value=\"5\" >完成</option>"
-                        } else if (data[num].state == 5) {
-                            td2 += "<option value=\"0\" >未审核</option>"
-                            td2 += "<option value=\"1\" >审核通过/下发</option>"
-                            td2 += "<option value=\"2\" >审核未通过</option>"
-                            td2 += "<option value=\"3\" >暂停</option>"
-                            td2 += "<option value=\"4\" >终止</option>"
-                            td2 += "<option value=\"5\" selected=\"selected\">完成</option>"
-                        }
-                        td2 += "</select></td>";
-                        tr.append(td2);
+                        tr.append("<td>" + isNull(data[num].mateiralNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].materialName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].materialSpeci) + "</td>");
+                        tr.append("<td>" + isNull(data[num].unit) + "</td>");
+                        tr.append("<td>" + isNull(data[num].mateiralStock) + "</td>");
+                        tr.append("<td>" + isNull(data[num].num) + "</td>");
+                        tr.append("<td>" + isNull(data[num].useDeptName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].remark) + "</td>");
+                        tr.append("<td>" + isNull(data[num].isCanUse2) + "</td>");
                         td = "<td>";
                         td += " <a class=\"btn btn-xs btn-primary\" \n" +
-                            "onclick=\"updateOrderItemByheadId('" + data[num].id + "');\">编辑</a>\n" +
+                            "onclick=\"updateOrderItemByheadId(this,'" + data[num].id + "');\">编辑</a>\n" +
                             "  <a class=\"btn btn-xs btn-primary\"\n" +
                             " onclick=\"deleteOrderItemByheadId('" + data[num].id + "',1);\">删除</a> " +
-                            " <a class=\"btn btn-xs btn-primary\"\n" +
-                            " onclick=\"confirmOrderItemByheadId(this);\">订单状态保存</a>\n" +
-                            " <a class=\"btn btn-xs btn-primary\"\n" +
-                            " onclick=\"transferDataToPDFFile('" + data[num].id + "');\">PDF打印</a>" +
                             "</td>";
                         tr.append(td);
                         tr.appendTo(tbody);
-                        $('#stateStr' + data[num].orderNo).selectpicker('refresh');
                     });
                     $("#currentpagespan").html(currentPage);
                     $("#maxpagespan").html(totalPage);
@@ -311,6 +309,41 @@
                     $("#nodatadiv").show();
                     $("#showdiv").hide();
                 }
+
+
+                var len = $("#tabletblody > tr").length;
+                var tbody = $("#tabletblody");
+                var tr;
+                var td;
+                for (var i = 0; i < 5; i++) {
+                    tr = $("<tr id='tr" + (len + i) + "'></tr>");
+                    tr.append("<td id='tr" + (len + i) + "'>" + (len + i + 1) + "</td>");
+                    tr.append("<td style='width: 130px'><input type=\"text\" class=\"form-control\" readonly='readonly'></td>");
+                    tr.append("<td  style='width: 200px'><input  type=\"text\" class=\"form-control\" " +
+                        " onkeypress=\"return onKeyPress1(event,this)\"></td>");
+                    tr.append("<td  style='width: 200px'><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+                    tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+                    tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+                    tr.append("<td style='width: 80px'><input type=\"text\"  class=\"form-control\" ></td>");
+                    td = "<td><select id=\"name\"  class=\"selectpicker show-tick form-control\"\n" +
+                        "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+                    for (var a = 0; a < deptNameArray.length; a++) {
+                        td += "  <option  value=\"" + deptNameArray[a] + "\" >" + deptNameArray[a] + "</option>\n";
+                    }
+                    td += "  </select></td> ";
+
+                    tr.append(td);
+                    tr.append("<td><input type='text'  class=\"form-control\" placeholder='其它备注'></td>")
+                    tr.append("<td><input type='text'   class=\"form-control\" readonly='readonly'></td>")
+                    tr.append("<td><a id=\"savebutton\"\n" +
+                        "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this,0)\">保存</a>" +
+                        " <a href=\"javascript:void(0);\"\n" +
+                        "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
+                    tr.prependTo(tbody);
+                    $('.selectpicker').selectpicker('refresh');
+
+                }
+
                 window.parent.document.getElementById('coverbehidepage').style.display = "none";
             },
             error: function (msg) {
@@ -324,22 +357,24 @@
         });
     }
 
-    function deleteOrderItemByheadId(id,isFlag) {
-        if(isFlag == 1) {
-            window.location.href = "/design/deleteOrderItemByheadIdItem?id=" + id;
+    function deleteOrderItemByheadId(id, isFlag) {
+        var customerNo = $("#customerNo").val()
+        var productNo = $("#productNo").val()
+        if (isFlag == 1) {
+            window.location.href = "/design/deleteOrderItemByheadIdItem?id=" + id + "&customerNo=" + customerNo + "&productNo=" + productNo;
         }
     }
 
     function sortByAsc(titlename) {
         sortMethod = 'asc';
         sortByName = titlename;
-        queryEmployeeSalaryByCondition();
+        queryOrderHeadProductItemByCondition();
     }
 
     function sortByDesc(titlename) {
         sortMethod = 'desc';
         sortByName = titlename;
-        queryEmployeeSalaryByCondition();
+        queryOrderHeadProductItemByCondition();
     }
 
 
@@ -371,7 +406,16 @@
     function addSJIProdctHead() {
         $("#errormessage").hide();
         var customerNo = $("#customerNo").val();
+        var productNo = $("#productNo").val();
         if (customerNo.length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "新增前请选择客户单号!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+
+        if (productNo.length <= 0) {
             $("#errormessage").show();
             var errormessagediv = document.getElementById("errormessage");
             errormessagediv.innerHTML = "新增前请选择商品品号!";
@@ -379,33 +423,80 @@
             return false;
         }
 
-        len = $("#tabletblody > tr").length;
-        len++;
-        var tbody = $("#tabletblody");
-        var tr = $("<tr id='tr" + len + "'></tr>");
 
-        tr.append("<td id='tr" + len + "'>" + len + "</td>");
-        tr.append("<td><input type=\"text\" class=\"form-control\" readonly='readonly'></td>");
-        tr.append("<td><input  type=\"text\" class=\"form-control\" " +
-            " onkeypress=\"return onKeyPress1(event,this)\"></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\" onblur=\"checkNum(this)\"></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\"></td>");
-        tr.append("<td><input type='text'  class=\"form-control\" placeholder='其它备注'></td>")
-        tr.append("<td><input type='text'   class=\"form-control\" readonly='readonly'></td>")
-        tr.append("<td><a id=\"savebutton\"\n" +
-            "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this)\">保存</a>" +
-            " <a href=\"javascript:void(0);\"\n" +
-            "    onclick=\"deleteTRA(this," + len + ");\">删除</a></td>");
-        tr.appendTo(tbody);
-        $('.selectpicker').selectpicker('refresh');
+        len = $("#tabletblody > tr").length;
+        var tbody = $("#tabletblody");
+        var tr;
+        var td;
+        for (var i = 0; i < 5; i++) {
+            tr = $("<tr id='tr" + (len + i) + "'></tr>");
+            tr.append("<td id='tr" + (len + i) + "'>" + (len + i + 1) + "</td>");
+            tr.append("<td style='width: 130px'><input type=\"text\" class=\"form-control\" readonly='readonly'></td>");
+            tr.append("<td  style='width: 200px'><input  type=\"text\" class=\"form-control\" " +
+                " onkeypress=\"return onKeyPress1(event,this)\"></td>");
+            tr.append("<td  style='width: 200px'><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+            tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+            tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+            tr.append("<td style='width: 80px'><input type=\"text\"  class=\"form-control\" ></td>");
+            td = "<td><select id=\"name\"  class=\"selectpicker show-tick form-control\"\n" +
+                "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+            for (var a = 0; a < deptNameArray.length; a++) {
+                td += "  <option  value=\"" + deptNameArray[a] + "\" >" + deptNameArray[a] + "</option>\n";
+            }
+            td += "  </select></td> ";
+
+            tr.append(td);
+            tr.append("<td><input type='text'  class=\"form-control\" placeholder='其它备注'></td>")
+            tr.append("<td><input type='text'   class=\"form-control\" readonly='readonly'></td>")
+            tr.append("<td><a id=\"savebutton\"\n" +
+                "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this,0)\">保存</a>" +
+                " <a href=\"javascript:void(0);\"\n" +
+                "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
+            tr.prependTo(tbody);
+            $('.selectpicker').selectpicker('refresh');
+
+        }
+
+        // len = $("#tabletblody > tr").length;
+        // len++;
+        // var tbody = $("#tabletblody");
+        // var tr = $("<tr id='tr" + len + "'></tr>");
+        //
+        // tr.append("<td id='tr" + len + "'>" + len + "</td>");
+        // tr.append("<td style='width: 130px'><input type=\"text\" class=\"form-control\" readonly='readonly'></td>");
+        // tr.append("<td  style='width: 200px'><input  type=\"text\" class=\"form-control\" " +
+        //     " onkeypress=\"return onKeyPress1(event,this)\"></td>");
+        // tr.append("<td  style='width: 200px'><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+        // tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+        // tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+        // tr.append("<td style='width: 80px'><input type=\"text\"  class=\"form-control\" ></td>");
+        //
+        //
+        // var td = "<td><select id=\"name\"  class=\"selectpicker show-tick form-control\"\n" +
+        //     "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+        // for (var a = 0; a < deptNameArray.length; a++) {
+        //     td += "  <option  value=\"" + deptNameArray[a] + "\" >" + deptNameArray[a] + "</option>\n";
+        // }
+        // td += "  </select></td> ";
+        //
+        // tr.append(td);
+        // tr.append("<td><input type='text'  class=\"form-control\" placeholder='其它备注'></td>")
+        // tr.append("<td><input type='text'   class=\"form-control\" readonly='readonly'></td>")
+        // tr.append("<td><a id=\"savebutton\"\n" +
+        //     "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this,0)\">保存</a>" +
+        //     " <a href=\"javascript:void(0);\"\n" +
+        //     "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
+        // tr.appendTo(tbody);
+        // $('.selectpicker').selectpicker('refresh');
     }
 
-    function deleteTRA(obj, len) {
-        obj.parentElement.parentElement.remove();
-        len--;
+    function deleteTRA(obj, len, id) {
+        if (id == 0) {
+            obj.parentElement.parentElement.remove();
+            len--;
+        } else {
+            window.location.href = "/design/deleteOrderItemByheadIdItem?id=" + id;
+        }
     }
 
 
@@ -414,6 +505,7 @@
     }
 
     function onKeyPress1(e, obj) {
+        console.log("aaa comin")
         var keyCode = null;
         if (e.which) keyCode = e.which; else if (e.keyCode) keyCode = e.keyCode;
         if (keyCode == 13) {
@@ -465,16 +557,24 @@
                     $(obj).parent().parent().find("td").eq(3).html(td);
 
 
-                    td = "<select  onchange='showBySelect1(this)' class=\"selectpicker show-tick form-control\"\n" +
-                        "   data-live-search=\"true\" data-actions-box=\"true\"\n" +
-                        "   data-selected-text-format=\"count > 1\">\n";
-                    for (var aa = 0; aa < datadata.length; aa++) {
-                        td += "  <option value=\"" + aa + "\">" + datadata[aa].materialName + "</option>\n";
+                    if (datadata.length > 1) {
+                        td = "<select  onchange='showBySelect1(this)' class=\"selectpicker show-tick form-control\"\n" +
+                            "   data-live-search=\"true\" data-actions-box=\"true\"\n" +
+                            "   data-selected-text-format=\"count > 1\">\n";
+                        for (var aa = 0; aa < datadata.length; aa++) {
+                            td += "  <option value=\"" + aa + "\">" + datadata[aa].materialName + "</option>\n";
+                        }
+                        td += "  </select>";
+                        $(obj).parent().parent().find("td").eq(2).html(td);
+
+                    } else {
+                        if (datadata.length == 1) {
+                            td = "<input type=\"text\" value='" + datadata[0].materialName + "'  onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">";
+                        } else {
+                            td = "<input type=\"text\" value=''  onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">";
+                        }
+                        $(obj).parent().parent().find("td").eq(2).html(td);
                     }
-                    td += "  </select>";
-                    $(obj).parent().parent().find("td").eq(2).html(td);
-
-
                     $('.selectpicker').selectpicker('refresh');
                 },
                 error: function (msg) {
@@ -493,7 +593,6 @@
         var index = $(obj).parent().parent().find("td").eq(3).find("select").eq(0).val();
         var td;
 
-        console.log(index + "===")
         td = "<input type=\"text\" value='" + datadata[index].materialName + "'  onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">";
         $(obj).parent().parent().find("td").eq(2).html(td);
 
@@ -514,9 +613,8 @@
 
     function showBySelect1(obj) {
         var index = $(obj).parent().parent().find("td").eq(2).find("select").eq(0).val();
+
         var td;
-
-
         td = "<input type=\"text\" value='" + datadata[index].materialSpeci + "'  disabled='disabled' onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">";
         $(obj).parent().parent().find("td").eq(3).html(td);
 
@@ -532,52 +630,442 @@
         td = "<input type=\"text\" value='" + datadata[index].isCanUseStr + "' disabled='disabled' class=\"form-control\">";
         $(obj).parent().parent().find("td").eq(9).html(td);
 
-        $('.selectpicker').selectpicker('refresh');
+        var indexstr = $(obj).parent().parent().find("td").eq(2).find("option:selected").text();
+
+        td = "<input type=\"text\" value='" + indexstr + "'  onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">";
+        $(obj).parent().parent().find("td").eq(2).html(td);
+
     }
 
 
-    function saveSJIHeadPDateToMysql(obj) {
+    function saveSJIProdctHead() {
+        var isFalse = true;
         $("#errormessage").hide();
-        var materialNo = $(obj).parent().parent().find("td").eq(1).find("input").eq(0).val();
-        var materialName = $(obj).parent().parent().find("td").eq(2).find("input").eq(0).val();
-        if(materialName.length == 0) {
-            materialName = $(obj).parent().parent().find("td").eq(2).find("option:selected").eq(0).text();
-        }
-        var materialSpeci = $(obj).parent().parent().find("td").eq(3).find("input").eq(0).val();
-        if(materialSpeci.length == 0) {
-            materialSpeci = $(obj).parent().parent().find("td").eq(3).find("option:selected").eq(0).text();
+        var customerNo = $("#customerNo").val()[0];
+        var productNo = $("#productNo").val()[0];
+        var value = {
+            customerNo: $("#customerNo").val()[0],
+            productNo: $("#productNo").val()[0],
+            mateiralNo: '',
+            materialName: '',
+            materialSpeci: '',
+            unit: '',
+            num: '',
+            useDeptName: '',
+            remark: '',
+            isCanUse2: '',
+            mateiralStock: '',
+            currentpage: $("#n_currentPage").val()
+        };
+
+        var set = [];
+        var materialNo;
+        var materialName;
+        var materialSpeci;
+        var unit;
+        var stockNum;
+        var isCanUse;
+        var customerNo;
+        var productNo;
+        var num;
+        var useDeptName;
+        var remark;
+        var homeyMa;
+
+        var errormessagediv = document.getElementById("errormessage");
+        var rowlen = 0;
+        var materialNoArr = [];
+
+        $("#tabletblody").find("tr").each(function () {
+            rowlen++;
+            value = {
+                customerNo: $("#customerNo").val()[0],
+                productNo: $("#productNo").val()[0],
+                mateiralNo: '',
+                materialName: '',
+                materialSpeci: '',
+                unit: '',
+                num: '',
+                useDeptName: '',
+                remark: '',
+                isCanUse2: '',
+                mateiralStock: '',
+                currentpage: $("#n_currentPage").val()
+            };
+
+            materialNo = $(this).children().eq(1).find("input").val();
+
+
+            if (typeof materialNo == "undefined") {
+                homeyMa = $(this).children().eq(1).text();
+                materialNoArr.push(Trim(homeyMa));
+                return true;
+            }
+
+            materialName = $(this).children().eq(2).find("input").val();
+            if (materialName.length == 0) {
+                materialName = $(this).children().eq(2).find("option:selected").eq(0).text();
+            }
+
+            materialSpeci = $(this).children().eq(3).find("input").eq(0).val();
+            if (materialSpeci.length == 0) {
+                materialSpeci = $(this).children().eq(3).find("option:selected").eq(0).text();
+            }
+
+            unit = $(this).children().eq(4).find("input").eq(0).val();
+            stockNum = $(this).children().eq(5).find("input").eq(0).val();
+            isCanUse = $(this).children().eq(9).find("input").eq(0).val();
+
+            num = $(this).children().eq(6).find("input").eq(0).val();
+            useDeptName = $(this).children().eq(7).find("select").eq(0).val();
+            remark = $(this).children().eq(8).find("input").eq(0).val();
+
+
+            if (Trim(materialNo).length > 0) {
+
+                materialNoArr.push(Trim(materialNo));
+
+                if (materialNo.length <= 0) {
+                    $("#errormessage").show();
+                    errormessagediv.innerHTML = "第" + rowlen + "行材料品号不能为空!";
+                    errormessagediv.style.color = "red";
+                    isFalse = false;
+                    return false;
+                }
+
+                if (materialName.length <= 0) {
+                    $("#errormessage").show();
+                    errormessagediv.innerHTML = "第" + rowlen + "行材料品名不能为空!";
+                    errormessagediv.style.color = "red";
+                    isFalse = false;
+                    return false;
+                }
+
+                if (materialSpeci.length <= 0) {
+                    $("#errormessage").show();
+                    errormessagediv.innerHTML = "第" + rowlen + "行材料规格不能为空!";
+                    errormessagediv.style.color = "red";
+                    isFalse = false;
+                    return false;
+                }
+
+                if (customerNo.length <= 0) {
+                    $("#errormessage").show();
+                    errormessagediv.innerHTML = "第" + rowlen + "行客户单号不能为空!";
+                    errormessagediv.style.color = "red";
+                    isFalse = false;
+                    return false;
+                }
+
+                if (productNo.length <= 0) {
+                    $("#errormessage").show();
+                    errormessagediv.innerHTML = "第" + rowlen + "行商品品号不能为空!";
+                    errormessagediv.style.color = "red";
+                    isFalse = false;
+                    return false;
+                }
+
+                if (Trim(num).length <= 0) {
+                    $("#errormessage").show();
+                    errormessagediv.innerHTML = "第" + rowlen + "行数量不能为空!";
+                    errormessagediv.style.color = "red";
+                    isFalse = false;
+                    return false;
+                }
+
+                if (Trim(useDeptName).length <= 0) {
+                    $("#errormessage").show();
+                    errormessagediv.innerHTML = "第" + rowlen + "行便用部门不能为空!";
+                    errormessagediv.style.color = "red";
+                    isFalse = false;
+                    return false;
+                }
+
+                value["mateiralNo"] = Trim(materialNo);
+                value["materialName"] = Trim(materialName);
+                value["materialSpeci"] = Trim(materialSpeci);
+                value["unit"] = Trim(unit);
+                value["num"] = Trim(num);
+                value["useDeptName"] = Trim(useDeptName);
+                value["remark"] = Trim(remark);
+                value["isCanUse2"] = Trim(isCanUse);
+                value["mateiralStock"] = Trim(stockNum);
+                set.push(value);
+            }
+        });
+
+        var dubArray = materialNoArr.duplicate();
+
+        if (dubArray.length > 0) {
+            $("#errormessage").show();
+            errormessagediv.innerHTML = "同一商品下不能出现重复料号:" + dubArray;
+            errormessagediv.style.color = "red";
+            isFalse = false;
+            return false;
         }
 
-        var unit = $(obj).parent().parent().find("td").eq(4).find("input").eq(0).val();
-        var stockNum = $(obj).parent().parent().find("td").eq(5).find("input").eq(0).val();
+        if (set.length == 0) {
+            $("#errormessage").show();
+            errormessagediv.innerHTML = "保存前请输入数据!";
+            errormessagediv.style.color = "red";
+            isFalse = false;
+            return false;
+        }
+
+        if (!isFalse) {
+            return isFalse;
+        }
+
+        var data = JSON.stringify(set);
+
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        $.ajax({
+            data: data,
+            type: "POST",
+            url: "/design/saveSJIHeadPDateToMysql2",
+            contentType: "application/json",//上传内容格式为json结构
+            success: function (msg) {
+                var data = eval(msg);//将msg化为数;
+                var tr = "";
+                var image01 = $("#image01");
+                var image02 = $("#image02");
+                var image03 = $("#image03");
+                var image04 = $("#image04");
+                var maxpageid = $("#maxPage");
+                var n_currentPage = $("#n_currentPage");
+                var inputpage = $("#_tp");
+                var flag;
+                image01.html("");
+                image02.html("");
+                image03.html("");
+                image04.html("");
+                var td = "";
+                var td2 = "";
+                var tbody = $("#tabletblody");
+                tbody.html("");
+                flag = data[0].flag;
+                console.log(flag);
+                if (data != null && data != "") {
+                    $("#nodatadiv").hide();
+                    $("#showdiv").show();
+                    currentPage = data[0].currentPage; //当前页
+                    totalPage = data[0].maxPage; //总多少页
+                    totaldata = data[0].recordCount; //总共多少记录
+                    pageSize = data[0].pageSize;
+                    if (flag == 1) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;添加成功!";
+                        errormessagediv.style.color = "green";
+                    } else if (flag == 5) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;材料品号已存在!";
+                        errormessagediv.style.color = "red";
+                    }else if (flag == 6) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;客户单号下的商品品名不存在!";
+                        errormessagediv.style.color = "red";
+                    }
+                    maxpageid.val(totalPage);
+                    n_currentPage.val(currentPage);
+                    inputpage.val(currentPage);
+                    $.each(data, function (num) {
+                        tr = $("<tr id='" + data[num].id + "'></tr>");
+                        tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
+                        tr.append("<td>" + isNull(data[num].mateiralNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].materialName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].materialSpeci) + "</td>");
+                        tr.append("<td>" + isNull(data[num].unit) + "</td>");
+                        tr.append("<td>" + isNull(data[num].mateiralStock) + "</td>");
+                        tr.append("<td>" + isNull(data[num].num) + "</td>");
+                        tr.append("<td>" + isNull(data[num].useDeptName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].remark) + "</td>");
+                        tr.append("<td>" + isNull(data[num].isCanUse2) + "</td>");
+                        td = "<td>";
+                        td += " <a class=\"btn btn-xs btn-primary\" \n" +
+                            "onclick=\"updateOrderItemByheadId(this,'" + data[num].id + "');\">编辑</a>\n" +
+                            "  <a class=\"btn btn-xs btn-primary\"\n" +
+                            " onclick=\"deleteOrderItemByheadId('" + data[num].id + "',1);\">删除</a> " +
+                            "</td>";
+                        tr.append(td);
+                        tr.appendTo(tbody);
+                    });
+                    $("#currentpagespan").html(currentPage);
+                    $("#maxpagespan").html(totalPage);
+                    $("#recordcountspan").html(totaldata);
+                    if (currentPage > 1) {
+                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPriPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPriPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image01.html(imange01str);
+                    } else {
+                        image01.html("");
+                    }
+                    if (currentPage <= 1) {
+                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image02.html(image02str);
+                    } else {
+                        image02.html("");
+                    }
+                    if (currentPage < totalPage) {
+                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goPriAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goPriMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image03.html(imange03str);
+                    } else {
+                        image03.html("");
+                    }
+                    if (currentPage >= totalPage) {
+                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image04.html(image04str);
+                    } else {
+                        image04.html("");
+                    }
+                } else {
+                    $("#nodatadiv").show();
+                    $("#showdiv").hide();
+                }
+
+
+                var len = $("#tabletblody > tr").length;
+                var tbody = $("#tabletblody");
+                var tr;
+                var td;
+                for (var i = 0; i < 5; i++) {
+                    tr = $("<tr id='tr" + (len + i) + "'></tr>");
+                    tr.append("<td id='tr" + (len + i) + "'>" + (len + i + 1) + "</td>");
+                    tr.append("<td style='width: 130px'><input type=\"text\" class=\"form-control\" readonly='readonly'></td>");
+                    tr.append("<td  style='width: 200px'><input  type=\"text\" class=\"form-control\" " +
+                        " onkeypress=\"return onKeyPress1(event,this)\"></td>");
+                    tr.append("<td  style='width: 200px'><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+                    tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+                    tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+                    tr.append("<td style='width: 80px'><input type=\"text\"  class=\"form-control\" ></td>");
+                    td = "<td><select id=\"name\"  class=\"selectpicker show-tick form-control\"\n" +
+                        "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+                    for (var a = 0; a < deptNameArray.length; a++) {
+                        td += "  <option  value=\"" + deptNameArray[a] + "\" >" + deptNameArray[a] + "</option>\n";
+                    }
+                    td += "  </select></td> ";
+
+                    tr.append(td);
+                    tr.append("<td><input type='text'  class=\"form-control\" placeholder='其它备注'></td>")
+                    tr.append("<td><input type='text'   class=\"form-control\" readonly='readonly'></td>")
+                    tr.append("<td><a id=\"savebutton\"\n" +
+                        "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this,0)\">保存</a>" +
+                        " <a href=\"javascript:void(0);\"\n" +
+                        "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
+                    tr.prependTo(tbody);
+                    $('.selectpicker').selectpicker('refresh');
+
+                }
+
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+
+        });
+
+
+    }
+
+
+    Array.prototype.duplicate = function () {
+        var tmp = [];
+        this.concat().sort().sort(function (a, b) {
+            if (a == b && tmp.indexOf(a) === -1) tmp.push(a);
+        });
+        return tmp;
+    }
+
+
+    function saveSJIHeadPDateToMysql(obj, id) {
+        $("#errormessage").hide();
+        var materialNo;
+        var materialName;
+        var materialSpeci;
+        var unit;
+        var stockNum;
+        var isCanUse;
+        var customerNo;
+        var productNo;
+        customerNo = $("#customerNo").val();
+        productNo = $("#productNo").val();
+        if (id == 0) {
+            materialNo = $(obj).parent().parent().find("td").eq(1).find("input").eq(0).val();
+            materialName = $(obj).parent().parent().find("td").eq(2).find("input").eq(0).val();
+            if (materialName.length == 0) {
+                materialName = $(obj).parent().parent().find("td").eq(2).find("option:selected").eq(0).text();
+            }
+            materialSpeci = $(obj).parent().parent().find("td").eq(3).find("input").eq(0).val();
+            if (materialSpeci.length == 0) {
+                materialSpeci = $(obj).parent().parent().find("td").eq(3).find("option:selected").eq(0).text();
+            }
+
+            unit = $(obj).parent().parent().find("td").eq(4).find("input").eq(0).val();
+            stockNum = $(obj).parent().parent().find("td").eq(5).find("input").eq(0).val();
+            isCanUse = $(obj).parent().parent().find("td").eq(9).find("input").eq(0).val();
+
+            if (materialName.length <= 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "材料品名不能为空!";
+                errormessagediv.style.color = "red";
+                return false;
+            }
+
+            if (materialNo.length <= 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "材料品号不能为空!";
+                errormessagediv.style.color = "red";
+                return false;
+            }
+
+            if (materialSpeci.length <= 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "材料规格不能为空!";
+                errormessagediv.style.color = "red";
+                return false;
+            }
+
+            if (customerNo.length <= 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "客户单号不能为空!";
+                errormessagediv.style.color = "red";
+                return false;
+            }
+
+            if (productNo.length <= 0) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "商品品号不能为空!";
+                errormessagediv.style.color = "red";
+                return false;
+            }
+
+        } else {
+            materialNo = $(obj).parent().parent().find("td").eq(1).text();
+        }
+
         var num = $(obj).parent().parent().find("td").eq(6).find("input").eq(0).val();
-        var useDeptName = $(obj).parent().parent().find("td").eq(7).find("input").eq(0).val();
+        var useDeptName = $(obj).parent().parent().find("td").eq(7).find("select").eq(0).val();
         var remark = $(obj).parent().parent().find("td").eq(8).find("input").eq(0).val();
-        var isCanUse = $(obj).parent().parent().find("td").eq(9).find("input").eq(0).val();
 
-        if (materialName.length <= 0) {
-            $("#errormessage").show();
-            var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "材料品名不能为空!";
-            errormessagediv.style.color = "red";
-            return false;
-        }
-
-        if (materialNo.length <= 0) {
-            $("#errormessage").show();
-            var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "材料品号不能为空!";
-            errormessagediv.style.color = "red";
-            return false;
-        }
-
-        if (materialSpeci.length <= 0) {
-            $("#errormessage").show();
-            var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "材料规格不能为空!";
-            errormessagediv.style.color = "red";
-            return false;
-        }
 
         if (Trim(num).length <= 0) {
             $("#errormessage").show();
@@ -595,37 +1083,220 @@
             return false;
         }
 
-        var customerNo = $("#customerNo").val();
-        if(customerNo.length <= 0) {
-            $("#errormessage").show();
-            var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "客户单号不能为空!";
-            errormessagediv.style.color = "red";
-            return false;
+
+        var jsonarray = {
+            "customerNo": customerNo[0],
+            "productNo": productNo[0],
+            "mateiralNo": materialNo,
+            "materialName": materialName,
+            "materialSpeci": materialSpeci,
+            "unit": unit,
+            "num": num,
+            "useDeptName": useDeptName,
+            "remark": remark,
+            "isCanUse2": isCanUse,
+            "mateiralStock": stockNum,
+            "currentpage": $("#n_currentPage").val(),
+            "id": id
+        };
+
+        console.log(jsonarray)
+        var data = JSON.stringify(jsonarray);
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        $.ajax({
+            data: data,
+            type: "POST",
+            url: "/design/saveSJIHeadPDateToMysql",
+            contentType: "application/json",//上传内容格式为json结构
+            success: function (msg) {
+                var data = eval(msg);//将msg化为数;
+                var tr = "";
+                var image01 = $("#image01");
+                var image02 = $("#image02");
+                var image03 = $("#image03");
+                var image04 = $("#image04");
+                var maxpageid = $("#maxPage");
+                var n_currentPage = $("#n_currentPage");
+                var inputpage = $("#_tp");
+                var flag;
+                image01.html("");
+                image02.html("");
+                image03.html("");
+                image04.html("");
+                var td = "";
+                var td2 = "";
+                var tbody = $("#tabletblody");
+                tbody.html("");
+                flag = data[0].flag;
+                console.log(flag)
+                if (data != null && data != "") {
+                    $("#nodatadiv").hide();
+                    $("#showdiv").show();
+                    currentPage = data[0].currentPage; //当前页
+                    totalPage = data[0].maxPage; //总多少页
+                    totaldata = data[0].recordCount; //总共多少记录
+                    pageSize = data[0].pageSize;
+                    if (flag == 1) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;添加成功!";
+                        errormessagediv.style.color = "green";
+                    } else if (flag == 5) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;材料品号已存在!";
+                        errormessagediv.style.color = "red";
+                    }else if (flag == 6) {
+                        $("#errormessage").show();
+                        var errormessagediv = document.getElementById("errormessage");
+                        errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;保存无效,客户单号下的商品品名不存在!";
+                        errormessagediv.style.color = "red";
+                    }
+                    maxpageid.val(totalPage);
+                    n_currentPage.val(currentPage);
+                    inputpage.val(currentPage);
+                    $.each(data, function (num) {
+                        tr = $("<tr id='" + data[num].id + "'></tr>");
+                        tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
+                        tr.append("<td>" + isNull(data[num].mateiralNo) + "</td>");
+                        tr.append("<td>" + isNull(data[num].materialName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].materialSpeci) + "</td>");
+                        tr.append("<td>" + isNull(data[num].unit) + "</td>");
+                        tr.append("<td>" + isNull(data[num].mateiralStock) + "</td>");
+                        tr.append("<td>" + isNull(data[num].num) + "</td>");
+                        tr.append("<td>" + isNull(data[num].useDeptName) + "</td>");
+                        tr.append("<td>" + isNull(data[num].remark) + "</td>");
+                        tr.append("<td>" + isNull(data[num].isCanUse2) + "</td>");
+                        td = "<td>";
+                        td += " <a class=\"btn btn-xs btn-primary\" \n" +
+                            "onclick=\"updateOrderItemByheadId(this,'" + data[num].id + "');\">编辑</a>\n" +
+                            "  <a class=\"btn btn-xs btn-primary\"\n" +
+                            " onclick=\"deleteOrderItemByheadId('" + data[num].id + "',1);\">删除</a> " +
+                            "</td>";
+                        tr.append(td);
+                        tr.appendTo(tbody);
+                    });
+                    $("#currentpagespan").html(currentPage);
+                    $("#maxpagespan").html(totalPage);
+                    $("#recordcountspan").html(totaldata);
+                    if (currentPage > 1) {
+                        var imange01str = '<img src="/images/page/sy-2.jpg"  onClick="goPriPageone()"  align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange01str += '<img src="/images/page/syy-2.jpg" onClick="goPriPrePage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image01.html(imange01str);
+                    } else {
+                        image01.html("");
+                    }
+                    if (currentPage <= 1) {
+                        var image02str = '<img src="/images/page/l-sy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image02str += ' <img src="/images/page/l-syy-2.jpg" align="middle" border="0px"';
+                        image02str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image02.html(image02str);
+                    } else {
+                        image02.html("");
+                    }
+                    if (currentPage < totalPage) {
+                        var imange03str = '<img src="/images/page/xyy-2.jpg" onClick="goPriAftPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/> </a>';
+                        imange03str += '<img src="/images/page/my-2.jpg" onClick="goPriMaxPage()" align="middle" border="0" style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp; </a>';
+                        image03.html(imange03str);
+                    } else {
+                        image03.html("");
+                    }
+                    if (currentPage >= totalPage) {
+                        var image04str = '<img src="/images/page/l-xyy-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>';
+                        image04str += ' <img src="/images/page/l-my-1.jpg" align="middle" border="0px"';
+                        image04str += ' style="width: 20px; height: 20px; vertical-align: middle"/>&nbsp;&nbsp;';
+                        image04.html(image04str);
+                    } else {
+                        image04.html("");
+                    }
+                } else {
+                    $("#nodatadiv").show();
+                    $("#showdiv").hide();
+                }
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+
+                var len = $("#tabletblody > tr").length;
+                var tbody = $("#tabletblody");
+                var tr;
+                var td;
+                for (var i = 0; i < 5; i++) {
+                    tr = $("<tr id='tr" + (len + i) + "'></tr>");
+                    tr.append("<td id='tr" + (len + i) + "'>" + (len + i + 1) + "</td>");
+                    tr.append("<td style='width: 130px'><input type=\"text\" class=\"form-control\" readonly='readonly'></td>");
+                    tr.append("<td  style='width: 200px'><input  type=\"text\" class=\"form-control\" " +
+                        " onkeypress=\"return onKeyPress1(event,this)\"></td>");
+                    tr.append("<td  style='width: 200px'><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+                    tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+                    tr.append("<td><input type=\"text\"  class=\"form-control\"  readonly='readonly'></td>");
+                    tr.append("<td style='width: 80px'><input type=\"text\"  class=\"form-control\" ></td>");
+                    td = "<td><select id=\"name\"  class=\"selectpicker show-tick form-control\"\n" +
+                        "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+                    for (var a = 0; a < deptNameArray.length; a++) {
+                        td += "  <option  value=\"" + deptNameArray[a] + "\" >" + deptNameArray[a] + "</option>\n";
+                    }
+                    td += "  </select></td> ";
+
+                    tr.append(td);
+                    tr.append("<td><input type='text'  class=\"form-control\" placeholder='其它备注'></td>")
+                    tr.append("<td><input type='text'   class=\"form-control\" readonly='readonly'></td>")
+                    tr.append("<td><a id=\"savebutton\"\n" +
+                        "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this,0)\">保存</a>" +
+                        " <a href=\"javascript:void(0);\"\n" +
+                        "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
+                    tr.prependTo(tbody);
+                    $('.selectpicker').selectpicker('refresh');
+
+                }
+
+
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+
+        });
+
+
+    }
+
+
+    function updateOrderItemByheadId(obj, id) {
+        var num = $(obj).parent().parent().find("td").eq(6).text();
+        var useDeptName = $(obj).parent().parent().find("td").eq(7).text();
+        var remark = $(obj).parent().parent().find("td").eq(8).text();
+
+
+        $(obj).parent().parent().find("td").eq(6).html("<input type=\"text\"  value='" + num + "' class=\"form-control\">")
+
+
+        var td = "<select id=\"name\"  class=\"selectpicker show-tick form-control\"\n" +
+            "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+        for (var a = 0; a < deptNameArray.length; a++) {
+            if (useDeptName.indexOf(deptNameArray[a]) != -1) {
+                td += "  <option selected='selected' value=\"" + deptNameArray[a] + "\" >" + deptNameArray[a] + "</option>\n";
+            } else {
+                td += "  <option value=\"" + deptNameArray[a] + "\">" + deptNameArray[a] + "</option>\n";
+            }
         }
+        td += "  </select> ";
 
-        var productNo = $("#productNo").val();
-        if(productNo.length <= 0) {
-            $("#errormessage").show();
-            var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "商品品号不能为空!";
-            errormessagediv.style.color = "red";
-            return false;
-        }
 
-        window.location.href = "/design/saveSJIHeadPDateToMysql?" +
-            "customerNo=" + customerNo +
-            "&productNo=" + productNo +
-            "&mateiralNo=" + materialNo +
-            "&materialName=" + materialName +
-            "&materialSpeci=" + materialSpeci +
-            "&unit=" + unit +
-            "&num=" + num +
-            "&useDeptName=" + useDeptName +
-            "&remark=" + remark +
-            "&isCanUse2=" + isCanUse +
-            "&mateiralStock=" + stockNum;
+        $(obj).parent().parent().find("td").eq(7).html(td);
 
+
+        $(obj).parent().parent().find("td").eq(8).html("<input type=\"text\"  value='" + remark + "' class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(10).html("<a id=\"savebutton\"\n" +
+            "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this,'" + id + "')\">保存</a>" +
+            " <a href=\"javascript:void(0);\"\n" +
+            "    onclick=\"deleteTRA(this," + len + "," + id + ");\">删除</a>");
+
+        $('.selectpicker').selectpicker('refresh');
 
     }
 
@@ -655,6 +1326,8 @@
             <form>
                 <input type="hidden" id="flag" th:value="${flag}">
                 <input type="hidden" id="maxPage" th:value="${orderHead.maxPage}">
+                <input type="hidden" id="customerNo2" th:value="${customerNo}">
+                <input type="hidden" id="productNo2" th:value="${productNo}">
                 <input type="hidden" id="n_currentPage" name="view.currentPage" th:value="${orderHead.currentPage}"/>
                 <input type="hidden" id="salorEmpListA" th:value="${salorEmpListA}">
 
@@ -679,7 +1352,7 @@
                                     </label>
                                 </td>
 
-                                <td>
+                                <td style="text-align: right">
                                     <label>材料品号：</label>
                                 </td>
                                 <td>
@@ -694,7 +1367,7 @@
                                     </label>
                                 </td>
 
-                                <td>
+                                <td style="text-align: right">
                                     <label>规格：</label>
                                 </td>
                                 <td>
@@ -742,15 +1415,19 @@
                                     </label>
                                 </td>
 
-                                <td style="text-align: right">
+                                <td style="text-align: left" colspan="2">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-primary"
-                                       href="javascript:void(0);" onclick="queryOrderHeadProductByCondition()">查找</a>
+                                       href="javascript:void(0);"
+                                       onclick="queryOrderHeadProductItemByCondition()">查找</a>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-primary"
                                        href="javascript:void(0);" onclick="addSJIProdctHead()">新增</a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a class="btn btn-primary"
+                                       href="javascript:void(0);" onclick="saveSJIProdctHead()">保存</a>
                                 </td>
-                                <td colspan="3">
+                                <td>
                                     <div style="display: none" id="errormessage">
 
                                     </div>
@@ -764,7 +1441,7 @@
                 <thead style="background-color:lightsteelblue">
                 <tr>
                     <th style="text-align: center"> 序号</th>
-                    <th style="text-align: center">
+                    <th style="text-align: center; ">
                         <i class="fa fa-sort-asc" onclick="sortByAsc('mateiralNo')" aria-hidden="true"></i>
                         材料品号
                         <i class="fa fa-sort-desc" onclick="sortByDesc('mateiralNo')" aria-hidden="true"></i>
@@ -836,11 +1513,9 @@
                             <td align="center" th:text="${order.isCanUse2}"></td>
                             <td align="center">
                                 <a class="btn btn-xs btn-primary"
-                                   th:onclick="updateOrderItemByheadId([[${order.id}]]);">编辑</a>
+                                   th:onclick="updateOrderItemByheadId(this,[[${order.id}]]);">编辑</a>
                                 <a class="btn btn-xs btn-primary"
                                    th:onclick="deleteOrderItemByheadId([[${order.id}]],1);">删除</a>
-                                <a class="btn btn-xs btn-primary"
-                                   th:onclick="transferDataToPDFFile([[${order.id}]]);">PDF打印</a>
                             </td>
                         </tr>
                     </div>

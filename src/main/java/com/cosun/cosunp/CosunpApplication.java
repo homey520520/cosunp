@@ -46,7 +46,7 @@ public class CosunpApplication extends SpringBootServletInitializer {
             public void run(String... args) throws Exception {
 //                fileUploadAndDownServ.deleteAll();
 //                fileUploadAndDownServ.init();
-                //new AccessTokenServlet().init();
+                new AccessTokenServlet().init();
 
                 // wx16c9442a4b26e6ea
                 //36e571b957c3705964b4398019482dde
@@ -65,24 +65,137 @@ public class CosunpApplication extends SpringBootServletInitializer {
 }
 
 
+//   文件管理平台交付说明
 //
-//   被管理者感想
+//        系统名称:文件管理平台
+//        使用部门:设计部
+//        程序目地：程序化管理设计图纸。
+//        程序开发时间起：2018年12月
+//        程序完成时间:2019年3月
+//        程序使用载体:浏览器
+//        程序功能说明:
+//        1.上传
+//        文件/文件夹上传
+//        帐号初始化时时任何部门任何人都有上传权限
+//
+//        2.更新
+//        文件/文件夹更新
+//        何人更新何文件需有更新权限
+//        更新与上传的文件需为同一帐号
+//
+//        3.下载
+//        文件/文件夹下载
+//        何人下载何文件需有下载权限
+//
+//        4.删除
+//        文件/文件夹删除
+//        何人删除何文件需有删除权限
+//
+//        5.查找
+//        文件查找
+//        任何人对任何文件都可进行在线查看
+//
+//        6.管理
+//        更新/下载/删除权限的分配
+//        经理级以上
+//
+//        流程说明:
+//        1.每日上传已做好的图纸。
+//        2.如若图纸发生变化可在更新页面进行更新操作。
+//        3.如若图纸需踢除可在删除页面进行删除操作。
+//        4.管理员/经理可对图纸的权限进行分配，即何人对何文件有何权限。
 //
 //
-//     这么多年，我一直是被管理者，首先，对于我一直是名被管理的身份，略感羞意，毕竟，成为领导是各方面能力优秀的体现，我好像
-// 差了点什么。不过正因为这么多年专职于被管理者，我觉得，我能代表诸多被管理者发言。
-//     算下来，柯赛应该是我从业的第五家公司，我初来柯赛时，不知是多年没工作原因，还是其它，我初次对柯赛的感觉是严谨，
-// 而这严谨，步步为营的态度，首先来自于我们的钟总。钟总确实是在我这么多年的打工生涯中，所见到过的最严厉，用心，用力的
-// 老板，我个人觉得这对于企业的生存是极好的。
-//     我见过柯赛的众多领导。
-//     或是神定气闲冷静自若，这方面的代表比如品质黄经理，又或是气势汹汹风急火热，这方面的代表就不说了。又或是一视同仁体恤手下
-// ，这方面的代表比如亚克力钟主管，或者是区别对待只顾自己的利益，这方面的代表我也就不说了。
-//     我个人比较欣赏亚克力钟主管。
-//     我虽不是钟主管的属下，但是看到他对属下那细致关怀，加上平时对他的稍观察，他确认就是我心目中领导的样子。
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//        研发中心软件部                                  人事部门
+//        交付人:                                         接收人:
+
+//#!/bin/sh
+//        # chkconfig: 2345 10 90
+//        # description: Start and Stop redis
+// cp -r /usr/local/redis/redis-server /usr/bin/redis-server
+//        REDISPORT=6379
+//        EXEC=/usr/local/redis/redis-server
+//        CLIEXEC=/usr/local/redis/redis-cli
+//
+//        PIDFILE=/opt/mysrv/var/redis/run/redis_${REDISPORT}.pid
+//        CONF="/opt/mysrv/etc/redis/redis.conf"
+//
+//        case "$1" in
+//        start)
+//        if [ -f $PIDFILE ]
+//        then
+//        echo "$PIDFILE exists, process is already running or crashed"
+//        else
+//        echo "Starting Redis server..."
+//        $EXEC $CONF &
+//        fi
+//        ;;
+//        stop)
+//        if [ ! -f $PIDFILE ]
+//        then
+//        echo "$PIDFILE does not exist, process is not running"
+//        else
+//        PID=$(cat $PIDFILE)
+//        echo "Stopping ..."
+//        $CLIEXEC -p $REDISPORT shutdown
+//        while [ -x /proc/${PID} ]
+//        do
+//        echo "Waiting for Redis to shutdown ..."
+//        sleep 1
+//        done
+//        echo "Redis stopped"
+//        fi
+//        ;;
+//        restart)
+//        "$0" stop
+//        sleep 3
+//        "$0" start
+//        ;;
+//        *)
+//        echo "Please use start or stop or restart as first argument"
+//        ;;
+//        esac
+
+//
+//
+//    养一盆花
+//    松土浇水
+//    等花开满枝
+//
+//    读一本诗
+//    感受那采菊东篱下的
+//    淡然心境
+//
+//    种几亩薄田
+//    撒下春的希望
+//    收获秋的喜悦
+//
+//    持一蒲扇
+//    扇来春风得意
+//    扇走一身忧愁
+//
+//    握一杆钓
+//    在风清云淡中
+//    等鱼儿上钩
+//
+//    做一桌美味的佳肴
+//    与亲朋好友
+//    谈笑风声
+//
+//    在名利淡泊中看清
+//    在生活体验中懂得
+//    让我们把日子
+//    过成诗
 //
 //
 // https://i.zhaopin.com/resume

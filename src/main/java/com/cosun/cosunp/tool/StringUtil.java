@@ -20,6 +20,13 @@ import java.util.regex.Pattern;
 public class StringUtil {
 
 
+    public static String nulltoempty(String a) throws Exception {
+        if (a == null || a.trim().length() <= 0) {
+            return "";
+        }
+        return a;
+    }
+
     public static Map<String, List<String>> compareEmpNOs(String[] oldEmpNos, String[] newEmpNos) throws Exception {
         List<String> newList = new ArrayList<String>();
         List<String> oldList = new ArrayList<String>();

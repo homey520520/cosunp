@@ -7,9 +7,11 @@ import com.cosun.cosunp.entity.Employee;
 import com.cosun.cosunp.mapper.DesignMapper;
 import com.cosun.cosunp.mapper.ProjectMapper;
 import com.cosun.cosunp.service.IDesignServ;
+import com.cosun.cosunp.tool.WordToPDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,8 @@ public class DesignServiceImpl implements IDesignServ {
     @Autowired
     DesignMapper designMapper;
 
+    @Value("${spring.servlet.multipart.location}")
+    private String finalDirPath;
 
     public List<String> getAllmaterialSpeciList() throws Exception {
         return designMapper.getAllmaterialSpeciList();
@@ -46,12 +50,35 @@ public class DesignServiceImpl implements IDesignServ {
     }
 
     public List<DesignMaterialHeadProductItem> getAllDMHPI(DesignMaterialHeadProductItem orderHead) throws Exception {
+        if (orderHead != null && orderHead.getHead_product_id() != null) {
+            return designMapper.getAllDMHPIButId(orderHead);
+        }
         return designMapper.getAllDMHPI(orderHead);
+    }
+
+    public int getAllDMHPICount(DesignMaterialHeadProductItem orderHead) throws Exception {
+        if (orderHead != null && orderHead.getHead_product_id() != null) {
+            return designMapper.getAllDMHPIButIdCount(orderHead.getHead_product_id());
+        }
+        return designMapper.getAllDMHPICount();
+    }
+
+    public DesignMaterialHeadProductItem getCustomerNameAndProductNoByHeadId(Integer headId) throws Exception {
+        return designMapper.getCustomerNameAndProductNoByHeadId(headId);
+    }
+
+    public DesignMaterialHead getHeadIdandInfoById(Integer id) throws Exception {
+        DesignMaterialHead head = designMapper.getHeadIdandInfoById(id);
+        List<DesignMaterialHeadProduct> headProduct = designMapper.getHeadIdProductById(id);
+        List<DesignMaterialHeadProductItem> headProductItemList = designMapper.getHeadIdProductItemById(id);
+        head.setProductList(headProduct);
+        head.setProductItemList(headProductItemList);
+        return head;
 
     }
 
-    public int getAllDMHPICount() throws Exception {
-        return designMapper.getAllDMHPICount();
+    public DesignMaterialHeadProductItem getCustomerNameAndProductNoByHeadId2(Integer headId) throws Exception {
+        return designMapper.getCustomerNameAndProductNoByHeadId2(headId);
     }
 
     public List<Employee> getSalor() throws Exception {
@@ -64,6 +91,13 @@ public class DesignServiceImpl implements IDesignServ {
 
     public List<String> getAllOrderNo() throws Exception {
         return designMapper.getAllOrderNo();
+    }
+
+    public String transferExcelToPDF(String excelUrlName) throws Exception {
+        int index = excelUrlName.lastIndexOf(".");
+        String centerName = excelUrlName.substring(0, index);
+        WordToPDF.WordToPDFOrder(excelUrlName, centerName.concat(".pdf"), finalDirPath);
+        return finalDirPath + "linshi/" + centerName.concat(".pdf");
     }
 
     public List<String> getAllOrderArea() throws Exception {
@@ -117,21 +151,72 @@ public class DesignServiceImpl implements IDesignServ {
     }
 
     public int saveSJIHeadPDateToMysql(DesignMaterialHeadProductItem item) throws Exception {
-        int isExsit = designMapper.getSJIHeadByOrderNo(item.getCustomerNo(), item.getProductNo(), item.getMateiralNo());
-        if (isExsit == 0) {
-            int head_id = designMapper.getHeadIdByCustomerNoAndMaterialNo(item.getCustomerNo(), item.getProductNo());
-            item.setHead_product_id(head_id);
-            designMapper.saveSJIHeadDateToMysql(item);
-            isExsit = 1;
+        if (item.getId() != null && item.getId() != 0) {
+            int head_id = designMapper.getHeadIdByMaterialNoAndId(item.getId());
+            int isExsit = designMapper.getSJIHeadByOrderNoButId(item.getMateiralNo(), item.getId(), item.getHead_product_id());
+            if (isExsit == 0) {
+                item.setHead_product_id(head_id);
+                designMapper.updateSJIHeadDateToMysql(item);
+                isExsit = 3;
+            } else {
+                isExsit = 5;
+            }
+            return isExsit;
         } else {
-            isExsit = 5;
+            int isExsit = designMapper.getSJIHeadByOrderNo(item.getCustomerNo(), item.getProductNo(), item.getMateiralNo());
+            if (isExsit == 0) {
+                Integer head_id = designMapper.getHeadIdByCustomerNoAndMaterialNo(item.getCustomerNo(), item.getProductNo());
+                if(head_id==null) {
+                    isExsit = 6;
+                    return isExsit;
+                }
+                item.setHead_product_id(head_id);
+                designMapper.saveSJIHeadDateToMysql(item);
+                isExsit = 1;
+            } else {
+                isExsit = 5;
+            }
+            return isExsit;
+        }
+    }
+
+
+    public int saveSJIListHeadPDateToMysql(List<DesignMaterialHeadProductItem> itemList) throws Exception {
+        int isExsit =0;
+        DesignMaterialHeadProductItem item;
+        Integer head_id = designMapper.getHeadIdByCustomerNoAndMaterialNo(itemList.get(0).getCustomerNo(), itemList.get(0).getProductNo());
+        if(head_id==null) {
+            isExsit = 6;
+            return isExsit;
+        }
+        for (int i = 0; i < itemList.size(); i++) {
+            item = itemList.get(i);
+            isExsit = designMapper.getSJIHeadByOrderNo(item.getCustomerNo(), item.getProductNo(), item.getMateiralNo());
+            if (isExsit == 0) {
+                item.setHead_product_id(head_id);
+                designMapper.saveSJIHeadDateToMysql(item);
+                isExsit = 1;
+            } else {
+                isExsit = 5;
+                throw new SecurityException();
+            }
         }
         return isExsit;
     }
 
+
     public List<DesignMaterialHeadProductItem> getAllDMHIPByCustomerNo(DesignMaterialHeadProductItem item) throws Exception {
         //return designMapper.getAllDMHIPByCustomerNo(item);
         return null;
+    }
+
+
+    public List<DesignMaterialHeadProductItem> queryOrderHeadProductItemByCondition(DesignMaterialHeadProductItem item) throws Exception {
+        return designMapper.queryOrderHeadProductItemByCondition(item);
+    }
+
+    public int queryOrderHeadProductItemByConditionCount(DesignMaterialHeadProductItem item) throws Exception {
+        return designMapper.queryOrderHeadProductItemByConditionCount(item);
     }
 
     public int getAllDMHIPByCustomerNoCount(DesignMaterialHeadProductItem item) throws Exception {
@@ -140,17 +225,21 @@ public class DesignServiceImpl implements IDesignServ {
     }
 
     public List<DesignMaterialHeadProduct> getAllDMHP(DesignMaterialHeadProduct orderHead) throws Exception {
-       if(orderHead!=null && orderHead.getCustomerNo()!=null) {
-           return designMapper.getAllDMHP2(orderHead);
-       }else{
-           return designMapper.getAllDMHP(orderHead);
+        if (orderHead != null && orderHead.getCustomerNo() != null) {
+            return designMapper.getAllDMHP2(orderHead);
+        } else {
+            return designMapper.getAllDMHP(orderHead);
         }
     }
 
+    public void deleteOrderItemByheadIdItem(Integer id) throws Exception {
+        designMapper.deleteOrderItemByheadIdItem(id);
+    }
+
     public int getAllDMHPCount(DesignMaterialHeadProduct orderHead) throws Exception {
-        if(orderHead!=null && orderHead.getCustomerNo()!=null) {
+        if (orderHead != null && orderHead.getCustomerNo() != null) {
             return designMapper.getAllDMHPCount2(orderHead);
-        }else{
+        } else {
             return designMapper.getAllDMHPCount();
         }
     }
@@ -176,7 +265,7 @@ public class DesignServiceImpl implements IDesignServ {
     }
 
     public int saveSJHeadPDateToMysql(DesignMaterialHeadProduct pmhp) throws Exception {
-        if(pmhp.getId() == 0) {
+        if (pmhp.getId() == 0) {
             Integer isExsit = designMapper.getSJHeadByProductNo(pmhp.getProductNo(), pmhp.getCustomerNo());
             if (isExsit == null || isExsit == 0) {
                 Integer head_Id = designMapper.getHeadIdByCustomerNo(pmhp.getCustomerNo());
@@ -184,11 +273,11 @@ public class DesignServiceImpl implements IDesignServ {
                 designMapper.saveSJHeadPDateToMysql(pmhp);
                 isExsit = 1;
             } else {
-                 isExsit = 5;
+                isExsit = 5;
             }
             return isExsit;
-        }else {
-            Integer isExsit = designMapper.getSJHeadByProductNoButId(pmhp.getProductNo(), pmhp.getCustomerNo(),pmhp.getId());
+        } else {
+            Integer isExsit = designMapper.getSJHeadByProductNoButId(pmhp.getProductNo(), pmhp.getCustomerNo(), pmhp.getId());
             if (isExsit == null || isExsit == 0) {
                 Integer head_Id = designMapper.getHeadIdByCustomerNo(pmhp.getCustomerNo());
                 pmhp.setHead_id(head_Id);
@@ -202,11 +291,18 @@ public class DesignServiceImpl implements IDesignServ {
     }
 
     public List<DesignMaterialHeadProduct> getAllDMHPByCustomerNo(DesignMaterialHeadProduct pmhp) throws Exception {
-        return designMapper.getAllDMHPByCustomerNo(pmhp);
+        if (pmhp.getCustomerNo().trim().length() > 0) {
+            return designMapper.getAllDMHPByCustomerNo(pmhp);
+        }
+        return designMapper.getAllDMHP(pmhp);
     }
 
-    public int getAllDMHPByCustomerNoCount(DesignMaterialHeadProduct dmhp) throws Exception {
-        return designMapper.getAllDMHPByCustomerNoCountCount(dmhp);
+    public int getAllDMHPByCustomerNoCount(DesignMaterialHeadProduct pmhp) throws Exception {
+        if (pmhp.getCustomerNo().trim().length() > 0) {
+            return designMapper.getAllDMHPByCustomerNoCountCount(pmhp);
+        }
+        return designMapper.getAllDMHPCount();
+
     }
 
 

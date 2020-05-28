@@ -39,10 +39,29 @@ public class DesignMaterialHead implements Serializable {
     private String sortMethod;
     private String sortByName;
 
-    List<String> customerNoList;
-    List<String> orderAreaList;
-    List<String> salorEmpList;
-    List<String> makerList;
+    private List<String> customerNoList;
+    private List<String> orderAreaList;
+    private List<String> salorEmpList;
+    private List<String> makerList;
+
+    private List<DesignMaterialHeadProduct> productList;
+    private List<DesignMaterialHeadProductItem> productItemList;
+
+    public List<DesignMaterialHeadProductItem> getProductItemList() {
+        return productItemList;
+    }
+
+    public void setProductItemList(List<DesignMaterialHeadProductItem> productItemList) {
+        this.productItemList = productItemList;
+    }
+
+    public List<DesignMaterialHeadProduct> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<DesignMaterialHeadProduct> productList) {
+        this.productList = productList;
+    }
 
     public List<String> getCustomerNoList() {
         return customerNoList;

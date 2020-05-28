@@ -30,7 +30,41 @@ public class Test {
     public static void main(String[] arg) {
 
         try {
-            //https://www.cnblogs.com/jsll/p/11610966.html  接口与抽象类
+//            var Af = {};
+//            Af.getTableData = function(container){
+//                let tripleArray = []; //--->得到的数据为三维数组
+//                $('#OrderModelList').each(function (index) {
+//                    let table = [];
+//                    $(container).find('tr').each(function () {
+//                        let row = [];
+//                        $(this).find('th,td').each(function () {
+//                            /*如果td里有input则获取td里input的值*/
+//                            if($(this).find("input").length>0)
+//                            {
+//                                let thisInputVal = $(this).find("input").val();
+//                                row.push(thisInputVal);
+//                            }
+//                            else
+//                            {
+//                                row.push($(this).text().trim());
+//                            }
+//                        });
+//                        table.push(row);
+//                    });
+//                    tripleArray.push(table);
+//                });
+//                let finalDoubleArray = tripleArray[0]; //--->得到二维数组
+//                /*去除数组中的中文*/
+//                let i = finalDoubleArray.length;
+//                while (i--) {
+//                    let thisVal = finalDoubleArray[i][0];
+//                    if (Af.chineseStatus(thisVal)) {
+//                        finalDoubleArray.splice(i, 1);
+//                    }
+//                }
+//                return finalDoubleArray;
+//            };
+
         } catch (Exception e) {
             e.printStackTrace();
         }

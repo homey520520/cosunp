@@ -43,7 +43,7 @@ import static com.cosun.cosunp.tool.StringUtil.subAfterString;
  * @Modified-date:2018/12/20 0020 下午 6:37
  */
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(value="test1TransactionManager",rollbackFor = Exception.class)
 public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
 
     private static Logger logger = LogManager.getLogger(FileUploadAndDownServiceImpl.class);
@@ -70,7 +70,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
         this.rootPaht = Paths.get(location);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveOrUpdateFilePrivilege(List<DownloadView> views, List<String> privilegeusers, UserInfo in) throws Exception {
         try {
@@ -931,20 +930,17 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<FilemanUrl> findAllUrlByOrderNo(String orderNo) throws Exception {
         return fileUploadAndDownMapper.findAllUrlByOrderNo(orderNo);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public FilemanRight getFileRightByUrlIdAndFileInfoIdAnaUid(Integer urlId, Integer fileInfoId, Integer uId) throws
             Exception {
         return fileUploadAndDownMapper.getFileRightByUrlIdAndFileInfoIdAnaUid(urlId, fileInfoId, uId);
     }
 
     @Override
-    @Transactional
     public FilemanRight getFileRightByUrlIdAndFileInfoIdAnaUidBack(Integer urlId, Integer fileInfoId, Integer uId) throws Exception {
         FilemanRight right = fileUploadAndDownMapper.getFileRightByUrlIdAndFileInfoIdAnaUid(urlId, fileInfoId, uId);
         if (right == null) {
@@ -954,57 +950,48 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<String> findAllUrlByOrderNo2(String orderNo) throws Exception {
         return fileUploadAndDownMapper.findAllUrlByOrderNo2(orderNo);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<DownloadView> findAllUploadFileByParaCondition(DownloadView view) throws Exception {
         return fileUploadAndDownMapper.findAllUploadFileByParaCondition(view);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<DownloadView> findAllFileUrlByCondition(Integer uid, int currentPageTotalNum, int PageSize) throws
             Exception {
         return fileUploadAndDownMapper.findAllFileUrlByCondition(uid, currentPageTotalNum, PageSize);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<String> findAllUrlByParamThree(DownloadView view) throws Exception {
         return fileUploadAndDownMapper.findAllUrlByParamThree(view);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<String> findAllUrlByParamThreeNew(DownloadView view) throws Exception {
         return fileUploadAndDownMapper.findAllUrlByParamThreeNew(view);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int findAllUploadFileCountByParaCondition(DownloadView view) throws Exception {
         return fileUploadAndDownMapper.findAllUploadFileCountByParaCondition(view);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<DownloadView> findAllFilesByCondParam(DownloadView view) throws Exception {
         return fileUploadAndDownMapper.findAllFilesByCondParam(view);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int findAllFilesByCondParamCount(DownloadView view) throws Exception {
         return fileUploadAndDownMapper.findAllFilesByCondParamCount(view);
     }
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public FileManFileInfo getFileInfoByOrderNo(String orderNo) throws Exception {
         return fileUploadAndDownMapper.getFileInfoByOrderNo(orderNo);
     }
@@ -1018,7 +1005,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @describtion
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public FolderUpdateList checkFileisSame(DownloadView view, UserInfo userInfo, String filePathName) throws Exception {
         filePathName = filePathName.replace("*", ",");
         FolderUpdateList ful = new FolderUpdateList();
@@ -1056,7 +1042,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String checkFileisSame1(DownloadView view, UserInfo userInfo, String filePathName) throws Exception {
         filePathName = filePathName.replace("*", ",");
         String[] names = null;
@@ -1094,7 +1079,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public FolderUpdateList isSameFolderNameorFileNameMethod(UserInfo userInfo, DownloadView view, String folderPathName) throws Exception {
         folderPathName = folderPathName.replace("*", ",");
         FolderUpdateList ful = new FolderUpdateList();
@@ -1295,22 +1279,18 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public List<String> findAllOrderNum(int currentPageTotalNum, int pageSize) throws Exception {
         return fileUploadAndDownMapper.findAllOrderNum(currentPageTotalNum, pageSize);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public int findAllOrderNumCount() throws Exception {
         return fileUploadAndDownMapper.findAllOrderNumCount();
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public List<DownloadView> findAllUrlByParamManyOrNo(DownloadView view) throws Exception {
         return fileUploadAndDownMapper.findAllUrlByParamManyOrNo(view);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public int findAllUrlByParamManyOrNoCount(DownloadView view) throws Exception {
         return fileUploadAndDownMapper.findAllUrlByParamManyOrNoCount(view);
     }
@@ -1320,7 +1300,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
     public int findAllUrlByParamThreeNew2Count(DownloadView view) throws Exception {
         String linshiId = view.getLinshiId();
         if (linshiId == null || linshiId.trim().length() <= 0) {
@@ -1331,7 +1310,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
         return fileUploadAndDownMapper.findAllUrlByParamThreeNew2Count(view);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public DownloadView findMessageByOrderNoandUid(String orderNo, String linshiId) throws Exception {
         Integer uId = 0;
         if (linshiId == null || linshiId.trim().length() <= 0) {
@@ -1342,7 +1320,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
         return fileUploadAndDownMapper.findMessageByOrderNoandUid(orderNo, uId);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public List<FilemanUrl> findAllUrlByOrderNoAndUid(String orderNo, String linshiId) throws Exception {
         Integer uId = 0;
         if (linshiId == null || linshiId.trim().length() <= 0) {
@@ -1354,12 +1331,10 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
     public DownloadView findOrderNobyOrderNo(String orderNo) throws Exception {
         return fileUploadAndDownMapper.findOrderNobyOrderNo(orderNo);
     }
 
-    @Transactional
     @Override
     public void saveFolderMessageUpdate(DownloadView view, UserInfo info) throws Exception {
         List<FileManFileInfo> fileManFileInfo = fileUploadAndDownMapper.isSameOrderNoandOtherMessage(info.getUserName(), view.getOrderNo(), view.getSalor());
@@ -1370,7 +1345,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
     @Override
-    @Transactional
     public void saveFileMessageUpdate(DownloadView view, UserInfo info) throws Exception {
         List<FileManFileInfo> fileManFileInfo = fileUploadAndDownMapper.isSameOrderNoandOtherMessage(info.getUserName(), view.getOrderNo(), view.getSalor());
         if (fileManFileInfo.size() > 0) {
@@ -1380,7 +1354,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
 
     }
 
-    @Transactional
     public void saveFileMessage(DownloadView view, UserInfo userInfo) throws Exception {
         List<FilemanUrl> oldFileUrls = new ArrayList<FilemanUrl>();
         List<String> urlStr = new ArrayList<String>();
@@ -1415,7 +1388,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional()
     public void saveFolderMessage(DownloadView view, UserInfo userInfo) throws Exception {
         List<FilemanUrl> oldFileUrls = new ArrayList<FilemanUrl>();
         List<FileManFileInfo> fileManFileInfo = fileUploadAndDownMapper.isSameOrderNoandOtherMessage(userInfo.getUserName(), view.getOrderNo(), view.getSalor());
@@ -1432,7 +1404,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public DownloadView uploadFileByMappedByteBuffer(MultipartFileParam param, UserInfo userInfo) throws Exception {
         param.setFilefolderNames(param.getFilefolderNames().replace("*", ","));
         String[] newArrayFileFolderName = param.getFilefolderNames().split(":");
@@ -1494,7 +1465,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
     }
 
 
-    @Transactional(rollbackFor = Exception.class)
     public DownloadView uploadFileByMappedByteBuffer1(MultipartFileParam param, UserInfo userInfo) throws Exception {
         File tmpDir = null;
         String uploadDirPath = finalDirPath;
@@ -1790,7 +1760,6 @@ public class FileUploadAndDownServiceImpl implements IFileUploadAndDownServ {
      * @describtion
      */
     @Override
-    @Transactional
     public void deleteByHeadIdAndItemId(List<DownloadView> deleteViews, List<File> files) throws Exception {
         List<Integer> singleHeadIds = new ArrayList<Integer>();
         int pointindex = 0;

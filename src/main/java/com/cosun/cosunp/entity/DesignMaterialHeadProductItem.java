@@ -22,7 +22,7 @@ public class DesignMaterialHeadProductItem implements Serializable {
     private String materialName;
     private String materialSpeci;
     private String unit;
-    private Double num;
+    private String num;
     private Integer useDeptId;
     private String productName;
     private String useDeptName;
@@ -33,6 +33,15 @@ public class DesignMaterialHeadProductItem implements Serializable {
     private String isCanUse2;
     private String isCanUseStr;
     private boolean isCanPurchase;
+    private int flag;
+
+
+    List<String> materialNameList2;
+    List<String> mateiralNoList;
+    List<String> materialSpeciList2;
+    List<String> customerNoList;
+    List<String> productNoList;
+
 
     private List<String> materialNameList;
     private List<String> materialSpeciList;
@@ -40,10 +49,67 @@ public class DesignMaterialHeadProductItem implements Serializable {
     private int currentPage = 1;
     private int maxPage;
     private int recordCount;
-    private int pageSize = 10;
+    private int pageSize = 100;
     private int currentPageTotalNum;
     private String sortMethod;
     private String sortByName;
+
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public List<String> getMaterialNameList2() {
+        return materialNameList2;
+    }
+
+    public void setMaterialNameList2(List<String> materialNameList2) {
+        this.materialNameList2 = materialNameList2;
+    }
+
+    public List<String> getMateiralNoList() {
+        return mateiralNoList;
+    }
+
+    public void setMateiralNoList(List<String> mateiralNoList) {
+        this.mateiralNoList = mateiralNoList;
+    }
+
+    public List<String> getMaterialSpeciList2() {
+        return materialSpeciList2;
+    }
+
+    public void setMaterialSpeciList2(List<String> materialSpeciList2) {
+        this.materialSpeciList2 = materialSpeciList2;
+    }
+
+    public List<String> getCustomerNoList() {
+        return customerNoList;
+    }
+
+    public void setCustomerNoList(List<String> customerNoList) {
+        this.customerNoList = customerNoList;
+    }
+
+    public List<String> getProductNoList() {
+        return productNoList;
+    }
+
+    public void setProductNoList(List<String> productNoList) {
+        this.productNoList = productNoList;
+    }
 
     public String getProductName() {
         return productName;
@@ -102,9 +168,10 @@ public class DesignMaterialHeadProductItem implements Serializable {
     }
 
     public String getIsCanUseStr() {
-        if (this.mateiralStock == 0.0 && this.isCanPurchase) {
-            return "不可用";
-        }
+        if (mateiralStock != null)
+            if ((this.mateiralStock == 0.0 && this.isCanPurchase)) {
+                return "不可用";
+            }
         return "可用";
     }
 
@@ -230,13 +297,6 @@ public class DesignMaterialHeadProductItem implements Serializable {
         this.unit = unit;
     }
 
-    public Double getNum() {
-        return num;
-    }
-
-    public void setNum(Double num) {
-        this.num = num;
-    }
 
     public Integer getUseDeptId() {
         return useDeptId;

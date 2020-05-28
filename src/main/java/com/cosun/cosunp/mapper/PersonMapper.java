@@ -1611,13 +1611,13 @@ public interface PersonMapper {
             "\tmorningon as morningOn,\n" +
             "\tmorningonfrom as morningOnFrom,\n" +
             "\tmorningonend as morningOnEnd,\n" +
-            "\tconcat(date_format(morningoff, '%Y-%m-%d %H:%i'),':00') as morningOff,\n" +
+            "\tconcat(date_format(morningoff, '%H:%i'),':00') as morningOff,\n" +
             "\tmorningofffrom as morningOffFrom,\n" +
             "\tmorningoffend as morningOffEnd,\n" +
             "\tnoonon as noonOn,\n" +
             "\tnoononfrom as noonOnFrom,\n" +
             "\tnoononend as noonOnEnd,\n" +
-            "\tconcat(date_format(noonoff, '%Y-%m-%d %H:%i'),':00') as noonOff,\n" +
+            "\tconcat(date_format(noonoff, '%H:%i'),':00') as noonOff,\n" +
             "\tnoonofffrom as noonOffFrom,\n" +
             "\tnoonoffend as noonOffEnd,\n" +
             "\textworkon as extworkon,\n" +

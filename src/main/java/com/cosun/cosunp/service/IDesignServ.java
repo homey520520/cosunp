@@ -18,6 +18,9 @@ public interface IDesignServ {
 
     List<Employee> getSalor() throws Exception;
 
+
+    String transferExcelToPDF(String fileRoute) throws Exception;
+
     List<DesignMaterialHeadProduct> queryOrderHeadProductByCondition(DesignMaterialHeadProduct product) throws Exception;
 
     int queryOrderHeadProductByConditionCount(DesignMaterialHeadProduct product) throws Exception;
@@ -28,15 +31,28 @@ public interface IDesignServ {
 
     List<String> getAllOrderNo() throws Exception;
 
+    DesignMaterialHead getHeadIdandInfoById(Integer id) throws Exception;
+
     void deleteOrderItemHByheadId(Integer id) throws Exception;
 
     int saveSJIHeadPDateToMysql(DesignMaterialHeadProductItem item) throws Exception;
+
+    int saveSJIListHeadPDateToMysql(List<DesignMaterialHeadProductItem> item) throws Exception;
+
+    DesignMaterialHeadProductItem getCustomerNameAndProductNoByHeadId(Integer headId) throws Exception;
+
+
+    DesignMaterialHeadProductItem getCustomerNameAndProductNoByHeadId2(Integer headId) throws Exception;
 
     List<DesignMaterialHeadProductItem> getAllDMHIPByCustomerNo(DesignMaterialHeadProductItem item) throws Exception;
 
     int getAllDMHIPByCustomerNoCount(DesignMaterialHeadProductItem item) throws Exception;
 
     List<String> getAllOrderArea() throws Exception;
+
+    List<DesignMaterialHeadProductItem> queryOrderHeadProductItemByCondition(DesignMaterialHeadProductItem item) throws Exception;
+
+    int queryOrderHeadProductItemByConditionCount(DesignMaterialHeadProductItem item) throws Exception;
 
     int saveSJHeadDateToMysql(DesignMaterialHead dmh) throws Exception;
 
@@ -54,7 +70,7 @@ public interface IDesignServ {
 
     int getAllDMHPCount(DesignMaterialHeadProduct head) throws Exception;
 
-    int getAllDMHPICount() throws Exception;
+    int getAllDMHPICount(DesignMaterialHeadProductItem item) throws Exception;
 
     int  getAllDMHCount() throws Exception;
 
@@ -65,6 +81,8 @@ public interface IDesignServ {
     int queryOrderHeadByConditionCount(DesignMaterialHead head) throws Exception;
 
     List<String> getAllproductNoList() throws Exception;
+
+    void deleteOrderItemByheadIdItem(Integer id) throws Exception;
 
     List<String> getAllmaterialSpeciList() throws Exception;
 

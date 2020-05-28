@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,15 +36,17 @@ public class KingSoftStoreServiceImpl implements IKingSoftStoreServ {
     }
 
     public List<DesignMaterialHeadProductItem> queryMaterialSpecifiByCondition(String materialName) {
-        if(materialName!=null && materialName.trim().length() >0)
-            materialName = materialName.substring(1,materialName.length()-1);
+        if (materialName != null && materialName.trim().length() > 0)
+            materialName = materialName.substring(1, materialName.length() - 1);
         if (materialName.contains(" ")) {
-            String[] materialNameA = materialName.split(" ");
+            String[] materialNameA = materialName.trim().split(" ");
             if (materialNameA != null && materialNameA.length > 1) {
-                return kingSoftStoreMapper.queryMaterialSpecifiByConditionB(materialNameA[0], materialNameA[1]);
+                List<String> charArray = Arrays.asList(materialNameA[0].trim().split(""));
+                return kingSoftStoreMapper.queryMaterialSpecifiByConditionB(charArray, materialNameA[1].trim());
             }
         } else {
-            return kingSoftStoreMapper.queryMaterialSpecifiByCondition(materialName);
+            List<String> charArray = Arrays.asList(materialName.trim().split(""));
+            return kingSoftStoreMapper.queryMaterialSpecifiByCondition(charArray);
         }
         return null;
     }
