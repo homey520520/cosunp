@@ -30,6 +30,20 @@ public class Test {
     public static void main(String[] arg) {
 
         try {
+
+           // String[] arr = "".split("\t");
+            String[] arr = "激光打磨\t精密焊接\t打磨\t扫描\t写纸稿/刻膜\t雕刻亚克力\t精工拉丝\t氧化\t喷高光白+光油\tUV打印\t装配\n".split("\t");
+            String afterStr = "";
+            for (int i = 0; i < arr.length; i++) {
+                if(arr[i].trim().length() > 0)
+                afterStr +=  arr[i].trim() + " ";
+
+            }
+
+
+            System.out.println(afterStr.replace(" ", "--").substring(0,afterStr.replace(" ", "--").length()-2));
+
+
 //            var Af = {};
 //            Af.getTableData = function(container){
 //                let tripleArray = []; //--->得到的数据为三维数组

@@ -32,7 +32,7 @@
         window.parent.document.getElementById('content').style.display = "block";
         window.parent.document.getElementById('contentnew').style.display = "none";
         document.getElementById("coverbehidepage").style.display = "none";
-        v ar flag = $("#flag").val ();
+        var flag = $("#flag").val ();
         var aflag = eval(flag);
         var customerNo2 = $ ("#customerNo2").val();
         deptNameArray = new Array("钣金", "精密", "精工", "喷涂", "图文", "亚克力", "装配", "包装");
@@ -65,6 +65,7 @@
                 "    href=\"javascript:void(0);\" onclick=\"saveSJIHeadPDateToMysql(this,0)\">保存</a>" +
                 " <a href=\"javascript:void(0);\"\n" +
                 "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
+           console.log("a")
             tr.prependTo(tbody);
             $('.selectpicker').selectpicker('refresh');
 

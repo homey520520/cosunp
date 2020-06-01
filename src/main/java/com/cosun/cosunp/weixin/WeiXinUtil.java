@@ -142,7 +142,7 @@ public class WeiXinUtil {
     }
 
 
-    public static List<WeiXinUsrId> getAddressBook(String access_token) {
+    public static List<WeiXinUsrId> getAddressBook(String access_token) throws Exception{
         String ticket = null;
         String url = "https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=" + access_token + "&department_id=1&fetch_child=1";//这个url链接和参数不能变
         List<WeiXinUsrId> wechatUsers = null;
@@ -164,6 +164,7 @@ public class WeiXinUtil {
             is.close();
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
         return wechatUsers;
     }

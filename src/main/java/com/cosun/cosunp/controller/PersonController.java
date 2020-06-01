@@ -152,8 +152,25 @@ public class PersonController {
 
 
     public void getKQ(String beforDay) throws Exception {
-        IPersonServ testDomainMapper = SpringUtil.getBean(IPersonServ.class);
-        testDomainMapper.getKQ(beforDay);
+        try {
+            logger.error("coming getKQ********start******");
+            IPersonServ testDomainMapper = SpringUtil.getBean(IPersonServ.class);
+            testDomainMapper.getKQ(beforDay);
+            logger.error("coming getKQ********end******");
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            logger.error("error big contorler****");
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    public void output() {
+        for (int i = 0; i < 1000000000; i++) {
+            logger.error(new Date() + "l love my two baby................-----------------" + i);
+        }
     }
 
     public void getBeforeDayZhongKongData(String beforDay) throws Exception {
@@ -327,7 +344,6 @@ public class PersonController {
 
 
     }
-
 
 
     public void getBeforeDayQYWCData(String beforDay) throws Exception {
@@ -848,7 +864,6 @@ public class PersonController {
             }
         }
     }
-
 
 
     @ResponseBody
@@ -4014,7 +4029,6 @@ public class PersonController {
             throw e;
         }
     }
-
 
 
 }

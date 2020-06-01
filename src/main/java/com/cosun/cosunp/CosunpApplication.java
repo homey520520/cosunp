@@ -2,6 +2,7 @@ package com.cosun.cosunp;
 
 import com.cosun.cosunp.controller.PersonController;
 import com.cosun.cosunp.service.IFileUploadAndDownServ;
+import com.cosun.cosunp.tool.DateUtil;
 import com.cosun.cosunp.weixin.AccessTokenServlet;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
@@ -16,6 +17,14 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 @EnableTransactionManagement
@@ -42,16 +51,35 @@ public class CosunpApplication extends SpringBootServletInitializer {
     @Bean
     public CommandLineRunner init(final IFileUploadAndDownServ fileUploadAndDownServ) {
         return new CommandLineRunner() {
+
             @Override
             public void run(String... args) throws Exception {
 //                fileUploadAndDownServ.deleteAll();
 //                fileUploadAndDownServ.init();
                 new AccessTokenServlet().init();
 
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            String beforeDay = DateUtil.getBeforeDay();
+                            logger.error(new Date() + "start-----------------" + beforeDay);
+                            new PersonController().getKQ(beforeDay);
+                            logger.error(new Date() + "end-----------------" + beforeDay);
+                        } catch (Exception e) {
+                            logger.error(e.getMessage(), e);
+                            logger.error("error*************************************");
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, 3 * 1000, 24 * 60 * 60 * 1000);
                 // wx16c9442a4b26e6ea
                 //36e571b957c3705964b4398019482dde
             }
         };
+
     }
 
 
@@ -65,139 +93,6 @@ public class CosunpApplication extends SpringBootServletInitializer {
 }
 
 
-//   文件管理平台交付说明
-//
-//        系统名称:文件管理平台
-//        使用部门:设计部
-//        程序目地：程序化管理设计图纸。
-//        程序开发时间起：2018年12月
-//        程序完成时间:2019年3月
-//        程序使用载体:浏览器
-//        程序功能说明:
-//        1.上传
-//        文件/文件夹上传
-//        帐号初始化时时任何部门任何人都有上传权限
-//
-//        2.更新
-//        文件/文件夹更新
-//        何人更新何文件需有更新权限
-//        更新与上传的文件需为同一帐号
-//
-//        3.下载
-//        文件/文件夹下载
-//        何人下载何文件需有下载权限
-//
-//        4.删除
-//        文件/文件夹删除
-//        何人删除何文件需有删除权限
-//
-//        5.查找
-//        文件查找
-//        任何人对任何文件都可进行在线查看
-//
-//        6.管理
-//        更新/下载/删除权限的分配
-//        经理级以上
-//
-//        流程说明:
-//        1.每日上传已做好的图纸。
-//        2.如若图纸发生变化可在更新页面进行更新操作。
-//        3.如若图纸需踢除可在删除页面进行删除操作。
-//        4.管理员/经理可对图纸的权限进行分配，即何人对何文件有何权限。
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//        研发中心软件部                                  人事部门
-//        交付人:                                         接收人:
-
-//#!/bin/sh
-//        # chkconfig: 2345 10 90
-//        # description: Start and Stop redis
-// cp -r /usr/local/redis/redis-server /usr/bin/redis-server
-//        REDISPORT=6379
-//        EXEC=/usr/local/redis/redis-server
-//        CLIEXEC=/usr/local/redis/redis-cli
-//
-//        PIDFILE=/opt/mysrv/var/redis/run/redis_${REDISPORT}.pid
-//        CONF="/opt/mysrv/etc/redis/redis.conf"
-//
-//        case "$1" in
-//        start)
-//        if [ -f $PIDFILE ]
-//        then
-//        echo "$PIDFILE exists, process is already running or crashed"
-//        else
-//        echo "Starting Redis server..."
-//        $EXEC $CONF &
-//        fi
-//        ;;
-//        stop)
-//        if [ ! -f $PIDFILE ]
-//        then
-//        echo "$PIDFILE does not exist, process is not running"
-//        else
-//        PID=$(cat $PIDFILE)
-//        echo "Stopping ..."
-//        $CLIEXEC -p $REDISPORT shutdown
-//        while [ -x /proc/${PID} ]
-//        do
-//        echo "Waiting for Redis to shutdown ..."
-//        sleep 1
-//        done
-//        echo "Redis stopped"
-//        fi
-//        ;;
-//        restart)
-//        "$0" stop
-//        sleep 3
-//        "$0" start
-//        ;;
-//        *)
-//        echo "Please use start or stop or restart as first argument"
-//        ;;
-//        esac
-
-//
-//
-//    养一盆花
-//    松土浇水
-//    等花开满枝
-//
-//    读一本诗
-//    感受那采菊东篱下的
-//    淡然心境
-//
-//    种几亩薄田
-//    撒下春的希望
-//    收获秋的喜悦
-//
-//    持一蒲扇
-//    扇来春风得意
-//    扇走一身忧愁
-//
-//    握一杆钓
-//    在风清云淡中
-//    等鱼儿上钩
-//
-//    做一桌美味的佳肴
-//    与亲朋好友
-//    谈笑风声
-//
-//    在名利淡泊中看清
-//    在生活体验中懂得
-//    让我们把日子
-//    过成诗
-//
-//
 // https://i.zhaopin.com/resume
 //
 //文件管理平台

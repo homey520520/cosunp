@@ -38,7 +38,7 @@ import java.util.*;
  */
 
 @Service
-@Transactional(value="test1TransactionManager",rollbackFor = Exception.class)
+@Transactional(value = "test1TransactionManager", rollbackFor = Exception.class)
 public class PersonServiceImpl implements IPersonServ {
 
     private static Logger logger = LogManager.getLogger(PersonServiceImpl.class);
@@ -659,8 +659,12 @@ public class PersonServiceImpl implements IPersonServ {
     }
 
     public void saveBeforeDayZhongKongData(List<ZhongKongBean> zkbList) throws Exception {
-        for (ZhongKongBean zkb : zkbList) {
-            personMapper.saveBeforeDayZhongKongData(zkb);
+        try {
+            for (ZhongKongBean zkb : zkbList) {
+                personMapper.saveBeforeDayZhongKongData(zkb);
+            }
+        } catch (Exception e) {
+            throw e;
         }
     }
 
@@ -8913,555 +8917,587 @@ public class PersonServiceImpl implements IPersonServ {
     }
 
     public void fillEmpNoWhenQYWXNull() throws Exception {
-        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-        jedis = pool.getResource();
-        List<WeiXinUsrId> allWXUserId = personMapper.getAllWeiXinUserId();
-        String empNo;
-        for (WeiXinUsrId wxu : allWXUserId) {
-            if (wxu.getEmpNo() == null || wxu.getEmpNo().trim().length() == 0) {
-                empNo = personMapper.getEmpNoByNameA(wxu.getName());
-                if (empNo != null) {
-                    personMapper.saveEmpNoByUserId(wxu.getUserid(), empNo);
+
+        try {
+            pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+            jedis = pool.getResource();
+            List<WeiXinUsrId> allWXUserId = personMapper.getAllWeiXinUserId();
+            String empNo;
+            for (WeiXinUsrId wxu : allWXUserId) {
+                if (wxu.getEmpNo() == null || wxu.getEmpNo().trim().length() == 0) {
+                    empNo = personMapper.getEmpNoByNameA(wxu.getName());
+                    if (empNo != null) {
+                        personMapper.saveEmpNoByUserId(wxu.getUserid(), empNo);
+                    }
                 }
             }
+        } catch (Exception e) {
+            throw e;
         }
+
+
     }
 
     public void getAllWeiXinUser() throws Exception {
-        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-        jedis = pool.getResource();
-        List<WeiXinUsrId> userList = WeiXinUtil.getAddressBook(jedis.get(Constants.accessToken));
-        WeiXinUsrId oldWX = null;
-        List<String> haves = new ArrayList<String>();
-        haves.clear();
-        List<WeiXinUsrId> newUserList = new ArrayList<WeiXinUsrId>();
-        for (WeiXinUsrId ww : userList) {
-            if (!haves.contains(ww.getUserid()) && (!ww.getUserid().equals("XiangMuZhongXinHuangFuYong"))) {
-                newUserList.add(ww);
-                haves.add(ww.getUserid());
+        try {
+            pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+            jedis = pool.getResource();
+            List<WeiXinUsrId> userList = WeiXinUtil.getAddressBook(jedis.get(Constants.accessToken));
+            WeiXinUsrId oldWX = null;
+            List<String> haves = new ArrayList<String>();
+            haves.clear();
+            List<WeiXinUsrId> newUserList = new ArrayList<WeiXinUsrId>();
+            for (WeiXinUsrId ww : userList) {
+                if (!haves.contains(ww.getUserid()) && (!ww.getUserid().equals("XiangMuZhongXinHuangFuYong"))) {
+                    newUserList.add(ww);
+                    haves.add(ww.getUserid());
+                }
             }
-        }
-        for (WeiXinUsrId wx : newUserList) {
-            oldWX = personMapper.getUserIdByUSerId(wx.getUserid());
-            if (oldWX == null) {
-                personMapper.saveWeiXinUserIdByBean(wx);
+            for (WeiXinUsrId wx : newUserList) {
+                oldWX = personMapper.getUserIdByUSerId(wx.getUserid());
+                if (oldWX == null) {
+                    personMapper.saveWeiXinUserIdByBean(wx);
+                }
             }
+        } catch (Exception e) {
+            throw e;
         }
 
 
     }
 
     public void getBeforeDayQYWXSPData(String beforDay) throws Exception {
-        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        List<QYWXSPFROM> fromList = new ArrayList<QYWXSPFROM>();
-        jedis = pool.getResource();
-        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/corp/getapprovaldata?access_token=%s", jedis.get(Constants.accessTokensp));
-        Date dateStart = sdf.parse(beforDay + " 00:00:00");
-        Date dateEnd = sdf.parse(beforDay + " 23:59:59");
-        QYWXSPTO text = new QYWXSPTO();
-        text.setStarttime(dateStart.getTime() / 1000);
-        text.setEndtime(dateEnd.getTime() / 1000);
-        text.setNext_spnum(null);
-        NetWorkHelper netHelper = new NetWorkHelper();
-        String result = netHelper.getHttpsResponse3(Url, text, "POST");
-        JSONObject json = JSON.parseObject(result);
-        com.alibaba.fastjson.JSONArray jsonArrayData = json.getJSONArray("data");
-        com.alibaba.fastjson.JSONArray jsonArrayData2 = null;
-        com.alibaba.fastjson.JSONArray jsonArrayData3 = null;
-        JSONObject data = null;
-        JSONObject data2 = null;
-        JSONObject data3 = null;
-        JSONObject data4 = null;
-        QYWXSPFROM from = null;
-        String title;
-        String spname;
-        for (int i = 0; i < jsonArrayData.size(); i++) {
-            data = jsonArrayData.getJSONObject(i);
-            spname = (String) data.get("spname");
-            if ("补卡申请".equals(spname)) {
-                from = new QYWXSPFROM();
-                from.setSpname(spname);
-                from.setApply_name((String) data.get("apply_name"));
-                from.setApply_org((String) data.get("apply_org"));
-                from.setSp_status((Integer) data.get("sp_status"));
-                from.setSp_num((Long) data.get("sp_num"));
-                from.setApply_time((Integer) data.get("apply_time"));
-                from.setApply_user_id((String) data.get("apply_user_id"));
-                data2 = data.getJSONObject("comm");
-                jsonArrayData2 = data2.getJSONArray("apply_data");
-                for (int j = 0; j < jsonArrayData2.size(); j++) {
-                    data3 = jsonArrayData2.getJSONObject(j);
-                    title = (String) data3.get("title");
-                    if (title.equals("补卡时间")) {
-                        from.setBukaTimeLong((Long) data3.get("value"));
-                        Date date = new Date(from.getBukaTimeLong());
-                        from.setBukaTime(sdf.format(date).split(" ")[1]);
-                        from.setBukaYearM(sdf.format(date).split(" ")[0]);
-                    }
-                    if (title.equals("补卡事由")) {
-                        from.setBukaReason((String) data3.get("value"));
-                    }
-                }
-                if (2 == (Integer) data.get("sp_status")) {
-                    fromList.add(from);
-                }
-            }
-
-            if (spname.contains("请假")) {
-                from = new QYWXSPFROM();
-                from.setSpname("请假");
-                from.setApply_name((String) data.get("apply_name"));
-                from.setApply_org((String) data.get("apply_org"));
-                from.setSp_status((Integer) data.get("sp_status"));
-                from.setSp_num((Long) data.get("sp_num"));
-                from.setApply_time((Integer) data.get("apply_time"));
-                from.setApply_user_id((String) data.get("apply_user_id"));
-                data2 = data.getJSONObject("comm");
-                jsonArrayData2 = data2.getJSONArray("apply_data");
-
-                for (int j = 0; j < jsonArrayData2.size(); j++) {
-                    data3 = jsonArrayData2.getJSONObject(j);
-                    title = (String) data3.get("title");
-                    if (title.equals("请假类型")) {
-                        from.setLeave_type(StringUtil.LeaveTypeTransf((String) data3.get("value")));
-                    }
-                    if (title.equals("请假事由")) {
-                        from.setBukaReason((String) data3.get("value"));
-                    }
-
-                    if (title.equals("请假")) {
-                        jsonArrayData3 = data3.getJSONArray("value");
-                        for (int a = 0; a < jsonArrayData3.size(); a++) {
-                            data4 = jsonArrayData3.getJSONObject(a);
-                            title = (String) data4.get("title");
-                            if (title.equals("开始时间")) {
-                                from.setStart_time((Long) data4.get("value"));
-                                Date date = new Date(from.getStart_time());
-                                from.setStart_timeStr(sdf.format((date)));
-                            }
-                            if (title.equals("结束时间")) {
-                                from.setEnd_time((Long) data4.get("value"));
-                                Date date = new Date(from.getEnd_time());
-                                from.setEnd_timeStr(sdf.format((date)));
-                            }
-                            if (title.equals("请假时长")) {
-                                from.setDuration((Integer) data4.get("value"));
-                            }
-
+        try {
+            pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            List<QYWXSPFROM> fromList = new ArrayList<QYWXSPFROM>();
+            jedis = pool.getResource();
+            String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/corp/getapprovaldata?access_token=%s", jedis.get(Constants.accessTokensp));
+            Date dateStart = sdf.parse(beforDay + " 00:00:00");
+            Date dateEnd = sdf.parse(beforDay + " 23:59:59");
+            QYWXSPTO text = new QYWXSPTO();
+            text.setStarttime(dateStart.getTime() / 1000);
+            text.setEndtime(dateEnd.getTime() / 1000);
+            text.setNext_spnum(null);
+            NetWorkHelper netHelper = new NetWorkHelper();
+            String result = netHelper.getHttpsResponse3(Url, text, "POST");
+            JSONObject json = JSON.parseObject(result);
+            com.alibaba.fastjson.JSONArray jsonArrayData = json.getJSONArray("data");
+            com.alibaba.fastjson.JSONArray jsonArrayData2 = null;
+            com.alibaba.fastjson.JSONArray jsonArrayData3 = null;
+            JSONObject data = null;
+            JSONObject data2 = null;
+            JSONObject data3 = null;
+            JSONObject data4 = null;
+            QYWXSPFROM from = null;
+            String title;
+            String spname;
+            for (int i = 0; i < jsonArrayData.size(); i++) {
+                data = jsonArrayData.getJSONObject(i);
+                spname = (String) data.get("spname");
+                if ("补卡申请".equals(spname)) {
+                    from = new QYWXSPFROM();
+                    from.setSpname(spname);
+                    from.setApply_name((String) data.get("apply_name"));
+                    from.setApply_org((String) data.get("apply_org"));
+                    from.setSp_status((Integer) data.get("sp_status"));
+                    from.setSp_num((Long) data.get("sp_num"));
+                    from.setApply_time((Integer) data.get("apply_time"));
+                    from.setApply_user_id((String) data.get("apply_user_id"));
+                    data2 = data.getJSONObject("comm");
+                    jsonArrayData2 = data2.getJSONArray("apply_data");
+                    for (int j = 0; j < jsonArrayData2.size(); j++) {
+                        data3 = jsonArrayData2.getJSONObject(j);
+                        title = (String) data3.get("title");
+                        if (title.equals("补卡时间")) {
+                            from.setBukaTimeLong((Long) data3.get("value"));
+                            Date date = new Date(from.getBukaTimeLong());
+                            from.setBukaTime(sdf.format(date).split(" ")[1]);
+                            from.setBukaYearM(sdf.format(date).split(" ")[0]);
+                        }
+                        if (title.equals("补卡事由")) {
+                            from.setBukaReason((String) data3.get("value"));
                         }
                     }
+                    if (2 == (Integer) data.get("sp_status")) {
+                        fromList.add(from);
+                    }
                 }
 
-                if (2 == (Integer) data.get("sp_status")) {
-                    fromList.add(from);
-                }
-            }
+                if (spname.contains("请假")) {
+                    from = new QYWXSPFROM();
+                    from.setSpname("请假");
+                    from.setApply_name((String) data.get("apply_name"));
+                    from.setApply_org((String) data.get("apply_org"));
+                    from.setSp_status((Integer) data.get("sp_status"));
+                    from.setSp_num((Long) data.get("sp_num"));
+                    from.setApply_time((Integer) data.get("apply_time"));
+                    from.setApply_user_id((String) data.get("apply_user_id"));
+                    data2 = data.getJSONObject("comm");
+                    jsonArrayData2 = data2.getJSONArray("apply_data");
 
-            if (spname.contains("外出申请")) {
-                from = new QYWXSPFROM();
-                from.setSpname("外出申请");
-                from.setApply_name((String) data.get("apply_name"));
-                from.setApply_org((String) data.get("apply_org"));
-                from.setSp_status((Integer) data.get("sp_status"));
-                from.setSp_num((Long) data.get("sp_num"));
-                from.setApply_time((Integer) data.get("apply_time"));
-                Date date = new Date(from.getApply_time());
-                from.setApply_timeStr(sdf.format((date)));
-                from.setApply_user_id((String) data.get("apply_user_id"));
-                data2 = data.getJSONObject("comm");
-                jsonArrayData2 = data2.getJSONArray("apply_data");
+                    for (int j = 0; j < jsonArrayData2.size(); j++) {
+                        data3 = jsonArrayData2.getJSONObject(j);
+                        title = (String) data3.get("title");
+                        if (title.equals("请假类型")) {
+                            from.setLeave_type(StringUtil.LeaveTypeTransf((String) data3.get("value")));
+                        }
+                        if (title.equals("请假事由")) {
+                            from.setBukaReason((String) data3.get("value"));
+                        }
 
-                for (int j = 0; j < jsonArrayData2.size(); j++) {
-                    data3 = jsonArrayData2.getJSONObject(j);
-                    title = (String) data3.get("title");
-                    if (title.equals("外出地点")) {
-                        from.setOutAddr((String) data3.get("value"));
-                    }
-                    if (title.equals("外出事由")) {
-                        from.setBukaReason((String) data3.get("value"));
-                    }
+                        if (title.equals("请假")) {
+                            jsonArrayData3 = data3.getJSONArray("value");
+                            for (int a = 0; a < jsonArrayData3.size(); a++) {
+                                data4 = jsonArrayData3.getJSONObject(a);
+                                title = (String) data4.get("title");
+                                if (title.equals("开始时间")) {
+                                    from.setStart_time((Long) data4.get("value"));
+                                    Date date = new Date(from.getStart_time());
+                                    from.setStart_timeStr(sdf.format((date)));
+                                }
+                                if (title.equals("结束时间")) {
+                                    from.setEnd_time((Long) data4.get("value"));
+                                    Date date = new Date(from.getEnd_time());
+                                    from.setEnd_timeStr(sdf.format((date)));
+                                }
+                                if (title.equals("请假时长")) {
+                                    from.setDuration((Integer) data4.get("value"));
+                                }
 
-                    if (title.equals("外出")) {
-                        jsonArrayData3 = data3.getJSONArray("value");
-                        for (int a = 0; a < jsonArrayData3.size(); a++) {
-                            data4 = jsonArrayData3.getJSONObject(a);
-                            title = (String) data4.get("title");
-                            if (title.equals("开始时间")) {
-                                from.setStart_time((Long) data4.get("value"));
-                                date = new Date(from.getStart_time());
-                                from.setStart_timeStr(sdf.format((date)));
                             }
-                            if (title.equals("结束时间")) {
-                                from.setEnd_time((Long) data4.get("value"));
-                                date = new Date(from.getEnd_time());
-                                from.setEnd_timeStr(sdf.format((date)));
-                            }
-                            if (title.equals("外出时长")) {
-                                from.setDuration((Integer) data4.get("value"));
-                            }
-
                         }
                     }
+
+                    if (2 == (Integer) data.get("sp_status")) {
+                        fromList.add(from);
+                    }
                 }
 
-                if (2 == (Integer) data.get("sp_status")) {
-                    fromList.add(from);
-                }
-            }
+                if (spname.contains("外出申请")) {
+                    from = new QYWXSPFROM();
+                    from.setSpname("外出申请");
+                    from.setApply_name((String) data.get("apply_name"));
+                    from.setApply_org((String) data.get("apply_org"));
+                    from.setSp_status((Integer) data.get("sp_status"));
+                    from.setSp_num((Long) data.get("sp_num"));
+                    from.setApply_time((Integer) data.get("apply_time"));
+                    Date date = new Date(from.getApply_time());
+                    from.setApply_timeStr(sdf.format((date)));
+                    from.setApply_user_id((String) data.get("apply_user_id"));
+                    data2 = data.getJSONObject("comm");
+                    jsonArrayData2 = data2.getJSONArray("apply_data");
 
+                    for (int j = 0; j < jsonArrayData2.size(); j++) {
+                        data3 = jsonArrayData2.getJSONObject(j);
+                        title = (String) data3.get("title");
+                        if (title.equals("外出地点")) {
+                            from.setOutAddr((String) data3.get("value"));
+                        }
+                        if (title.equals("外出事由")) {
+                            from.setBukaReason((String) data3.get("value"));
+                        }
 
-            if (spname.contains("出差")) {
-                from = new QYWXSPFROM();
-                from.setSpname("出差");
-                from.setApply_name((String) data.get("apply_name"));
-                from.setApply_org((String) data.get("apply_org"));
-                from.setSp_status((Integer) data.get("sp_status"));
-                from.setSp_num((Long) data.get("sp_num"));
-                from.setApply_time((Integer) data.get("apply_time"));
-                Date date = new Date(from.getApply_time());
-                from.setApply_timeStr(sdf.format((date)));
-                from.setApply_user_id((String) data.get("apply_user_id"));
-                data2 = data.getJSONObject("comm");
-                jsonArrayData2 = data2.getJSONArray("apply_data");
+                        if (title.equals("外出")) {
+                            jsonArrayData3 = data3.getJSONArray("value");
+                            for (int a = 0; a < jsonArrayData3.size(); a++) {
+                                data4 = jsonArrayData3.getJSONObject(a);
+                                title = (String) data4.get("title");
+                                if (title.equals("开始时间")) {
+                                    from.setStart_time((Long) data4.get("value"));
+                                    date = new Date(from.getStart_time());
+                                    from.setStart_timeStr(sdf.format((date)));
+                                }
+                                if (title.equals("结束时间")) {
+                                    from.setEnd_time((Long) data4.get("value"));
+                                    date = new Date(from.getEnd_time());
+                                    from.setEnd_timeStr(sdf.format((date)));
+                                }
+                                if (title.equals("外出时长")) {
+                                    from.setDuration((Integer) data4.get("value"));
+                                }
 
-                for (int j = 0; j < jsonArrayData2.size(); j++) {
-                    data3 = jsonArrayData2.getJSONObject(j);
-                    title = (String) data3.get("title");
-                    if (title.equals("出差地点")) {
-                        from.setOutAddr((String) data3.get("value"));
-                    }
-                    if (title.equals("出差事由")) {
-                        from.setBukaReason((String) data3.get("value"));
-                    }
-
-                    if (title.equals("出差")) {
-                        jsonArrayData3 = data3.getJSONArray("value");
-                        for (int a = 0; a < jsonArrayData3.size(); a++) {
-                            data4 = jsonArrayData3.getJSONObject(a);
-                            title = (String) data4.get("title");
-                            if (title.equals("开始时间")) {
-                                from.setStart_time((Long) data4.get("value"));
-                                date = new Date(from.getStart_time());
-                                from.setStart_timeStr(sdf.format((date)));
                             }
-                            if (title.equals("结束时间")) {
-                                from.setEnd_time((Long) data4.get("value"));
-                                date = new Date(from.getEnd_time());
-                                from.setEnd_timeStr(sdf.format((date)));
-                            }
-                            if (title.equals("出差时长")) {
-                                from.setDuration((Integer) data4.get("value"));
-                            }
-
                         }
                     }
+
+                    if (2 == (Integer) data.get("sp_status")) {
+                        fromList.add(from);
+                    }
                 }
 
-                if (2 == (Integer) data.get("sp_status")) {
-                    fromList.add(from);
+
+                if (spname.contains("出差")) {
+                    from = new QYWXSPFROM();
+                    from.setSpname("出差");
+                    from.setApply_name((String) data.get("apply_name"));
+                    from.setApply_org((String) data.get("apply_org"));
+                    from.setSp_status((Integer) data.get("sp_status"));
+                    from.setSp_num((Long) data.get("sp_num"));
+                    from.setApply_time((Integer) data.get("apply_time"));
+                    Date date = new Date(from.getApply_time());
+                    from.setApply_timeStr(sdf.format((date)));
+                    from.setApply_user_id((String) data.get("apply_user_id"));
+                    data2 = data.getJSONObject("comm");
+                    jsonArrayData2 = data2.getJSONArray("apply_data");
+
+                    for (int j = 0; j < jsonArrayData2.size(); j++) {
+                        data3 = jsonArrayData2.getJSONObject(j);
+                        title = (String) data3.get("title");
+                        if (title.equals("出差地点")) {
+                            from.setOutAddr((String) data3.get("value"));
+                        }
+                        if (title.equals("出差事由")) {
+                            from.setBukaReason((String) data3.get("value"));
+                        }
+
+                        if (title.equals("出差")) {
+                            jsonArrayData3 = data3.getJSONArray("value");
+                            for (int a = 0; a < jsonArrayData3.size(); a++) {
+                                data4 = jsonArrayData3.getJSONObject(a);
+                                title = (String) data4.get("title");
+                                if (title.equals("开始时间")) {
+                                    from.setStart_time((Long) data4.get("value"));
+                                    date = new Date(from.getStart_time());
+                                    from.setStart_timeStr(sdf.format((date)));
+                                }
+                                if (title.equals("结束时间")) {
+                                    from.setEnd_time((Long) data4.get("value"));
+                                    date = new Date(from.getEnd_time());
+                                    from.setEnd_timeStr(sdf.format((date)));
+                                }
+                                if (title.equals("出差时长")) {
+                                    from.setDuration((Integer) data4.get("value"));
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (2 == (Integer) data.get("sp_status")) {
+                        fromList.add(from);
+                    }
                 }
+
+
             }
-
-
+            this.saveQKData(fromList);
+        } catch (Exception e) {
+            throw e;
         }
-        this.saveQKData(fromList);
     }
 
     public void getBeforeDayQYWCDataAAA(String beforDay) throws Exception {
-        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-        jedis = pool.getResource();
-        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/checkin/getcheckindata?access_token=%s", jedis.get(Constants.accessToken));
-        List<String> userList = personMapper.getAllUserName();
-        List<ZhongKongBeanQY> outClockInList = new ArrayList<ZhongKongBeanQY>();
-        List<String> haveUserId = new ArrayList<String>();
-        List<String> afterUserList1 = userList.subList(0, 99);
-        List<String> afterUserList2 = userList.subList(99, 199);
-        List<String> afterUserList3 = userList.subList(199, 299);
-        List<String> afterUserList4 = null;
-        List<String> afterUserList5 = null;
-        if (userList.size() > 398) {
-            afterUserList4 = userList.subList(299, 399);
-            afterUserList5 = userList.subList(399, userList.size());
-        } else {
-            afterUserList4 = userList.subList(299, userList.size());
-        }
+        try {
+            pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+            jedis = pool.getResource();
+            String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/checkin/getcheckindata?access_token=%s", jedis.get(Constants.accessToken));
+            List<String> userList = personMapper.getAllUserName();
+            List<ZhongKongBeanQY> outClockInList = new ArrayList<ZhongKongBeanQY>();
+            List<String> haveUserId = new ArrayList<String>();
+            List<String> afterUserList1 = userList.subList(0, 99);
+            List<String> afterUserList2 = userList.subList(99, 199);
+            List<String> afterUserList3 = userList.subList(199, 299);
+            List<String> afterUserList4 = null;
+            List<String> afterUserList5 = null;
+            if (userList.size() > 398) {
+                afterUserList4 = userList.subList(299, 399);
+                afterUserList5 = userList.subList(399, userList.size());
+            } else {
+                afterUserList4 = userList.subList(299, userList.size());
+            }
 
-        List<List<String>> all = new ArrayList<List<String>>();
-        all.add(afterUserList1);
-        all.add(afterUserList2);
-        all.add(afterUserList3);
-        all.add(afterUserList4);
-        if (afterUserList5 != null)
-            all.add(afterUserList5);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date dateStart = sdf.parse(beforDay + " 00:00:00");
-        Date dateEnd = sdf.parse(beforDay + " 23:59:59");
-        QYweixinSend text = new QYweixinSend();
-        text.setOpencheckindatatype(1);
-        text.setStarttime(dateStart.getTime() / 1000);
-        text.setEndtime(dateEnd.getTime() / 1000);
-        NetWorkHelper netHelper = new NetWorkHelper();
-        for (int aa = 0; aa < all.size(); aa++) {
-            text.setUseridlist(all.get(aa));
-            String result = netHelper.getHttpsResponse2(Url, text, "POST");
-            JSONObject json = JSON.parseObject(result);
-            String checkindata = String.valueOf(json.get("checkindata"));
-            com.alibaba.fastjson.JSONArray checkindataStr = JSON.parseArray(checkindata);
-            List<OutPunch> outPunchList = JSONUtils.toList(checkindataStr, OutPunch.class);
-            ZhongKongBeanQY oc = null;
-            String hourStr = null;
-            Integer hour = null;
-            String userId = null;
-            for (int a = 0; a < outPunchList.size(); a++) {
-                userId = outPunchList.get(a).getUserid();
-                if (haveUserId.contains(userId))
-                    continue;
-                oc = new ZhongKongBeanQY();
-                oc.setUserId(userId);
-                oc.setDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
-                oc.setYearMonth(beforDay.split("-")[0] + "-" + beforDay.split("-")[1]);
-                for (OutPunch op : outPunchList) {
-                    if (op.getUserid().equals(userId)) {
-                        if (op != null && (op.getException_type() == null || "".equals(op.getException_type()) || "时间异常".equals(op.getException_type()))) {
-                            oc.setTimeStr((oc.getTimeStr() == null ? "" : oc.getTimeStr()) + op.getCheckin_timeStr().split(" ")[1] + " ");
-                            oc.setRemark((oc.getRemark() == null ? "" : oc.getRemark()) + op.getNotes());
+            List<List<String>> all = new ArrayList<List<String>>();
+            all.add(afterUserList1);
+            all.add(afterUserList2);
+            all.add(afterUserList3);
+            all.add(afterUserList4);
+            if (afterUserList5 != null)
+                all.add(afterUserList5);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date dateStart = sdf.parse(beforDay + " 00:00:00");
+            Date dateEnd = sdf.parse(beforDay + " 23:59:59");
+            QYweixinSend text = new QYweixinSend();
+            text.setOpencheckindatatype(1);
+            text.setStarttime(dateStart.getTime() / 1000);
+            text.setEndtime(dateEnd.getTime() / 1000);
+            NetWorkHelper netHelper = new NetWorkHelper();
+            for (int aa = 0; aa < all.size(); aa++) {
+                text.setUseridlist(all.get(aa));
+                String result = netHelper.getHttpsResponse2(Url, text, "POST");
+                JSONObject json = JSON.parseObject(result);
+                String checkindata = String.valueOf(json.get("checkindata"));
+                com.alibaba.fastjson.JSONArray checkindataStr = JSON.parseArray(checkindata);
+                List<OutPunch> outPunchList = JSONUtils.toList(checkindataStr, OutPunch.class);
+                ZhongKongBeanQY oc = null;
+                String hourStr = null;
+                Integer hour = null;
+                String userId = null;
+                for (int a = 0; a < outPunchList.size(); a++) {
+                    userId = outPunchList.get(a).getUserid();
+                    if (haveUserId.contains(userId))
+                        continue;
+                    oc = new ZhongKongBeanQY();
+                    oc.setUserId(userId);
+                    oc.setDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
+                    oc.setYearMonth(beforDay.split("-")[0] + "-" + beforDay.split("-")[1]);
+                    for (OutPunch op : outPunchList) {
+                        if (op.getUserid().equals(userId)) {
+                            if (op != null && (op.getException_type() == null || "".equals(op.getException_type()) || "时间异常".equals(op.getException_type()))) {
+                                oc.setTimeStr((oc.getTimeStr() == null ? "" : oc.getTimeStr()) + op.getCheckin_timeStr().split(" ")[1] + " ");
+                                oc.setRemark((oc.getRemark() == null ? "" : oc.getRemark()) + op.getNotes());
+                            }
                         }
                     }
+                    outClockInList.add(oc);
+                    haveUserId.add(userId);
                 }
-                outClockInList.add(oc);
-                haveUserId.add(userId);
             }
+            this.saveZKQYList(outClockInList);
+        } catch (Exception e) {
+            throw e;
         }
-        this.saveZKQYList(outClockInList);
     }
 
     public void getBeforeDayQYWCData(String beforDay) throws Exception {
-        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-        jedis = pool.getResource();
-        String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/checkin/getcheckindata?access_token=%s", jedis.get(Constants.accessToken));
-        List<String> userList = personMapper.getAllUserName();
-        List<OutClockIn> outClockInList = new ArrayList<OutClockIn>();
-        List<String> haveUserId = new ArrayList<String>();
-        List<String> afterUserList1 = userList.subList(0, 99);
-        List<String> afterUserList2 = userList.subList(99, 199);
-        List<String> afterUserList3 = userList.subList(199, 299);
-        List<String> afterUserList4 = null;
-        List<String> afterUserList5 = null;
-        if (userList.size() > 398) {
-            afterUserList4 = userList.subList(299, 399);
-            afterUserList5 = userList.subList(399, userList.size());
-        } else {
-            afterUserList4 = userList.subList(299, userList.size());
-        }
+        try {
+            pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+            jedis = pool.getResource();
+            String Url = String.format("https://qyapi.weixin.qq.com/cgi-bin/checkin/getcheckindata?access_token=%s", jedis.get(Constants.accessToken));
+            List<String> userList = personMapper.getAllUserName();
+            List<OutClockIn> outClockInList = new ArrayList<OutClockIn>();
+            List<String> haveUserId = new ArrayList<String>();
+            List<String> afterUserList1 = userList.subList(0, 99);
+            List<String> afterUserList2 = userList.subList(99, 199);
+            List<String> afterUserList3 = userList.subList(199, 299);
+            List<String> afterUserList4 = null;
+            List<String> afterUserList5 = null;
+            if (userList.size() > 398) {
+                afterUserList4 = userList.subList(299, 399);
+                afterUserList5 = userList.subList(399, userList.size());
+            } else {
+                afterUserList4 = userList.subList(299, userList.size());
+            }
 
-        List<List<String>> all = new ArrayList<List<String>>();
-        all.add(afterUserList1);
-        all.add(afterUserList2);
-        all.add(afterUserList3);
-        all.add(afterUserList4);
-        if (afterUserList5 != null)
-            all.add(afterUserList5);
-        String day = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date dateStart = sdf.parse(beforDay + " 00:00:00");
-        Date dateEnd = sdf.parse(beforDay + " 23:59:59");
-        QYweixinSend text = new QYweixinSend();
-        text.setOpencheckindatatype(2);
-        text.setStarttime(dateStart.getTime() / 1000);
-        text.setEndtime(dateEnd.getTime() / 1000);
-        NetWorkHelper netHelper = new NetWorkHelper();
-        List<OutClockAll> ocAll = new ArrayList<OutClockAll>();
-        String yearM = beforDay.split("-")[0] + "-" + beforDay.split("-")[1];
-        OutClockAll oca = null;
-        for (int aa = 0; aa < all.size(); aa++) {
-            text.setUseridlist(all.get(aa));
-            String result = netHelper.getHttpsResponse2(Url, text, "POST");
-            JSONObject json = JSON.parseObject(result);
-            String checkindata = String.valueOf(json.get("checkindata"));
-            com.alibaba.fastjson.JSONArray checkindataStr = JSON.parseArray(checkindata);
-            List<OutPunch> outPunchList = JSONUtils.toList(checkindataStr, OutPunch.class);
-            OutClockIn oc = null;
-            String hourStr = null;
-            Integer hour = null;
-            String userId = null;
-            for (int a = 0; a < outPunchList.size(); a++) {
-                userId = outPunchList.get(a).getUserid();
-                if (haveUserId.contains(userId))
-                    continue;
-                oc = new OutClockIn();
-                oc.setUserid(userId);
-                oc.setClockInDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
-                oca = new OutClockAll();
-                oca.setEnrollNumber(userId);
-                oca.setDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
-                oca.setYearMonth(yearM);
-                for (OutPunch op : outPunchList) {
-                    if (op.getUserid().equals(userId)) {
-                        oca.setTimeStr((oca.getTimeStr() == null ? "" : oca.getTimeStr()) + " " + op.getCheckin_timeStr().split(" ")[1]);
-                        hourStr = op.getCheckin_timeStr().split(" ")[1];
-                        hour = Integer.valueOf(hourStr.split(":")[0]);
-                        if (hour < 12 && hour >= 0) {
-                            oc.setClockInDateAMOnStr(op.getCheckin_timeStr());
-                            oc.setClockInAddrAMOn(op.getLocation_detail());
-                            oc.setAmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
-                            oc.setCheckin_typeA(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
-                            oc.setException_typeA(op == null || op.getException_type() == null ? "" : op.getException_type());
-                            oc.setNotesA(op == null || op.getNotes() == null ? "" : op.getNotes());
-                        } else if (hour >= 12 && hour <= 18) {
-                            oc.setClockInDatePMOnStr(op.getCheckin_timeStr());
-                            oc.setClockInAddrPMOn(op.getLocation_detail());
-                            oc.setPmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
-                            oc.setCheckin_typeP(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
-                            oc.setException_typeP(op == null || op.getException_type() == null ? "" : op.getException_type());
-                            oc.setNotesP(op == null || op.getNotes() == null ? "" : op.getNotes());
-                        } else if (hour > 18 && hour <= 24) {
-                            oc.setClockInDateNMOnStr(op.getCheckin_timeStr());
-                            oc.setClockInAddNMOn(op.getLocation_detail());
-                            oc.setNmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
-                            oc.setCheckin_typeN(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
-                            oc.setException_typeN(op == null || op.getException_type() == null ? "" : op.getException_type());
-                            oc.setNotesN(op == null || op.getNotes() == null ? "" : op.getNotes());
+            List<List<String>> all = new ArrayList<List<String>>();
+            all.add(afterUserList1);
+            all.add(afterUserList2);
+            all.add(afterUserList3);
+            all.add(afterUserList4);
+            if (afterUserList5 != null)
+                all.add(afterUserList5);
+            String day = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date dateStart = sdf.parse(beforDay + " 00:00:00");
+            Date dateEnd = sdf.parse(beforDay + " 23:59:59");
+            QYweixinSend text = new QYweixinSend();
+            text.setOpencheckindatatype(2);
+            text.setStarttime(dateStart.getTime() / 1000);
+            text.setEndtime(dateEnd.getTime() / 1000);
+            NetWorkHelper netHelper = new NetWorkHelper();
+            List<OutClockAll> ocAll = new ArrayList<OutClockAll>();
+            String yearM = beforDay.split("-")[0] + "-" + beforDay.split("-")[1];
+            OutClockAll oca = null;
+            for (int aa = 0; aa < all.size(); aa++) {
+                text.setUseridlist(all.get(aa));
+                String result = netHelper.getHttpsResponse2(Url, text, "POST");
+                JSONObject json = JSON.parseObject(result);
+                String checkindata = String.valueOf(json.get("checkindata"));
+                com.alibaba.fastjson.JSONArray checkindataStr = JSON.parseArray(checkindata);
+                List<OutPunch> outPunchList = JSONUtils.toList(checkindataStr, OutPunch.class);
+                OutClockIn oc = null;
+                String hourStr = null;
+                Integer hour = null;
+                String userId = null;
+                for (int a = 0; a < outPunchList.size(); a++) {
+                    userId = outPunchList.get(a).getUserid();
+                    if (haveUserId.contains(userId))
+                        continue;
+                    oc = new OutClockIn();
+                    oc.setUserid(userId);
+                    oc.setClockInDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
+                    oca = new OutClockAll();
+                    oca.setEnrollNumber(userId);
+                    oca.setDateStr(outPunchList.get(a).getCheckin_timeStr().split(" ")[0]);
+                    oca.setYearMonth(yearM);
+                    for (OutPunch op : outPunchList) {
+                        if (op.getUserid().equals(userId)) {
+                            oca.setTimeStr((oca.getTimeStr() == null ? "" : oca.getTimeStr()) + " " + op.getCheckin_timeStr().split(" ")[1]);
+                            hourStr = op.getCheckin_timeStr().split(" ")[1];
+                            hour = Integer.valueOf(hourStr.split(":")[0]);
+                            if (hour < 12 && hour >= 0) {
+                                oc.setClockInDateAMOnStr(op.getCheckin_timeStr());
+                                oc.setClockInAddrAMOn(op.getLocation_detail());
+                                oc.setAmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
+                                oc.setCheckin_typeA(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
+                                oc.setException_typeA(op == null || op.getException_type() == null ? "" : op.getException_type());
+                                oc.setNotesA(op == null || op.getNotes() == null ? "" : op.getNotes());
+                            } else if (hour >= 12 && hour <= 18) {
+                                oc.setClockInDatePMOnStr(op.getCheckin_timeStr());
+                                oc.setClockInAddrPMOn(op.getLocation_detail());
+                                oc.setPmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
+                                oc.setCheckin_typeP(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
+                                oc.setException_typeP(op == null || op.getException_type() == null ? "" : op.getException_type());
+                                oc.setNotesP(op == null || op.getNotes() == null ? "" : op.getNotes());
+                            } else if (hour > 18 && hour <= 24) {
+                                oc.setClockInDateNMOnStr(op.getCheckin_timeStr());
+                                oc.setClockInAddNMOn(op.getLocation_detail());
+                                oc.setNmOnUrl((op == null || op.getMediaids() == null || op.getMediaids().length == 0 || op.getMediaids()[0] == null) ? "" : op.getMediaids()[0]);
+                                oc.setCheckin_typeN(op == null || op.getCheckin_type() == null ? "" : op.getCheckin_type());
+                                oc.setException_typeN(op == null || op.getException_type() == null ? "" : op.getException_type());
+                                oc.setNotesN(op == null || op.getNotes() == null ? "" : op.getNotes());
+                            }
                         }
                     }
+                    outClockInList.add(oc);
+                    haveUserId.add(userId);
+                    ocAll.add(oca);
                 }
-                outClockInList.add(oc);
-                haveUserId.add(userId);
-                ocAll.add(oca);
             }
+            this.saveOutClockInList(outClockInList, ocAll);
+        } catch (Exception e) {
+            throw e;
         }
-        this.saveOutClockInList(outClockInList, ocAll);
     }
 
     public void getBeforeDayZhongKongData(String beforDay) throws Exception {
-        pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
-        jedis = pool.getResource();
-        String[] afterDay = beforDay.split("-");
-        List<ZhongKongBean> strList = new ArrayList<ZhongKongBean>();
-        boolean connFlag = ZkemSDKUtils.connect("192.168.2.12", 4370);
-        if (connFlag) {
-            boolean flag = ZkemSDKUtils.readGeneralLogData();
-            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 4));
-        }
+        try {
+            logger.error("coming getKQ Service 01********start******");
+            pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
+            jedis = pool.getResource();
+            String[] afterDay = beforDay.split("-");
+            List<ZhongKongBean> strList = new ArrayList<ZhongKongBean>();
+            logger.error("coming getKQ Service 02********start******");
+            boolean connFlag = ZkemSDKUtils.connect("192.168.2.12", 4370);
+            logger.error("coming getKQ Service 032********start******" + connFlag);
+            if (connFlag) {
+                logger.error("coming getKQ Service 03********start******");
+                boolean flag = ZkemSDKUtils.readGeneralLogData();
+                strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 4));
+            }
+            logger.error("coming getKQ Service 06********start******");
 
-        boolean connFlag1 = ZkemSDKUtils.connect("192.168.2.10", 4370);
-        if (connFlag1) {
-            boolean flag = ZkemSDKUtils.readGeneralLogData();
-            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 2));
-        }
+            boolean connFlag1 = ZkemSDKUtils.connect("192.168.2.10", 4370);
+            if (connFlag1) {
+                boolean flag = ZkemSDKUtils.readGeneralLogData();
+                strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 2));
+            }
 
-        boolean connFlag2 = ZkemSDKUtils.connect("192.168.2.11", 4370);
-        if (connFlag2) {
-            boolean flag = ZkemSDKUtils.readGeneralLogData();
-            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 3));
-        }
+            boolean connFlag2 = ZkemSDKUtils.connect("192.168.2.11", 4370);
+            if (connFlag2) {
+                boolean flag = ZkemSDKUtils.readGeneralLogData();
+                strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 3));
+            }
 
-        boolean connFlag3 = ZkemSDKUtils.connect("192.168.1.18", 4370);
-        if (connFlag3) {
-            boolean flag = ZkemSDKUtils.readGeneralLogData();
-            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 1));
-        }
+            boolean connFlag3 = ZkemSDKUtils.connect("192.168.1.18", 4370);
+            if (connFlag3) {
+                boolean flag = ZkemSDKUtils.readGeneralLogData();
+                strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 1));
+            }
 
 
-        boolean connFlag4 = ZkemSDKUtils.connect("192.168.2.13", 4370);
-        if (connFlag4) {
-            boolean flag = ZkemSDKUtils.readGeneralLogData();
-            strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 5));
-        }
+            boolean connFlag4 = ZkemSDKUtils.connect("192.168.2.13", 4370);
+            if (connFlag4) {
+                boolean flag = ZkemSDKUtils.readGeneralLogData();
+                strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 5));
+            }
 
-        List<ZhongKongBean> newZkbList = new ArrayList<ZhongKongBean>();
-        List<ZhongKongBean> secZkbList = new ArrayList<ZhongKongBean>();
-        String encroNum1 = null;
-        String encroNum2 = null;
-        List<String> alreadyHaveNum = new ArrayList<String>();
-        for (int a = 0; a < strList.size(); a++) {
-            encroNum1 = strList.get(a).getEnrollNumber();
-            if (!alreadyHaveNum.contains(encroNum1)) {
-                for (int b = 0; b < strList.size(); b++) {
-                    encroNum2 = strList.get(b).getEnrollNumber();
-                    if (encroNum1.equals(encroNum2)) {
-                        secZkbList.add(strList.get(b));
-                    }
-                }
-
-                for (int i = 0; i < secZkbList.size() - 1; i++) {
-                    for (int j = 0; j < secZkbList.size() - 1 - i; j++) {
-                        if (secZkbList.get(j).getTimeTime().after(secZkbList.get(j + 1).getTimeTime())) {
-                            ZhongKongBean temp = secZkbList.get(j + 1);
-                            secZkbList.set(j + 1, secZkbList.get(j));
-                            secZkbList.set(j, temp);
+            List<ZhongKongBean> newZkbList = new ArrayList<ZhongKongBean>();
+            List<ZhongKongBean> secZkbList = new ArrayList<ZhongKongBean>();
+            String encroNum1 = null;
+            String encroNum2 = null;
+            List<String> alreadyHaveNum = new ArrayList<String>();
+            for (int a = 0; a < strList.size(); a++) {
+                encroNum1 = strList.get(a).getEnrollNumber();
+                if (!alreadyHaveNum.contains(encroNum1)) {
+                    for (int b = 0; b < strList.size(); b++) {
+                        encroNum2 = strList.get(b).getEnrollNumber();
+                        if (encroNum1.equals(encroNum2)) {
+                            secZkbList.add(strList.get(b));
                         }
                     }
+
+                    for (int i = 0; i < secZkbList.size() - 1; i++) {
+                        for (int j = 0; j < secZkbList.size() - 1 - i; j++) {
+                            if (secZkbList.get(j).getTimeTime().after(secZkbList.get(j + 1).getTimeTime())) {
+                                ZhongKongBean temp = secZkbList.get(j + 1);
+                                secZkbList.set(j + 1, secZkbList.get(j));
+                                secZkbList.set(j, temp);
+                            }
+                        }
+                    }
+                    alreadyHaveNum.add(encroNum1);
+                    newZkbList.addAll(secZkbList);
+                    secZkbList.clear();
                 }
-                alreadyHaveNum.add(encroNum1);
-                newZkbList.addAll(secZkbList);
                 secZkbList.clear();
             }
-            secZkbList.clear();
-        }
 
-        ZhongKongBean zkb01 = null;
-        ZhongKongBean zkb02 = null;
-        ZhongKongBean zkb = null;
-        List<ZhongKongBean> toDataBaseList = new ArrayList<ZhongKongBean>();
-        boolean isHave;
-        for (int a = 0; a < newZkbList.size(); a++) {
-            zkb01 = newZkbList.get(a);
-            isHave = false;
-            for (int b = 0; b < toDataBaseList.size(); b++) {
-                zkb02 = toDataBaseList.get(b);
-                if (zkb01.getEnrollNumber().equals(zkb02.getEnrollNumber()) && zkb01.getDateStr().equals(zkb02.getDateStr())) {
-                    isHave = true;
-                    zkb02.setTimeStr(zkb02.getTimeStr() + " " + zkb01.getTimeStr());
+            ZhongKongBean zkb01 = null;
+            ZhongKongBean zkb02 = null;
+            ZhongKongBean zkb = null;
+            List<ZhongKongBean> toDataBaseList = new ArrayList<ZhongKongBean>();
+            boolean isHave;
+            for (int a = 0; a < newZkbList.size(); a++) {
+                zkb01 = newZkbList.get(a);
+                isHave = false;
+                for (int b = 0; b < toDataBaseList.size(); b++) {
+                    zkb02 = toDataBaseList.get(b);
+                    if (zkb01.getEnrollNumber().equals(zkb02.getEnrollNumber()) && zkb01.getDateStr().equals(zkb02.getDateStr())) {
+                        isHave = true;
+                        zkb02.setTimeStr(zkb02.getTimeStr() + " " + zkb01.getTimeStr());
+                    }
+                }
+                if (!isHave) {
+                    zkb = new ZhongKongBean();
+                    zkb.setEnrollNumber(zkb01.getEnrollNumber());
+                    zkb.setMachineNum(zkb01.getMachineNum());
+                    zkb.setDateStr(zkb01.getDateStr());
+                    zkb.setTimeStr(zkb01.getTimeStr());
+                    zkb.setYearMonth(zkb01.getYearMonth());
+                    toDataBaseList.add(zkb);
                 }
             }
-            if (!isHave) {
-                zkb = new ZhongKongBean();
-                zkb.setEnrollNumber(zkb01.getEnrollNumber());
-                zkb.setMachineNum(zkb01.getMachineNum());
-                zkb.setDateStr(zkb01.getDateStr());
-                zkb.setTimeStr(zkb01.getTimeStr());
-                zkb.setYearMonth(zkb01.getYearMonth());
-                toDataBaseList.add(zkb);
-            }
-        }
 
-        List<Employee> employeeList = personMapper.findAllEmployeeNotIsQuitandhaveEnrollNum();
-        boolean isComin = false;
-        Integer nu = null;
-        ZhongKongBean zkbb = null;
-        for (Employee ee : employeeList) {
-            isComin = false;
-            for (ZhongKongBean zk : toDataBaseList) {
-                if (ee.getEnrollNumber().equals(zk.getEnrollNumber())) {
-                    nu = zk.getMachineNum();
-                    isComin = true;
-                    break;
+            List<Employee> employeeList = personMapper.findAllEmployeeNotIsQuitandhaveEnrollNum();
+            boolean isComin = false;
+            Integer nu = null;
+            ZhongKongBean zkbb = null;
+            for (Employee ee : employeeList) {
+                isComin = false;
+                for (ZhongKongBean zk : toDataBaseList) {
+                    if (ee.getEnrollNumber().equals(zk.getEnrollNumber())) {
+                        nu = zk.getMachineNum();
+                        isComin = true;
+                        break;
+                    }
+                }
+                if (!isComin) {
+                    zkbb = new ZhongKongBean();
+                    zkbb.setEnrollNumber(ee.getEnrollNumber().toString());
+                    zkbb.setYearMonth(afterDay[0] + "-" + afterDay[1]);
+                    zkbb.setDateStr(beforDay);
+                    zkbb.setTimeStr("");
+                    zkbb.setMachineNum(nu);
+                    toDataBaseList.add(zkbb);
                 }
             }
-            if (!isComin) {
-                zkbb = new ZhongKongBean();
-                zkbb.setEnrollNumber(ee.getEnrollNumber().toString());
-                zkbb.setYearMonth(afterDay[0] + "-" + afterDay[1]);
-                zkbb.setDateStr(beforDay);
-                zkbb.setTimeStr("");
-                zkbb.setMachineNum(nu);
-                toDataBaseList.add(zkbb);
-            }
+
+            this.saveBeforeDayZhongKongData(toDataBaseList);
+
+            List<OutClockIn> ociList = new ArrayList<OutClockIn>();
+            OutClockIn oc = new OutClockIn();
+            oc.setClockInDateStr(toDataBaseList.get(0).getDateStr());
+            ociList.add(oc);
+            List<KQBean> kqBeanList = new ArrayList<KQBean>();
+            KQBean kq = null;
+            List<KQBean> kqBeans = this.getAllKQDataByYearMonthDay(toDataBaseList.get(0).getDateStr());
+            List<KQBean> newKQBeans = this.getAfterOperatorDataByOriginData(ociList, kqBeans);
+            this.saveAllNewKQBeansToMysql(newKQBeans);
+            ociList.clear();
+        } catch (Exception e) {
+            throw e;
         }
-
-        this.saveBeforeDayZhongKongData(toDataBaseList);
-
-        List<OutClockIn> ociList = new ArrayList<OutClockIn>();
-        OutClockIn oc = new OutClockIn();
-        oc.setClockInDateStr(toDataBaseList.get(0).getDateStr());
-        ociList.add(oc);
-        List<KQBean> kqBeanList = new ArrayList<KQBean>();
-        KQBean kq = null;
-        List<KQBean> kqBeans = this.getAllKQDataByYearMonthDay(toDataBaseList.get(0).getDateStr());
-        List<KQBean> newKQBeans = this.getAfterOperatorDataByOriginData(ociList, kqBeans);
-        this.saveAllNewKQBeansToMysql(newKQBeans);
-        ociList.clear();
     }
 
 

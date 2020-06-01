@@ -1,9 +1,12 @@
 package com.cosun.cosunp.tool;
 
 import com.cosun.cosunp.entity.ZhongKongBean;
+import com.cosun.cosunp.service.impl.PersonServiceImpl;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -21,27 +24,40 @@ public class ZkemSDKUtils {
 
     private static ActiveXComponent zkem = new ActiveXComponent("zkemkeeper.ZKEM.1");
 
+    private static Logger logger = LogManager.getLogger(ZkemSDKUtils.class);
 
-    public static boolean connect(String address, int port) {
-        boolean result = zkem.invoke("Connect_NET", address, port).getBoolean();
-        return result;
+
+    public static boolean connect(String address, int port) throws Exception {
+        try {
+            boolean result = zkem.invoke("Connect_NET", address, port).getBoolean();
+            return result;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 
-    public static boolean readGeneralLogData() {
-        boolean result = zkem.invoke("ReadGeneralLogData", 1).getBoolean();
-        return result;
+    public static boolean readGeneralLogData() throws Exception {
+        try {
+            boolean result = zkem.invoke("ReadGeneralLogData", 1).getBoolean();
+            return result;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 
-    public static boolean readLastestLogData(Date lastest) {
-        boolean result = zkem.invoke("ReadLastestLogData", 2018 - 07 - 24).getBoolean();
-        return result;
+    public static boolean readLastestLogData(Date lastest) throws Exception {
+        try {
+            boolean result = zkem.invoke("ReadLastestLogData", 2018 - 07 - 24).getBoolean();
+            return result;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
-    public static List<ZhongKongBean> getGeneralLogData(String fromDate, String endDate) {
+    public static List<ZhongKongBean> getGeneralLogData(String fromDate, String endDate) throws Exception {
         Variant dwMachineNumber = new Variant(1, true);
-
         Variant dwEnrollNumber = new Variant("", true);
         Variant dwVerifyMode = new Variant(0, true);
         Variant dwInOutMode = new Variant(0, true);
@@ -100,23 +116,26 @@ public class ZkemSDKUtils {
         return strList;
     }
 
-    public static List<ZhongKongBean> getGeneralLogData(String beforDay, Integer num) {
-        Variant dwMachineNumber = new Variant(1, true);
-        Variant dwEnrollNumber = new Variant("", true);
-        Variant dwVerifyMode = new Variant(0, true);
-        Variant dwInOutMode = new Variant(0, true);
-        Variant dwYear = new Variant(0, true);
-        Variant dwMonth = new Variant(0, true);
-        Variant dwDay = new Variant(0, true);
-        Variant dwHour = new Variant(0, true);
-        Variant dwMinute = new Variant(0, true);
-        Variant dwSecond = new Variant(0, true);
-        Variant dwWorkCode = new Variant(0, true);
+    public static List<ZhongKongBean> getGeneralLogData(String beforDay, Integer num) throws Exception {
         List<ZhongKongBean> strList = new ArrayList<ZhongKongBean>();
-        boolean newresult = false;
         try {
+            Variant dwMachineNumber = new Variant(1, true);
+            Variant dwEnrollNumber = new Variant("", true);
+            Variant dwVerifyMode = new Variant(0, true);
+            Variant dwInOutMode = new Variant(0, true);
+            Variant dwYear = new Variant(0, true);
+            Variant dwMonth = new Variant(0, true);
+            Variant dwDay = new Variant(0, true);
+            Variant dwHour = new Variant(0, true);
+            Variant dwMinute = new Variant(0, true);
+            Variant dwSecond = new Variant(0, true);
+            Variant dwWorkCode = new Variant(0, true);
+            boolean newresult = false;
             do {
+                logger.error("coming getKQ Service 04********start******");
                 Variant vResult = Dispatch.call(zkem, "SSR_GetGeneralLogData", dwMachineNumber, dwEnrollNumber, dwVerifyMode, dwInOutMode, dwYear, dwMonth, dwDay, dwHour, dwMinute, dwSecond, dwWorkCode);
+                logger.error("coming getKQ Service 05********start******");
+
                 newresult = vResult.getBoolean();
                 if (newresult) {
                     String enrollNumber = dwEnrollNumber.getStringRef();
@@ -163,7 +182,7 @@ public class ZkemSDKUtils {
         return strList;
     }
 
-    public static List<Map<String, Object>> getUserInfo() {
+    public static List<Map<String, Object>> getUserInfo() throws Exception {
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         boolean result = zkem.invoke("ReadAllUserID", 1).getBoolean();
 
@@ -199,7 +218,7 @@ public class ZkemSDKUtils {
         return resultList;
     }
 
-    public static boolean setUserInfo(String number, String name, String password, int isPrivilege, boolean enabled) {
+    public static boolean setUserInfo(String number, String name, String password, int isPrivilege, boolean enabled) throws Exception {
         Variant v0 = new Variant(1);
         Variant sdwEnrollNumber = new Variant(number, true);
         Variant sName = new Variant(name, true);
@@ -211,22 +230,26 @@ public class ZkemSDKUtils {
         return result;
     }
 
-    public static Map<String, Object> getUserInfoByNumber(String number) {
-        Variant v0 = new Variant(1);
-        Variant sdwEnrollNumber = new Variant(number, true);
-        Variant sName = new Variant("", true);
-        Variant sPassword = new Variant("", true);
-        Variant iPrivilege = new Variant(0, true);
-        Variant bEnabled = new Variant(false, true);
-        boolean result = zkem.invoke("SSR_GetUserInfo", v0, sdwEnrollNumber, sName, sPassword, iPrivilege, bEnabled).getBoolean();
-        if (result) {
-            Map<String, Object> m = new HashMap<String, Object>();
-            m.put("EnrollNumber", number);
-            m.put("Name", sName.getStringRef());
-            m.put("Password", sPassword.getStringRef());
-            m.put("Privilege", iPrivilege.getIntRef());
-            m.put("Enabled", bEnabled.getBooleanRef());
-            return m;
+    public static Map<String, Object> getUserInfoByNumber(String number) throws Exception {
+        try {
+            Variant v0 = new Variant(1);
+            Variant sdwEnrollNumber = new Variant(number, true);
+            Variant sName = new Variant("", true);
+            Variant sPassword = new Variant("", true);
+            Variant iPrivilege = new Variant(0, true);
+            Variant bEnabled = new Variant(false, true);
+            boolean result = zkem.invoke("SSR_GetUserInfo", v0, sdwEnrollNumber, sName, sPassword, iPrivilege, bEnabled).getBoolean();
+            if (result) {
+                Map<String, Object> m = new HashMap<String, Object>();
+                m.put("EnrollNumber", number);
+                m.put("Name", sName.getStringRef());
+                m.put("Password", sPassword.getStringRef());
+                m.put("Privilege", iPrivilege.getIntRef());
+                m.put("Enabled", bEnabled.getBooleanRef());
+                return m;
+            }
+        } catch (Exception e) {
+            throw e;
         }
         return null;
     }

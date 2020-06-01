@@ -24,7 +24,8 @@ public class WordToPDF {
 //    cmd命令
 //
 //    cd C:\Program Files\OpenOffice.org 3\program
-//  soffice -headless -accept="socket,host=0.0.0.0,port=8100;urp;" -nofirststartwizard
+    // service mysqld start
+//  soffice -headles s -accept="socket,host=0.0.0.0,port=8100;urp;" -nofirststartwizard
 //    soffice -headless -accept="socket,host=127.0.0.1,port=8100;urp;" -nofirststartwizard
 
 
@@ -36,9 +37,9 @@ public class WordToPDF {
         if (!outputFile.getParentFile().exists()) {
             outputFile.getParentFile().exists();
         }
-//        soffice -headless -accept="socket,host=0.0.0.0,port=8100;urp;" -nofirststartwizard
+//
 
-        //String command = "/opt/openoffice4/program/soffice --headless --accept=\"socket,host=0.0.0.0,port=8100;urp;\" --nofirststartwizard &";
+        //String c ommand = "/opt/openoffice4/program/soffice --headless --accept=\"socket,host=0.0.0.0,port=8100;urp;\" --nofirststartwizard &";
         String command = "/opt/openoffice4/program/soffice -headless -accept=\"socket,host=0.0.0.0,port=8100;urp;\" -nofirststartwizard";
         //String command = "C:/Program Files (x86)/OpenOffice 4/program/soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\" -nofirststartwizard";
         Process p = Runtime.getRuntime().exec(command);
