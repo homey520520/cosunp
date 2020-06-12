@@ -34,6 +34,7 @@ public class DesignMaterialHeadProductItem implements Serializable {
     private String isCanUseStr;
     private boolean isCanPurchase;
     private int flag;
+    private int isLinshi;
 
 
     List<String> materialNameList2;
@@ -46,6 +47,11 @@ public class DesignMaterialHeadProductItem implements Serializable {
     private List<String> materialNameList;
     private List<String> materialSpeciList;
 
+
+    List<DesignMaterialHeadProductItem> dhpItemList;
+
+    List<DesignMaterialHeadProductItem> dhpHeadItemList;
+
     private int currentPage = 1;
     private int maxPage;
     private int recordCount;
@@ -54,6 +60,30 @@ public class DesignMaterialHeadProductItem implements Serializable {
     private String sortMethod;
     private String sortByName;
 
+
+    public int getIsLinshi() {
+        return isLinshi;
+    }
+
+    public void setIsLinshi(int isLinshi) {
+        this.isLinshi = isLinshi;
+    }
+
+    public List<DesignMaterialHeadProductItem> getDhpHeadItemList() {
+        return dhpHeadItemList;
+    }
+
+    public void setDhpHeadItemList(List<DesignMaterialHeadProductItem> dhpHeadItemList) {
+        this.dhpHeadItemList = dhpHeadItemList;
+    }
+
+    public List<DesignMaterialHeadProductItem> getDhpItemList() {
+        return dhpItemList;
+    }
+
+    public void setDhpItemList(List<DesignMaterialHeadProductItem> dhpItemList) {
+        this.dhpItemList = dhpItemList;
+    }
 
     public int getFlag() {
         return flag;

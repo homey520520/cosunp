@@ -18,11 +18,15 @@ public class DesignMaterialHeadProduct implements Serializable {
     private String productName;
     private String productNo;
     private String needNum;
+    private String loginName;
     private String drawingNo;
     private String productRoute;
     private String remark;
     private Integer head_id;
     private String customerNo;
+    private String productTypeNo;
+    private String productTypeName;
+    private String productTypeRoute;
 
     List<String> productNameList;
     List<String> productNoList;
@@ -32,10 +36,42 @@ public class DesignMaterialHeadProduct implements Serializable {
     private int currentPage = 1;
     private int maxPage;
     private int recordCount;
-    private int pageSize = 10;
+    private int pageSize = 8;
     private int currentPageTotalNum;
     private String sortMethod;
     private String sortByName;
+
+    public String getProductTypeNo() {
+        return productTypeNo;
+    }
+
+    public void setProductTypeNo(String productTypeNo) {
+        this.productTypeNo = productTypeNo;
+    }
+
+    public String getProductTypeName() {
+        return productTypeName;
+    }
+
+    public void setProductTypeName(String productTypeName) {
+        this.productTypeName = productTypeName;
+    }
+
+    public String getProductTypeRoute() {
+        return productTypeRoute;
+    }
+
+    public void setProductTypeRoute(String productTypeRoute) {
+        this.productTypeRoute = productTypeRoute;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
 
     private List<DesignMaterialHeadProductItem> itemList;
 

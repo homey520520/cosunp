@@ -25,6 +25,8 @@ public class DesignMaterialHead implements Serializable {
     private String orderMaker;
     private String remark;
 
+    private String loginName;
+
     private String getOrderDateStr;
     private String deliveryOrderDateStr;
     private String salorEmpStr;
@@ -34,7 +36,7 @@ public class DesignMaterialHead implements Serializable {
     private int currentPage = 1;
     private int maxPage;
     private int recordCount;
-    private int pageSize = 10;
+    private int pageSize = 8;
     private int currentPageTotalNum;
     private String sortMethod;
     private String sortByName;
@@ -85,6 +87,14 @@ public class DesignMaterialHead implements Serializable {
 
     public void setSalorEmpList(List<String> salorEmpList) {
         this.salorEmpList = salorEmpList;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public List<String> getMakerList() {

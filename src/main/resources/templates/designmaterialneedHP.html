@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
     <script src="/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
     <script type="text/javascript" src="../static/lib/bootstrap/js/bootstrap.min.js"></script>
@@ -23,10 +23,14 @@
     th {
         font-size: 11px;
     }
+
+    .selectpicker {
+        width: 50px
+    }
 </style>
 <script>
 
-    let deptNameArray
+    let deptNameArray;
     $(function () {
         window.parent.document.getElementById('content').style.display = "block";
         window.parent.document.getElementById('contentnew').style.display = "none";
@@ -34,12 +38,14 @@
         var flag = $("#flag").val();
         var aflag = eval(flag)
         var customerNo2 = $("#customerNo2").val();
-        deptNameArray = new Array("钣金", "精密", "精工", "喷涂", "图文", "亚克力", "装配", "包装");
+        deptNameArray = new Array("钣金", "精密", "精工", "喷涂", "图文", "亚克力", "装配", "包装", "真空电镀", "真空镀膜", "水镀"
+            , "纳米镀", "热浸锌", "氧化", "阳极氧化", "做旧","腐蚀", "水切割", "线切割", "水转印", "热转印", "机加工");
         if (customerNo2.length > 0) {
             $("#customerNo").val(customerNo2);
             $('.selectpicker').selectpicker('refresh');
-            console.log(customerNo2)
         }
+        addSJProdctHead();
+
         if (aflag == 1) {
             $("#errormessage").show();
             var errormessagediv = document.getElementById("errormessage");
@@ -65,7 +71,14 @@
             var errormessagediv = document.getElementById("errormessage");
             errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;商品品号已存在!";
             errormessagediv.style.color = "red";
+        } else if (aflag == 8) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;商品复制成功!";
+            errormessagediv.style.color = "green";
         }
+
+
     });
 
     function goPageone() {
@@ -210,6 +223,7 @@
                         tr.append("<td>" + isNull(data[num].drawingNo) + "</td>");
                         tr.append("<td>" + isNull(data[num].needNum) + "</td>");
                         tr.append("<td>" + isNull(data[num].productRoute) + "</td>");
+                        tr.append("<td></td>");
                         tr.append("<td>" + isNull(data[num].remark) + "</td>");
                         td = "<td>";
                         td += " <a class=\"btn btn-xs btn-primary\" \n" +
@@ -293,6 +307,11 @@
         return str.replace(/(^\s*)|(\s*$)/g, "");
     }
 
+    var ii = 0;
+    $(".name").click(function () {
+        $(this).attr("idvalue", ii++);
+    })
+
 
     function checkNum(str) {
         $("#errormessage").hide();
@@ -308,6 +327,35 @@
                 return false;
             }
         }
+    }
+
+    var oldstrstr = new Array();
+
+    function onBiaoJi(obj, num) {
+
+        var valueArr = $(obj).children('option:selected');
+        var strstr = new Array();
+        for (var i = 0; i < valueArr.length; i++) {
+            strstr[i] = $(valueArr[i]).attr("value");
+        }
+
+        if (strstr.length == 0) {
+            oldstrstr = new Array();
+            $(obj).parent().parent().find("td").eq(5).find("input").eq(0).val(oldstrstr.join("-"));
+            return;
+        }
+        for (var a = 0; a < strstr.length; a++) {
+            if (oldstrstr.indexOf(strstr[a]) <= -1) {
+                oldstrstr[strstr.length] = strstr[a];
+            }
+        }
+
+        if (oldstrstr.join("-").substr(0, 1) == "-") {
+            $(obj).parent().parent().find("td").eq(5).find("input").eq(0).val(oldstrstr.join("-").substr(1, oldstrstr.join("-").length--));
+        } else {
+            $(obj).parent().parent().find("td").eq(5).find("input").eq(0).val(oldstrstr.join("-"));
+        }
+
     }
 
     function addSJProdctHead() {
@@ -328,17 +376,24 @@
         var tr = $("<tr id='tr" + len + "'></tr>");
 
         tr.append("<td id='tr" + len + "'>" + len + "</td>");
-        tr.append("<td><input type=\"text\" class=\"form-control\"    ></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\"></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\"></td>");
-        tr.append("<td><input type=\"text\"  class=\"form-control\" ></td>");
-        td = "<td><select id=\"name\" multiple class=\"selectpicker show-tick form-control\"\n" +
-            "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+        tr.append("<td><input style='width:160px;' type=\"text\" class=\"form-control\"    ></td>");
+        tr.append("<td><input style='width:160px;' type=\"text\"  class=\"form-control\"></td>");
+        tr.append("<td><input style='width:160px;' type=\"text\"  class=\"form-control\"></td>");
+        tr.append("<td ><input type=\"text\"  class=\"form-control\" ></td>");
+        tr.append("<td style='width: 180px'><input type=\"text\" style='width: 180px' class=\"form-control\" ></td>");
+        td = "<td ><select id='testShow' " +
+            "   multiple class=\"selectpicker show-tick form-control \"\n" +
+            "   data-live-search=\"true\" data-actions-box=\"true\" onchange=\"onBiaoJi(this,0)\"  " +
+            "data-selected-text-format=\"count > 1\">\n";
         for (var a = 0; a < deptNameArray.length; a++) {
             td += "  <option value=\"" + deptNameArray[a] + "\">" + deptNameArray[a] + "</option>\n";
         }
         td += "  </select></td> ";
         tr.append(td);
+
+        tr.append("<td  style='width: 200px'><input style='width: 200px' type=\"text\" class=\"form-control\" " +
+            " onkeypress=\"return onKeyPress1(event,this)\"></td>");
+        tr.append("<td  style='width: 280px'><input type=\"text\"  onkeypress=\"return onKeyPress2(event,this)\" style='width: 280px' class=\"form-control\"  ></td>");
 
         tr.append("<td><input type='text' placeholder='备注选填'  class=\"form-control\"></td>")
         tr.append("<td><a id=\"savebutton\"\n" +
@@ -348,8 +403,92 @@
         tr.prependTo(tbody);
         $('.selectpicker').selectpicker('refresh');
 
+        //$(tr).children().find("td").eq(7).find("div").eq(0).find("button").eq(0).attr("width","50px");
+
     }
 
+    function onKeyPress1(e, obj) {
+        var keyCode = null;
+        if (e.which) keyCode = e.which; else if (e.keyCode) keyCode = e.keyCode;
+        if (keyCode == 13) {
+            queryRoutNameName(obj);
+            return false;
+        }
+        return true;
+    }
+
+
+    var datadata;
+
+    function Trim(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+
+    function queryRoutNameName(obj) {
+        var routeName = $(obj).parent().parent().find("td").eq(7).find("input").eq(0).val();
+        var data = JSON.stringify(routeName);
+        var td;
+        if (Trim(routeName).length > 0) {
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/design/queryRouteSpecifiByCondition",
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    datadata = eval(msg);
+                    if (datadata.length > 1) {
+
+
+                        td = "<input style='width:280px' type=\"text\" value='" + datadata[0].productTypeRoute + "'  onkeypress=\"return onKeyPress2(event,this)\" class=\"form-control\">";
+                        $(obj).parent().parent().find("td").eq(8).html(td);
+
+                        td = "<select  onchange='showBySelect1(this)' class=\"selectpicker show-tick form-control\"\n" +
+                            "   data-live-search=\"true\" data-actions-box=\"true\"\n" +
+                            "   data-selected-text-format=\"count > 1\">\n";
+                        for (var aa = 0; aa < datadata.length; aa++) {
+                            td += "  <option value=\"" + aa + "\" >" + datadata[aa].productTypeName + "</option>\n";
+                        }
+                        td += "  </select>";
+                        $(obj).parent().parent().find("td").eq(7).html(td);
+
+                    } else {
+                        if (datadata.length == 1) {
+                            td = "<input style='width:200px' type=\"text\" value='" + datadata[0].productTypeName + "'  onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">";
+                            td = "<input style='width:280px' type=\"text\" value='" + datadata[0].productTypeRoute + "'  onkeypress=\"return onKeyPress2(event,this)\" class=\"form-control\">";
+                        } else {
+                            td = "<input style='width:200px' type=\"text\" value=''  onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">";
+                            td = "<input style='width:280px' type=\"text\" value=''  onkeypress=\"return onKeyPress2(event,this)\" class=\"form-control\">";
+                        }
+                        $(obj).parent().parent().find("td").eq(8).html(td);
+                    }
+
+
+                    $('.selectpicker').selectpicker('refresh');
+                },
+                error: function (msg) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    $("#errormessage").show();
+                    var errormessagediv = document.getElementById("errormessage");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                    errormessagediv.style.color = "red";
+                }
+            });
+        }
+    }
+
+    function showBySelect1(obj) {
+        var index = $(obj).parent().parent().find("td").eq(7).find("select").val();
+        $(obj).parent().parent().find("td").eq(8).find("input").eq(0).val(datadata[index].productTypeRoute);
+        $(obj).parent().parent().find("td").eq(7).html("<input onkeypress=\"return onKeyPress1(event,this)\" style='width:200px' type=\"text\"value='" + datadata[index].productTypeName + "'  class=\"form-control\">")
+
+
+
+    }
 
     function updateOrderItemByheadId(obj, id) {
         var productName = $(obj).parent().parent().find("td").eq(1).text();
@@ -357,16 +496,22 @@
         var drawingNo = $(obj).parent().parent().find("td").eq(3).text();
         var num = $(obj).parent().parent().find("td").eq(4).text();
         var proroute = $(obj).parent().parent().find("td").eq(5).text();
-        var remark = $(obj).parent().parent().find("td").eq(6).text();
+        var productTypeName = $(obj).parent().parent().find("td").eq(7).text();
+        var productTypeRoute = $(obj).parent().parent().find("td").eq(8).text();
+        var remark = $(obj).parent().parent().find("td").eq(9).text();
 
-
-        $(obj).parent().parent().find("td").eq(1).html("<input type=\"text\"value='" + productName + "'  class=\"form-control\">")
-        $(obj).parent().parent().find("td").eq(2).html("<input type=\"text\" value='" + productNo + "' class=\"form-control\">")
-        $(obj).parent().parent().find("td").eq(3).html("<input type=\"text\"  value='" + drawingNo + "' class=\"form-control\">")
+        oldstrstr = proroute.split("-");
+        $(obj).parent().parent().find("td").eq(1).html("<input style='width:160px' type=\"text\"value='" + productName + "'  class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(2).html("<input style='width:160px' type=\"text\" value='" + productNo + "' class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(3).html("<input style='width:160px' type=\"text\"  value='" + drawingNo + "' class=\"form-control\">")
         $(obj).parent().parent().find("td").eq(4).html("<input type=\"text\"  value='" + num + "' class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(5).html("<input style='width:180px' style='width:350px' type=\"text\"  value='" + proroute + "' class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(7).html("<input onkeypress=\"return onKeyPress1(event,this)\" style='width:200px'  type=\"text\"  value='" + productTypeName + "' class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(8).html("<input style='width:280px'  type=\"text\"  value='" + productTypeRoute + "' class=\"form-control\">")
 
         var td = "<select id=\"name\" multiple class=\"selectpicker show-tick form-control\"\n" +
-            "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+            "   data-live-search=\"true\" data-actions-box=\"true\"  onchange=\"onBiaoJi(this,0)\"  " +
+            " data-selected-text-format=\"count = 1\">\n";
         for (var a = 0; a < deptNameArray.length; a++) {
             if (proroute.indexOf(deptNameArray[a]) != -1) {
                 td += "  <option selected='selected' value=\"" + deptNameArray[a] + "\" >" + deptNameArray[a] + "</option>\n";
@@ -376,12 +521,12 @@
         }
         td += "  </select> ";
 
+        $(obj).parent().parent().find("td").eq(6).html(td);
 
-        $(obj).parent().parent().find("td").eq(5).html(td);
 
 
-        $(obj).parent().parent().find("td").eq(6).html("<input type=\"text\"  value='" + remark + "' class=\"form-control\">")
-        $(obj).parent().parent().find("td").eq(7).html("<a id=\"savebutton\"\n" +
+        $(obj).parent().parent().find("td").eq(9).html("<input type=\"text\"  value='" + remark + "' class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(10).html("<a id=\"savebutton\"\n" +
             "    href=\"javascript:void(0);\" onclick=\"saveSJHeadPDateToMysql(this," + id + ")\">保存</a>" +
             " <a href=\"javascript:void(0);\"\n" +
             "    onclick=\"deleteTRA(this," + len + "," + id + ");\">删除</a>");
@@ -401,7 +546,8 @@
 
     function deleteOrderItemHByheadId(id) {
         var customerNo = $("#customerNo").val();
-        window.location.href = "/design/deleteOrderItemHByheadId?id=" + id + "&customerNo=" + customerNo;
+        var head_id = $("#customerNoId").val();
+        window.location.href = "/design/deleteOrderItemHByheadId?id=" + id + "&customerNo=" + customerNo + "&head_id=" + head_id;
     }
 
     function saveSJHeadPDateToMysql(obj, id) {
@@ -410,9 +556,19 @@
         var productNo = $(obj).parent().parent().find("td").eq(2).find("input").eq(0).val();
         var drawingNo = $(obj).parent().parent().find("td").eq(3).find("input").eq(0).val();
         var needNum = $(obj).parent().parent().find("td").eq(4).find("input").eq(0).val();
-        var productRoute = $(obj).parent().parent().find("td").eq(5).find("select").eq(0).val();
-        var remark = $(obj).parent().parent().find("td").eq(6).find("input").eq(0).val();
+        var productRoute = $(obj).parent().parent().find("td").eq(5).find("input").eq(0).val();
+
+        var prodctuType = $(obj).parent().parent().find("td").eq(7).find("input").eq(0).val();
+        if (prodctuType.length == 0) {
+            prodctuType = $(obj).parent().parent().find("td").eq(7).find("option:selected").text();
+        }
+        var prodctuTypeName = $(obj).parent().parent().find("td").eq(8).find("input").eq(0).val();
+        if (prodctuTypeName.length == 0) {
+            prodctuTypeName = $(obj).parent().parent().find("td").eq(8).find("option:selected").eq(0).text();
+        }
+        var remark = $(obj).parent().parent().find("td").eq(9).find("input").eq(0).val();
         var customerNo = $("#customerNo").val();
+        var customerNoId = $("#customerNoId").val();
 
 
         if (productName.trim().length <= 0) {
@@ -431,21 +587,46 @@
             return false;
         }
 
-        console.log(productName)
-        console.log(productNo + "  productNo")
+        if (prodctuType.trim().length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "产品分类名称不能为空!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+
+        if (prodctuTypeName.trim().length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "产品分类路线不能为空!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+
+
         window.location.href = "/design/saveSJHeadPDateToMysql?" +
             "productName=" + productName +
             "&productNo=" + productNo +
             "&drawingNo=" + drawingNo +
             "&needNum=" + needNum +
             "&productRoute=" + productRoute +
+            "&productTypeNo=" + customerNo +
+            "&productTypeName=" + prodctuType +
+            "&productTypeRoute=" + prodctuTypeName +
             "&customerNo=" + customerNo +
+            "&head_id=" + customerNoId +
             "&id=" + id +
             "&remark=" + remark;
     }
 
     function showOrderProductByOrderNo(id) {
         window.location.href = "/design/toHeadProductItem?headId=" + id;
+    }
+
+    function copyDesigeOrderProductById(id) {
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        window.parent.document.getElementById('showCopyeDivItem').style.display = "block";
+        window.parent.document.getElementById('fromOrderItemId').value = id;
     }
 
 </script>
@@ -474,6 +655,7 @@
             <form>
                 <input type="hidden" id="flag" th:value="${flag}">
                 <input type="hidden" id="customerNo2" th:value="${customerNo}">
+                <input type="hidden" id="customerNoId" th:value="${head_Id}">
                 <input type="hidden" id="maxPage" th:value="${orderHead.maxPage}">
                 <input type="hidden" id="n_currentPage" name="view.currentPage" th:value="${orderHead.currentPage}"/>
 
@@ -491,7 +673,7 @@
                                     <label>
                                         <select id="productName" multiple class="selectpicker show-tick form-control"
                                                 data-live-search="true" data-actions-box="true"
-                                                data-selected-text-format="count > 1">
+                                                data-selected-text-format="count > 0">
                                             　　
                                             <option th:each="c:${productNameList}" th:value="${c}"
                                                     th:text="${c}"></option>
@@ -564,7 +746,7 @@
                     </div>
                 </div>
             </form>
-            <table class="table table-bordered table-hover table-striped text-center hongmei" id="showlistbody">
+            <table class="table table-bordered table-hover table-striped text-center" id="showlistbody">
                 <thead style="background-color:lightsteelblue">
                 <tr>
                     <th style="text-align: center"> 序号</th>
@@ -594,6 +776,22 @@
                         工艺路线
                         <i class="fa fa-sort-desc" onclick="sortByDesc('productRoute')" aria-hidden="true"></i>
                     </th>
+                    <th style="width: 50px">
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('productRoute')" aria-hidden="true"></i>
+                        工艺路线选择
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('productRoute')" aria-hidden="true"></i>
+                    </th>
+                    <th style="width: 50px">
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('productTypeName')" aria-hidden="true"></i>
+                        产品分类名称
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('productTypeName')" aria-hidden="true"></i>
+                    </th>
+
+                    <th style="width: 50px">
+                        <i class="fa fa-sort-asc" onclick="sortByAsc('productTypeRoute')" aria-hidden="true"></i>
+                        产品工艺路线
+                        <i class="fa fa-sort-desc" onclick="sortByDesc('productTypeRoute')" aria-hidden="true"></i>
+                    </th>
 
                     <th style="text-align: center">
                         <i class="fa fa-sort-asc" onclick="sortByAsc('remark')" aria-hidden="true"></i>
@@ -616,19 +814,24 @@
                             <td align="center" th:text="${order.drawingNo}"></td>
                             <td align="center" th:text="${order.needNum}"></td>
                             <td align="center" th:text="${order.productRoute}"></td>
+                            <td align="center" style="width:50px"></td>
+                            <td align="center" th:text="${order.productTypeName}"></td>
+                            <td align="center" th:text="${order.productTypeRoute}"></td>
                             <td align="center" th:text="${order.remark}"></td>
                             <td align="center">
                                 <a class="btn btn-xs btn-primary"
                                    th:onclick="updateOrderItemByheadId(this,[[${order.id}]]);">编辑</a>
                                 <a class="btn btn-xs btn-primary"
                                    th:onclick="deleteOrderItemHByheadId([[${order.id}]]);">删除</a>
+                                <a class="btn btn-xs btn-primary"
+                                   th:onclick="copyDesigeOrderProductById([[${order.id}]]);">复制</a>
                             </td>
                         </tr>
                     </div>
                 </div>
                 <div th:if="${#lists.isEmpty(orderList)}">
                     <tr>
-                        <td colspan="8">
+                        <td colspan="11">
                             查无数据
                         </td>
                     </tr>
@@ -638,7 +841,7 @@
                 <tfoot id="s_tfoot">
                 <tr id="showdiv">
 
-                    <td colspan="8" align="center">
+                    <td colspan="11" align="center">
                         <span>第</span>
                         <span th:text="${orderHead.currentPage}" id="currentpagespan"> </span>
                         <span>页|共</span>
@@ -694,7 +897,7 @@
 
 
                 <tr style="display:none;" id="nodatadiv">
-                    <td colspan="8" align="center">
+                    <td colspan="11" align="center">
                         查无数据
                     </td>
                 </tr>

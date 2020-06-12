@@ -77,7 +77,7 @@
 </div>
 
 
-<div class="sidebar-nav">
+<div class="sidebar-nav" id="sidebar-nav">
     <ul>
         <!--===============================业务订单===================================-->
         <li data-popover="false"
@@ -120,7 +120,7 @@
                 class="fa fa-collapse"></i></a></li>
         <li>
             <ul class="premium-menuforsalorac nav nav-list collapse">
-                <li><a th:href="@{/design/toMaterialNeed}" target="targetText"><span
+                <li><a th:href="@{/design/toMaterialNeed}"  target="targetText"><span
                         class="fa fa-caret-right"></span>材料需求</a></li>
 
                 <li>
@@ -321,7 +321,6 @@
     <!--</div>-->
     <div class="content" id="contentnew" style="overflow-y:scroll;">
         <div th:if="${showflaga==1}">
-
             <iframe class="iframecontentnew" src="/pdfjs/web/viewer.html?file=/rules/previewFirst"
                     style="float: left;" name="targetText"></iframe>
         </div>
@@ -463,6 +462,42 @@
     </div>
 </div>
 
+
+<div style="display: none;" id="showCopyeDiv">
+    <input type="hidden" id="fromOrderId">
+    <div id="toCopyeOrderNo">
+        复制给订单号:<input type="text" class="form-control" id="toCopyOrderNo" style="width:180px">
+    </div>
+    <div style="display: none" id="errormessage">
+
+    </div>
+    <div th:align="right">
+        <p>
+            <br>
+            <input type="button" value="确认" onclick="confirmCopy()">
+            &nbsp;&nbsp;&nbsp;
+            <input type="button" value="关闭" onclick="closeCopyeDiv()">
+    </div>
+</div>
+
+
+<div style="display: none;" id="showCopyeDivItem">
+    <input type="hidden" id="fromOrderItemId">
+    <div>
+        复制给订单号:<input type="text" class="form-control" id="toCopyOrderNoProduct" style="width:180px">
+    </div>
+    <div style="display: none" id="errormessage99">
+
+    </div>
+    <div th:align="right">
+        <p>
+            <br>
+            <input type="button" value="确认" onclick="confirmCopyItem()">
+            &nbsp;&nbsp;&nbsp;
+            <input type="button" value="关闭" onclick="closeCopyeDivItem()">
+    </div>
+</div>
+
 </body>
 </html>
 
@@ -491,8 +526,66 @@
     function closeHtmlDiv() {
         $("#showHtmlDiv").hide();
         $("#coverbehidepage").hide();
+    }
+
+    function Trim(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+    function confirmCopy() {
+        var newstr = $("#toCopyOrderNo").val();
+        $("#errormessage").hide();
+        if (Trim(newstr) != "") {
+            var reg = new RegExp(/^[A-Z]{5}[0-9]{8}[A-Z]{2}[0-9]{2}$/g);
+            if (!reg.test(Trim(newstr))) {
+                $("#errormessage").show();
+                var errormessagediv = document.getElementById("errormessage");
+                errormessagediv.innerHTML = "客户单号请检查,示例如:COSUN20190112WW01";
+                errormessagediv.style.color = "red";
+                $("#toCopyOrderNo").val("");
+                return false;
+            }
+        } else {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "客户单号不能为空";
+            errormessagediv.style.color = "red";
+            $("#toCopyOrderNo").val("");
+            return false;
+        }
+        closeCopyeDiv();
+        // window.location.href = "/design/saveSJHeadBYIdToMysql?fromId=" + $("#fromOrderId").val() + "&toOrderNo=" + newstr;
+        parent.frames["targetText"].window.location.href = "/design/saveSJHeadBYIdToMysql?fromId=" + $("#fromOrderId").val() + "&toOrderNo=" + newstr;
 
     }
+
+
+    function confirmCopyItem() {
+        var newstr = $("#toCopyOrderNoProduct").val();
+        $("#errormessage99").hide();
+        if (Trim(newstr) != "") {
+            var reg = new RegExp(/^[A-Z]{5}[0-9]{8}[A-Z]{2}[0-9]{2}$/g);
+            if (!reg.test(Trim(newstr))) {
+                $("#errormessage99").show();
+                var errormessagediv = document.getElementById("errormessage99");
+                errormessagediv.innerHTML = "客户单号请检查,示例如:COSUN20190112WW01";
+                errormessagediv.style.color = "red";
+                $("#toCopyOrderNoProduct").val("");
+                return false;
+            }
+        } else {
+            $("#errormessage99").show();
+            var errormessagediv = document.getElementById("errormessage99");
+            errormessagediv.innerHTML = "客户单号不能为空";
+            errormessagediv.style.color = "red";
+            $("#toCopyOrderNoProduct").val("");
+            return false;
+        }
+        closeCopyeDivItem();
+        //window.location.href = "/design/saveSJIHeadBYIdToMysql?fromId=" + $("#fromOrderItemId").val() + "&toOrderNo=" + newstr;
+        parent.frames["targetText"].window.location.href = "/design/saveSJIHeadBYIdToMysql?fromId=" + $("#fromOrderItemId").val() + "&toOrderNo=" + newstr;
+    }
+
 
     function showUpdatediv() {
         $("#downDivIn").hide();
@@ -522,6 +615,17 @@
     function closeOrderItemMessage() {
         $("#coverbehidepage").hide();
         $("#orderItemDiv").hide();
+    }
+
+
+    function closeCopyeDiv() {
+        $("#coverbehidepage").hide();
+        $("#showCopyeDiv").hide();
+    }
+
+    function closeCopyeDivItem() {
+        $("#coverbehidepage").hide();
+        $("#showCopyeDivItem").hide();
     }
 
     function getHtmlStreamById(rulesId) {
@@ -667,6 +771,30 @@
         position: absolute;
     }
 
+    #showCopyeDiv {
+        top: 40%;
+        left: 38%;
+        width: 400px;
+        height: 150px;
+        padding: 8px;
+        border: 8px solid #E8E9F7;
+        background-color: #E0EEEE;
+        z-index: 1058;
+        position: absolute;
+    }
+
+    #showCopyeDivItem {
+        top: 40%;
+        left: 38%;
+        width: 400px;
+        height: 150px;
+        padding: 8px;
+        border: 8px solid #E8E9F7;
+        background-color: #E0EEEE;
+        z-index: 1058;
+        position: absolute;
+    }
+
     #updateDivInner {
         border: 1px solid #9AC0CD;
         width: 760px;
@@ -801,7 +929,7 @@
     }
 
     .iframecontent {
-        height: 700px;
+        height: 650px;
         width: 100%;
         background: #fff;
         border-left: 1px solid #cccccc;

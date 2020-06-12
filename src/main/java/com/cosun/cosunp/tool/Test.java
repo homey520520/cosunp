@@ -1,5 +1,15 @@
 package com.cosun.cosunp.tool;
 
+import com.cosun.cosunp.entity.Employee;
+import com.cosun.cosunp.entity.MonthKQInfo;
+import com.cosun.cosunp.entity.Out;
+import jxl.CellType;
+import jxl.DateCell;
+import jxl.WorkbookSettings;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import sun.misc.BASE64Encoder;
@@ -9,6 +19,8 @@ import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,54 +42,16 @@ public class Test {
     public static void main(String[] arg) {
 
         try {
-
-           // String[] arr = "".split("\t");
-            String[] arr = "激光打磨\t精密焊接\t打磨\t扫描\t写纸稿/刻膜\t雕刻亚克力\t精工拉丝\t氧化\t喷高光白+光油\tUV打印\t装配\n".split("\t");
+            // http://www.txttool.com/wenben_replace.asp
+            String[] arr = "".split("\t");
             String afterStr = "";
             for (int i = 0; i < arr.length; i++) {
-                if(arr[i].trim().length() > 0)
-                afterStr +=  arr[i].trim() + " ";
+                if (arr[i].trim().length() > 0)
+                    afterStr += arr[i].trim() + " ";
 
             }
+            System.out.println(afterStr.replace(" ", "--").substring(0, afterStr.replace(" ", "--").length() - 2));
 
-
-            System.out.println(afterStr.replace(" ", "--").substring(0,afterStr.replace(" ", "--").length()-2));
-
-
-//            var Af = {};
-//            Af.getTableData = function(container){
-//                let tripleArray = []; //--->得到的数据为三维数组
-//                $('#OrderModelList').each(function (index) {
-//                    let table = [];
-//                    $(container).find('tr').each(function () {
-//                        let row = [];
-//                        $(this).find('th,td').each(function () {
-//                            /*如果td里有input则获取td里input的值*/
-//                            if($(this).find("input").length>0)
-//                            {
-//                                let thisInputVal = $(this).find("input").val();
-//                                row.push(thisInputVal);
-//                            }
-//                            else
-//                            {
-//                                row.push($(this).text().trim());
-//                            }
-//                        });
-//                        table.push(row);
-//                    });
-//                    tripleArray.push(table);
-//                });
-//                let finalDoubleArray = tripleArray[0]; //--->得到二维数组
-//                /*去除数组中的中文*/
-//                let i = finalDoubleArray.length;
-//                while (i--) {
-//                    let thisVal = finalDoubleArray[i][0];
-//                    if (Af.chineseStatus(thisVal)) {
-//                        finalDoubleArray.splice(i, 1);
-//                    }
-//                }
-//                return finalDoubleArray;
-//            };
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,4 +84,5 @@ public class Test {
     }
 
 }
+
 

@@ -29,7 +29,13 @@ public interface IDesignServ {
 
     void deleteOrderItemByheadId(Integer id) throws Exception;
 
-    List<String> getAllOrderNo() throws Exception;
+    List<String> getAllOrderNo(String empNo) throws Exception;
+
+    int saveSJHeadByCopy(Integer fromId, String toOrderNo) throws Exception;
+
+    List<DesignMaterialHead> queryOrderHeadBytoOrderNo(String loginName,String orderNo) throws Exception;
+
+    int queryOrderHeadBytoOrderNoCount(String loginName,String orderNo) throws Exception;
 
     DesignMaterialHead getHeadIdandInfoById(Integer id) throws Exception;
 
@@ -72,7 +78,7 @@ public interface IDesignServ {
 
     int getAllDMHPICount(DesignMaterialHeadProductItem item) throws Exception;
 
-    int  getAllDMHCount() throws Exception;
+    int  getAllDMHCount(DesignMaterialHead head) throws Exception;
 
     List<String> getAllproductNameList() throws Exception;
 
@@ -80,7 +86,15 @@ public interface IDesignServ {
 
     int queryOrderHeadByConditionCount(DesignMaterialHead head) throws Exception;
 
-    List<String> getAllproductNoList() throws Exception;
+    List<String> getAllproductNoList(String orderNo) throws Exception;
+
+    DesignMaterialHeadProduct saveSJIHeadBYIdToMysql(String empNo,Integer fromId, String toOrderNo) throws Exception;
+
+    List<DesignMaterialHeadProduct> queryOrderHeadProductOrderNoByCondition(String empNo,String toOrderNo) throws Exception;
+
+    int queryOrderHeadProductOrderNoByConditionCount(String empNo,String toOrderNo) throws Exception;
+
+    int saveSJIListHeadPDateToMysqlLinShi(List<DesignMaterialHeadProductItem> orderHeadList) throws Exception;
 
     void deleteOrderItemByheadIdItem(Integer id) throws Exception;
 

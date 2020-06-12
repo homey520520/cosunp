@@ -23,6 +23,11 @@
     th {
         font-size: 11px;
     }
+
+    .selectpicker {
+        width: 50px
+    }
+
 </style>
 <script>
 
@@ -30,13 +35,9 @@
         window.parent.document.getElementById('content').style.display = "block";
         window.parent.document.getElementById('contentnew').style.display = "none";
         document.getElementById("coverbehidepage").style.display = "none";
+        ;
         var flag = $("#flag").val();
         var aflag = eval(flag)
-        var customerNo2 = $("#customerNo2").val();
-        if (customerNo2.length > 0) {
-            $("#customerNo").val(customerNo2);
-            $('.selectpicker').selectpicker('refresh');
-        }
         if (aflag == 1) {
             $("#errormessage").show();
             var errormessagediv = document.getElementById("errormessage");
@@ -62,7 +63,19 @@
             var errormessagediv = document.getElementById("errormessage");
             errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;客户单号已存在!";
             errormessagediv.style.color = "red";
+        } else if (aflag == 8) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;复制成功!";
+            errormessagediv.style.color = "green";
         }
+
+        var customerNo2 = $("#customerNo2").val();
+        if (customerNo2.length > 0) {
+            $("#customerNo").val(customerNo2);
+            $('.selectpicker').selectpicker('refresh');
+        }
+        addSJHead();
     });
 
     function goPageone() {
@@ -203,7 +216,7 @@
                     n_currentPage.val(currentPage);
                     inputpage.val(currentPage);
                     $.each(data, function (num) {
-                        tr = $("<tr id='" + data[num].id + "' ondblclick=\"showOrderItemByOrderNo('" + data[num].customerNo + "')\"></tr>");
+                        tr = $("<tr id='" + data[num].id + "' ondblclick=\"showOrderItemByOrderNo(" + data[num].id + ",'" + data[num].customerNo + "')\"></tr>");
                         tr.append("<td>" + ((num + 1) + ((n_currentPage.val() - 1) * pageSize)) + "</td>");
                         tr.append("<td>" + isNull(data[num].orderMakerStr) + "</td>");
                         tr.append("<td>" + isNull(data[num].customerNo) + "</td>");
@@ -219,7 +232,8 @@
                             " onclick=\"deleteOrderItemByheadId('" + data[num].id + "');\">删除</a> " +
                             "  <a class=\"btn btn-xs btn-primary\"\n" +
                             "  onclick=\"importDesigeHeadById('" + data[num].id + "');\">导出</a>\n" +
-                            "                                <a class=\"btn btn-xs btn-primary\"\n" +
+                            "                    <a class=\"btn btn-xs btn-primary\"\n" +
+                            "                                   onclick=\"copyDesigeOrderById('" + data[num].id + "');\">复制</a>\n             <a class=\"btn btn-xs btn-primary\"\n" +
                             "                                   onclick=\"ImportPDFFile('" + data[num].id + "');\">PDF导出</a>\n" +
                             "                                <a class=\"btn btn-xs btn-primary\"\n" +
                             "                                   onclick=\"transferDataToPDFFile('" + data[num].id + "');\">PDF预览</a>" +
@@ -313,6 +327,7 @@
                 $("#orderno").val("");
                 return false;
             }
+
         }
     }
 
@@ -326,9 +341,9 @@
         var deliverDate = $(obj).parent().parent().find("td").eq(6).text();
         var remark = $(obj).parent().parent().find("td").eq(7).text();
 
-        $(obj).parent().parent().find("td").eq(2).html("<input type=\"text\" id=\"orderno\" name=\"orderNo\" value='" + customerNo + "' onblur=\"checkOrderNo(this)\" class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(2).html("<input style='width: 180px' type=\"text\" id=\"orderno\" name=\"orderNo\" value='" + customerNo + "' onblur=\"checkOrderNo(this)\" class=\"form-control\">")
         $(obj).parent().parent().find("td").eq(3).html("<input type=\"text\" " +
-            "               style=\"width:160px;height: 34px;text-align: center\" class=\"Wdate\" " +
+            "               style=\"width:110px;height: 34px;text-align: center\" class=\"Wdate\" " +
             "  id=\'getOrderDate\'" +
             " value='" + getOrderDate + "'" +
             "  onClick=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"/>")
@@ -346,7 +361,7 @@
         td += "  </select> ";
         $(obj).parent().parent().find("td").eq(5).html(td);
         $(obj).parent().parent().find("td").eq(6).html("<input type=\"text\" " +
-            "               style=\"width:160px;height: 34px;text-align: center\" class=\"Wdate\" " +
+            "               style=\"width:110px;height: 34px;text-align: center\" class=\"Wdate\" " +
             " value='" + deliverDate + "'" +
             "  onClick=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"/>")
 
@@ -372,9 +387,9 @@
 
         tr.append("<td id='tr" + len + "'>" + len + "</td>");
         tr.append("<td><input type=\"text\" class=\"form-control\" disabled=\"true\" type=\"hide\" value='" + userName + "' ></td>");
-        tr.append("<td><input type=\"text\" id=\"orderno\" name=\"orderNo\" onblur=\"checkOrderNo(this)\" class=\"form-control\"></td>");
-        tr.append("<td> <input type=\"text\" " +
-            "               style=\"width:160px;height: 34px;text-align: center\" class=\"Wdate\" " +
+        tr.append("<td style='width: 180px;'><input type=\"text\" style='width: 180px;' id=\"orderno\" name=\"orderNo\" onblur=\"checkOrderNo(this)\" class=\"form-control\"></td>");
+        tr.append("<td style='width: 110px;'> <input type=\"text\" " +
+            "               style=\"width:110px;height: 34px;text-align: center\" class=\"Wdate\" " +
             "  id=\'getOrderDate\'" +
             "  onClick=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"/></td>");
         tr.append("<td><input type=\"text\" class=\"form-control\"></td>");
@@ -388,8 +403,8 @@
         }
         td += "  </select></td> ";
         tr.append(td);
-        tr.append("<td> <input type=\"text\" " +
-            "               style=\"width:160px;height: 34px;text-align: center\" class=\"Wdate\" " +
+        tr.append("<td  style='width: 110px;'> <input type=\"text\" " +
+            "               style=\"width:110px;height: 34px;text-align: center\" class=\"Wdate\" " +
             "  id=\'deliveryDate\'" +
             "  onClick=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"/></td>");
 
@@ -400,6 +415,7 @@
             "    onclick=\"deleteTRA(this," + len + ",0);\">删除</a></td>");
         tr.prependTo(tbody);
         $('.selectpicker').selectpicker('refresh');
+
     }
 
     function deleteTRA(obj, len, id) {
@@ -440,13 +456,12 @@
     function importSJHead() {
     }
 
-    function showOrderItemByOrderNo(customerNo) {
-        window.location.href = "/design/toHeadProduct?customerNo=" + customerNo;
+    function showOrderItemByOrderNo(id, customerNo) {
+        window.location.href = "/design/toHeadProduct?id=" + id + "&customerNo=" + customerNo;
     }
 
 
     function importDesigeHeadById(id) {
-        console.log(id)
         $("#mkform01").attr("action", "/design/importDesigeHeadById");
         $("#headId").val(id);
         delCookie("downloadstatus");
@@ -457,7 +472,6 @@
 
 
     function ImportPDFFile(id) {
-        console.log(id)
         $("#mkform01").attr("action", "/design/importDesigeHeadPDFById");
         $("#headId").val(id);
         delCookie("downloadstatus");
@@ -505,7 +519,15 @@
     }
 
 
+    function copyDesigeOrderById(id) {
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        window.parent.document.getElementById('showCopyeDiv').style.display = "block";
+        window.parent.document.getElementById('fromOrderId').value = id;
+    }
+
 </script>
+
+<body>
 <div>
     <div id="coverbehidepage"></div>
     <div id="coverbehidepagetwo"></div>
@@ -527,6 +549,7 @@
     <p>
 
     <div id='compreAttendRecord'>
+
         <div id='app'>
             <form id="mkform01" action="" th:method="post">
                 <input type="hidden" id="headId" name="headId">
@@ -694,15 +717,15 @@
                 <!--v-for中的数据不再是直接从data中获取，而是通过search方法对data中的数据进行过滤再显示-->
                 <div th:unless="${#lists.isEmpty(orderList)}">
                     <div th:each="order,iterStat: ${orderList}" align="center">
-                        <tr th:ondblclick="showOrderItemByOrderNo([[${order.customerNo}]])">
+                        <tr th:ondblclick="showOrderItemByOrderNo([[${order.id}]],[[${order.customerNo}]])">
                             <td align="center"
                                 th:text="${(iterStat.index+1)}+${orderHead.currentPage-1}*${orderHead.pageSize}"></td>
                             <td align="center" th:text="${order.orderMakerStr}"></td>
-                            <td align="center" th:text="${order.customerNo}"></td>
-                            <td align="center" th:text="${order.getOrderDateStr}"></td>
+                            <td align="center" style="width: 180px" th:text="${order.customerNo}"></td>
+                            <td align="center" style="width:110px ;" th:text="${order.getOrderDateStr}"></td>
                             <td align="center" th:text="${order.orderArea}"></td>
                             <td align="center" th:text="${order.salorEmpStr}"></td>
-                            <td align="center" th:text="${order.deliveryOrderDateStr}"></td>
+                            <td align="center" style="width:110px" th:text="${order.deliveryOrderDateStr}"></td>
                             <td align="center" th:text="${order.remark}"></td>
                             <td align="center">
                                 <a class="btn btn-xs btn-primary"
@@ -711,6 +734,8 @@
                                    th:onclick="deleteOrderItemByheadId([[${order.id}]]);">删除</a>
                                 <a class="btn btn-xs btn-primary"
                                    th:onclick="importDesigeHeadById([[${order.id}]]);">导出</a>
+                                <a class="btn btn-xs btn-primary"
+                                   th:onclick="copyDesigeOrderById([[${order.id}]]);">复制</a>
                                 <a class="btn btn-xs btn-primary"
                                    th:onclick="ImportPDFFile([[${order.id}]]);">PDF导出</a>
                                 <a class="btn btn-xs btn-primary"
@@ -797,6 +822,6 @@
     </div>
 
 
-    </body>
+</body>
 </div>
 </html>

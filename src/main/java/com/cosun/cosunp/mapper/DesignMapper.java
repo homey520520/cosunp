@@ -48,9 +48,6 @@ public interface DesignMapper {
     DesignMaterialHeadProductItem getCustomerNameAndProductNoByHeadId(Integer headId);
 
 
-
-
-
     @Select("SELECT\n" +
             "\tdm.customerNo,\n" +
             "\tdmh.productNo\n" +
@@ -80,12 +77,12 @@ public interface DesignMapper {
     @Select("SELECT\n" +
             "\tcustomerNo\n" +
             "FROM\n" +
-            "\tdesignmaterialhead\n" +
+            "\tdesignmaterialhead  where orderMaker = #{empNo} \n" +
             "GROUP BY\n" +
             "\tcustomerNo\n" +
             "ORDER BY\n" +
             "\tcustomerNo DESC")
-    List<String> getAllOrderNo();
+    List<String> getAllOrderNo(String empNo);
 
 
     @Select("SELECT\n" +
@@ -129,12 +126,16 @@ public interface DesignMapper {
 
 
     @Select("SELECT\n" +
-            "\tproductNo\n" +
+            "\tpd.productNo\n" +
             "FROM\n" +
-            "\tdesignmaterialheadproduct\n" +
-            "group by productNo\n" +
-            "order by productNo asc")
-    List<String> getAllproductNoList();
+            "\tdesignmaterialheadproduct pd\n" +
+            "LEFT JOIN designmaterialhead dh ON pd.head_id = dh.id\n" +
+            " where dh.customerNo = #{customerNo} " +
+            "GROUP BY\n" +
+            "\tproductNo\n" +
+            "ORDER BY\n" +
+            "\tproductNo ASC")
+    List<String> getAllproductNoList(String customerNo);
 
     @Select("SELECT\n" +
             "\tproductName\n" +
@@ -168,9 +169,44 @@ public interface DesignMapper {
             "\tdesignmaterialhead dmh\n" +
             "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
             "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker\n" +
+            " where dmh.orderMaker = #{loginName} " +
             "ORDER BY\n" +
-            "\tid DESC limit #{currentPageTotalNum},#{pageSize}")
+            "\tid desc  limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHead> getAllDMH(DesignMaterialHead orderHead);
+
+    @Select("SELECT\n" +
+            "\tdmh.id,\n" +
+            "\tdmh.customerNo,\n" +
+            "\tdmh.getOrderDate AS getOrderDateStr,\n" +
+            "\tdmh.orderArea,\n" +
+            "\tee. NAME AS salorEmpStr,\n" +
+            "\tdmh.deliveryOrderDate AS deliveryOrderDateStr,\n" +
+            "\teee. NAME AS orderMakerStr,\n" +
+            "\tdmh.remark\n" +
+            "FROM\n" +
+            "\tdesignmaterialhead dmh\n" +
+            "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
+            "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker\n" +
+            " where dmh.orderMaker = #{empNo} and dmh.customerNo = #{orderNo} limit 1 ")
+    DesignMaterialHead getSJbyOrderNoAndEmpno(String empNo, String orderNo);
+
+    @Select("SELECT\n" +
+            "\tdmh.id,\n" +
+            "\tdmh.customerNo,\n" +
+            "\tdmh.getOrderDate AS getOrderDateStr,\n" +
+            "\tdmh.orderArea,\n" +
+            "\tee. NAME AS salorEmpStr,\n" +
+            "\tdmh.deliveryOrderDate AS deliveryOrderDateStr,\n" +
+            "\teee. NAME AS orderMakerStr,\n" +
+            "\tdmh.remark\n" +
+            "FROM\n" +
+            "\tdesignmaterialhead dmh\n" +
+            "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
+            "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker\n" +
+            " " +
+            "ORDER BY\n" +
+            "\tid desc  limit #{currentPageTotalNum},#{pageSize}")
+    List<DesignMaterialHead> getAllDMH22(DesignMaterialHead orderHead);
 
 
     @Select("SELECT\n" +
@@ -188,6 +224,22 @@ public interface DesignMapper {
             "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker where dmh.id = #{id}")
     DesignMaterialHead getHeadIdandInfoById(Integer id);
 
+
+    @Select("SELECT\n" +
+            "\tdmh.id,\n" +
+            "\tdmh.customerNo,\n" +
+            "\tdmh.getOrderDate AS getOrderDateStr,\n" +
+            "\tdmh.orderArea,\n" +
+            "\tdmh.salorEmp,\n" +
+            "\tdmh.deliveryOrderDate AS deliveryOrderDateStr,\n" +
+            "\tdmh.orderMaker,\n" +
+            "\tdmh.remark\n" +
+            "FROM\n" +
+            "\tdesignmaterialhead dmh\n" +
+            "WHERE\n" +
+            "\tdmh.id = #{id}")
+    DesignMaterialHead getSJbyId(Integer id);
+
     @Select("SELECT\n" +
             "\tdmhp.head_id,\n" +
             "\tdmhp.id,\n" +
@@ -196,12 +248,14 @@ public interface DesignMapper {
             "\tdmhp.needNum,\n" +
             "\tdmhp.drawingNo,\n" +
             "\tdmhp.productRoute,\n" +
+            "\tdmhp.productTypeName,\n" +
+            "\tdmhp.productTypeRoute,\n" +
             "\tdmhp.remark\n" +
             "FROM\n" +
             "\tdesignmaterialheadproduct dmhp\n" +
             " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id\n" +
             " where dmh.customerNo = #{customerNo} " +
-            "order by dmh.customerNo desc,dmhp.productNo asc " +
+            "order by dmh.id asc " +
             "limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHeadProduct> getAllDMHP2(DesignMaterialHeadProduct pmhp);
 
@@ -214,6 +268,9 @@ public interface DesignMapper {
             "\tdmhp.needNum,\n" +
             "\tdmhp.drawingNo,\n" +
             "\tdmhp.productRoute,\n" +
+            "\tdmhp.productTypeNo,\n" +
+            "\tdmhp.productTypeName,\n" +
+            "\tdmhp.productTypeRoute,\n" +
             "\tdmhp.remark\n" +
             "FROM\n" +
             "\tdesignmaterialheadproduct dmhp\n" +
@@ -229,11 +286,48 @@ public interface DesignMapper {
             "\tdmhp.needNum,\n" +
             "\tdmhp.drawingNo,\n" +
             "\tdmhp.productRoute,\n" +
+            "\tdmhp.productTypeNo,\n" +
+            "\tdmhp.productTypeName,\n" +
+            "\tdmhp.productTypeRoute,\n" +
             "\tdmhp.remark\n" +
             "FROM\n" +
             "\tdesignmaterialheadproduct dmhp\n" +
-            "LEFT JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id\n" +
-            "order by dmh.customerNo desc,dmhp.productNo asc " +
+            " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id\n" +
+            " where dmhp.id = #{headId} ")
+    DesignMaterialHeadProduct getHeadIdProductByIdOne(Integer headId);
+
+    @Select("SELECT\n" +
+            "\tid,\n" +
+            "\thead_id,\n" +
+            "\tproductName,\n" +
+            "\tproductNo,\n" +
+            "\tneedNum,\n" +
+            "\tdrawingNo,\n" +
+            "\tproductRoute,\n" +
+            "\tproductTypeNo,\n" +
+            "\tproductTypeName,\n" +
+            "\tproductTypeRoute,\n" +
+            "\tremark\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproduct where head_id = #{headId}")
+    List<DesignMaterialHeadProduct> getProductListByHeadId(Integer headId);
+
+    @Select("SELECT\n" +
+            "\tdmhp.head_id,\n" +
+            "\tdmhp.id,\n" +
+            "\tdmhp.productName,\n" +
+            "\tdmhp.productNo,\n" +
+            "\tdmhp.needNum,\n" +
+            "\tdmhp.drawingNo,\n" +
+            "\tdmhp.productRoute,\n" +
+            "\tdmhp.productTypeName,\n" +
+            "\tdmhp.productTypeRoute,\n" +
+            "\tdmhp.remark\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproduct dmhp\n" +
+            " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id" +
+            " where dmh.id = #{id} \n" +
+            "order by dmhp.id asc " +
             "limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHeadProduct> getAllDMHP(DesignMaterialHeadProduct pmhp);
 
@@ -256,13 +350,99 @@ public interface DesignMapper {
             "\tdmhi.isCanUse as isCanUse2\n" +
             "FROM\n" +
             "\tdesignmaterialheadproductitem dmhi\n" +
-            "LEFT JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
-            "LEFT JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
+            " JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            " JOIN designmaterialhead dm ON dm.id = dmh.head_id" +
+            " where dmh.head_id = #{head_product_id} \n" +
             "ORDER BY\n" +
-            "\tdm.customerNo DESC,\n" +
-            "\tdmh.productNo ASC,\n" +
-            "\tdmhi.mateiralNo ASC limit #{currentPageTotalNum},#{pageSize}")
+            "\tdmhi.id ASC limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHeadProductItem> getAllDMHPI(DesignMaterialHeadProductItem pmhp);
+
+    @Select("select * from (SELECT\n" +
+            "\tdmhi.id,\n" +
+            "\tdmhi.head_product_id,\n" +
+            "\tdmhi.mateiralNo,\n" +
+            "\tdmhi.materialName,\n" +
+            "\tdmhi.materialSpeci,\n" +
+            "\tdmhi.unit,\n" +
+            "\tdmhi.num,\n" +
+            "\tdmhi.useDeptId,\n" +
+            "\tdmhi.useDeptName,\n" +
+            "\tdmhi.mateiralStock,\n" +
+            "\tdmhi.remark,\n" +
+            "\tdmhi.isCanUse AS isCanUse2\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem dmhi\n" +
+            "JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            "JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
+            "WHERE\n" +
+            "\t dmhi.head_product_id = #{dhp} and dmhi.mateiralNo <> '' order by dmhi.id asc \n" +
+            ") as a\n" +
+            "UNION all\n" +
+            "\n" +
+            "select * from (SELECT\n" +
+            "\tdmhi.id,\n" +
+            "\tdmhi.head_product_id,\n" +
+            "\tdmhi.mateiralNo,\n" +
+            "\tdmhi.materialName,\n" +
+            "\tdmhi.materialSpeci,\n" +
+            "\tdmhi.unit,\n" +
+            "\tdmhi.num,\n" +
+            "\tdmhi.useDeptId,\n" +
+            "\tdmhi.useDeptName,\n" +
+            "\tdmhi.mateiralStock,\n" +
+            "\tdmhi.remark,\n" +
+            "\tdmhi.isCanUse AS isCanUse2\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem dmhi\n" +
+            "JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            "JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
+            "WHERE\n" +
+            "\tdmhi.head_product_id = #{dhp} and dmhi.mateiralNo = '' order by dmhi.id asc ) as b ")
+    List<DesignMaterialHeadProductItem> getHeadIdProductItemByIdBig(Integer dhp);
+
+
+    @Select("select * from (SELECT\n" +
+            "\tdmhi.id,\n" +
+            "\tdmhi.head_product_id,\n" +
+            "\tdmhi.mateiralNo,\n" +
+            "\tdmhi.materialName,\n" +
+            "\tdmhi.materialSpeci,\n" +
+            "\tdmhi.unit,\n" +
+            "\tdmhi.num,\n" +
+            "\tdmhi.useDeptId,\n" +
+            "\tdmhi.useDeptName,\n" +
+            "\tdmhi.mateiralStock,\n" +
+            "\tdmhi.remark,\n" +
+            "\tdmhi.isCanUse AS isCanUse2\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem dmhi\n" +
+            "JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            "JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
+            "WHERE\n" +
+            "\t dm.id = #{dhp} and dmhi.mateiralNo <> '' order by dmhi.id asc \n" +
+            ") as a\n" +
+            "UNION all\n" +
+            "\n" +
+            "select * from (SELECT\n" +
+            "\tdmhi.id,\n" +
+            "\tdmhi.head_product_id,\n" +
+            "\tdmhi.mateiralNo,\n" +
+            "\tdmhi.materialName,\n" +
+            "\tdmhi.materialSpeci,\n" +
+            "\tdmhi.unit,\n" +
+            "\tdmhi.num,\n" +
+            "\tdmhi.useDeptId,\n" +
+            "\tdmhi.useDeptName,\n" +
+            "\tdmhi.mateiralStock,\n" +
+            "\tdmhi.remark,\n" +
+            "\tdmhi.isCanUse AS isCanUse2\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem dmhi\n" +
+            "JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            "JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
+            "WHERE\n" +
+            "\tdm.id = #{dhp} and dmhi.mateiralNo = '' order by dmhi.id asc ) as b ")
+    List<DesignMaterialHeadProductItem> getHeadIdProductItemById(Integer dhp);
 
     @Select("SELECT\n" +
             "\tdmhi.id,\n" +
@@ -276,13 +456,13 @@ public interface DesignMapper {
             "\tdmhi.useDeptName,\n" +
             "\tdmhi.mateiralStock,\n" +
             "\tdmhi.remark,\n" +
-            "\tdmhi.isCanUse as isCanUse2\n" +
+            "\tdmhi.isCanUse AS isCanUse2\n" +
             "FROM\n" +
             "\tdesignmaterialheadproductitem dmhi\n" +
-            " JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
-            " JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
-            " where dm.id = #{dhp} ")
-    List<DesignMaterialHeadProductItem> getHeadIdProductItemById(Integer dhp);
+            "JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            "WHERE\n" +
+            "\t dmhi.head_product_id = #{dhp} order by dmhi.id asc   ")
+    List<DesignMaterialHeadProductItem> getHeadIdProductItemById2(Integer dhp);
 
 
     @Select("SELECT\n" +
@@ -304,9 +484,7 @@ public interface DesignMapper {
             "LEFT JOIN designmaterialhead dm ON dm.id = dmh.head_id\n" +
             " where dmhi.head_product_id = #{head_product_id} " +
             "ORDER BY\n" +
-            "\tdm.customerNo DESC,\n" +
-            "\tdmh.productNo ASC,\n" +
-            "\tdmhi.mateiralNo ASC limit #{currentPageTotalNum},#{pageSize}")
+            "\tdmhi.id ASC limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHeadProductItem> getAllDMHPIButId(DesignMaterialHeadProductItem item);
 
 
@@ -314,9 +492,9 @@ public interface DesignMapper {
             " count(*) " +
             "FROM\n" +
             "\tdesignmaterialheadproductitem dmhi\n" +
-            "LEFT JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
-            "LEFT JOIN designmaterialhead dm ON dm.id = dmh.head_id")
-    int getAllDMHPICount();
+            " JOIN designmaterialheadproduct dmh ON dmhi.head_product_id = dmh.id\n" +
+            " JOIN designmaterialhead dm ON dm.id = dmh.head_id where dmh.head_id = #{head_product_id}")
+    int getAllDMHPICount(DesignMaterialHeadProductItem item);
 
     @Select("SELECT" +
             " count(*) " +
@@ -340,7 +518,7 @@ public interface DesignMapper {
             "\tdesignmaterialheadproduct dmhp\n" +
             "LEFT JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id" +
             " where dmh.customerNo = #{customerNo}" +
-            " order by dmh.customerNo desc,dmhp.productNo asc " +
+            " order by dmhp.id asc " +
             "limit #{currentPageTotalNum},#{pageSize}")
     List<DesignMaterialHeadProduct> getAllDMHPByCustomerNo(DesignMaterialHeadProduct pmhp);
 
@@ -358,8 +536,8 @@ public interface DesignMapper {
             " count(*) " +
             "FROM\n" +
             "\tdesignmaterialheadproduct dmhp\n" +
-            "LEFT JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id")
-    int getAllDMHPCount();
+            " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id where dmh.id = #{id} ")
+    int getAllDMHPCount(DesignMaterialHeadProduct product);
 
     @Select("SELECT" +
             " count(*) " +
@@ -374,12 +552,73 @@ public interface DesignMapper {
             "FROM\n" +
             "\tdesignmaterialhead dmh\n" +
             "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
-            "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker")
-    int getAllDMHCount();
+            "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker" +
+            " where dmh.orderMaker = #{loginName} ")
+    int getAllDMHCount(DesignMaterialHead head);
+
+    @Select("SELECT\n" +
+            "  count(*) " +
+            "FROM\n" +
+            "\tdesignmaterialhead dmh\n" +
+            "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
+            "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker" +
+            "  ")
+    int getAllDMHCount22(DesignMaterialHead head);
 
 
     @SelectProvider(type = DesignMapper.OrderDaoProvider.class, method = "queryOrderHeadByCondition")
     List<DesignMaterialHead> queryOrderHeadByCondition(DesignMaterialHead orderHead);
+
+
+    @Select("SELECT\n" +
+            "\tdmh.id,\n" +
+            "\tdmh.customerNo,\n" +
+            "\tdmh.getOrderDate AS getOrderDateStr,\n" +
+            "\tdmh.orderArea,\n" +
+            "\tee. NAME AS salorEmpStr,\n" +
+            "\tdmh.deliveryOrderDate AS deliveryOrderDateStr,\n" +
+            "\teee. NAME AS orderMakerStr,\n" +
+            "\tdmh.remark\n" +
+            "FROM\n" +
+            "\tdesignmaterialhead dmh\n" +
+            "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
+            "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker where dmh.orderMaker = #{loginName} " +
+            "and  dmh.customerNo = #{orderNo} ")
+    List<DesignMaterialHead> queryOrderHeadBytoOrderNo(String loginName, String orderNo);
+
+
+    @Select("SELECT" +
+            " count(*) " +
+            "FROM\n" +
+            "\tdesignmaterialhead dmh\n" +
+            "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
+            "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker where dmh.orderMaker = #{loginName} " +
+            "and  dmh.customerNo = #{orderNo} ")
+    int queryOrderHeadBytoOrderNoCount(String loginName, String orderNo);
+
+
+    @Select("SELECT\n" +
+            "\tdmhp.head_id,\n" +
+            "\tdmhp.id,\n" +
+            "\tdmhp.productName,\n" +
+            "\tdmhp.productNo,\n" +
+            "\tdmhp.needNum,\n" +
+            "\tdmhp.drawingNo,\n" +
+            "\tdmhp.productTypeName,\n" +
+            "\tdmhp.productTypeRoute,\n" +
+            "\tdmhp.productRoute,\n" +
+            "\tdmhp.remark\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproduct dmhp\n" +
+            " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id where dmh.orderMaker = #{empNo} and  dmh.customerNo = #{orderNo} ")
+    List<DesignMaterialHeadProduct> queryOrderHeadProductOrderNoByCondition(String empNo, String orderNo);
+
+    @Select("SELECT" +
+            " count(*) " +
+            "FROM\n" +
+            "\tdesignmaterialheadproduct dmhp\n" +
+            " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id where dmh.orderMaker = #{empNo} and  dmh.customerNo = #{orderNo} ")
+    int queryOrderHeadProductOrderNoByConditionCount(String empNo, String orderNo);
 
     @SelectProvider(type = DesignMapper.OrderDaoProvider.class, method = "queryOrderHeadByConditionCount")
     int queryOrderHeadByConditionCount(DesignMaterialHead orderHead);
@@ -443,6 +682,15 @@ public interface DesignMapper {
     Integer getHeadIdByCustomerNoAndMaterialNo(String customerNo, String productNo);
 
 
+    @Delete("DELETE\n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproductitem\n" +
+            "WHERE\n" +
+            "\thead_product_id = #{head_id}\n" +
+            "AND isLinshi = 1")
+    void deleteItemByLinshi(Integer head_id);
+
+
     @Select("select head_product_id from designmaterialheadproductitem where id = #{itemId}")
     int getHeadIdByMaterialNoAndId(Integer itemId);
 
@@ -491,6 +739,7 @@ public interface DesignMapper {
             "\t#{orderMaker},\n" +
             "\t#{remark}\n" +
             ")")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     void saveSJHeadDateToMysql(DesignMaterialHead dmh);
 
     @Update("update designmaterialhead " +
@@ -510,6 +759,9 @@ public interface DesignMapper {
             "\tneedNum,\n" +
             "\tdrawingNo,\n" +
             "\tproductRoute,\n" +
+            "\tproductTypeNo,\n" +
+            "\tproductTypeName,\n" +
+            "\tproductTypeRoute,\n" +
             "\tremark)" +
             " values " +
             " (" +
@@ -519,8 +771,12 @@ public interface DesignMapper {
             "\t#{needNum},\n" +
             "\t#{drawingNo},\n" +
             "\t#{productRoute},\n" +
+            "\t#{productTypeNo},\n" +
+            "\t#{productTypeName},\n" +
+            "\t#{productTypeRoute},\n" +
             "\t#{remark}" +
             ")")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     void saveSJHeadPDateToMysql(DesignMaterialHeadProduct dmhp);
 
     @Update("update designmaterialheadproduct " +
@@ -529,6 +785,9 @@ public interface DesignMapper {
             " needNum = #{needNum}," +
             " drawingNo = #{drawingNo}," +
             " productRoute = #{productRoute}," +
+            " productTypeNo = #{productTypeNo}," +
+            " productTypeName = #{productTypeName}," +
+            " productTypeRoute = #{productTypeRoute}," +
             " remark = #{remark} where id = #{id}")
     void updateSJHeadPDateToMysql(DesignMaterialHeadProduct dh);
 
@@ -559,9 +818,14 @@ public interface DesignMapper {
 
 
     @Insert("update designmaterialheadproductitem set " +
-            "num = #{num}," +
-            "useDeptName = #{useDeptName}," +
-            "remark = #{remark}" +
+            " mateiralNo = #{mateiralNo}," +
+            " materialName = #{materialName}," +
+            " materialSpeci = #{materialSpeci}," +
+            " unit = #{unit}," +
+            " mateiralStock = #{mateiralStock}," +
+            " num = #{num}," +
+            " useDeptName = #{useDeptName}," +
+            " remark = #{remark}" +
             " where id = #{id} ")
     void updateSJIHeadDateToMysql(DesignMaterialHeadProductItem item);
 
@@ -575,7 +839,7 @@ public interface DesignMapper {
                     "FROM\n" +
                     "\tdesignmaterialhead dmh\n" +
                     "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
-                    "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker where 1=1");
+                    "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker  where dmh.orderMaker = #{loginName} ");
 
             if (orderHead.getCustomerNoList() != null && orderHead.getCustomerNoList().size() > 0) {
                 if (orderHead.getCustomerNoList().size() == 1) {
@@ -589,11 +853,11 @@ public interface DesignMapper {
                 }
             }
 
-            if (orderHead.getGetOrderDateStr() != null && orderHead.getGetOrderDateStr().length() > 0) {
+            if (orderHead.getGetOrderDateStr() != null && orderHead.getGetOrderDateStr().length() > 5) {
                 sb.append(" and date_format(dmh.getOrderDate, '%Y-%m-%d') = #{getOrderDateStr}");
             }
 
-            if (orderHead.getDeliveryOrderDateStr() != null && orderHead.getDeliveryOrderDateStr().length() > 0) {
+            if (orderHead.getDeliveryOrderDateStr() != null && orderHead.getDeliveryOrderDateStr().length() > 5) {
                 sb.append(" and date_format(dmh.deliveryOrderDate, '%Y-%m-%d') = #{deliveryOrderDateStr}");
             }
 
@@ -649,7 +913,7 @@ public interface DesignMapper {
                     "FROM\n" +
                     "\tdesignmaterialhead dmh\n" +
                     "LEFT JOIN employee ee ON ee.empno = dmh.salorEmp\n" +
-                    "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker where 1=1");
+                    "LEFT JOIN employee eee ON eee.empno = dmh.orderMaker where dmh.orderMaker = #{loginName} ");
 
             if (orderHead.getCustomerNoList() != null && orderHead.getCustomerNoList().size() > 0) {
                 if (orderHead.getCustomerNoList().size() == 1) {
@@ -663,11 +927,11 @@ public interface DesignMapper {
                 }
             }
 
-            if (orderHead.getGetOrderDateStr() != null && orderHead.getGetOrderDateStr().length() > 0) {
+            if (orderHead.getGetOrderDateStr() != null && orderHead.getGetOrderDateStr().length() > 5) {
                 sb.append(" and date_format(dmh.getOrderDate, '%Y-%m-%d') = #{getOrderDateStr}");
             }
 
-            if (orderHead.getDeliveryOrderDateStr() != null && orderHead.getDeliveryOrderDateStr().length() > 0) {
+            if (orderHead.getDeliveryOrderDateStr() != null && orderHead.getDeliveryOrderDateStr().length() > 5) {
                 sb.append(" and date_format(dmh.deliveryOrderDate, '%Y-%m-%d') = #{deliveryOrderDateStr}");
             }
 
@@ -774,10 +1038,16 @@ public interface DesignMapper {
                     "\tdmhp.needNum,\n" +
                     "\tdmhp.drawingNo,\n" +
                     "\tdmhp.productRoute,\n" +
+                    "\tdmhp.productTypeName,\n" +
+                    "\tdmhp.productTypeRoute,\n" +
                     "\tdmhp.remark\n" +
                     "FROM\n" +
                     "\tdesignmaterialheadproduct dmhp\n" +
-                    " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id");
+                    " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id where 1=1 ");
+
+            if (orderHead.getHead_id() != null) {
+                sb.append("  and dmh.id = #{head_id} ");
+            }
 
             if (orderHead.getProductNameList() != null && orderHead.getProductNameList().size() > 0) {
                 if (orderHead.getProductNameList().size() == 1) {
@@ -874,8 +1144,7 @@ public interface DesignMapper {
                 }
             } else {
                 sb.append("  ORDER BY\n" +
-                        "\tdmh.customerNo DESC,\n" +
-                        "\tdmhp.productNo ASC");
+                        "\tdmhp.id ASC");
             }
             sb.append("  limit #{currentPageTotalNum},#{pageSize}");
             return sb.toString();
@@ -886,7 +1155,11 @@ public interface DesignMapper {
                     " count(*) " +
                     "FROM\n" +
                     "\tdesignmaterialheadproduct dmhp\n" +
-                    " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id");
+                    " JOIN designmaterialhead dmh ON dmhp.head_id = dmh.id  where 1=1 ");
+
+            if (orderHead.getHead_id() != null) {
+                sb.append("  and dmh.id = #{head_id} ");
+            }
 
             if (orderHead.getProductNameList() != null && orderHead.getProductNameList().size() > 0) {
                 if (orderHead.getProductNameList().size() == 1) {
@@ -1079,9 +1352,7 @@ public interface DesignMapper {
                 }
             } else {
                 sb.append("  ORDER BY\n" +
-                        "\tdm.customerNo DESC,\n" +
-                        "\tdmh.productNo ASC,\n" +
-                        "\tdmhi.mateiralNo ASC\n");
+                        "\tdmhi.id ASC\n");
             }
             sb.append("  limit #{currentPageTotalNum},#{pageSize}");
             return sb.toString();

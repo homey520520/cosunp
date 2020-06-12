@@ -1,5 +1,6 @@
 package com.cosun.cosunp.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.cosun.cosunp.entity.*;
 import com.cosun.cosunp.service.IDesignServ;
 import com.cosun.cosunp.service2.IKingSoftStoreServ;
@@ -22,10 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author:homey Wong
@@ -84,6 +82,8 @@ public class DesignController {
         }
     }
 
+//
+
     @ResponseBody
     @RequestMapping(value = "/queryMaterialSpecifiByCondition", method = RequestMethod.POST)
     public void queryMaterialSpecifiByCondition(@RequestBody(required = true) String materiName, HttpSession session, HttpServletResponse response) throws
@@ -104,9 +104,48 @@ public class DesignController {
 
 
     @ResponseBody
+    @RequestMapping(value = "/queryRouteSpecifiByCondition", method = RequestMethod.POST)
+    public void queryRouteSpecifiByCondition(@RequestBody(required = true) String routeName, HttpSession session, HttpServletResponse response) throws
+            Exception {
+        try {
+            List<DesignMaterialHeadProduct> item = IKingSoftStoreServ.queryRouteSpecifiByCondition(routeName);
+            ObjectMapper x = new ObjectMapper();
+            String str1 = x.writeValueAsString(item);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().print(str1);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/queryMaterialSpecifiByConditionab", method = RequestMethod.POST)
+    public void queryMaterialSpecifiByConditionab(@RequestBody(required = true) String materiName, HttpSession session, HttpServletResponse response) throws
+            Exception {
+        try {
+            List<DesignMaterialHeadProductItem> item = IKingSoftStoreServ.queryMaterialSpecifiByConditionab(materiName);
+            ObjectMapper x = new ObjectMapper();
+            String str1 = x.writeValueAsString(item);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().print(str1);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    @ResponseBody
     @RequestMapping(value = "/deleteOrderItemByheadIdItem")
     public ModelAndView deleteOrderItemByheadIdItem(String productNo, String customerNo, Integer id, HttpSession session) throws Exception {
         ModelAndView mav = new ModelAndView("designmaterialneedHPITEM");
+        UserInfo userInfo = (UserInfo) session.getAttribute("account");
         IDesignServ.deleteOrderItemByheadIdItem(id);
         DesignMaterialHeadProductItem orderHead = new DesignMaterialHeadProductItem();
         List<String> list = new ArrayList<String>();
@@ -119,8 +158,8 @@ public class DesignController {
             list2.add(productNo);
             orderHead.setProductNoList(list2);
         }
-        List<String> customerNoList = IDesignServ.getAllOrderNo();
-        List<String> productNoList = IDesignServ.getAllproductNoList();
+        List<String> customerNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
+        List<String> productNoList = null;
         List<String> materialSpeciList = IDesignServ.getAllmaterialSpeciList();
         List<String> pmaterialNameList = IDesignServ.getAllmaterialNameList();
         List<String> mateiralNoList = IDesignServ.getAllmateiralNoList();
@@ -132,7 +171,7 @@ public class DesignController {
         mav.addObject("orderHead", orderHead);
         mav.addObject("orderList", orderList);
         mav.addObject("customerNoList", customerNoList);
-        mav.addObject("productNoList", productNoList);
+        mav.addObject("productNoList", IDesignServ.getAllproductNoList(customerNo));
         mav.addObject("materialSpeciList", materialSpeciList);
         mav.addObject("pmaterialNameList", pmaterialNameList);
         mav.addObject("mateiralNoList", mateiralNoList);
@@ -150,20 +189,36 @@ public class DesignController {
         ModelAndView mav = new ModelAndView("designmaterialneedHPITEM");
         DesignMaterialHeadProductItem orderHead = new DesignMaterialHeadProductItem();
         DesignMaterialHeadProductItem orderHead2 = new DesignMaterialHeadProductItem();
-        List<String> customerNoList = IDesignServ.getAllOrderNo();
-        List<String> productNoList = IDesignServ.getAllproductNoList();
+        List<String> customerNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
+        List<String> productNoList = null;
         List<String> materialSpeciList = IDesignServ.getAllmaterialSpeciList();
         List<String> pmaterialNameList = IDesignServ.getAllmaterialNameList();
         List<String> mateiralNoList = IDesignServ.getAllmateiralNoList();
+        List<DesignMaterialHeadProductItem> orderList = null;
+        int recordCount = 0;
         if (headId != null) {
             orderHead.setHead_product_id(headId);
             orderHead2 = IDesignServ.getCustomerNameAndProductNoByHeadId(headId);
+            orderList = IDesignServ.getAllDMHPI(orderHead);
+            recordCount = IDesignServ.getAllDMHPICount(orderHead);
         }
-        List<DesignMaterialHeadProductItem> orderList = IDesignServ.getAllDMHPI(orderHead);
-        int recordCount = IDesignServ.getAllDMHPICount(orderHead);
+
+        // List<DesignMaterialHeadProductItem> orderList = IDesignServ.getAllDMHPI(orderHead);
+
+        //int recordCount = IDesignServ.getAllDMHPICount(orderHead);
         int maxPage = recordCount % orderHead.getPageSize() == 0 ? recordCount / orderHead.getPageSize() : recordCount / orderHead.getPageSize() + 1;
         orderHead.setMaxPage(maxPage);
         orderHead.setRecordCount(recordCount);
+        if (headId != null && orderHead2 != null) {
+            mav.addObject("productNo", orderHead2.getProductNo());
+            mav.addObject("customerNo", orderHead2.getCustomerNo());
+            productNoList = IDesignServ.getAllproductNoList(orderHead2.getCustomerNo());
+        } else if (headId != null) {
+            orderHead2 = IDesignServ.getCustomerNameAndProductNoByHeadId2(headId);
+            mav.addObject("productNo", orderHead2.getProductNo());
+            mav.addObject("customerNo", orderHead2.getCustomerNo());
+            productNoList = IDesignServ.getAllproductNoList(orderHead2.getCustomerNo());
+        }
         mav.addObject("orderHead", orderHead);
         mav.addObject("orderList", orderList);
         mav.addObject("customerNoList", customerNoList);
@@ -171,41 +226,41 @@ public class DesignController {
         mav.addObject("materialSpeciList", materialSpeciList);
         mav.addObject("pmaterialNameList", pmaterialNameList);
         mav.addObject("mateiralNoList", mateiralNoList);
-        if (headId != null && orderHead2 != null) {
-            mav.addObject("productNo", orderHead2.getProductNo());
-            mav.addObject("customerNo", orderHead2.getCustomerNo());
-        } else if (headId != null) {
-            orderHead2 = IDesignServ.getCustomerNameAndProductNoByHeadId2(headId);
-            mav.addObject("productNo", orderHead2.getProductNo());
-            mav.addObject("customerNo", orderHead2.getCustomerNo());
-        }
         return mav;
     }
 
 
+
     @ResponseBody
     @RequestMapping(value = "/toHeadProduct")
-    public ModelAndView toHeadProduct(String customerNo, HttpSession session) throws Exception {
+    public ModelAndView toHeadProduct(Integer id, String customerNo, HttpSession session) throws Exception {
         UserInfo userInfo = (UserInfo) session.getAttribute("account");
         ModelAndView mav = new ModelAndView("designmaterialneedHP");
         DesignMaterialHeadProduct orderHead = new DesignMaterialHeadProduct();
-        List<String> orderNoList = IDesignServ.getAllOrderNo();
+        List<String> orderNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
         List<String> productNameList = IDesignServ.getAllproductNameList();
-        List<String> productNoList = IDesignServ.getAllproductNoList();
         List<String> drawingNoList = IDesignServ.getAlldrawingNoList();
-        orderHead.setCustomerNo(customerNo);
-        List<DesignMaterialHeadProduct> orderList = IDesignServ.getAllDMHP(orderHead);
-        int recordCount = IDesignServ.getAllDMHPCount(orderHead);
+        orderHead.setId(id);
+        List<DesignMaterialHeadProduct> orderList = null;
+        int recordCount = 0;
+
+        if (orderHead != null && orderHead.getId() != null) {
+            orderList = IDesignServ.getAllDMHP(orderHead);
+            recordCount = IDesignServ.getAllDMHPCount(orderHead);
+        }
+        //List<DesignMaterialHeadProduct> orderList = IDesignServ.getAllDMHP(orderHead);
+        //int recordCount = IDesignServ.getAllDMHPCount(orderHead);
         int maxPage = recordCount % orderHead.getPageSize() == 0 ? recordCount / orderHead.getPageSize() : recordCount / orderHead.getPageSize() + 1;
         orderHead.setMaxPage(maxPage);
         orderHead.setRecordCount(recordCount);
         mav.addObject("orderHead", orderHead);
         mav.addObject("orderList", orderList);
         mav.addObject("productNameList", productNameList);
-        mav.addObject("productNoList", productNoList);
+        mav.addObject("productNoList", IDesignServ.getAllproductNoList(customerNo));
         mav.addObject("drawingNoList", drawingNoList);
         mav.addObject("orderNoList", orderNoList);
         mav.addObject("customerNo", customerNo);
+        mav.addObject("head_Id", id);
         return mav;
     }
 
@@ -220,11 +275,12 @@ public class DesignController {
             DesignMaterialHead orderHead = new DesignMaterialHead();
             List<Employee> salorEmpList = IDesignServ.getSalor();
             JSONArray salorEmpList1 = JSONArray.fromObject(salorEmpList.toArray());
-            List<String> orderNoList = IDesignServ.getAllOrderNo();
+            List<String> orderNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
             List<String> orderAreaList = IDesignServ.getAllOrderArea();
             List<Employee> orderMakerList = IDesignServ.getAllMaker();
+            orderHead.setLoginName(userInfo.getEmpNo());
             List<DesignMaterialHead> orderList = IDesignServ.getAllDMH(orderHead);
-            int recordCount = IDesignServ.getAllDMHCount();
+            int recordCount = IDesignServ.getAllDMHCount(orderHead);
             int maxPage = recordCount % orderHead.getPageSize() == 0 ? recordCount / orderHead.getPageSize() : recordCount / orderHead.getPageSize() + 1;
             orderHead.setMaxPage(maxPage);
             orderHead.setRecordCount(recordCount);
@@ -285,6 +341,12 @@ public class DesignController {
             item.setCustomerNoList(list);
             item.setProductNoList(list2);
             item.setCurrentPage(orderHead.getCurrentPage());
+            DesignMaterialHeadProductItem iitem = null;
+            if (orderHead.getId() != null && orderHead.getId() != 0) {
+                iitem = IKingSoftStoreServ.getMaterialNameSpeifiById(orderHead.getMateiralNo().trim());
+                orderHead.setMaterialName(iitem.getMaterialName());
+                orderHead.setMaterialSpeci(iitem.getMaterialSpeci());
+            }
             int isSave = IDesignServ.saveSJIHeadPDateToMysql(orderHead);
             List<DesignMaterialHeadProductItem> orderList = IDesignServ.queryOrderHeadProductItemByCondition(item);
             int recordCount = IDesignServ.queryOrderHeadProductItemByConditionCount(item);
@@ -295,7 +357,7 @@ public class DesignController {
                 orderList.get(0).setCurrentPage(orderHead.getCurrentPage());
                 orderList.get(0).setFlag(isSave);
 
-            }else {
+            } else {
                 orderList = new ArrayList<DesignMaterialHeadProductItem>();
                 item.setMaxPage(maxPage);
                 item.setRecordCount(recordCount);
@@ -319,10 +381,77 @@ public class DesignController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/saveSJIHeadPDateToMysql2")
-    public void saveSJIHeadPDateToMysql2(@RequestBody(required = true) List<DesignMaterialHeadProductItem> orderHeadList, HttpServletResponse response, HttpSession session) throws
+    @RequestMapping(value = "/showProductNoByCustomerNo", method = RequestMethod.POST)
+    public void showProductNoByCustomerNo(DesignMaterialHead head, HttpServletResponse response, HttpSession session) throws
             Exception {
         try {
+            List<String> productNoList = IDesignServ.getAllproductNoList(head.getCustomerNo());
+            String str1;
+            ObjectMapper x = new ObjectMapper();
+            str1 = x.writeValueAsString(productNoList);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().print(str1);
+
+        } catch (SecurityException e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/saveSJIHeadPDateToMysqlLinShi")
+    public void saveSJIHeadPDateToMysqlLinShi(@RequestBody(required = true) String data, HttpServletResponse response, HttpSession session) throws
+            Exception {
+        try {
+            List<DesignMaterialHeadProductItem> orderHeadList = JSON.parseArray(data, DesignMaterialHeadProductItem.class);
+            DesignMaterialHeadProductItem item = new DesignMaterialHeadProductItem();
+            List<String> list = new ArrayList<String>();
+            List<String> list2 = new ArrayList<String>();
+            list.add(orderHeadList.get(0).getCustomerNo().trim());
+            list2.add(orderHeadList.get(0).getProductNo().trim());
+            item.setCustomerNoList(list);
+            item.setProductNoList(list2);
+            item.setCurrentPage(orderHeadList.get(0).getCurrentPage());
+            int isSave = IDesignServ.saveSJIListHeadPDateToMysql(orderHeadList);
+            List<DesignMaterialHeadProductItem> orderList = IDesignServ.queryOrderHeadProductItemByCondition(item);
+            int recordCount = IDesignServ.queryOrderHeadProductItemByConditionCount(item);
+            int maxPage = recordCount % item.getPageSize() == 0 ? recordCount / item.getPageSize() : recordCount / item.getPageSize() + 1;
+            if (orderList.size() > 0) {
+                orderList.get(0).setMaxPage(maxPage);
+                orderList.get(0).setRecordCount(recordCount);
+                orderList.get(0).setCurrentPage(item.getCurrentPage());
+                orderList.get(0).setFlag(isSave);
+
+            } else {
+                orderList = new ArrayList<DesignMaterialHeadProductItem>();
+                item.setMaxPage(maxPage);
+                item.setRecordCount(recordCount);
+                item.setCurrentPage(item.getCurrentPage());
+                item.setFlag(isSave);
+                orderList.add(item);
+            }
+
+            String str1;
+            ObjectMapper x = new ObjectMapper();
+            str1 = x.writeValueAsString(orderList);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().print(str1);
+
+        } catch (SecurityException e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/saveSJIHeadPDateToMysql2")
+    public void saveSJIHeadPDateToMysql2(@RequestBody(required = true) String data, HttpServletResponse response, HttpSession session) throws
+            Exception {
+        try {
+            List<DesignMaterialHeadProductItem> orderHeadList = JSON.parseArray(data, DesignMaterialHeadProductItem.class);
             DesignMaterialHeadProductItem item = new DesignMaterialHeadProductItem();
             List<String> list = new ArrayList<String>();
             List<String> list2 = new ArrayList<String>();
@@ -368,11 +497,13 @@ public class DesignController {
     public ModelAndView deleteOrderItemHByheadId(DesignMaterialHeadProduct orderHead, HttpServletResponse response, HttpSession session) throws
             Exception {
         try {
+            UserInfo userInfo = (UserInfo) session.getAttribute("account");
             IDesignServ.deleteOrderItemHByheadId(orderHead.getId());
             ModelAndView mav = new ModelAndView("designmaterialneedHP");
-            List<String> orderNoList = IDesignServ.getAllOrderNo();
+            List<String> orderNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
             List<String> productNameList = IDesignServ.getAllproductNameList();
-            List<String> productNoList = IDesignServ.getAllproductNoList();
+            List<String> productNoList = null;
+
             List<String> drawingNoList = IDesignServ.getAlldrawingNoList();
             List<DesignMaterialHeadProduct> orderList = IDesignServ.getAllDMHPByCustomerNo(orderHead);
             int recordCount = IDesignServ.getAllDMHPByCustomerNoCount(orderHead);
@@ -382,11 +513,12 @@ public class DesignController {
             mav.addObject("orderHead", orderHead);
             mav.addObject("orderList", orderList);
             mav.addObject("productNameList", productNameList);
-            mav.addObject("productNoList", productNoList);
+            mav.addObject("productNoList", IDesignServ.getAllproductNoList(orderHead.getCustomerNo()));
             mav.addObject("drawingNoList", drawingNoList);
             mav.addObject("flag", 2);
             mav.addObject("orderNoList", orderNoList);
             mav.addObject("customerNo", orderHead.getCustomerNo());
+            mav.addObject("head_Id", orderHead.getHead_id());
             return mav;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -514,13 +646,15 @@ public class DesignController {
             if (orderHead != null && orderHead.getProductRoute() != null && orderHead.getProductRoute().contains(",")) {
                 orderHead.setProductRoute(orderHead.getProductRoute().replace(",", "-"));
             }
+            UserInfo userInfo = (UserInfo) session.getAttribute("account");
             int isSave = IDesignServ.saveSJHeadPDateToMysql(orderHead);
             ModelAndView mav = new ModelAndView("designmaterialneedHP");
-            List<String> orderNoList = IDesignServ.getAllOrderNo();
+            List<String> orderNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
             List<String> productNameList = IDesignServ.getAllproductNameList();
-            List<String> productNoList = IDesignServ.getAllproductNoList();
+            List<String> productNoList = null;
             List<String> drawingNoList = IDesignServ.getAlldrawingNoList();
             List<String> list2 = new ArrayList<String>();
+            orderHead.setLoginName(userInfo.getEmpNo());
             if (orderHead != null && orderHead.getCustomerNo() != null) {
                 list2.add(orderHead.getCustomerNo());
                 orderHead.setCustomerNoList(list2);
@@ -538,6 +672,40 @@ public class DesignController {
             mav.addObject("flag", isSave);
             mav.addObject("orderNoList", orderNoList);
             mav.addObject("customerNo", orderHead.getCustomerNo());
+            mav.addObject("head_Id", orderHead.getHead_id());
+            return mav;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/saveSJIHeadBYIdToMysql")
+    public ModelAndView saveSJIHeadBYIdToMysql(Integer fromId, String toOrderNo, HttpServletResponse response, HttpSession session) throws
+            Exception {
+        try {
+            UserInfo userInfo = (UserInfo) session.getAttribute("account");
+            DesignMaterialHeadProduct orderHead = IDesignServ.saveSJIHeadBYIdToMysql(userInfo.getEmpNo(),fromId,toOrderNo);
+            ModelAndView mav = new ModelAndView("designmaterialneedHP");
+            List<String> productNameList = IDesignServ.getAllproductNameList();
+            List<String> drawingNoList = IDesignServ.getAlldrawingNoList();
+            List<String> orderNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
+            List<DesignMaterialHeadProduct> orderList = IDesignServ.queryOrderHeadProductOrderNoByCondition(userInfo.getEmpNo(),toOrderNo);
+            int recordCount = IDesignServ.queryOrderHeadProductOrderNoByConditionCount(userInfo.getEmpNo(),toOrderNo);
+            int maxPage = recordCount % orderHead.getPageSize() == 0 ? recordCount / orderHead.getPageSize() : recordCount / orderHead.getPageSize() + 1;
+            orderHead.setMaxPage(maxPage);
+            orderHead.setRecordCount(recordCount);
+            mav.addObject("orderHead", orderHead);
+            mav.addObject("orderList", orderList);
+            mav.addObject("productNameList", productNameList);
+            mav.addObject("drawingNoList", drawingNoList);
+            mav.addObject("flag", 8);
+            mav.addObject("orderNoList", orderNoList);
+            mav.addObject("customerNo", toOrderNo);
+            mav.addObject("head_Id",orderHead.getHead_id());
             return mav;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -555,11 +723,12 @@ public class DesignController {
         DesignMaterialHead orderHead = new DesignMaterialHead();
         List<Employee> salorEmpList = IDesignServ.getSalor();
         JSONArray salorEmpList1 = JSONArray.fromObject(salorEmpList.toArray());
-        List<String> orderNoList = IDesignServ.getAllOrderNo();
+        List<String> orderNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
         List<String> orderAreaList = IDesignServ.getAllOrderArea();
         List<Employee> orderMakerList = IDesignServ.getAllMaker();
+        orderHead.setLoginName(userInfo.getEmpNo());
         List<DesignMaterialHead> orderList = IDesignServ.getAllDMH(orderHead);
-        int recordCount = IDesignServ.getAllDMHCount();
+        int recordCount = IDesignServ.getAllDMHCount(orderHead);
         int maxPage = recordCount % orderHead.getPageSize() == 0 ? recordCount / orderHead.getPageSize() : recordCount / orderHead.getPageSize() + 1;
         orderHead.setMaxPage(maxPage);
         orderHead.setRecordCount(recordCount);
@@ -604,6 +773,8 @@ public class DesignController {
     @RequestMapping(value = "/queryOrderHeadByCondition", method = RequestMethod.POST)
     public void queryOrderHeadByCondition(DesignMaterialHead orderHead, HttpServletResponse response, HttpSession session) throws Exception {
         try {
+            UserInfo userInfo = (UserInfo) session.getAttribute("account");
+            orderHead.setLoginName(userInfo.getEmpNo());
             List<DesignMaterialHead> orderList = IDesignServ.queryOrderHeadByCondition(orderHead);
             int recordCount = IDesignServ.queryOrderHeadByConditionCount(orderHead);
             int maxPage = recordCount % orderHead.getPageSize() == 0 ? recordCount / orderHead.getPageSize() : recordCount / orderHead.getPageSize() + 1;
@@ -630,16 +801,29 @@ public class DesignController {
     public ModelAndView saveSJHeadDateToMysql(DesignMaterialHead designMaterialHead, HttpServletResponse response, HttpSession session) throws
             Exception {
         try {
+            designMaterialHead.setCustomerNo(designMaterialHead.getCustomerNo().trim());
             UserInfo userInfo = (UserInfo) session.getAttribute("account");
+            designMaterialHead.setLoginName(userInfo.getEmpNo());
             designMaterialHead.setOrderMaker(userInfo.getEmpNo());
+            List<String> list2 = new ArrayList<String>();
+            if (designMaterialHead != null && designMaterialHead.getCustomerNo() != null) {
+                list2.add(designMaterialHead.getCustomerNo());
+                designMaterialHead.setCustomerNoList(list2);
+            }
+            if (designMaterialHead.getDeliveryOrderDateStr() != null && designMaterialHead.getDeliveryOrderDateStr() == "")
+                designMaterialHead.setDeliveryOrderDateStr(null);
+            if (designMaterialHead.getGetOrderDateStr() != null && designMaterialHead.getGetOrderDateStr() == "")
+                designMaterialHead.setGetOrderDateStr(null);
             int isSave = IDesignServ.saveSJHeadDateToMysql(designMaterialHead);
             ModelAndView mav = new ModelAndView("designmaterialneed");
             DesignMaterialHead orderHead = new DesignMaterialHead();
             List<Employee> salorEmpList = IDesignServ.getSalor();
             JSONArray salorEmpList1 = JSONArray.fromObject(salorEmpList.toArray());
-            List<String> orderNoList = IDesignServ.getAllOrderNo();
+            List<String> orderNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
             List<String> orderAreaList = IDesignServ.getAllOrderArea();
             List<Employee> orderMakerList = IDesignServ.getAllMaker();
+            designMaterialHead.setDeliveryOrderDateStr("");
+            designMaterialHead.setGetOrderDateStr("");
             List<DesignMaterialHead> orderList = IDesignServ.queryOrderHeadByCondition(designMaterialHead);
             int recordCount = IDesignServ.queryOrderHeadByConditionCount(designMaterialHead);
             int maxPage = recordCount % orderHead.getPageSize() == 0 ? recordCount / orderHead.getPageSize() : recordCount / orderHead.getPageSize() + 1;
@@ -654,6 +838,44 @@ public class DesignController {
             mav.addObject("orderList", orderList);
             mav.addObject("flag", isSave);
             mav.addObject("customerNo", designMaterialHead.getCustomerNo());
+            mav.addObject("userName", userInfo.getUserName());
+            return mav;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/saveSJHeadBYIdToMysql")
+    public ModelAndView saveSJHeadBYIdToMysql(Integer fromId, String toOrderNo, HttpServletResponse response, HttpSession session) throws
+            Exception {
+        try {
+            UserInfo userInfo = (UserInfo) session.getAttribute("account");
+            int isCopy = IDesignServ.saveSJHeadByCopy(fromId, toOrderNo);
+            ModelAndView mav = new ModelAndView("designmaterialneed");
+            DesignMaterialHead orderHead = new DesignMaterialHead();
+            List<Employee> salorEmpList = IDesignServ.getSalor();
+            JSONArray salorEmpList1 = JSONArray.fromObject(salorEmpList.toArray());
+            List<String> orderNoList = IDesignServ.getAllOrderNo(userInfo.getEmpNo());
+            List<String> orderAreaList = IDesignServ.getAllOrderArea();
+            List<Employee> orderMakerList = IDesignServ.getAllMaker();
+            List<DesignMaterialHead> orderList = IDesignServ.queryOrderHeadBytoOrderNo(userInfo.getEmpNo(), toOrderNo);
+            int recordCount = IDesignServ.queryOrderHeadBytoOrderNoCount(userInfo.getEmpNo(), toOrderNo);
+            int maxPage = recordCount % orderHead.getPageSize() == 0 ? recordCount / orderHead.getPageSize() : recordCount / orderHead.getPageSize() + 1;
+            orderHead.setMaxPage(maxPage);
+            orderHead.setRecordCount(recordCount);
+            mav.addObject("orderHead", orderHead);
+            mav.addObject("salorEmpList", salorEmpList);
+            mav.addObject("salorEmpList1", salorEmpList1);
+            mav.addObject("orderNoList", orderNoList);
+            mav.addObject("orderAreaList", orderAreaList);
+            mav.addObject("orderMakerList", orderMakerList);
+            mav.addObject("orderList", orderList);
+            mav.addObject("flag", 8);
+            mav.addObject("customerNo", toOrderNo.trim());
             mav.addObject("userName", userInfo.getUserName());
             return mav;
         } catch (Exception e) {

@@ -25,11 +25,11 @@ public class ZhongKongDATAToSQLTask {
 
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(cron = "0 0 05 * * ?")
-    //@Scheduled(cron = "00 18 09 ? * *")
+    @Scheduled(cron = "00 38 08 ? * *")
     private void configureTasks() {
         try {
             //String beforDay  B = "2020-03-";
-            String beforeDay = "2020-05-31";
+            String beforeDay = "2020-06-11";
 //            String beforeDay;
 //            for (int a = 1; a <= 17; a++) {
 //                if (a < 10) {
@@ -65,45 +65,6 @@ public class ZhongKongDATAToSQLTask {
 }
 
 
-//   时间会告诉我们答案
-//
-// 你是否常挑灯夜读
-// 让自己的羽翼更为丰满
-// 幻想在广阔蔚蓝的天空中
-// 展翅高飞
-
-// 你是否为情所困
-// 那得不到的
-// 那心心念而不能的
-// 让你心愈挫落
-//
-// 你是否一直坚持自己笃定的目标
-// 曾重重摔倒
-// 或又头破血流
-//
-// 你是否曾在某个十字路口
-// 茫然四顾
-// 不知所措
-//
-// 你是否常常为自己空有能力
-// 而没有任何赏识的机会
-//
-// 你受着的这些
-// 时间终会告诉你
-//
-// 时间会抚平
-// 所有的伤痛
-//
-// 时间会见证
-// 你翱翔天空
-//
-// 时间会给你
-// 合适的爱
-//
-// 时间会清晰
-// 方向
-//
-// 那些
 
 
 

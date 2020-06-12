@@ -58,67 +58,87 @@ public class CosunpApplication extends SpringBootServletInitializer {
 //                fileUploadAndDownServ.init();
                 new AccessTokenServlet().init();
 
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        try {
-                            String beforeDay = DateUtil.getBeforeDay();
-                            logger.error(new Date() + "start-----------------" + beforeDay);
-                            new PersonController().getKQ(beforeDay);
-                            logger.error(new Date() + "end-----------------" + beforeDay);
-                        } catch (Exception e) {
-                            logger.error(e.getMessage(), e);
-                            logger.error("error*************************************");
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, 3 * 1000, 24 * 60 * 60 * 1000);
-                // wx16c9442a4b26e6ea
-                //36e571b957c3705964b4398019482dde
+//                Timer timer = new Timer();
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            String beforeDay = DateUtil.getBeforeDay();
+//                            logger.error(new Date() + "start-----------------" + beforeDay);
+//                            new PersonController().getKQ(beforeDay);
+//                            logger.error(new Date() + "end-----------------" + beforeDay);
+//                        } catch (Exception e) {
+//                            logger.error(e.getMessage(), e);
+//                            logger.error("error*************************************");
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                }, 3 * 1000, 24 * 60 * 60 * 1000);
             }
         };
 
     }
 
-
+//    劝君莫赌博
+//
+//            世人皆言麻将妙
+//    为你痴来为你狂
+//            方方正正清一色
+//    统一着装底面绝
+//            要说发明是明清
+//    有万有条又有圆
+//            组成话来不用学
+//    五六七万就要得
+//            麻将麻将人人爱
+//    老来把玩小来学
+//            一逢大风雷雨天
+//    麻将馆里声震天
+//            只闻牌声小儿哭
+//    不见阿婆把饭喂
+//            小儿若有意外险
+//    父母老人哭不回
+//            更有好吃懒做人
+//    输的裤子都不剩
+//            此劝老幼年青人
+//    莫把麻将当饭食
+//            人生区区几十载
+//    圆梦赚钱是正道
+//            麻将祸害真不少
+//    我给大家捋一捋
+//            东边王二输套房
+//    西边李四妻子散
+//            南边张三败光家
+//    莫要到时沦到你
+//            网上赌博陷阱多
+//    劝君莫拿身去试
+//            一试上瘾难戒除
+//    害你家破害你亡
+//            若是小打怡怡情
+//    叫上亲朋就可行
+//            莫要贪来莫要恋
+//    小钱即可众乐乐
+//            祝愿大家心健康
+//    永不赌来永快乐
+//
+// alter table b_warehouse_message add column entity_warehouse_no_test varchar(48) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '实体仓库代码';
+    // mysqldump -u root -p root ext_upload_files project_head_order > project_head_order.sql
+//cat /var/log/syslog
+    //https://www.jianshu.com/p/776b9455c4d8
+    // https://blog.csdn.net/qq_38737992/article/details/81090373
     // /opt/mysrv/nginx/sbin/nginx -c /opt/mysrv/etc/nginx/nginx.conf
     // ./nginx -t
     //  redis-server /opt/mysrv/etc/redis/redis.conf
+    //     ubuntu
+    //  redis-server /usr/local/redis/redis.conf
     //./mysqld --initialize --user=mysql --basedir=/usr/local/mysql-5.7.30/ --datadir=/usr/local/mysql-5.7.30/data/
     //  ln -s /usr/local/mysql/bin/mysql-5.7.30 /usr/bin
+// mysqld --initialize --user=mysql --datadir=/opt/mysql/data
+    //sudo mysqld --initialize --user=mysql  --datadir=/etc/mysql/data mysqld --initialize --user=mysql
 
-
+//    SELECT * FROM [AIS20190910163600].dbo.T_BAS_ASSISTANTDATAENTRY where FID ='5ebd0236b59a8a'
+//            5ebd0236b59a8a是固定的，先在T_BAS_ASSISTANTDATAENTRY中选取FID为5ebd0236b59a8a的数据，
+//    再筛选出来的数据中取所有数据的FENTRYID值，去T_BAS_ASSISTANTDATAENTRY_L中选出FDATAVALUE和FDESCRIPTION即为所需，FDATAVALUE为产品类型，FDESCRIPTION为工艺路线说明
 }
 
 
-// https://i.zhaopin.com/resume
-//
-//文件管理平台
-//
-//项目框架搭建采用：springboot+springMVC+ibaties+redis+maven+tomcat+FTP+js+json+ajax+css+html5+jquery+bootstrap等
-//数据库：mysql
-//线上系统：linux
-//项目中配置了log4j日志方便线上BUG排错。事物,数据连接池等
-//采用了控件webuploader等，修改部分源码迎合项目需要等.
-//
-//人事考勤系统
-//项目框架搭建采用:springboot+springMVC+ibaties+redis+maven+tomcat+js+json+ajax+css+jquery+bootstrap等
-//数据库:mysql
-//线上系统：linux
-//根据人事习惯量身订做的系统，集排单，数据管理，月考勤报表等等所有功能。
-//
-//微信小程序
-//后端采用JAVA语言
-//数据库:mysql
-//后端线上系统：linux
-//给项目中心全体人员量身订做的一款项目订单监控小程序+后台数据管理。集数据管理，数据更改或延期或报警消息通知，系统自动排单
-//等数据智能化系统。
-//
-// 金蝶星空云二次开发
-// 使用已有的系统金蝶去数据库
-// 根据部门需要做二次开发
-//
-// 其它一些帮助部门节约时间的桌面程序开发等。
-//

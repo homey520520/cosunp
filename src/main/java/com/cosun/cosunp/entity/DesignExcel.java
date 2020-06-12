@@ -266,7 +266,7 @@ public class DesignExcel {
                 itemList.clear();
                 product = head.getProductList().get(i);
                 for (int j = 0; j < head.getProductItemList().size(); j++) {
-                    if (head.getProductItemList().get(j).getHead_product_id() == product.getId()) {
+                    if (head.getProductItemList().get(j).getHead_product_id().equals(Integer.valueOf(product.getId())) ) {
                         itemList.add(head.getProductItemList().get(j));
                     }
                 }
@@ -410,12 +410,91 @@ public class DesignExcel {
                 cell.setCellValue(product.getProductRoute());
                 cell.setCellStyle(cellStyle);
 
+                row = hssfSheet.createRow(4 + i + rowLen);
+                row.setHeight((short) 600);
+                cell = row.createCell(0);
+                cell.setCellValue("产品分类编码");
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(1);
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(2);
+                cell.setCellValue(product.getProductTypeNo());
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(3);
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(4);
+                cell.setCellValue("产品分类名称");
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(5);
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(6);
+                cell.setCellValue(product.getProductTypeName());
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(7);
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(8);
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(9);
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(10);
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(11);
+                cell.setCellStyle(cellStyle);
+
+                row = hssfSheet.createRow(5 + i + rowLen);
+                row.setHeight((short) 600);
+
+                cell = row.createCell(0);
+                cell.setCellValue("产品工艺路线");
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(1);
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(2);
+                cell.setCellValue(product.getProductTypeRoute());
+                cell.setCellStyle(cellStyle);
+
+
+                region = new CellRangeAddress(i + 4 + rowLen, i + 4 + rowLen, 0, 1);
+                RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
+                hssfSheet.addMergedRegion(region);
+
+                region = new CellRangeAddress(i + 4 + rowLen, i + 4 + rowLen, 2, 3);
+                RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
+                hssfSheet.addMergedRegion(region);
+                region = new CellRangeAddress(i + 4 + rowLen, i + 4 + rowLen, 4, 5);
+                RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
+                hssfSheet.addMergedRegion(region);
+
+                region = new CellRangeAddress(i + 4 + rowLen, i + 4 + rowLen, 6, 11);
+                RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
+                hssfSheet.addMergedRegion(region);
 
                 region = new CellRangeAddress(i + 3 + rowLen, i + 3 + rowLen, 0, 1);
                 RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
                 hssfSheet.addMergedRegion(region);
 
                 region = new CellRangeAddress(i + 3 + rowLen, i + 3 + rowLen, 2, 11);
+                RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
+                hssfSheet.addMergedRegion(region);
+
+                region = new CellRangeAddress(i + 5 + rowLen, i + 5 + rowLen, 0, 1);
+                RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
+                hssfSheet.addMergedRegion(region);
+
+                region = new CellRangeAddress(i + 5 + rowLen, i + 5 + rowLen, 2, 11);
                 RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
                 hssfSheet.addMergedRegion(region);
 
@@ -430,7 +509,7 @@ public class DesignExcel {
 
                 for (int a = 0; a < itemList.size(); a++) {
                     item = itemList.get(a);
-                    row = hssfSheet.createRow(4 + i + a + rowLen);
+                    row = hssfSheet.createRow(6 + i + a + rowLen);
                     cell = row.createCell(0);
                     cell.setCellValue(a + 1);
                     cell.setCellStyle(cellStyleb);
@@ -480,11 +559,11 @@ public class DesignExcel {
                     cell.setCellValue(item.getRemark() == null ? "" : item.getRemark());
                     cell.setCellStyle(cellStyleb);
 
-                    region = new CellRangeAddress(4 + i + a + rowLen, 4 + i + a + rowLen, 2, 4);
+                    region = new CellRangeAddress(6 + i + a + rowLen, 6 + i + a + rowLen, 2, 4);
                     RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
                     hssfSheet.addMergedRegion(region);
 
-                    region = new CellRangeAddress(4 + i + a + rowLen, 4 + i + a + rowLen, 5, 6);
+                    region = new CellRangeAddress(6 + i + a + rowLen, 6 + i + a + rowLen, 5, 6);
                     RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
                     hssfSheet.addMergedRegion(region);
                     calcAndSetRowHeigt(row);
@@ -493,10 +572,10 @@ public class DesignExcel {
                     }
                 }
 
-                rowLen = rowLen + (itemList.size() + 3);
+                rowLen = rowLen + (itemList.size() + 5);
             }
 
-            rowLen = 2 + head.getProductList().size() * 4 + head.getProductItemList().size() + 2 * head.getProductList().size();
+            rowLen = 2 + head.getProductList().size() * 6 + head.getProductItemList().size() + 2 * head.getProductList().size();
             row = hssfSheet.createRow(rowLen);
             row.setHeight((short) 600);
             cell = row.createCell(0);
@@ -697,8 +776,8 @@ public class DesignExcel {
                         }
                     }
                 } else {
-                    if (maxHeight < 300) {
-                        sourceRow.setHeight((short) 300);
+                    if (maxHeight < 600) {
+                        sourceRow.setHeight((short) 600);
                     } else {
                         sourceRow.setHeight((short) maxHeight);
                     }
