@@ -27,8 +27,6 @@ public class ProjectHeadOrderItem implements Serializable {
     private String sortByName;
 
 
-
-
     private Integer id;
     private String name;
     private String note;
@@ -57,6 +55,10 @@ public class ProjectHeadOrderItem implements Serializable {
     private Date outDraw_Date_Accu;
     private Date program_confir_Date_Plan;
     private Date program_confir_Date_Accu;
+    private Date xiaDanQianDuan_Date_Plan;
+    private Date xiaDanQianDuan_Date_Accu;
+    private Date xiaDanShengChan_Date_Plan;
+    private Date xiaDanShengChan_Date_Accu;
     private Date giveOrder_Date_Plan;
     private Date giveOrder_Date_Accu;
     private Date delivery_Goods_Date_Plan;
@@ -67,6 +69,17 @@ public class ProjectHeadOrderItem implements Serializable {
     private Date yanShou_Date_Accu;
     private Date jieSuan_Date_Plan;
     private Date jieSuan_Date_Accu;
+
+    private String zhanCha_Emp;
+    private String outDraw_Emp;
+    private String program_confir_Emp;
+    private String xiaDanQianDuan_Emp;
+    private String xiaDanShengChan_Emp;
+    private String giveOrder_Emp;
+    private String delivery_Goods_Emp;
+    private String install_Emp;
+    private String yanShou_Emp;
+    private String jieSuan_Emp;
 
     private String updateUserId;
     private String updateDate;
@@ -83,7 +96,6 @@ public class ProjectHeadOrderItem implements Serializable {
     private Double version;
 
 
-
     private String salor;
     private String[] salors;
     private String[] gendans;
@@ -96,6 +108,8 @@ public class ProjectHeadOrderItem implements Serializable {
     private String[] zhanCha_Emps;
     private String[] outDraw_Emps;
     private String[] program_confir_Emps;
+    private String[] xiaDanQianDuan_Emps;
+    private String[] xiaDanShengChan_Emps;
     private String[] giveOrder_Emps;
     private String[] delivery_Goods_Emps;
     private String[] install_Emps;
@@ -106,6 +120,8 @@ public class ProjectHeadOrderItem implements Serializable {
     private String[] zhanCha_Emps2;
     private String[] outDraw_Emps2;
     private String[] program_confir_Emps2;
+    private String[] xiaDanQianDuan_Emps2;
+    private String[] xiaDanShengChan_Emps2;
     private String[] giveOrder_Emps2;
     private String[] delivery_Goods_Emps2;
     private String[] install_Emps2;
@@ -119,30 +135,14 @@ public class ProjectHeadOrderItem implements Serializable {
     private String fapiaoNo;
     private int status;
     private int checked;
-
     private Integer statusIn;
     private Integer checkedIn;
-
     private String statusStr;
-
-
-
     private String saleManager;
     private String gendan;
-    private String zhanCha_Emp;
-    private String outDraw_Emp;
-    private String program_confir_Emp;
-    private String giveOrder_Emp;
-    private String delivery_Goods_Emp;
-    private String install_Emp;
-    private String yanShou_Emp;
-    private String jieSuan_Emp;
-
-
     private Double hetongMoney;
     private Double hereMoney;
     private Double weiHuiMoney;
-
     private int isYanShou;
 
 
@@ -155,6 +155,10 @@ public class ProjectHeadOrderItem implements Serializable {
     private String outDraw_Date_AccuStr;
     private String program_confir_Date_PlanStr;
     private String program_confir_Date_AccuStr;
+    private String xiaDanQianDuan_Date_PlanStr;
+    private String xiaDanQianDuan_Date_AccuStr;
+    private String xiaDanShengChan_Date_PlanStr;
+    private String xiaDanShengChan_Date_AccuStr;
     private String giveOrder_Date_PlanStr;
     private String giveOrder_Date_AccuStr;
     private String delivery_Goods_Date_PlanStr;
@@ -174,6 +178,10 @@ public class ProjectHeadOrderItem implements Serializable {
     private int outDraw_Date_AccuStrChange;
     private int program_confir_Date_PlanStrChange;
     private int program_confir_Date_AccuStrChange;
+    private int xiaDanQianDuan_Date_PlanStrChange;
+    private int xiaDanQianDuan_Date_AccuStrChange;
+    private int xiaDanShengChan_Date_PlanStrChange;
+    private int xiaDanShengChan_Date_AccuStrChange;
     private int giveOrder_Date_PlanStrChange;
     private int giveOrder_Date_AccuStrChange;
     private int delivery_Goods_Date_PlanStrChange;
@@ -196,6 +204,155 @@ public class ProjectHeadOrderItem implements Serializable {
     private String isYanShouStr;
 
 
+    public Date getXiaDanQianDuan_Date_Plan() {
+        return xiaDanQianDuan_Date_Plan;
+    }
+
+    public void setXiaDanQianDuan_Date_Plan(Date xiaDanQianDuan_Date_Plan) {
+        this.xiaDanQianDuan_Date_Plan = xiaDanQianDuan_Date_Plan;
+    }
+
+    public Date getXiaDanQianDuan_Date_Accu() {
+        return xiaDanQianDuan_Date_Accu;
+    }
+
+    public void setXiaDanQianDuan_Date_Accu(Date xiaDanQianDuan_Date_Accu) {
+        this.xiaDanQianDuan_Date_Accu = xiaDanQianDuan_Date_Accu;
+    }
+
+    public Date getXiaDanShengChan_Date_Plan() {
+        return xiaDanShengChan_Date_Plan;
+    }
+
+    public void setXiaDanShengChan_Date_Plan(Date xiaDanShengChan_Date_Plan) {
+        this.xiaDanShengChan_Date_Plan = xiaDanShengChan_Date_Plan;
+    }
+
+    public Date getXiaDanShengChan_Date_Accu() {
+        return xiaDanShengChan_Date_Accu;
+    }
+
+    public void setXiaDanShengChan_Date_Accu(Date xiaDanShengChan_Date_Accu) {
+        this.xiaDanShengChan_Date_Accu = xiaDanShengChan_Date_Accu;
+    }
+
+    public String getXiaDanQianDuan_Emp() {
+        return xiaDanQianDuan_Emp;
+    }
+
+    public void setXiaDanQianDuan_Emp(String xiaDanQianDuan_Emp) {
+        this.xiaDanQianDuan_Emp = xiaDanQianDuan_Emp;
+    }
+
+    public String getXiaDanShengChan_Emp() {
+        return xiaDanShengChan_Emp;
+    }
+
+    public void setXiaDanShengChan_Emp(String xiaDanShengChan_Emp) {
+        this.xiaDanShengChan_Emp = xiaDanShengChan_Emp;
+    }
+
+    public String[] getXiaDanQianDuan_Emps() {
+        if (this.xiaDanQianDuan_Emp != null) {
+            return xiaDanQianDuan_Emp.split(",");
+        }
+        return xiaDanQianDuan_Emps;
+    }
+
+    public void setXiaDanQianDuan_Emps(String[] xiaDanQianDuan_Emps) {
+        this.xiaDanQianDuan_Emps = xiaDanQianDuan_Emps;
+    }
+
+    public String[] getXiaDanShengChan_Emps() {
+        if (this.xiaDanShengChan_Emp != null) {
+            return xiaDanShengChan_Emp.split(",");
+        }
+        return xiaDanShengChan_Emps;
+    }
+
+    public void setXiaDanShengChan_Emps(String[] xiaDanShengChan_Emps) {
+        this.xiaDanShengChan_Emps = xiaDanShengChan_Emps;
+    }
+
+    public String[] getXiaDanQianDuan_Emps2() {
+        return xiaDanQianDuan_Emps2;
+    }
+
+    public void setXiaDanQianDuan_Emps2(String[] xiaDanQianDuan_Emps2) {
+        this.xiaDanQianDuan_Emps2 = xiaDanQianDuan_Emps2;
+    }
+
+    public String[] getXiaDanShengChan_Emps2() {
+        return xiaDanShengChan_Emps2;
+    }
+
+    public void setXiaDanShengChan_Emps2(String[] xiaDanShengChan_Emps2) {
+        this.xiaDanShengChan_Emps2 = xiaDanShengChan_Emps2;
+    }
+
+    public String getXiaDanQianDuan_Date_PlanStr() {
+        return xiaDanQianDuan_Date_PlanStr;
+    }
+
+    public void setXiaDanQianDuan_Date_PlanStr(String xiaDanQianDuan_Date_PlanStr) {
+        this.xiaDanQianDuan_Date_PlanStr = xiaDanQianDuan_Date_PlanStr;
+    }
+
+    public String getXiaDanQianDuan_Date_AccuStr() {
+        return xiaDanQianDuan_Date_AccuStr;
+    }
+
+    public void setXiaDanQianDuan_Date_AccuStr(String xiaDanQianDuan_Date_AccuStr) {
+        this.xiaDanQianDuan_Date_AccuStr = xiaDanQianDuan_Date_AccuStr;
+    }
+
+    public String getXiaDanShengChan_Date_PlanStr() {
+        return xiaDanShengChan_Date_PlanStr;
+    }
+
+    public void setXiaDanShengChan_Date_PlanStr(String xiaDanShengChan_Date_PlanStr) {
+        this.xiaDanShengChan_Date_PlanStr = xiaDanShengChan_Date_PlanStr;
+    }
+
+    public String getXiaDanShengChan_Date_AccuStr() {
+        return xiaDanShengChan_Date_AccuStr;
+    }
+
+    public void setXiaDanShengChan_Date_AccuStr(String xiaDanShengChan_Date_AccuStr) {
+        this.xiaDanShengChan_Date_AccuStr = xiaDanShengChan_Date_AccuStr;
+    }
+
+    public int getXiaDanQianDuan_Date_PlanStrChange() {
+        return xiaDanQianDuan_Date_PlanStrChange;
+    }
+
+    public void setXiaDanQianDuan_Date_PlanStrChange(int xiaDanQianDuan_Date_PlanStrChange) {
+        this.xiaDanQianDuan_Date_PlanStrChange = xiaDanQianDuan_Date_PlanStrChange;
+    }
+
+    public int getXiaDanQianDuan_Date_AccuStrChange() {
+        return xiaDanQianDuan_Date_AccuStrChange;
+    }
+
+    public void setXiaDanQianDuan_Date_AccuStrChange(int xiaDanQianDuan_Date_AccuStrChange) {
+        this.xiaDanQianDuan_Date_AccuStrChange = xiaDanQianDuan_Date_AccuStrChange;
+    }
+
+    public int getXiaDanShengChan_Date_PlanStrChange() {
+        return xiaDanShengChan_Date_PlanStrChange;
+    }
+
+    public void setXiaDanShengChan_Date_PlanStrChange(int xiaDanShengChan_Date_PlanStrChange) {
+        this.xiaDanShengChan_Date_PlanStrChange = xiaDanShengChan_Date_PlanStrChange;
+    }
+
+    public int getXiaDanShengChan_Date_AccuStrChange() {
+        return xiaDanShengChan_Date_AccuStrChange;
+    }
+
+    public void setXiaDanShengChan_Date_AccuStrChange(int xiaDanShengChan_Date_AccuStrChange) {
+        this.xiaDanShengChan_Date_AccuStrChange = xiaDanShengChan_Date_AccuStrChange;
+    }
 
     public List<Integer> getStatuss() {
         return statuss;

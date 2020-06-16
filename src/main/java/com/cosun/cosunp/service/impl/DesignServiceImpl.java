@@ -196,6 +196,7 @@ public class DesignServiceImpl implements IDesignServ {
 
     public int saveSJHeadByCopy(Integer fromId, String toOrderNo) throws Exception {
         DesignMaterialHead head = designMapper.getSJbyId(fromId);
+        DesignMaterialHeadProductItem itemNew = null;
         head.setCustomerNo(toOrderNo);
         designMapper.saveSJHeadDateToMysql(head);
         List<DesignMaterialHeadProductItem> itemList = null;
@@ -209,9 +210,12 @@ public class DesignServiceImpl implements IDesignServ {
             designMapper.saveSJHeadPDateToMysql(product);
             for (int j = 0; j < itemList.size(); j++) {
                 item = itemList.get(j);
-                item.setHead_product_id(product.getId());
-                item.setMateiralStock(kingSoftStoreMapper.getNewStockByMateriId(item.getMateiralNo()));
-                designMapper.saveSJIHeadDateToMysql(item);
+                itemNew = kingSoftStoreMapper.getMaterialByNo(item.getMateiralNo());
+                itemNew.setHead_product_id(product.getId());
+                itemNew.setNum(item.getNum());
+                itemNew.setUseDeptName(item.getUseDeptName());
+                itemNew.setRemark(item.getRemark());
+                designMapper.saveSJIHeadDateToMysql(itemNew);
             }
         }
         return 0;
@@ -221,6 +225,7 @@ public class DesignServiceImpl implements IDesignServ {
     public DesignMaterialHeadProduct saveSJIHeadBYIdToMysql(String empNo, Integer fromId, String toOrderNo) throws Exception {
         DesignMaterialHead head = designMapper.getSJbyOrderNoAndEmpno(empNo, toOrderNo);
         DesignMaterialHeadProduct product = designMapper.getHeadIdProductByIdOne(fromId);
+        DesignMaterialHeadProductItem itemnew = null;
         List<DesignMaterialHeadProductItem> itemList = null;
         DesignMaterialHeadProductItem item = null;
         if (product != null && head != null) {
@@ -229,9 +234,12 @@ public class DesignServiceImpl implements IDesignServ {
             itemList = designMapper.getHeadIdProductItemByIdBig(fromId);
             for (int j = 0; j < itemList.size(); j++) {
                 item = itemList.get(j);
-                item.setHead_product_id(product.getId());
-                item.setMateiralStock(kingSoftStoreMapper.getNewStockByMateriId(item.getMateiralNo()));
-                designMapper.saveSJIHeadDateToMysql(item);
+                itemnew = kingSoftStoreMapper.getMaterialByNo(item.getMateiralNo());
+                itemnew.setHead_product_id(product.getId());
+                itemnew.setNum(item.getNum());
+                itemnew.setUseDeptName(item.getUseDeptName());
+                itemnew.setRemark(item.getRemark());
+                designMapper.saveSJIHeadDateToMysql(itemnew);
             }
         }
         return product;
@@ -381,11 +389,18 @@ public class DesignServiceImpl implements IDesignServ {
     }
 
     public int saveSJHeadPDateToMysql(DesignMaterialHeadProduct pmhp) throws Exception {
+        int isExsit2 = 0;
         if (pmhp != null && pmhp.getProductTypeName() != null && pmhp.getProductTypeName().trim().length() > 0) {
             pmhp.setProductTypeNo(kingSoftStoreMapper.getProductNoByName(pmhp.getProductTypeName().trim()));
+        } else {
+            pmhp.setProductTypeNo("");
         }
         if (pmhp.getId() == 0) {
             Integer isExsit = 0;
+            isExsit2 = designMapper.getDesignHeadByCustomerNoAndProductNo(pmhp.getCustomerNo(), pmhp.getProductNo());
+            if (isExsit2 > 0) {
+                return 6;
+            }
             if (isExsit == null || isExsit == 0) {
                 pmhp.setHead_id(pmhp.getHead_id());
                 designMapper.saveSJHeadPDateToMysql(pmhp);
@@ -396,6 +411,10 @@ public class DesignServiceImpl implements IDesignServ {
             return isExsit;
         } else {
             Integer isExsit = 0;
+            isExsit2 = designMapper.getDesignHeadByCustomerNoAndProductNoButId(pmhp.getCustomerNo(), pmhp.getProductNo(), pmhp.getId());
+            if(isExsit2 > 0) {
+                return 6;
+            }
             if (isExsit == null || isExsit == 0) {
                 pmhp.setHead_id(pmhp.getHead_id());
                 designMapper.updateSJHeadPDateToMysql(pmhp);

@@ -1751,7 +1751,10 @@ public class PersonServiceImpl implements IPersonServ {
                         emm.setMarriaged(0);
                     } else if ("离".equals(emm.getMarriagedStr())) {
                         emm.setMarriaged(2);
+                    } else if ("丧偶".equals(emm.getMarriagedStr())) {
+                        emm.setMarriaged(3);
                     }
+
 
                     if ("壮".equals(emm.getNationStr())) {
                         emm.setNation(1);
@@ -1978,7 +1981,7 @@ public class PersonServiceImpl implements IPersonServ {
                         emm.setOtherCerti(2);
                     } else if ("焊工证".equals(emm.getOtherCertiStr())) {
                         emm.setOtherCerti(3);
-                    } else if ("结婚证".equals(emm.getOtherCertiStr())) {
+                    } else if ("安全生产主任".equals(emm.getOtherCertiStr())) {
                         emm.setOtherCerti(4);
                     }
 
@@ -8628,7 +8631,12 @@ public class PersonServiceImpl implements IPersonServ {
                 lateMinutes = personMapper.getLateMinutesByEmpNoAndYearMonth(mk.getEmpNo(), yearMonth);
                 lateTimes = personMapper.getLateTimesByEmpNoAndYearMonth(mk.getEmpNo(), yearMonth);
                 wd2 = personMapper.getWorkDate22222ByEmpNo(mk.getEmpNo(), yearMonth);
-                totalZhengBanHours = wd2.getWorkDatess().length * 8.0;
+                if (wd2 != null && wd2.getWorkDatess() != null) {
+                    totalZhengBanHours = wd2.getWorkDatess().length * 8.0;
+                } else {
+                    totalZhengBanHours = 0d;
+                }
+
                 if (mk.getImCYM().equals(yearMonth)) {
                     for (int i = 0; i < wd2.getWorkDatess().length; i++) {
                         if (Integer.valueOf(wd2.getWorkDatess()[i]) == mk.getImCYMDay()) {
@@ -8844,6 +8852,10 @@ public class PersonServiceImpl implements IPersonServ {
         }
     }
 
+    public void updateZhongKongBeanDataBYIdAndTimeStr(Integer id, String timeStr) throws Exception {
+        personMapper.updateZhongKongBeanDataBYIdAndTimeStr(id, timeStr);
+    }
+
     public AccuFund getAFByEmpNo(String empNo) throws Exception {
         return personMapper.getAFByEmpNo(empNo);
     }
@@ -8906,14 +8918,17 @@ public class PersonServiceImpl implements IPersonServ {
     }
 
     @Override
-    public void getKQ(String beforDay) throws Exception {
+    public int getKQ(String beforDay) throws Exception {
+        int isExsit = personMapper.getZhongKongDateByDate(beforDay);
+        if (isExsit > 0)
+            return isExsit;
         this.getAllWeiXinUser();
         this.fillEmpNoWhenQYWXNull();
         this.getBeforeDayZhongKongData(beforDay);
         this.getBeforeDayQYWCData(beforDay);
         this.getBeforeDayQYWCDataAAA(beforDay);
         this.getBeforeDayQYWXSPData(beforDay);
-
+        return isExsit;
     }
 
     public void fillEmpNoWhenQYWXNull() throws Exception {
@@ -9362,20 +9377,15 @@ public class PersonServiceImpl implements IPersonServ {
 
     public void getBeforeDayZhongKongData(String beforDay) throws Exception {
         try {
-            logger.error("coming getKQ Service 01********start******");
             pool = new JedisPool(new JedisPoolConfig(), "127.0.0.1");
             jedis = pool.getResource();
             String[] afterDay = beforDay.split("-");
             List<ZhongKongBean> strList = new ArrayList<ZhongKongBean>();
-            logger.error("coming getKQ Service 02********start******");
             boolean connFlag = ZkemSDKUtils.connect("192.168.2.12", 4370);
-            logger.error("coming getKQ Service 032********start******" + connFlag);
             if (connFlag) {
-                logger.error("coming getKQ Service 03********start******");
                 boolean flag = ZkemSDKUtils.readGeneralLogData();
                 strList.addAll(ZkemSDKUtils.getGeneralLogData(beforDay, 4));
             }
-            logger.error("coming getKQ Service 06********start******");
 
             boolean connFlag1 = ZkemSDKUtils.connect("192.168.2.10", 4370);
             if (connFlag1) {

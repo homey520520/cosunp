@@ -23,41 +23,11 @@ import java.util.Date;
 @EnableScheduling
 public class ZhongKongDATAToSQLTask {
 
-    //@Scheduled(fixedRate = 100000)
-    //@Scheduled(cron = "0 0 05 * * ?")
-    @Scheduled(cron = "00 38 08 ? * *")
+    // @Scheduled(cron = "00 43 08 ? * *")
     private void configureTasks() {
         try {
-            //String beforDay  B = "2020-03-";
-            String beforeDay = "2020-06-11";
-//            String beforeDay;
-//            for (int a = 1; a <= 17; a++) {
-//                if (a < 10) {
-//                    beforeDay = "0" + a;
-//                } else {
-//                    beforeDay = "" + a;
-//
-////                }
-//            SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
-//            Date date = new Date();
-//            String beforeDay = dft.format(date);
-
-            //new ProjectController().sendMessageToUserId();
-
+            String beforeDay = "2020-06-14";
             new PersonController().getKQ(beforeDay);
-//            new PersonController().getAllWeiXinUser();
-//            new PersonController().fillEmpNoWhenQYWXNull();
-//
-//            new PersonController().getBeforeDayZhongKongData(beforeDay);
-//            new PersonController().getBeforeDayQYWCData(beforeDay);
-//            new PersonController().getBeforeDayQYWCDataAAA(beforeDay);
-//            new PersonController().getBeforeDayQYWXSPData(beforeDay);
-
-
-//            new PersonController().fillEmptyZKWhenNull();
-//            new PersonController().getKQBean();
-//            new PersonController().fillRightDeptIdToEmployee();
-            // }
         } catch (Exception e) {
             e.printStackTrace();
         }

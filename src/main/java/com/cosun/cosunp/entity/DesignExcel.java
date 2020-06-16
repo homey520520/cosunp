@@ -21,7 +21,7 @@ import java.util.*;
 
 /**
  * @author:homey Wong
- * @Date: 2020/5/18 0018 上午 9:22
+ * @Date: 2020/5 /18 0018 上午 9:22
  * @Description:
  * @Modified By:
  * @Modified-date:
@@ -40,15 +40,17 @@ public class DesignExcel {
 
 
         try {
+            File targetFile = new File(finalDirPath);
+            if (!targetFile.exists()) {
+                targetFile.mkdirs();
+            }
+
             File file = new File(finalDirPath + excelName);
             if (file.exists()) {
                 file.delete();
             }
             file.createNewFile();
-            File targetFile = new File(finalDirPath);
-            if (!targetFile.exists()) {
-                targetFile.mkdirs();
-            }
+
             fis = new FileInputStream(finalDirPath + excelName);
             wb = new HSSFWorkbook();
 
@@ -266,7 +268,7 @@ public class DesignExcel {
                 itemList.clear();
                 product = head.getProductList().get(i);
                 for (int j = 0; j < head.getProductItemList().size(); j++) {
-                    if (head.getProductItemList().get(j).getHead_product_id().equals(Integer.valueOf(product.getId())) ) {
+                    if (head.getProductItemList().get(j).getHead_product_id().equals(Integer.valueOf(product.getId()))) {
                         itemList.add(head.getProductItemList().get(j));
                     }
                 }
@@ -351,11 +353,10 @@ public class DesignExcel {
                 row.setHeight((short) 600);
 
                 cell = row.createCell(0);
-                cell.setCellValue("序号");
+                cell.setCellValue("材料品号");
                 cell.setCellStyle(cellStyle);
 
                 cell = row.createCell(1);
-                cell.setCellValue("材料品号");
                 cell.setCellStyle(cellStyle);
 
                 cell = row.createCell(2);
@@ -498,6 +499,10 @@ public class DesignExcel {
                 RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
                 hssfSheet.addMergedRegion(region);
 
+                region = new CellRangeAddress(i + 2 + rowLen, i + 2 + rowLen, 0, 1);
+                RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
+                hssfSheet.addMergedRegion(region);
+
                 region = new CellRangeAddress(i + 2 + rowLen, i + 2 + rowLen, 2, 4);
                 RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
                 hssfSheet.addMergedRegion(region);
@@ -511,11 +516,10 @@ public class DesignExcel {
                     item = itemList.get(a);
                     row = hssfSheet.createRow(6 + i + a + rowLen);
                     cell = row.createCell(0);
-                    cell.setCellValue(a + 1);
+                    cell.setCellValue(item.getMateiralNo() == null ? "" : item.getMateiralNo());
                     cell.setCellStyle(cellStyleb);
 
                     cell = row.createCell(1);
-                    cell.setCellValue(item.getMateiralNo() == null ? "" : item.getMateiralNo());
                     cell.setCellStyle(cellStyleb);
 
                     cell = row.createCell(2);
@@ -531,10 +535,6 @@ public class DesignExcel {
                     cell = row.createCell(5);
                     cell.setCellValue(item.getMaterialSpeci() == null ? "" : item.getMaterialSpeci());
                     cell.setCellStyle(cellStyleb);
-
-
-//                    int rwsTemp = (item.getMaterialSpeci() == null ? "" : item.getMaterialSpeci()).toString().split("\n").length;
-//                    row.setHeight((short)(rwsTemp * 600));
 
                     cell = row.createCell(6);
                     cell.setCellStyle(cellStyleb);
@@ -558,6 +558,10 @@ public class DesignExcel {
                     cell = row.createCell(11);
                     cell.setCellValue(item.getRemark() == null ? "" : item.getRemark());
                     cell.setCellStyle(cellStyleb);
+
+                    region = new CellRangeAddress(6 + i + a + rowLen, 6 + i + a + rowLen, 0, 1);
+                    RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);
+                    hssfSheet.addMergedRegion(region);
 
                     region = new CellRangeAddress(6 + i + a + rowLen, 6 + i + a + rowLen, 2, 4);
                     RegionUtil.setBorderRight(HSSFBorderFormatting.BORDER_THIN, region, hssfSheet, wb);

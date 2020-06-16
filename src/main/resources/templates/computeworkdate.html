@@ -29,6 +29,8 @@
         var flag7 = $("#flag7").val();
         var flag8 = $("#flag88").val();
         var errorMessage = $("#errorMessage").val();
+        var yestoday = beforeToday();
+        $("#getOrderDate").val(yestoday);
         if (flag == 1) {
             $("#errormessagee").show();
             var errormessagediv = document.getElementById("errormessagee");
@@ -117,6 +119,12 @@
             errormessagediv.style.color = "red";
         }
     });
+
+    function beforeToday() {
+        var time = (new Date).getTime() - 24 * 60 * 60 * 1000;
+        var yesterday = new Date(time);
+        return yesterday = yesterday.getFullYear() + "-" + (yesterday.getMonth() > 9 ? (yesterday.getMonth() + 1) : "0" + (yesterday.getMonth() + 1)) + "-" + (yesterday.getDate() > 9 ? (yesterday.getDate()) : "0" + (yesterday.getDate()));
+    }
 
     function delCookie(name) {
         var exp = new Date();
@@ -312,7 +320,6 @@
     }
 
 
-
     function commitDataInSql() {
         var originFile = $("#originFile8").val();
         if (originFile.trim().length > 0) {
@@ -331,6 +338,48 @@
             errormessagediv1.style.color = "red";
         }
     }
+
+
+    function pullFromZkAndWX() {
+        window.parent.document.getElementById('coverbehidepage').style.display = "block";
+        var formData = new FormData();
+        formData.append('dateStr', $("#getOrderDate").val());
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/person/pullFromZkAndWX",
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                if (msg.data == 0) {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    $("#errormessage888").show();
+                    var errormessagediv = document.getElementById("errormessage888");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;已全部抓取完成";
+                    errormessagediv.style.color = "green";
+                } else {
+                    window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                    $("#errormessage888").show();
+                    var errormessagediv = document.getElementById("errormessage888");
+                    errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;已抓取过,不能重复抓取!";
+                    errormessagediv.style.color = "red";
+                }
+            },
+            error: function (msg) {
+                window.parent.document.getElementById('coverbehidepage').style.display = "none";
+                $("#errormessage888").show();
+                var errormessagediv = document.getElementById("errormessage888");
+                errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;系统发生错误!";
+                errormessagediv.style.color = "red";
+            }
+
+        });
+    }
+
+
 </script>
 <style type="text/css">
     a {
@@ -345,6 +394,36 @@
 <body>
 
 <div id='app'>
+    <table class="table table-bordered table-hover table-striped">
+
+        <tr>
+            <td>
+                <label>抓取打卡数据时间：</label>
+            </td>
+            <td>
+                <input type="text" id="getOrderDate"
+                       style="width:130px;height: 34px;text-align: center"
+                       class="Wdate"
+                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+
+            </td>
+        </tr>
+        <tr>
+            <td><label>手抓打卡数据</label></td>
+            <td>
+                <button type="button" class="btn btn-primary" onclick="pullFromZkAndWX()">抓取</button>
+
+            </td>
+        </tr>
+        <tr>
+            <td><label>结果提示：</label></td>
+            <td>
+                <div style="display: none;" id="errormessage888">
+
+                </div>
+            </td>
+        </tr>
+    </table>
 
     <form id="computeForm8" action="/person/outDataInSql" th:method="post" enctype="multipart/form-data">
         <input type="hidden" id="flag8" th:value="${flag8}">
@@ -631,9 +710,6 @@
             </div>
         </div>
     </form>
-
-
-
 
 
 </div>

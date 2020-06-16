@@ -27,6 +27,7 @@
 <script>
 
     let deptNameArray;
+    var intinterval;
 
     $(function () {
         window.parent.document.getElementById('content').style.display = "block";
@@ -115,7 +116,7 @@
             errormessagediv.style.color = "red";
         }
 
-        var int = self.setInterval("saveByAutoMatic()", 5 * 60 * 1000);
+        // intinterval = self.setInterval("saveByAutoMatic()", 5 * 60 * 1000);
 
 
     });
@@ -417,9 +418,11 @@
         });
 
         setTimeout(function () {
-            console.log("comin timeout")
             $("#errormessage").hide()
         }, 3000);
+
+        // clearInterval(intinterval);
+        // intinterval = self.setInterval("saveByAutoMatic()", 5 * 60 * 1000);
 
     }
 
@@ -1687,6 +1690,86 @@
     }
 
 
+    function updateSJIProdctHead() {
+        $("#errormessage").hide();
+        var customerNo = $("#customerNo").val();
+        var productNo = $("#productNo").val();
+        if (customerNo.length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "编辑前请选择客户单号!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+
+        if (productNo.length <= 0) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "编辑前请选择商品品号!";
+            errormessagediv.style.color = "red";
+            return false;
+        }
+        var materialNo;
+        var materialName;
+        var materialSpeci;
+        var unit;
+        var stockNum;
+        var isCanUse;
+        var customerNo;
+        var productNo;
+        var num;
+        var useDeptName;
+        var remark;
+        var id;
+
+        var rowlen = 0;
+
+        $("#tabletblody").find("tr").each(function () {
+            rowlen++;
+            materialNo = $(this).children().eq(1).find("input").val();
+
+            if (typeof materialNo != "undefined") {
+                return true;
+            }
+
+            id = $(this).children().eq(0).attr("id");
+            console.log(id)
+            materialNo = $(this).children().eq(1).text();
+            materialName = $(this).children().eq(2).text();
+            materialSpeci = $(this).children().eq(3).text();
+            unit = $(this).children().eq(4).text();
+            stockNum = $(this).children().eq(5).text();
+            isCanUse = $(this).children().eq(9).text();
+            num = $(this).children().eq(6).text();
+            useDeptName = $(this).children().eq(7).text();
+            remark = $(this).children().eq(8).text();
+            $(this).children().eq(1).html("<input type=\"text\"  value='" + materialNo + "'  class=\"form-control\">")
+            $(this).children().eq(2).html("<input type=\"text\"  value='" + materialName + "' onkeypress=\"return onKeyPress1(event,this)\" class=\"form-control\">")
+            $(this).children().eq(3).html("<input type=\"text\"  value='" + materialSpeci + "' readonly='readonly' class=\"form-control\">")
+            $(this).children().eq(4).html("<input type=\"text\"  value='" + unit + "' class=\"form-control\">")
+            $(this).children().eq(5).html("<input type=\"text\"  value='" + stockNum + "' class=\"form-control\">")
+            $(this).children().eq(6).html("<input type=\"text\"  value='" + num + "' class=\"form-control\">")
+            var td = "<select id=\"name\"  class=\"selectpicker show-tick form-control\"\n" +
+                "   data-live-search=\"true\" data-actions-box=\"true\" >\n";
+            td += "  <option  selected value='' >请选择</option>\n";
+            for (var a = 0; a < deptNameArray.length; a++) {
+                if (useDeptName.indexOf(deptNameArray[a]) != -1) {
+                    td += "  <option selected='selected' value=\"" + deptNameArray[a] + "\" >" + deptNameArray[a] + "</option>\n";
+                } else {
+                    td += "  <option value=\"" + deptNameArray[a] + "\">" + deptNameArray[a] + "</option>\n";
+                }
+            }
+            td += "  </select> ";
+            $(this).children().eq(7).html(td);
+            $(this).children().eq(8).html("<input type=\"text\"  value='" + remark + "' class=\"form-control\">")
+            $(this).children().eq(9).html("<input type=\"text\"  value='" + isCanUse + "' class=\"form-control\">")
+            $(this).children().eq(10).html("<a href=\"javascript:void(0);\"\n" +
+                "    onclick=\"deleteTRA(this," + len + "," + id + ");\">删除</a>");
+            $('.selectpicker').selectpicker('refresh');
+        });
+        window.parent.document.getElementById('coverbehidepage').style.display = "none";
+    }
+
     function updateOrderItemByheadId(obj, id) {
 
         var materialNo = $(obj).parent().parent().find("td").eq(1).text();
@@ -1894,6 +1977,9 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-primary"
                                        href="javascript:void(0);" onclick="addSJIProdctHead()">新增</a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a class="btn btn-primary"
+                                       href="javascript:void(0);" onclick="updateSJIProdctHead()">编辑</a>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="btn btn-primary"
                                        href="javascript:void(0);" onclick="saveSJIProdctHead()">保存</a>

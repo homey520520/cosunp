@@ -52,7 +52,6 @@ public interface KingSoftStoreMapper {
     String getProductNoByName(String materiName);
 
 
-
     @SelectProvider(type = KingSoftStoreMapper.OrderDaoProvider.class, method = "queryRouteSpecifiByCondition")
     List<DesignMaterialHeadProduct> queryRouteSpecifiByCondition(@Param("charArray") List<String> charArray);
 
@@ -69,11 +68,34 @@ public interface KingSoftStoreMapper {
     List<DesignMaterialHeadProductItem> queryMaterialSpecifiByCondition(@Param("charArray") List<String> charArray);
 
     @SelectProvider(type = KingSoftStoreMapper.OrderDaoProvider.class, method = "queryMaterialSpecifiByConditionW")
-    List<DesignMaterialHeadProductItem> queryMaterialSpecifiByConditionW(@Param("charArray") List<String> charArray);
+    List<DesignMaterialHeadProductItem> queryMaterialSpecifiByConditionW(@Param("charArray") List<String> charArray, @Param("materialName") String materialName);
 
 
     @SelectProvider(type = KingSoftStoreMapper.OrderDaoProvider.class, method = "queryMaterialSpecifiByConditionWF")
     List<DesignMaterialHeadProductItem> queryMaterialSpecifiByConditionWF(@Param("charArray") List<String> charArray, @Param("materialSpefi") String materialSpefi);
+
+
+    @Select("select \n" +
+            "tt.FNUMBER as mateiralNo,\n" +
+            "tbm.FNAME as materialName,\n" +
+            "tbm.FSPECIFICATION as materialSpeci,\n" +
+            "CASE tbma.FBASEUNITID\n" +
+            "         WHEN '10087' THEN '米'\n" +
+            "         WHEN '10095' THEN '千克'\n" +
+            "\t\t  WHEN '10099' THEN '升'\n" +
+            "\t\t  WHEN '10101' THEN 'pcs'\n" +
+            "\t\t  WHEN '10149' THEN '套'\n" +
+            "\t\t  WHEN '110486' THEN '平方'\n" +
+            "ELSE '其他' END as unit,\n" +
+            "tbma.FISPURCHASE as isCanPurchase,\n" +
+            " Convert(decimal(18,2),sum(tsi.FBASEQTY)) as mateiralStock\n" +
+            "from  T_BD_MATERIAL tt\n" +
+            " join T_BD_MATERIAL_L tbm  on tbm.FMATERIALID = tt.FMATERIALID and   PATINDEX( '[1-5]%', tt.FNUMBER ) > 0\n" +
+            " join T_BD_MATERIALBASE tbma on tbm.FMATERIALID = tbma.FMATERIALID\n" +
+            " join T_STK_INVENTORY tsi on tsi.FMATERIALID = tbm.FMATERIALID " +
+            " where tt.FNUMBER = #{materialNo}  group by tt.FNUMBER,tbm.FNAME,tbm.FSPECIFICATION,tbma.FBASEUNITID,tbma.FISPURCHASE\n" +
+            " order by tbm.FNAME,tbm.FSPECIFICATION")
+    DesignMaterialHeadProductItem getMaterialByNo(String materialNo);
 
 
     class OrderDaoProvider {
@@ -112,7 +134,7 @@ public interface KingSoftStoreMapper {
             return sb.toString();
         }
 
-        public String queryRouteSpecifiByCondition(List<String> charArray ) {
+        public String queryRouteSpecifiByCondition(List<String> charArray) {
 
             StringBuilder sb = new StringBuilder("SELECT\n" +
                     "   tba.fnumber as productTypeNo,\n" +
@@ -188,7 +210,7 @@ public interface KingSoftStoreMapper {
             return sb.toString();
         }
 
-        public String queryMaterialSpecifiByConditionW(List<String> charArray) {
+        public String queryMaterialSpecifiByConditionW(List<String> charArray, String materialName) {
             StringBuilder sb = new StringBuilder("select" +
                     " tbm.FNAME as materialName " +
                     "from  T_BD_MATERIAL tt\n" +
@@ -201,6 +223,10 @@ public interface KingSoftStoreMapper {
                 for (int i = 0; i < charArray.size(); i++) {
                     sb.append(" and tbm.FNAME like CONCAT('%','" + charArray.get(i) + "','%')");
                 }
+            }
+
+            if (materialName != null) {
+                sb.append(" and tbm.FNAME <> #{materialName} ");
             }
 
             sb.append(" group by tbm.FNAME " +

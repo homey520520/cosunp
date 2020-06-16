@@ -38,13 +38,14 @@ public class KingSoftStoreServiceImpl implements IKingSoftStoreServ {
     public List<DesignMaterialHeadProductItem> queryMaterialSpecifiByCondition(String materialName) {
         List<DesignMaterialHeadProductItem> item = new ArrayList<DesignMaterialHeadProductItem>();
         DesignMaterialHeadProductItem pitem = new DesignMaterialHeadProductItem();
+        List<DesignMaterialHeadProductItem> headItemList = new ArrayList<DesignMaterialHeadProductItem>();
         if (materialName != null && materialName.trim().length() > 0)
             materialName = materialName.substring(1, materialName.length() - 1);
         if (materialName.contains(" ")) {
             String[] materialNameA = materialName.trim().split(" ");
             if (materialNameA != null && materialNameA.length > 1) {
                 List<String> charArray = Arrays.asList(materialNameA[0].trim().split(""));
-                List<DesignMaterialHeadProductItem> headItemList = kingSoftStoreMapper.queryMaterialSpecifiByConditionWF(charArray, materialNameA[1].trim());
+                headItemList = kingSoftStoreMapper.queryMaterialSpecifiByConditionWF(charArray, materialNameA[1].trim());
                 pitem.setDhpHeadItemList(headItemList);
                 if (headItemList != null && headItemList.size() > 0) {
                     List<DesignMaterialHeadProductItem> dphItemList = kingSoftStoreMapper.queryMaterialSpecifiByConditionWWW(headItemList.get(0).getMaterialName(), materialNameA[1].trim());
@@ -55,8 +56,16 @@ public class KingSoftStoreServiceImpl implements IKingSoftStoreServ {
                 return item;
             }
         } else {
+
+            List<DesignMaterialHeadProductItem> itemm = null;
+            if (materialName != null) {
+                itemm = kingSoftStoreMapper.queryMaterialSpecifiByConditionWW(materialName.trim());
+                if (itemm != null && itemm.size() > 0) {
+                    headItemList.add(itemm.get(0));
+                }
+            }
             List<String> charArray = Arrays.asList(materialName.trim().split(""));
-            List<DesignMaterialHeadProductItem> headItemList = kingSoftStoreMapper.queryMaterialSpecifiByConditionW(charArray);
+            headItemList.addAll(kingSoftStoreMapper.queryMaterialSpecifiByConditionW(charArray, materialName.trim()));
             pitem.setDhpHeadItemList(headItemList);
             if (headItemList != null && headItemList.size() > 0) {
                 List<DesignMaterialHeadProductItem> dphItemList = kingSoftStoreMapper.queryMaterialSpecifiByConditionWW(headItemList.get(0).getMaterialName());

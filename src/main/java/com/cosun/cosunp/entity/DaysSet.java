@@ -17,12 +17,30 @@ public class DaysSet implements Serializable {
     private Integer zhanchaDays;
     private Integer outDrawDays;
     private Integer fanAnConfDays;
+    private Integer xiaDanQianDuanDays;
+    private Integer xiaDanShengChanDays;
     private Integer prodDays;
     private Integer anzhuangDays;
     private Integer yanshouDays;
     private Integer jiesuanDays;
     private Integer type;
     private String remark;
+
+    public Integer getXiaDanQianDuanDays() {
+        return xiaDanQianDuanDays;
+    }
+
+    public void setXiaDanQianDuanDays(Integer xiaDanQianDuanDays) {
+        this.xiaDanQianDuanDays = xiaDanQianDuanDays;
+    }
+
+    public Integer getXiaDanShengChanDays() {
+        return xiaDanShengChanDays;
+    }
+
+    public void setXiaDanShengChanDays(Integer xiaDanShengChanDays) {
+        this.xiaDanShengChanDays = xiaDanShengChanDays;
+    }
 
     public Integer getId() {
         return id;

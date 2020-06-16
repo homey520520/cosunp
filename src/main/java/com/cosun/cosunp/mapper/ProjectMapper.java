@@ -1078,6 +1078,8 @@ public interface ProjectMapper {
             "\tzhanchaDays = #{zhanchaDays},\n" +
             "\toutDrawDays = #{outDrawDays},\n" +
             "\tfanAnConfDays = #{fanAnConfDays},\n" +
+            "\txiaDanQianDuanDays = #{xiaDanQianDuanDays},\n" +
+            "\txiaDanShengChanDays = #{xiaDanShengChanDays},\n" +
             "\tprodDays = #{prodDays},\n" +
             "\tanzhuangDays = #{anzhuangDays},\n" +
             "\tyanshouDays = #{yanshouDays},\n" +
@@ -1090,6 +1092,8 @@ public interface ProjectMapper {
 
     @Update("update daysSet set " +
             "\tfanAnConfDays = #{fanAnConfDays},\n" +
+            "\txiaDanQianDuanDays = #{xiaDanQianDuanDays},\n" +
+            "\txiaDanShengChanDays = #{xiaDanShengChanDays},\n" +
             "\tprodDays = #{prodDays},\n" +
             "\tanzhuangDays = #{anzhuangDays},\n" +
             "\tyanshouDays = #{yanshouDays},\n" +

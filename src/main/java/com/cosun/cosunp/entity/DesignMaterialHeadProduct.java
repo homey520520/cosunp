@@ -36,7 +36,7 @@ public class DesignMaterialHeadProduct implements Serializable {
     private int currentPage = 1;
     private int maxPage;
     private int recordCount;
-    private int pageSize = 8;
+    private int pageSize = 100;
     private int currentPageTotalNum;
     private String sortMethod;
     private String sortByName;

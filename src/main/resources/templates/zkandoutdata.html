@@ -207,10 +207,10 @@
                         userType = 1;
                         if (userType == 1) {
                             td += " <a class=\"btn btn-xs btn-primary\" \n" +
-                                "disabled='true' onclick=\"updateFinanceImportData('" + data[num].id + "');\">编辑</a> </td>";
+                                " onclick=\"updateFinanceImportData(this,'" + data[num].id + "');\">编辑</a> </td>";
                         } else {
                             td += " <a class=\"btn btn-xs btn-primary\" disabled='disabled' \n" +
-                                "disable='true' onclick=\"updateFinanceImportData('" + data[num].id + "');\">编辑</a></td>";
+                                " onclick=\"updateFinanceImportData(this,'" + data[num].id + "');\">编辑</a></td>";
                         }
                         tr.append(td);
                         tr.appendTo(tbody);
@@ -344,10 +344,10 @@
                         userType = 1;
                         if (userType == 1) {
                             td += " <a class=\"btn btn-xs btn-primary\" \n" +
-                                "disabled='true' onclick=\"updateFinanceImportData('" + data[num].id + "');\">编辑</a> </td>";
+                                " onclick=\"updateFinanceImportData(this,'" + data[num].id + "');\">编辑</a> </td>";
                         } else {
                             td += " <a class=\"btn btn-xs btn-primary\" disabled='disabled' \n" +
-                                "disabled = 'true' onclick=\"updateFinanceImportData('" + data[num].id + "');\">编辑</a></td>";
+                                " onclick=\"updateFinanceImportData(this,'" + data[num].id + "');\">编辑</a></td>";
                         }
                         tr.append(td);
                         tr.appendTo(tbody);
@@ -404,9 +404,20 @@
         });
     }
 
-    function updateFinanceImportData(id) {
-        window.location.href = "/finance/toupdateFinanceImportDataById?id=" + id;
+    function updateFinanceImportData(obj, id) {
+        var timeStr = $(obj).parent().parent().find("td").eq(6).text();
+        $(obj).parent().parent().find("td").eq(6).html("<input style='width:500px' type=\"text\"value='" + timeStr + "'  class=\"form-control\">")
+        $(obj).parent().parent().find("td").eq(7).html("<a id=\"savebutton\"\n" +
+            "    href=\"javascript:void(0);\" onclick=\"saveSJHeadPDateToMysql(this," + id + ")\">保存</a>");
+    }
 
+
+    function saveSJHeadPDateToMysql(obj, id) {
+        $("#errormessage").hide();
+        var timeStr = $(obj).parent().parent().find("td").eq(6).find("input").eq(0).val();
+        window.location.href = "/person/updateFinanceImportData?" +
+            "id=" + id +
+            "&timeStr=" + timeStr;
     }
 
     function deleteFinanceImportData(id) {
@@ -553,7 +564,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label>入职时间起：</label>
+                                    <label>打卡日期起：</label>
                                 </td>
                                 <td>
                                     <input type="text" id="startIncomDateStr"
@@ -563,7 +574,7 @@
 
                                 </td>
                                 <td>
-                                    <label>&nbsp;&nbsp;入职时间止：</label>
+                                    <label>&nbsp;&nbsp;打卡日期止：</label>
                                 </td>
                                 <td>
                                     <input type="text" id="endIncomDateStr"
@@ -655,8 +666,7 @@
                         <td align="left" th:text="${empH.timeStr}"></td>
                         <td align="center">
                             <a class="btn btn-xs btn-primary"
-                               disabled="true"
-                               th:onclick="updateFinanceImportData([[${empH.id}]]);">编辑</a>
+                               th:onclick="updateFinanceImportData(this,[[${empH.id}]]);">编辑</a>
                         </td>
                     </tr>
                 </div>

@@ -84,6 +84,8 @@ public interface IPersonServ {
 
     List<Position> findAllPositionAll() throws Exception;
 
+    void updateZhongKongBeanDataBYIdAndTimeStr(Integer id,String timeStr) throws Exception;
+
     void deleteTiaoXiuById(Integer id) throws Exception;
 
     void deleteLinShiDateToMysql(LinShiHours lsh) throws Exception;
@@ -250,7 +252,7 @@ public interface IPersonServ {
 
     void saveQKData(List<QYWXSPFROM> fromList) throws Exception;
 
-    void getKQ(String beforDay) throws Exception;
+    int getKQ(String beforDay) throws Exception;
 
     List<KQBean> getAfterOperatorDataByOriginData(List<OutClockIn> clockDates, List<KQBean> kqBeans) throws Exception;
 

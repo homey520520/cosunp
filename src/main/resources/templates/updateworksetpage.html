@@ -210,7 +210,7 @@
                         <td>
                             <input type="text" style="width:170px;height: 34px;text-align: center" id="morningOnStr"
                                    readOnly="true" class="Wdate" th:field="*{morningOnStr}"
-                                   onclick="WdatePicker({dateFmt:'HH:mm'})"
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss'})"
                                    onchange="fillmorningOnEndStr('morningOnEndStr','morningOnStr')"/>
                         </td>
                         <td>
@@ -220,7 +220,7 @@
                             <input type="text" id="morningOnFromStr"
                                    style="width:170px;height: 34px;text-align: center" th:field="*{morningOnFromStr}"
                                    class="Wdate"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',maxDate:'#F{$dp.$D(\'morningOnEndStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',maxDate:'#F{$dp.$D(\'morningOnEndStr\')}'})"/>
 
                         </td>
                         <td>
@@ -230,7 +230,7 @@
                             <input type="text" id="morningOnEndStr"
                                    style="width:170px;height: 34px;text-align: center" class="Wdate"
                                    th:field="*{morningOnEndStr}"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'morningOnFromStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',minDate:'#F{$dp.$D(\'morningOnFromStr\')}'})"/>
 
                         </td>
                     </tr>
@@ -241,7 +241,7 @@
                                    readOnly="true" class="Wdate"
                                    th:field="*{morningOffStr}"
                                    onchange="fillmorningOnEndStr('morningOffEndStr','morningOffStr')"
-                                   onclick="WdatePicker({dateFmt:'HH:mm'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss'})"/>
                         </td>
                         <td>
                             <label>上午下班时间打卡起：</label>
@@ -251,7 +251,7 @@
                                    style="width:170px;height: 34px;text-align: center"
                                    th:field="*{morningOffFromStr}"
                                    class="Wdate"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',maxDate:'#F{$dp.$D(\'morningOffEndStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',maxDate:'#F{$dp.$D(\'morningOffEndStr\')}'})"/>
 
                         </td>
                         <td>
@@ -261,7 +261,7 @@
                             <input type="text" id="morningOffEndStr"
                                    th:field="*{morningOffEndStr}"
                                    style="width:170px;height: 34px;text-align: center" class="Wdate"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'morningOffFromStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',minDate:'#F{$dp.$D(\'morningOffFromStr\')}'})"/>
 
                         </td>
                     </tr>
@@ -272,7 +272,7 @@
                                    readOnly="true" class="Wdate"
                                    th:field="*{noonOnStr}"
                                    onchange="fillmorningOnEndStr('noonOnEndStr','noonOnStr')"
-                                   onclick="WdatePicker({dateFmt:'HH:mm'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss'})"/>
                         </td>
                         <td>
                             <label>下午上班时间打卡起：</label>
@@ -282,7 +282,7 @@
                                    style="width:170px;height: 34px;text-align: center"
                                    th:field="*{noonOnFromStr}"
                                    class="Wdate"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',maxDate:'#F{$dp.$D(\'noonOnEndStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',maxDate:'#F{$dp.$D(\'noonOnEndStr\')}'})"/>
 
                         </td>
                         <td>
@@ -292,7 +292,7 @@
                             <input type="text" id="noonOnEndStr"
                                    th:field="*{noonOnEndStr}"
                                    style="width:170px;height: 34px;text-align: center" class="Wdate"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'noonOnFromStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',minDate:'#F{$dp.$D(\'noonOnFromStr\')}'})"/>
 
                         </td>
                     </tr>
@@ -303,7 +303,7 @@
                                    onchange="fillmorningOnEndStr('noonOffEndStr','noonOffStr')"
                                    readOnly="true" class="Wdate"
                                    th:field="*{noonOffStr}"
-                                   onclick="WdatePicker({dateFmt:'HH:mm'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss'})"/>
                         </td>
                         <td>
                             <label>下午下班时间打卡起：</label>
@@ -313,7 +313,7 @@
                                    style="width:170px;height: 34px;text-align: center"
                                    th:field="*{noonOffFromStr}"
                                    class="Wdate"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',maxDate:'#F{$dp.$D(\'noonOffEndStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',maxDate:'#F{$dp.$D(\'noonOffEndStr\')}'})"/>
 
                         </td>
                         <td>
@@ -324,7 +324,7 @@
                                    style="width:170px;height: 34px;text-align: center"
                                    th:field="*{noonOffEndStr}"
                                    class="Wdate"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'noonOffFromStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',minDate:'#F{$dp.$D(\'noonOffFromStr\')}'})"/>
 
                         </td>
                     </tr>
@@ -334,7 +334,7 @@
                             <input type="text" style="width:170px;height: 34px;text-align: center" id="extworkonStr"
                                    readOnly="true" class="Wdate"
                                    th:field="*{extworkonStr}"
-                                   onclick="WdatePicker({dateFmt:'HH:mm'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss'})"/>
                         </td>
 
                         <td>
@@ -345,7 +345,7 @@
                                    style="width:170px;height: 34px;text-align: center"
                                    th:field="*{extworkonFromStr}"
                                    class="Wdate"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',maxDate:'#F{$dp.$D(\'extworkonEndStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',maxDate:'#F{$dp.$D(\'extworkonEndStr\')}'})"/>
 
                         </td>
                         <td>
@@ -356,7 +356,7 @@
                                    style="width:170px;height: 34px;text-align: center"
                                    th:field="*{extworkonEndStr}"
                                    class="Wdate"
-                                   onclick="WdatePicker({dateFmt:'HH:mm',minDate:'#F{$dp.$D(\'extworkonFromStr\')}'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss',minDate:'#F{$dp.$D(\'extworkonFromStr\')}'})"/>
 
                         </td>
 
@@ -367,7 +367,7 @@
                             <input type="text" style="width:170px;height: 34px;text-align: center" id="extworkoffStr"
                                    readOnly="true" class="Wdate"
                                    th:field="*{extworkoffStr}"
-                                   onclick="WdatePicker({dateFmt:'HH:mm'})"/>
+                                   onclick="WdatePicker({dateFmt:'HH:mm:ss'})"/>
                         </td>
                     </tr>
                     <tr>

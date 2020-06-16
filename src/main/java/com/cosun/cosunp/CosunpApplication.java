@@ -80,47 +80,9 @@ public class CosunpApplication extends SpringBootServletInitializer {
 
     }
 
-//    劝君莫赌博
-//
-//            世人皆言麻将妙
-//    为你痴来为你狂
-//            方方正正清一色
-//    统一着装底面绝
-//            要说发明是明清
-//    有万有条又有圆
-//            组成话来不用学
-//    五六七万就要得
-//            麻将麻将人人爱
-//    老来把玩小来学
-//            一逢大风雷雨天
-//    麻将馆里声震天
-//            只闻牌声小儿哭
-//    不见阿婆把饭喂
-//            小儿若有意外险
-//    父母老人哭不回
-//            更有好吃懒做人
-//    输的裤子都不剩
-//            此劝老幼年青人
-//    莫把麻将当饭食
-//            人生区区几十载
-//    圆梦赚钱是正道
-//            麻将祸害真不少
-//    我给大家捋一捋
-//            东边王二输套房
-//    西边李四妻子散
-//            南边张三败光家
-//    莫要到时沦到你
-//            网上赌博陷阱多
-//    劝君莫拿身去试
-//            一试上瘾难戒除
-//    害你家破害你亡
-//            若是小打怡怡情
-//    叫上亲朋就可行
-//            莫要贪来莫要恋
-//    小钱即可众乐乐
-//            祝愿大家心健康
-//    永不赌来永快乐
-//
+    // https://blog.csdn.net/ffortunateoy/article/details/79384036?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
+    // scp /opt/all.sql root@192.168.0.11:C:/all.sql
+// mysqldump -uroot -proot --databases ext_upload_files >/opt/all.sql
 // alter table b_warehouse_message add column entity_warehouse_no_test varchar(48) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '实体仓库代码';
     // mysqldump -u root -p root ext_upload_files project_head_order > project_head_order.sql
 //cat /var/log/syslog

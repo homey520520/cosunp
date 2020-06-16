@@ -775,6 +775,8 @@ public class Employee implements Serializable {
                 return "未";
             } else if (this.marriaged == 2) {
                 return "离";
+            }else if (this.marriaged == 3) {
+                return "丧偶";
             }
         }
         return marriagedStr;
@@ -882,7 +884,7 @@ public class Employee implements Serializable {
             } else if (this.otherCerti == 3) {
                 return "焊工证";
             } else if (this.otherCerti == 4) {
-                return "结婚证";
+                return "安全主任证书";
             }
         }
         return otherCertiStr;

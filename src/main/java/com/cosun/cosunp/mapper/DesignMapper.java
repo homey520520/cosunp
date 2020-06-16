@@ -715,6 +715,26 @@ public interface DesignMapper {
     Integer getSJHeadByProductNoButId(String productNo, String customerNo, Integer id);
 
     @Select("SELECT\n" +
+            "\tcount(phh.id) \n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproduct ph \n" +
+            " join designmaterialhead phh on ph.head_id = phh.id\n" +
+            "WHERE\n" +
+            "\tph.productNo = #{productNo}\n" +
+            "  and phh.customerNo = #{customerNo} ")
+    int getDesignHeadByCustomerNoAndProductNo(String customerNo,String productNo);
+
+    @Select("SELECT\n" +
+            "\tcount(phh.id) \n" +
+            "FROM\n" +
+            "\tdesignmaterialheadproduct ph \n" +
+            " join designmaterialhead phh on ph.head_id = phh.id\n" +
+            "WHERE\n" +
+            "\tph.productNo = #{productNo}\n" +
+            "  and phh.customerNo = #{customerNo} and ph.id <> #{id} limit 1")
+    int getDesignHeadByCustomerNoAndProductNoButId(String customerNo,String productNo,Integer id);
+
+    @Select("SELECT\n" +
             "\tphh.id \n" +
             "FROM\n" +
             " designmaterialhead phh " +

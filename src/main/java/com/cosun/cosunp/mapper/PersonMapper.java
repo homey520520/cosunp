@@ -784,7 +784,7 @@ public interface PersonMapper {
     int queryEmployeeSalaryByConditionCount(Employee employee);
 
 
-    @Select("select * from position order by positionName desc limit #{currentPageTotalNum},#{pageSize}")
+    @Select("select * from position order by positionLevel asc limit #{currentPageTotalNum},#{pageSize}")
     List<Position> findAllPosition(Position position);
 
     @Select("select * from clockinsetup order by outDays asc ")
@@ -1376,6 +1376,14 @@ public interface PersonMapper {
             "\tzk.EnrollNumber ASC")
     List<ZhongKongBean> getAllKQDataByYearMonthDayA(String date);
 
+    @Select("SELECT" +
+            " count(*)" +
+            " FROM\n" +
+            "\tzhongkongbean " +
+            " WHERE\n" +
+            " date = #{beforeDay} ")
+    int getZhongKongDateByDate(String beforeDay);
+
 
     @SelectProvider(type = PseronDaoProvider.class, method = "getAllKQDataByYearMonthDays")
     List<KQBean> getAllKQDataByYearMonthDays(@Param("dateStr") List<OutClockIn> dateStr);
@@ -1428,6 +1436,7 @@ public interface PersonMapper {
     void addZKQY(ZhongKongBeanQY zkq);
 
     @Select("SELECT\n" +
+            "\tzk.id,\n" +
             "\tzk.yearMonth,\n" +
             "\tzk.EnrollNumber AS enrollNumber1,\n" +
             "\tzk.dateStr as dateStr,\n" +
@@ -1437,6 +1446,7 @@ public interface PersonMapper {
             "FROM\n" +
             "\t(\n" +
             "\t\tSELECT\n" +
+            "\t\t\tzk.id,\n" +
             "\t\t\tzk.yearMonth,\n" +
             "\t\t\tzk.EnrollNumber AS enrollNumber,\n" +
             "\t\t\tzk.Date AS dateStr,\n" +
@@ -3062,12 +3072,15 @@ public interface PersonMapper {
             "\tee.empno = #{empNo} ")
     Insurance getISByEmpNo(String empNo);
 
+    @Update("update zhongkongbean set timeStr = #{timeStr} where id = #{id}")
+    void updateZhongKongBeanDataBYIdAndTimeStr(Integer id,String timeStr);
+
     @Update("update position set positionName =  #{positionName},positionLevel=#{positionLevel} where id = #{id} ")
     void saveUpdateData(Integer id, String positionName, String positionLevel);
 
 
     @Select("SELECT\n" +
-            "\tsum(kb.lateminitesa) + sum(kb.lateminitesp) AS sumlateminutes\n" +
+            "\tifnull(sum(ifnull(kb.lateminitesa,0)) + sum(ifnull(kb.lateminitesp,0)),0) AS sumlateminutes\n" +
             "FROM\n" +
             "\tkqbean kb\n" +
             "LEFT JOIN qyweixinbd ee ON kb.enrollNumber = ee.userid\n" +
@@ -3077,7 +3090,7 @@ public interface PersonMapper {
     int getLateMinutesByEmpNoAndYearMonth(String empNo, String yearMon);
 
     @Select("SELECT\n" +
-            "\tsum(ab.sumlateminutes)\n" +
+            "\tifnull(sum(ab.sumlateminutes),0) as sumlateminutes\n" +
             "FROM\n" +
             "\t(\n" +
             "\t\tSELECT\n" +
@@ -5634,6 +5647,7 @@ public interface PersonMapper {
 
         public String findAllZKAndOutDataCondition(Employee kqBean) {
             StringBuilder sb = new StringBuilder("SELECT\n" +
+                    "\tzk.id,\n" +
                     "\tzk.yearMonth,\n" +
                     "\tzk.EnrollNumber AS enrollNumber1,\n" +
                     "\tzk.dateStr AS dateStr,\n" +
@@ -5643,13 +5657,14 @@ public interface PersonMapper {
                     "FROM\n" +
                     "\t(\n" +
                     "\t\tSELECT\n" +
+                    "\t\t\tzk.id,\n" +
                     "\t\t\tzk.yearMonth,\n" +
                     "\t\t\tzk.EnrollNumber AS enrollNumber,\n" +
                     "\t\t\tzk.Date AS dateStr,\n" +
                     "\t\t\tzk.timeStr\n" +
                     "\t\tFROM\n" +
                     "\t\t\tzhongkongbean zk\n" +
-                    "\t\tWHERE\n" +
+                     "\t\tWHERE\n" +
                     "\t\t\t(\n" +
                     "\t\t\t\tEnrollNumber REGEXP '[^0-9.]'\n" +
                     "\t\t\t) <> 0 ");
@@ -5671,7 +5686,14 @@ public interface PersonMapper {
                     " where 1=1");
             if (kqBean.getNameIds() != null && kqBean.getNameIds().size() > 0) {
                 sb.append(" and ee.id in (" + StringUtils.strip(kqBean.getNameIds().toString(), "[]") + ") ");
+            }
 
+            if (kqBean.getStartIncomDateStr() != null && kqBean.getStartIncomDateStr().length() > 0 && kqBean.getEndIncomDateStr() != null && kqBean.getEndIncomDateStr().length() > 0) {
+                sb.append(" and zk.dateStr  >= #{startIncomDateStr} and zk.dateStr  <= #{endIncomDateStr}");
+            } else if (kqBean.getStartIncomDateStr() != null && kqBean.getStartIncomDateStr().length() > 0) {
+                sb.append(" and zk.dateStr >= #{startIncomDateStr}");
+            } else if (kqBean.getEndIncomDateStr() != null && kqBean.getEndIncomDateStr().length() > 0) {
+                sb.append(" and zk.dateStr <= #{endIncomDateStr}");
             }
 
             if (kqBean.getEmpNo() != null && kqBean.getEmpNo() != "" && kqBean.getEmpNo().trim().length() > 0) {

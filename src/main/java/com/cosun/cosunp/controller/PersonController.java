@@ -1220,6 +1220,34 @@ public class PersonController {
         return view;
     }
 
+
+    @ResponseBody
+    @RequestMapping("/updateFinanceImportData")
+    public ModelAndView updateFinanceImportData(ZhongKongBean bean, HttpSession session) throws Exception {
+        personServ.updateZhongKongBeanDataBYIdAndTimeStr(bean.getId(), bean.getTimeStr());
+        ModelAndView view = new ModelAndView("zkandoutdata");
+        UserInfo userInfo = (UserInfo) session.getAttribute("account");
+        Employee employee = new Employee();
+        List<Position> positionList = personServ.findAllPositionAll();
+        List<Dept> deptList = personServ.findAllDeptAll();
+        List<Employee> empList = personServ.findAllEmployeeAll();
+        List<String> zkYearMonthList = personServ.findAllZKYearMonthList();
+        List<Employee> financeImportDataList = personServ.findAllZKAndOutData(employee);
+        int recordCount = personServ.findAllZKAndOutDataCount();
+        int maxPage = recordCount % employee.getPageSize() == 0 ? recordCount / employee.getPageSize() : recordCount / employee.getPageSize() + 1;
+        employee.setMaxPage(maxPage);
+        employee.setRecordCount(recordCount);
+        view.addObject("financeImportDataList", financeImportDataList);
+        view.addObject("empList", empList);
+        view.addObject("kqMonthList", zkYearMonthList);
+        view.addObject("employee", employee);
+        view.addObject("positionList", positionList);
+        view.addObject("deptList", deptList);
+        view.addObject("userInfo", userInfo);
+        view.addObject("flag", 3);
+        return view;
+    }
+
     @ResponseBody
     @RequestMapping("/toZKandOutDataAll")
     public ModelAndView toZKandOutDataAll(HttpSession session) throws Exception {
@@ -1677,6 +1705,7 @@ public class PersonController {
             throw e;
         }
     }
+
 
     @ResponseBody
     @RequestMapping("/tocomputeworkdate")
@@ -2723,6 +2752,25 @@ public class PersonController {
             view.addObject("compute", new Compute());
             view.addObject("flag3", 11);
             return view;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/pullFromZkAndWX", method = RequestMethod.POST)
+    public void pullFromZkAndWX(String dateStr, HttpSession session, HttpServletResponse response) throws
+            Exception {
+        try {
+            int state = personServ.getKQ(dateStr);
+            ObjectMapper x = new ObjectMapper();
+            String str1 = x.writeValueAsString(state);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().print(str1);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();

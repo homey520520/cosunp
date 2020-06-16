@@ -76,6 +76,11 @@
             var errormessagediv = document.getElementById("errormessage");
             errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;商品复制成功!";
             errormessagediv.style.color = "green";
+        }else if (aflag == 6) {
+            $("#errormessage").show();
+            var errormessagediv = document.getElementById("errormessage");
+            errormessagediv.innerHTML = "&nbsp;&nbsp;&nbsp;同一客户单号下不能有相同商品品号!";
+            errormessagediv.style.color = "green";
         }
 
 
@@ -587,36 +592,36 @@
             return false;
         }
 
-        if (prodctuType.trim().length <= 0) {
-            $("#errormessage").show();
-            var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "产品分类名称不能为空!";
-            errormessagediv.style.color = "red";
-            return false;
-        }
-
-        if (prodctuTypeName.trim().length <= 0) {
-            $("#errormessage").show();
-            var errormessagediv = document.getElementById("errormessage");
-            errormessagediv.innerHTML = "产品分类路线不能为空!";
-            errormessagediv.style.color = "red";
-            return false;
-        }
+        // if (prodctuType.trim().length <= 0) {
+        //     $("#errormessage").show();
+        //     var errormessagediv = document.getElementById("errormessage");
+        //     errormessagediv.innerHTML = "产品分类名称不能为空!";
+        //     errormessagediv.style.color = "red";
+        //     return false;
+        // }
+        //
+        // if (prodctuTypeName.trim().length <= 0) {
+        //     $("#errormessage").show();
+        //     var errormessagediv = document.getElementById("errormessage");
+        //     errormessagediv.innerHTML = "产品分类路线不能为空!";
+        //     errormessagediv.style.color = "red";
+        //     return false;
+        // }
 
 
         window.location.href = "/design/saveSJHeadPDateToMysql?" +
-            "productName=" + productName +
-            "&productNo=" + productNo +
-            "&drawingNo=" + drawingNo +
+            "productName=" + productName.trim() +
+            "&productNo=" + productNo.trim() +
+            "&drawingNo=" + drawingNo.trim() +
             "&needNum=" + needNum +
-            "&productRoute=" + productRoute +
+            "&productRoute=" + productRoute.trim() +
             "&productTypeNo=" + customerNo +
-            "&productTypeName=" + prodctuType +
-            "&productTypeRoute=" + prodctuTypeName +
+            "&productTypeName=" + prodctuType.trim() +
+            "&productTypeRoute=" + prodctuTypeName.trim() +
             "&customerNo=" + customerNo +
             "&head_id=" + customerNoId +
             "&id=" + id +
-            "&remark=" + remark;
+            "&remark=" + remark.trim();
     }
 
     function showOrderProductByOrderNo(id) {
