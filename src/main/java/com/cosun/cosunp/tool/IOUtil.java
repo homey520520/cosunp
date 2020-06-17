@@ -32,7 +32,6 @@ public class IOUtil {
     public static void zipFile(List<File> files, ZipOutputStream outputStream) throws IOException, ServletException {
         try {
             int size = files.size();
-            // 压缩列表中的文件
             for (int i = 0; i < size; i++) {
                 File file = (File) files.get(i);
                 zipFile(file, outputStream);

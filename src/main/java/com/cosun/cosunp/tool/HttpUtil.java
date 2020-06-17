@@ -64,7 +64,6 @@ public class HttpUtil {
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier(doNotVerify);
         } catch (Exception e) {
-            log.error("Initialization https impl occur exception : {}", e);
         }
     }
 
@@ -75,7 +74,6 @@ public class HttpUtil {
             url = setParmas(url, map, null);
             result = defaultConnection(url, method, data);
         } catch (Exception e) {
-            log.error("出错参数 {}", map);
         }
         return result;
     }
@@ -140,7 +138,6 @@ public class HttpUtil {
                 url = url + "&" + result;
             }
         }
-        log.debug("request url is {}", url);
         return url;
     }
 
@@ -159,7 +156,6 @@ public class HttpUtil {
             log.info(data);
             return defaultConnection(url, method, data);
         } catch (Exception e) {
-            log.error("出错参数 {}", map);
         }
         return "";
     }
@@ -183,7 +179,6 @@ public class HttpUtil {
             conn = (HttpURLConnection) url.openConnection();
         }
         if (conn == null) {
-            throw new IOException("connection can not be null");
         }
         conn.setRequestProperty("Pragma", "no-cache");
         conn.setRequestProperty("Cache-Control", "no-cache");

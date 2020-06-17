@@ -21,17 +21,6 @@ import java.util.zip.ZipEntry;
 public class HighEffiCompressZipTest {
 
     public static void main(String[] arg) throws Exception {
-        long begin = System.currentTimeMillis();
-        System.out.println(new Date());
-        final File result = new File("E:/myFile/test.zip");
-        List<String> urls = new ArrayList<String>();
-        urls.add("C:\\Users\\Administrator\\Desktop\\test\\000001 (1).exe");
-        urls.add("C:\\Users\\Administrator\\Desktop\\test\\000001 (1) - 副本.exe");
-        urls.add("C:\\Users\\Administrator\\Desktop\\test\\000001 (2) - 副本.exe");
-        urls.add("C:\\Users\\Administrator\\Desktop\\test\\000001 (3) - 副本.exe");
-         new HighEffiCompressZipTest().createZipFile(urls, result);
-        long end = System.currentTimeMillis();
-        System.out.println(new Date());
     }
 
     class CustomInputStreamSupplier implements InputStreamSupplier {

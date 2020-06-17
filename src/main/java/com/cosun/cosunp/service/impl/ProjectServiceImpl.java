@@ -38,7 +38,6 @@ public class ProjectServiceImpl implements IProjectServ {
     ProjectMapper projectMapper;
 
 
-    //getNamesByEmpNos
 
 
     @Override

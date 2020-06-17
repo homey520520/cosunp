@@ -785,75 +785,85 @@ public class ProjectController extends BaseController {
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setProgram_confir_Date_PlanStr(map.get("nextDay"));
 
-                    map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_PlanStr(), 1 + 1, faDingList, phoi.getGiveOrder_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_PlanStr(), ds.getXiaDanQianDuanDays(), faDingList, phoi.getXiaDanQianDuan_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
-                    phoi.setGiveOrder_Date_PlanStr(map.get("nextDay"));
+                    phoi.setXiaDanQianDuan_Date_PlanStr(map.get("nextDay"));
 
-                    map = new DateUtil().getAfterDay2(phoi.getGiveOrder_Date_PlanStr(), ds.getProdDays() + 1, faDingList, phoi.getDelivery_Goods_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getXiaDanQianDuan_Date_PlanStr(), ds.getXiaDanShengChanDays(), faDingList, phoi.getXiaDanShengChan_Emps2());
+                    sundayge += Integer.valueOf(map.get("sundayge"));
+                    qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                    fadingday += Integer.valueOf(map.get("fadingday"));
+                    phoi.setXiaDanShengChan_Date_PlanStr(map.get("nextDay"));
+
+                    map = new DateUtil().getAfterDay2(phoi.getXiaDanShengChan_Date_PlanStr(), ds.getProdDays(), faDingList, phoi.getDelivery_Goods_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setDelivery_Goods_Date_PlanStr(map.get("nextDay"));
 
-
-                    map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays() + 1, faDingList, phoi.getInstall_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setInstall_Date_PlanStr(map.get("nextDay"));
 
-                    map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                    map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setJieSuan_Date_PlanStr(map.get("nextDay"));
 
-                    note = "整个项目周期内周日有" + sundayge + "天,法定假日有" + fadingday + "天,请假有" + qingjiaday + "天,工号为:" + qingJiaName;
+                    note = "整个项目周期内周日有" + sundayge + "天,法定假日有" + fadingday + "天,请假有" + qingjiaday + "天,请假工号为:" + qingJiaName;
 
                     phoi.setNote(note);
                 } else if ("outDraw_Date_AccuStr".equals(phoi.getTitleName())) {
-                    map = new DateUtil().getAfterDay2(phoi.getOutDraw_Date_AccuStr(), ds.getFanAnConfDays() + 1, faDingList, phoi.getProgram_confir_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getOutDraw_Date_AccuStr(), ds.getFanAnConfDays(), faDingList, phoi.getProgram_confir_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setProgram_confir_Date_PlanStr(map.get("nextDay"));
 
-                    map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_PlanStr(), 1 + 1, faDingList, phoi.getGiveOrder_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_PlanStr(), ds.getXiaDanQianDuanDays(), faDingList, phoi.getXiaDanQianDuan_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
-                    phoi.setGiveOrder_Date_PlanStr(map.get("nextDay"));
+                    phoi.setXiaDanQianDuan_Date_PlanStr(map.get("nextDay"));
 
-                    map = new DateUtil().getAfterDay2(phoi.getGiveOrder_Date_PlanStr(), ds.getProdDays() + 1, faDingList, phoi.getDelivery_Goods_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getXiaDanQianDuan_Date_PlanStr(), ds.getXiaDanShengChanDays(), faDingList, phoi.getXiaDanShengChan_Emps2());
+                    sundayge += Integer.valueOf(map.get("sundayge"));
+                    qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                    fadingday += Integer.valueOf(map.get("fadingday"));
+                    phoi.setXiaDanShengChan_Date_PlanStr(map.get("nextDay"));
+
+                    map = new DateUtil().getAfterDay2(phoi.getXiaDanShengChan_Date_PlanStr(), ds.getProdDays(), faDingList, phoi.getDelivery_Goods_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setDelivery_Goods_Date_PlanStr(map.get("nextDay"));
 
-
-                    map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays() + 1, faDingList, phoi.getInstall_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setInstall_Date_PlanStr(map.get("nextDay"));
 
-                    map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                    map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
@@ -864,40 +874,46 @@ public class ProjectController extends BaseController {
                     phoi.setNote(note);
                 }
             } else {
+
                 if (phoi.getTitleName().equals("getOrder_Date_PlanStr")) {
-                    map = new DateUtil().getAfterDay2(phoi.getGetOrder_Date_PlanStr(), ds.getFanAnConfDays() + 1, faDingList, phoi.getProgram_confir_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getGetOrder_Date_PlanStr(), ds.getFanAnConfDays(), faDingList, phoi.getZhanCha_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setProgram_confir_Date_PlanStr(map.get("nextDay"));
 
-                    map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_PlanStr(), 1 + 1, faDingList, phoi.getGiveOrder_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_PlanStr(), ds.getXiaDanQianDuanDays(), faDingList, phoi.getXiaDanQianDuan_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
-                    phoi.setGiveOrder_Date_PlanStr(map.get("nextDay"));
+                    phoi.setXiaDanQianDuan_Date_PlanStr(map.get("nextDay"));
 
-                    map = new DateUtil().getAfterDay2(phoi.getGiveOrder_Date_PlanStr(), ds.getProdDays() + 1, faDingList, phoi.getDelivery_Goods_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getXiaDanQianDuan_Date_PlanStr(), ds.getXiaDanShengChanDays(), faDingList, phoi.getXiaDanShengChan_Emps2());
+                    sundayge += Integer.valueOf(map.get("sundayge"));
+                    qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                    fadingday += Integer.valueOf(map.get("fadingday"));
+                    phoi.setXiaDanShengChan_Date_PlanStr(map.get("nextDay"));
+
+                    map = new DateUtil().getAfterDay2(phoi.getXiaDanShengChan_Date_PlanStr(), ds.getProdDays(), faDingList, phoi.getDelivery_Goods_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setDelivery_Goods_Date_PlanStr(map.get("nextDay"));
 
-
-                    map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays() + 1, faDingList, phoi.getInstall_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setInstall_Date_PlanStr(map.get("nextDay"));
 
-                    map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
                     phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                    map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                    map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                     sundayge += Integer.valueOf(map.get("sundayge"));
                     qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                     fadingday += Integer.valueOf(map.get("fadingday"));
@@ -910,33 +926,38 @@ public class ProjectController extends BaseController {
                 }
             }
             if ("program_confir_Date_PlanStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_PlanStr(), 1 + 1, faDingList, phoi.getGiveOrder_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_PlanStr(), ds.getXiaDanQianDuanDays(), faDingList, phoi.getXiaDanQianDuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
-                phoi.setGiveOrder_Date_PlanStr(map.get("nextDay"));
+                phoi.setXiaDanQianDuan_Date_PlanStr(map.get("nextDay"));
 
-                map = new DateUtil().getAfterDay2(phoi.getGiveOrder_Date_PlanStr(), ds.getProdDays() + 1, faDingList, phoi.getDelivery_Goods_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanQianDuan_Date_PlanStr(), ds.getXiaDanShengChanDays(), faDingList, phoi.getXiaDanShengChan_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setXiaDanShengChan_Date_PlanStr(map.get("nextDay"));
+
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanShengChan_Date_PlanStr(), ds.getProdDays(), faDingList, phoi.getDelivery_Goods_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setDelivery_Goods_Date_PlanStr(map.get("nextDay"));
 
-
-                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays() + 1, faDingList, phoi.getInstall_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setInstall_Date_PlanStr(map.get("nextDay"));
 
-                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
@@ -946,33 +967,38 @@ public class ProjectController extends BaseController {
 
                 phoi.setNote(note);
             } else if ("program_confir_Date_AccuStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_AccuStr(), 1 + 1, faDingList, phoi.getGiveOrder_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getProgram_confir_Date_AccuStr(), ds.getXiaDanQianDuanDays(), faDingList, phoi.getXiaDanQianDuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
-                phoi.setGiveOrder_Date_PlanStr(map.get("nextDay"));
+                phoi.setXiaDanQianDuan_Date_PlanStr(map.get("nextDay"));
 
-                map = new DateUtil().getAfterDay2(phoi.getGiveOrder_Date_PlanStr(), ds.getProdDays() + 1, faDingList, phoi.getDelivery_Goods_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanQianDuan_Date_PlanStr(), ds.getXiaDanShengChanDays(), faDingList, phoi.getXiaDanShengChan_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setXiaDanShengChan_Date_PlanStr(map.get("nextDay"));
+
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanShengChan_Date_PlanStr(), ds.getProdDays(), faDingList, phoi.getDelivery_Goods_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setDelivery_Goods_Date_PlanStr(map.get("nextDay"));
 
-
-                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays() + 1, faDingList, phoi.getInstall_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setInstall_Date_PlanStr(map.get("nextDay"));
 
-                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
@@ -981,28 +1007,33 @@ public class ProjectController extends BaseController {
                 note = "整个项目周期内周日有" + sundayge + "天,法定假日有" + fadingday + "天,请假有" + qingjiaday + "天,请假工号为:" + qingJiaName;
 
                 phoi.setNote(note);
-            } else if ("giveOrder_Date_PlanStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getGiveOrder_Date_PlanStr(), ds.getProdDays() + 1, faDingList, phoi.getDelivery_Goods_Emps2());
+            } else if ("xiaDanQianDuan_Date_PlanStr".equals(phoi.getTitleName())) {
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanQianDuan_Date_PlanStr(), ds.getXiaDanShengChanDays(), faDingList, phoi.getXiaDanShengChan_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setXiaDanShengChan_Date_PlanStr(map.get("nextDay"));
+
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanShengChan_Date_PlanStr(), ds.getProdDays(), faDingList, phoi.getDelivery_Goods_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setDelivery_Goods_Date_PlanStr(map.get("nextDay"));
 
-
-                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays() + 1, faDingList, phoi.getInstall_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setInstall_Date_PlanStr(map.get("nextDay"));
 
-                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
@@ -1011,28 +1042,33 @@ public class ProjectController extends BaseController {
                 note = "整个项目周期内周日有" + sundayge + "天,法定假日有" + fadingday + "天,请假有" + qingjiaday + "天,请假工号为:" + qingJiaName;
 
                 phoi.setNote(note);
-            } else if ("giveOrder_Date_AccuStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getGiveOrder_Date_AccuStr(), ds.getProdDays() + 1, faDingList, phoi.getDelivery_Goods_Emps2());
+            } else if ("xiaDanQianDuan_Date_AccuStr".equals(phoi.getTitleName())) {
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanQianDuan_Date_AccuStr(), ds.getXiaDanShengChanDays(), faDingList, phoi.getXiaDanShengChan_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setXiaDanShengChan_Date_PlanStr(map.get("nextDay"));
+
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanShengChan_Date_PlanStr(), ds.getProdDays(), faDingList, phoi.getDelivery_Goods_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setDelivery_Goods_Date_PlanStr(map.get("nextDay"));
 
-
-                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays() + 1, faDingList, phoi.getInstall_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setInstall_Date_PlanStr(map.get("nextDay"));
 
-                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
@@ -1041,8 +1077,66 @@ public class ProjectController extends BaseController {
                 note = "整个项目周期内周日有" + sundayge + "天,法定假日有" + fadingday + "天,请假有" + qingjiaday + "天,请假工号为:" + qingJiaName;
 
                 phoi.setNote(note);
-            } else if ("delivery_Goods_Date_AccuStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_AccuStr(), ds.getAnzhuangDays() + 1, faDingList, phoi.getInstall_Emps2());
+            } else if ("xiaDanShengChan_Date_PlanStr".equals(phoi.getTitleName())) {
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanShengChan_Date_PlanStr(), ds.getProdDays(), faDingList, phoi.getDelivery_Goods_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setDelivery_Goods_Date_PlanStr(map.get("nextDay"));
+
+                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setInstall_Date_PlanStr(map.get("nextDay"));
+
+                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
+
+
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setJieSuan_Date_PlanStr(map.get("nextDay"));
+
+                note = "整个项目周期内周日有" + sundayge + "天,法定假日有" + fadingday + "天,请假有" + qingjiaday + "天,请假工号为:" + qingJiaName;
+
+                phoi.setNote(note);
+            } else if ("xiaDanShengChan_Date_AccuStr".equals(phoi.getTitleName())) {
+                map = new DateUtil().getAfterDay2(phoi.getXiaDanShengChan_Date_AccuStr(), ds.getProdDays(), faDingList, phoi.getDelivery_Goods_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setDelivery_Goods_Date_PlanStr(map.get("nextDay"));
+
+                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setInstall_Date_PlanStr(map.get("nextDay"));
+
+                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
+
+
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
+                sundayge += Integer.valueOf(map.get("sundayge"));
+                qingjiaday += Integer.valueOf(map.get("qingjiaday"));
+                fadingday += Integer.valueOf(map.get("fadingday"));
+                phoi.setJieSuan_Date_PlanStr(map.get("nextDay"));
+
+                note = "整个项目周期内周日有" + sundayge + "天,法定假日有" + fadingday + "天,请假有" + qingjiaday + "天,请假工号为:" + qingJiaName;
+
+                phoi.setNote(note);
+            }else if ("delivery_Goods_Date_AccuStr".equals(phoi.getTitleName())) {
+                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_AccuStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
@@ -1065,20 +1159,20 @@ public class ProjectController extends BaseController {
 
                 phoi.setNote(note);
             } else if ("delivery_Goods_Date_PlanStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays() + 1, faDingList, phoi.getInstall_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getDelivery_Goods_Date_PlanStr(), ds.getAnzhuangDays(), faDingList, phoi.getInstall_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setInstall_Date_PlanStr(map.get("nextDay"));
 
-                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
@@ -1088,14 +1182,14 @@ public class ProjectController extends BaseController {
 
                 phoi.setNote(note);
             } else if ("install_Date_PlanStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_PlanStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
@@ -1105,14 +1199,14 @@ public class ProjectController extends BaseController {
 
                 phoi.setNote(note);
             } else if ("install_Date_AccuStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_AccuStr(), ds.getYanshouDays() + 1, faDingList, phoi.getYanShou_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getInstall_Date_AccuStr(), ds.getYanshouDays(), faDingList, phoi.getYanShou_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
                 phoi.setYanShou_Date_PlanStr(map.get("nextDay"));
 
 
-                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
@@ -1122,7 +1216,7 @@ public class ProjectController extends BaseController {
 
                 phoi.setNote(note);
             } else if ("yanShou_Date_PlanStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_PlanStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));
@@ -1132,7 +1226,7 @@ public class ProjectController extends BaseController {
 
                 phoi.setNote(note);
             } else if ("yanShou_Date_AccuStr".equals(phoi.getTitleName())) {
-                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_AccuStr(), ds.getJiesuanDays() + 1, faDingList, phoi.getJieSuan_Emps2());
+                map = new DateUtil().getAfterDay2(phoi.getYanShou_Date_AccuStr(), ds.getJiesuanDays(), faDingList, phoi.getJieSuan_Emps2());
                 sundayge += Integer.valueOf(map.get("sundayge"));
                 qingjiaday += Integer.valueOf(map.get("qingjiaday"));
                 fadingday += Integer.valueOf(map.get("fadingday"));

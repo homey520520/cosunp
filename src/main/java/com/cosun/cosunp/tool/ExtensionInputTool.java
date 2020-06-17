@@ -12,7 +12,6 @@ public class ExtensionInputTool {
 
     public static void main(String[] args) {
         try {
-            new ReadTextUtil().readTxtUtil("C:\\Users\\Administrator\\Desktop\\扩展名.txt");
         }catch (Exception e) {
             e.printStackTrace();
         }

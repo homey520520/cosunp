@@ -17,29 +17,28 @@ public class QYWXSPFROM implements Serializable {
     private static final long serialVersionUID = 7502024218764366502L;
 
 
-    private String spname;  //补卡申请
-    private String apply_name;  //吴世乐
-    private String apply_org;  //项目中心/项目管理
-    private Integer sp_status;  //审批状态：1审批中；2 已通过；3已驳回；4已取消；6通过后撤销；10已支付
-    private Long sp_num;  //202002140001
+    private String spname;
+    private String apply_name;
+    private String apply_org;
+    private Integer sp_status;
+    private Long sp_num;
     private String[] mediaids;
-    private Integer apply_time; //Long型
-    private String apply_user_id;  //WuShiLe
+    private Integer apply_time;
+    private String apply_user_id;
     private String bukaTime;
     private String bukaYearM;
     private String bukaReason;
     private String exceptReason;
     private String apply_timeStr;
     private Long bukaTimeLong;
-    private Integer timeunit;//请假时间单位：0半天；1小时
-    private Integer leave_type; //请假类型：1年假；2事假；3病假；4调休假；5婚假；6产假；7陪产假；8其他
-    //          0正常请假 1因公外出 2带薪年假 3丧假 4婚假 5产假 6陪产假
+    private Integer timeunit;
+    private Integer leave_type;
     private String leave_typeStr;
     private Long start_time;
     private String start_timeStr;
     private Long end_time;
     private String end_timeStr;
-    private Integer duration;//请假时长 单位小时
+    private Integer duration;
     private String reason;
 
     private String outAddr;

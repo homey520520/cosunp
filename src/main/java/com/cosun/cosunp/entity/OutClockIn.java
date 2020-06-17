@@ -21,23 +21,23 @@ public class OutClockIn implements Serializable {
     private Date clockInDateAMOn;
     private String clockInAddrAMOn;
     private String amOnUrl;
-    private String checkin_typeA;     //***   上班打卡
-    private String exception_typeA;   //***   地点异常
-    private String notesA;     //***  路上堵车，迟到了5分钟
+    private String checkin_typeA;
+    private String exception_typeA;
+    private String notesA;
 
     private Date clockInDatePMOn;
     private String clockInAddrPMOn;
     private String pmOnUrl;
-    private String checkin_typeP;     //***   上班打卡
-    private String exception_typeP;   //***   地点异常
-    private String notesP;     //***  路上堵车，迟到了5分钟
+    private String checkin_typeP;
+    private String exception_typeP;
+    private String notesP;
 
     private Date clockInDateNMOn;
     private String clockInAddNMOn;
     private String nmOnUrl;
-    private String checkin_typeN;     //***   上班打卡
-    private String exception_typeN;   //***   地点异常
-    private String notesN;     //***  路上堵车，迟到了5分钟
+    private String checkin_typeN;
+    private String exception_typeN;
+    private String notesN;
 
 
     private String clockInDateAMOnStr;

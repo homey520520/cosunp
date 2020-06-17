@@ -14,7 +14,7 @@ public class BUKA implements Serializable {
     private static final long serialVersionUID = -7729623372590499965L;
 
     private String id;
-    private String title;  //异常状态  //补卡时间  //补卡事由  //说明附件
+    private String title;
     private String type;
     private String[] value;
 

@@ -133,9 +133,7 @@ public class DownLoadUtil {
 
         @Override
         public void run() {
-            logger.debug("Start batch:[{}] into: [{}]", url, path);
             DownLoadUtil.download(url, path);
-            logger.debug("Download:[{}] into: [{}] is done", url, path);
             latch.countDown();
         }
     }
